@@ -1,0 +1,83 @@
+workflows:
+  ios-simulator-build:
+    name: iOS Simulator build and test
+    instance_type: mac_mini_m2
+    max_build_duration: 120
+    environment:
+      xcode: latest
+    scripts:
+      - name: Print toolchain versions
+        script: |
+          set -euo pipefail
+          xcodebuild -version
+          swift --version
+          if ! command -v xcodegen >/dev/null 2>&1; then
+            brew install xcodegen
+          fi
+          xcodegen --version
+
+      - name: Generate Xcode project and list schemes
+        script: |
+          set -euo pipefail
+          xcodegen generate
+          xcodebuild -project Minik.xcodeproj -list
+
+      - name: Run ProductConfigurationTests
+        script: |
+          set -euo pipefail
+          mkdir -p build/logs build/TestResults
+          SIMULATOR_UDID="$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          data = json.load(sys.stdin)
+          devices = [device for runtime in data["devices"].values() for device in runtime]
+          phones = [device for device in devices if device.get("isAvailable") and "iPhone" in device.get("name", "")]
+          if not phones:
+              raise SystemExit("No available iPhone Simulator was found")
+          print(phones[0]["udid"])
+          ' )"
+          test -n "$SIMULATOR_UDID"
+          xcodebuild test \
+            -project Minik.xcodeproj \
+            -scheme MinikPlus \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_UDID" \
+            -derivedDataPath build/DerivedData/ProductConfigurationTests \
+            -resultBundlePath build/TestResults/ProductConfigurationTests.xcresult \
+            -only-testing:ProductConfigurationTests \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            | tee build/logs/ProductConfigurationTests.log
+
+      - name: Build and package all Simulator apps
+        script: |
+          set -euo pipefail
+          mkdir -p build/artifacts build/logs
+          for SCHEME in MinikPlus MinikPlusEnglish MinikMath MinikPingPong; do
+            DERIVED_DATA="build/DerivedData/$SCHEME"
+            xcodebuild build \
+              -project Minik.xcodeproj \
+              -scheme "$SCHEME" \
+              -configuration Debug \
+              -sdk iphonesimulator \
+              -destination "generic/platform=iOS Simulator" \
+              -derivedDataPath "$DERIVED_DATA" \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO \
+              | tee "build/logs/$SCHEME.log"
+            APP_PATH="$DERIVED_DATA/Build/Products/Debug-iphonesimulator/$SCHEME.app"
+            if [ ! -d "$APP_PATH" ]; then
+              echo "Expected Simulator app was not produced: $APP_PATH" >&2
+              find "$DERIVED_DATA/Build/Products" -maxdepth 3 -name "*.app" -print >&2
+              exit 1
+            fi
+            ditto -c -k --sequesterRsrc --keepParent \
+              "$APP_PATH" "build/artifacts/$SCHEME-simulator.zip"
+          done
+
+    artifacts:
+      - build/artifacts/MinikPlus-simulator.zip
+      - build/artifacts/MinikPlusEnglish-simulator.zip
+      - build/artifacts/MinikMath-simulator.zip
+      - build/artifacts/MinikPingPong-simulator.zip

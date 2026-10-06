@@ -1,0 +1,486 @@
+{
+  "date": "2026-09-28",
+  "baseCommit": "b15717f",
+  "files": [
+    {
+      "file": ".github/workflows/retro-pong-simulator.yml",
+      "beforeSHA256": null,
+      "afterSHA256": "6cb5eb4874123bdb0bbb5ff19762d85c318b0c261ecd4997894c35eed115ad2a"
+    },
+    {
+      "file": "docs/apple-release-checklist.md",
+      "beforeSHA256": "38618a4cb53393f17a7f2a7f52875bb1d0ba7ccbedaeb0fe9cf24decef27df45",
+      "afterSHA256": "4c861bf1d32904cc09946a67a283b429e48984f508a4c52d34608d96903c9393"
+    },
+    {
+      "file": "docs/MINIK_MASTER_PLAN.md",
+      "beforeSHA256": "c06976ee8ba0d550e8e08bf5dd18f86c83acade4e17ff6932898459697a58556",
+      "afterSHA256": "00f0bb35731f3521118579553c3b1aed65d7fc298e18255a7b0df9e212ed038d"
+    },
+    {
+      "file": "docs/modern-pong-ios-handoff.md",
+      "beforeSHA256": "199835ce1fc0b542efac7975a0d4a799ec0b5a70b01f73283b26a84357a75acc",
+      "afterSHA256": "4add47aa9186941bd72d69b670169bd217b9f547ce6c999632e4d3d742bb3cf1"
+    },
+    {
+      "file": "docs/retro-pong-android-provenance.json",
+      "beforeSHA256": null,
+      "afterSHA256": "2c6fcfd8026582e80d35044581b8cd552127dd71c752bcefb49d1023d1030273"
+    },
+    {
+      "file": "docs/retro-pong-evidence/windows-checks.json",
+      "beforeSHA256": null,
+      "afterSHA256": "5b91974c9b52909f17f955e29f63e0c8a8c5921f3b6ee28a81e82d798d655dbf"
+    },
+    {
+      "file": "docs/retro-pong-ios-handoff.md",
+      "beforeSHA256": null,
+      "afterSHA256": "a60c4ac56ff4b5a7dbcc794faf444717eb308f7fc325c2ecec5877cb180c2a02"
+    },
+    {
+      "file": "project.yml",
+      "beforeSHA256": "6ac867bb56194926a24597f9eb39d50feb11a3b4a954c357adcfe9120a4a89c1",
+      "afterSHA256": "3c37ae2ea3fa8ea5097a20120744e6ee6d52254cf2b75164a10d41353a379939"
+    },
+    {
+      "file": "Resources/RetroPong/app.js",
+      "beforeSHA256": null,
+      "afterSHA256": "d955f28c52ca8e03f382bdb5fc72c89230a7bcf61d0b342fd18e4a91497f7909"
+    },
+    {
+      "file": "Resources/RetroPong/assets/arrow_back.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "5e578d6ff67965541890db937b45a97a09b0e095a51947819f9cd0d2fc928dde"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/ball_hit.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "de20197edd7aec007b8a3d2e45e6add57163b6878c446e71501e4b51f531980e"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/balloon_explode.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "a76b6e8696aae24bed43c28af28a71820b9eca0aa88a81618d9cd4daa3e643bd"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/car_hit.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "bc6e59b89bcd1610d6f50a412d838c360925350eecbd65887d9a92aa10eb8878"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/cool_music2.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "8739c47026ed62f4dde407a432d013b151af6d191a3d9a4fc5a0392c9071563e"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/failure_answer_sound.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "4d349c088c0fef8a96265fefeb310182b6adbee888349af78fe10df28b2cabad"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/failure_sound.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "c3af78f5f0a591aa006b0959aedaa8b20e0224bc7e1454857ac4784807cfd896"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/game_start.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "7602947cfc346901b9fea88e9ea881c7260a828ace9f2ff0d49937d8ab45e782"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/minik_kick.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "3b5bf005e77004c80e785ad396a4d110f631dd35638117af6e356cfd9e1ad020"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/minik_kick2.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "d2a6e6eb3191c0498637b24897b420717bcae71c4b73f1ab5237db9c47a802f6"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/splash.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "de20197edd7aec007b8a3d2e45e6add57163b6878c446e71501e4b51f531980e"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/success_in_a_raw_sound.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "e5d4f4c8c99745d054493aeb5dc33ad30c0888777ccd327c9747c6ad45c406c1"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/success_sound.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "3d542f91232b31cd1d9f45c50eb22c8c2f9184eb342c00c0548317b332f2913e"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/train_hit.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "92c1ab475858749c406d52a16da1fbc1ca613a8dab097225b1c1a56232cb102b"
+    },
+    {
+      "file": "Resources/RetroPong/assets/audio/train_horn.mp3",
+      "beforeSHA256": null,
+      "afterSHA256": "680ff8c5333710dad10228cae64a64864a000ba8b1bf3c385e08d09fef046e80"
+    },
+    {
+      "file": "Resources/RetroPong/assets/balloon1.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "cfb5344a8d04641a0ef05a8cf7bc08f483f04d09c79f00f4931cf5822f46aa51"
+    },
+    {
+      "file": "Resources/RetroPong/assets/balloon2.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "16513fcf46c887c6c67d61edb6039408bba277038bc189d547de6e3f075ef5c3"
+    },
+    {
+      "file": "Resources/RetroPong/assets/balloon3.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "fffd6d53e9b2499efd52e7e4521d3ebd3f6277741c51ae143bf8b41430225287"
+    },
+    {
+      "file": "Resources/RetroPong/assets/balloon4.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "52b8bd3c62c8fab327b1fa2d1d354f28848ee8fd0fda7c4190bac998566e9b20"
+    },
+    {
+      "file": "Resources/RetroPong/assets/balloon5.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "2661936756e7938ad178a0104753131be584944db34f4cdad2cebf836f1d6899"
+    },
+    {
+      "file": "Resources/RetroPong/assets/balloon6.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "3a002f363c8324dc7a8ee3e956a8f4ed84e1bf3884e69aa3af4b99a024373333"
+    },
+    {
+      "file": "Resources/RetroPong/assets/balloon7.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "f9e713dfc96e8d66d04fb2cfe6bab3cbfbc801eb476428cbfcb8e4d8e109409a"
+    },
+    {
+      "file": "Resources/RetroPong/assets/balloon8.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "d29a25a32e995351562d026b77db435a508e09fa3e2420891c0bdbb49d3630ba"
+    },
+    {
+      "file": "Resources/RetroPong/assets/cloud_blue_a.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "7a3c0bb4a198aeb473b5ddaa7cacebb413baf814049e0a5317834bd55bac6432"
+    },
+    {
+      "file": "Resources/RetroPong/assets/cloud_blue_b.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "7769733c07640d3815eb07e427ccc30cfacad4eca5bea53516fbef31a7ff771b"
+    },
+    {
+      "file": "Resources/RetroPong/assets/cloud_yellow.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "7ba01f86cc1f92fe84f6106376fd1494d414f40d6d206274db92ac48a73f2e15"
+    },
+    {
+      "file": "Resources/RetroPong/assets/cotton_candy_ball.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "c459eff7ec0981931d13ece7ed3837ae1d400a704f528b16ec0e524114bc722a"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_blue.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "c76e4ec9b48788a20023225a8fcfe3dc049d4dc53d252a59b26a5aea15c4f541"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_blue_with_border.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "6587ffed4a6fb4150d33a3fda2cdb7a800546a22960573b70de157052855a821"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_green.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "1e5883a39f2ca1ba290622cc1b42dcd03cc9c3be5d7ca3ecd48cb22c5527f80c"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_green_with_border.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "5e61f4b353ac585f3c27024f58386c26675262e249ed0e563fceaaa3611297ff"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_red.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "48b50013923e6bcfd6da1e9b68a8a724cfba02c7b1ebd5fbcebb5dc46d384439"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_red_with_border.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "940c6fa78af8bb55059dd8659d8e91153c8fe4bc84586c52bdce36a529b04d89"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_silver_with_border.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "5388c8363dd0fbcbdf55e7c911365cb43c8501926de1b305016b0cac83e29f19"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_yellow.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "3fa5a2db64288752a2e90c1716e1815a54c38e438096c955f3827e72fc010c20"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_blue.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "65dd68c3fcfea3835735123587a2ef1b5667d1d9552bb8e0af743a9ffa07f906"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_blue_with_border.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "9f679624d91ad542e2568f0fc32a93f67cd10c8b2f99b39eb90291348bef0379"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_green.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "b1d2e48099e2dfae1f1f8b6de3833fca6a56efba59423d6e1ef915babcb9361c"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_green_with_border.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "2e26e42e540aaf81a8e88f363e56a62c6f211cfc54df08380db3367bd6cdc51b"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_red.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "741cf292f6ece683aa8c0fe1ab38c67c98fa0691f9da14769ca4607ec595afac"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_red_with_border.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "19a6f679009a9e9f0db43f8dab2f4ee8e014fc22e011def89b990d7c8090f63b"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_silver_with_border.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "583ffae74694f8a33bdcf38deb106f61584e0c36cc96125fa0d52ba1a3e2bc89"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_yellow.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "c388c61a46e2f22b15de885b26733dc96bd664535bef5d8698938dc686460883"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/train_engine.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "1ccb5d9c69f7c1b3d3dd10847b6705df2dd05e62dfe8c64ed9d584f9ad49cb8a"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/train_smoke.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "97c82903c6b20187a70ebf44bc54215c160e4cd1faeb04f29d50b486eda954fc"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/train_wagon1.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "906fef7c0c068cfaaf62780bb20412a4d1a95fff55a19e4bd3d774c5015b0560"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/train_wagon2.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "ffc33f7ec6bac5324fad9225d7053eef1150655c0b6f26620f145fa5137e6c28"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/train_wagon3.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "08112119762b148ec1cd5e7f268fafb8d6aee80ac1a97bb2fef67eeef2a14cd2"
+    },
+    {
+      "file": "Resources/RetroPong/assets/expansion/train_wagon4.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "7b3ae89e73cf6d00b28935bfafd76aaa21ef09eaba493a1ab6c99ab32c18266d"
+    },
+    {
+      "file": "Resources/RetroPong/assets/karting_minik_background.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "9ef6049ec43e8137313b701ab679263c098a4aa464d8748c94a7cb7d6920fd29"
+    },
+    {
+      "file": "Resources/RetroPong/assets/mascot-rainbow-cat.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "8f630875032c01be2681fc5576b9308a5693e4e1f1df505a191012cf7ee4f394"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik-close.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "b5c1826926860dd2398f4884fad3b1732473e1c800dcf9aa2257ab4d212888ed"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik-logo.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "355ba69ef3ed25c1376899ee9aca07434231704cd183a34960aab2498666e7d1"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik-love.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "ca978449bffc9f76673ed47b0dfcb9c577d04d58e4195d042e2c25181452ce98"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik-no-0.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "7cec4ae0cc48db8192042f29fbcfe4830e49ce480009518dfae41f2fc3eff700"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik-no-1.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "02b6a80afae418de6c75f0e7609e73488da62641a16fdb3d128a069e51d16739"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik-no-2.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "8fcb7ad04a129ffbfdf1c576bbf9d83cdfe6478fa2a4c634138ced9efa32b873"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik-no-3.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "282bcd9a0aabeeedeee811a1f2e67f8a43a8137128c83e217d6c7d4b9efc1d1e"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik-no-4.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "d03c91dfc00b8f54151bdf8f0b8738d8ead8588d5f31f3c92700e2fcd5e07e62"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik-ping-pong-logo.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "f550d8f0d1b15bbc06076f4f175c573003a1a96f6c843236c232a3ea4f423bf9"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik-pong.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "fb49ce3521e05c442ac6ae5726134f5b0a26bef2cf603df36c53e0a98938ec13"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik-success.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "d7a8e3295a2f20e970af309f48ad77c1636c742f529421fed50ad2540f16cbf9"
+    },
+    {
+      "file": "Resources/RetroPong/assets/minik_rainbow_car.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "b38b0c000978bbe933bf311c9a2ede009a8fcecb459f8174c1646d7c6e9374e9"
+    },
+    {
+      "file": "Resources/RetroPong/assets/s05_beach_ball_3d.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "1499e24824b3fac08fe6ea35f35c10df8f63d332809b17ae33dc95363ee5563e"
+    },
+    {
+      "file": "Resources/RetroPong/assets/s05_beach_ball_round.webp",
+      "beforeSHA256": null,
+      "afterSHA256": "167068b354cf3c111a8859327f305f944177168c0ff3959d7f4588fa472e54d2"
+    },
+    {
+      "file": "Resources/RetroPong/index.html",
+      "beforeSHA256": null,
+      "afterSHA256": "9611a6d91a78d3497bcaf49319b1a7f001c47d72cf2415e4e09881eca30290f6"
+    },
+    {
+      "file": "Resources/RetroPong/ios-host.css",
+      "beforeSHA256": null,
+      "afterSHA256": "7d47b2f92f027e1365dce1a22c5dbeef5573c515c3a3246c585ef282e030adf6"
+    },
+    {
+      "file": "Resources/RetroPong/ios-host.js",
+      "beforeSHA256": null,
+      "afterSHA256": "b7dca9495acbff0657e81026a549860c06deb3a90e661a9af19b778d0615c6ce"
+    },
+    {
+      "file": "Resources/RetroPong/minik-audio-bank.js",
+      "beforeSHA256": null,
+      "afterSHA256": "3e598375a34469f28914b325df8602128c373f116145ac792ace211e14dda823"
+    },
+    {
+      "file": "Resources/RetroPong/minik-audio.js",
+      "beforeSHA256": null,
+      "afterSHA256": "dab5628c8279931be44726e51fba4fb48bd4b9eb860c407c6033b710c4dfaa87"
+    },
+    {
+      "file": "Resources/RetroPong/pong-extras.css",
+      "beforeSHA256": null,
+      "afterSHA256": "517e13ca245267a1f67d734d0c9ffcae39d777f8cf31b151350b524436dc7456"
+    },
+    {
+      "file": "Resources/RetroPong/pong-extras.js",
+      "beforeSHA256": null,
+      "afterSHA256": "ac22865225e05ea5223e47d9a6a23e796b409cbda73bbdf5f030974b2262cec6"
+    },
+    {
+      "file": "Resources/RetroPong/pong-layout.css",
+      "beforeSHA256": null,
+      "afterSHA256": "a286f90ab388583f2c70b95f211ef022fefe06092cbb06f551b1359e345247c9"
+    },
+    {
+      "file": "Resources/RetroPong/styles.css",
+      "beforeSHA256": null,
+      "afterSHA256": "1569e194152338fd226bec36551bf05701799c6e0c03804da52a3bc8178f6273"
+    },
+    {
+      "file": "Resources/RetroPongIcon.xcassets/Contents.json",
+      "beforeSHA256": null,
+      "afterSHA256": "72c7d24704014fc43418caf0de10610912623033478dc1cfe1a4f8458970f0db"
+    },
+    {
+      "file": "Resources/RetroPongIcon.xcassets/RetroPongAppIcon.appiconset/AppIcon.png",
+      "beforeSHA256": null,
+      "afterSHA256": "035f38e4f5084d97c4f39d1e7ddd1cf241085751d8f4fcf6e083188abe6c2f23"
+    },
+    {
+      "file": "Resources/RetroPongIcon.xcassets/RetroPongAppIcon.appiconset/Contents.json",
+      "beforeSHA256": null,
+      "afterSHA256": "7dd13173667206bbd858ff45143033edfc7cfd110a10d363daa10ca7a07ad8ec"
+    },
+    {
+      "file": "Scripts/audit-release-configuration.ps1",
+      "beforeSHA256": "d96cdba4dc19c0cb5d1625895723eeaf6a7d28151aa8fd9fc872e89c2451e472",
+      "afterSHA256": "05861551971c9fc00b93bf81cfa86b579f45495bb63e3791dcfa0d99732569cb"
+    },
+    {
+      "file": "Scripts/audit-retro-pong.py",
+      "beforeSHA256": null,
+      "afterSHA256": "afbce064ef0cc8186a4591a8e7649b211b5a2a7018d6599284c958f5de2db78a"
+    },
+    {
+      "file": "Sources/MinikActivityHubView.swift",
+      "beforeSHA256": "f0ff861841e24306cc571c4fadaac7c761b536537f20fd78c3d40e51d14e42ec",
+      "afterSHA256": "8eca9f8194824baa078e301afbae16c7a4123ca5e653c4c90808ecb890d4dcfc"
+    },
+    {
+      "file": "Sources/MinikApp.swift",
+      "beforeSHA256": "bbe2fc2052d12f471ab1818f1231d7590b325f914144f3dd7a386ececd72922d",
+      "afterSHA256": "7a4a22020eb50e01e76af305f7ea0a3547f44f42ba2ab43b27d11d91fb771e1a"
+    },
+    {
+      "file": "Sources/RetroPong/MathPingPongChooser.swift",
+      "beforeSHA256": null,
+      "afterSHA256": "8e172c5cc8f1a1609f3d935b836f1fd5ad411e351ca24cfc170bee9b352edce4"
+    },
+    {
+      "file": "Sources/RetroPong/RetroPongStorage.swift",
+      "beforeSHA256": null,
+      "afterSHA256": "43f6d3eff6c994bf5b415b98f9ec177748c7738444c1cb40002ea60ccf2bd3ea"
+    },
+    {
+      "file": "Sources/RetroPong/RetroPongView.swift",
+      "beforeSHA256": null,
+      "afterSHA256": "79a4db97e586c804d8ac7353db948d5176ef4b2485d5209f44324cc78e16fa7b"
+    },
+    {
+      "file": "Tests/ProductConfigurationTests/RetroPongHostTests.swift",
+      "beforeSHA256": null,
+      "afterSHA256": "a9a537710598f924b1f6c497c49544f3b24484d916e63fe0277e927cecc6a414"
+    },
+    {
+      "file": "Tests/RetroPong/engine.test.cjs",
+      "beforeSHA256": null,
+      "afterSHA256": "5fbd17f290e23dea7ee843f4cbec5974735d6320617c9357d9e011b2134fc716"
+    },
+    {
+      "file": "Tests/RetroPong/host.test.cjs",
+      "beforeSHA256": null,
+      "afterSHA256": "40f18380074f0bf498881142444b2aa6a5ae79bbb66c6b9e8570511d3d93650c"
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+i  emulators: Starting emulators: database
+i  emulators: Detected demo project ID "demo-minik-pingpong", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  database: Database Emulator logging to database-debug.log
+i  Running script: node --test --test-reporter=spec tests/rules.test.cjs
+[2026-09-28T14:46:26.572Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/profiles/host failed: permission_denied
+✔ full rules deny unauthenticated root access (871.8174ms)
+✔ only minikPingPong differs from supplied full rules; originals and registrations stay intact (52.5351ms)
+[2026-09-28T14:46:27.171Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/leaderboard/alice failed: permission_denied
+✔ collection scans and unknown namespaces denied even to authenticated users (545.0747ms)
+[2026-09-28T14:46:27.410Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/profiles/alice failed: permission_denied
+[2026-09-28T14:46:27.469Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/profiles/alice failed: permission_denied
+[2026-09-28T14:46:27.525Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/profiles/alice failed: permission_denied
+[2026-09-28T14:46:27.583Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/profiles/alice failed: permission_denied
+[2026-09-28T14:46:27.646Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/profiles/alice failed: permission_denied
+[2026-09-28T14:46:27.695Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/profiles/alice failed: permission_denied
+✔ own profile accepted; impersonation and invalid name/avatar rejected (523.3374ms)
+[2026-09-28T14:46:27.780Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:27.826Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:28.300Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+✔ friendlyRooms: create/read/join works; full, unauthenticated and fake host rejected (664.6883ms)
+[2026-09-28T14:46:28.545Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:28.612Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:28.703Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:28.780Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:28.890Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:29.014Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+✔ friendlyRooms: outsiders cannot overwrite/delete rooms, members cannot alter settings/host (654.6344ms)
+[2026-09-28T14:46:29.379Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:29.497Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:29.555Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF/participants/alice failed: permission_denied
+✔ friendlyRooms: own identity edit allowed before start; other identity and roster deletion blocked (540.7172ms)
+[2026-09-28T14:46:29.688Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:29.953Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:30.200Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:30.774Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:30.911Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:31.270Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:31.317Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF/matches/ABCDEF_0_0_1 failed: permission_denied
+✔ friendlyRooms: host creates schedule, ready persists, both present start once, authority saves immutable result (1761.807ms)
+[2026-09-28T14:46:31.464Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF/connections/eve/0 failed: permission_denied
+[2026-09-28T14:46:31.546Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF/connections/alice/0 failed: permission_denied
+[2026-09-28T14:46:31.681Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF/connections/alice/0 failed: permission_denied
+[2026-09-28T14:46:31.762Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+✔ friendlyRooms: presence belongs to members themselves, including deletion via room transaction (520.8216ms)
+[2026-09-28T14:46:32.095Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:32.517Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+✔ friendlyRooms: bot skills validated, host add/remove supported, non-host cannot become bot (678.8537ms)
+[2026-09-28T14:46:32.617Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:32.678Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:33.163Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ tournaments: create/read/join works; full, unauthenticated and fake host rejected (676.5847ms)
+[2026-09-28T14:46:33.369Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:33.414Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:33.518Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:33.605Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:33.738Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:33.839Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ tournaments: outsiders cannot overwrite/delete rooms, members cannot alter settings/host (645.1385ms)
+[2026-09-28T14:46:34.179Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:34.292Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:34.371Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF/participants/alice failed: permission_denied
+✔ tournaments: own identity edit allowed before start; other identity and roster deletion blocked (531.8285ms)
+[2026-09-28T14:46:34.585Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:34.962Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:35.268Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:35.874Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:36.037Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:36.434Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:36.508Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF/matches/ABCDEF_0_0_1 failed: permission_denied
+✔ tournaments: host creates schedule, ready persists, both present start once, authority saves immutable result (2137.2091ms)
+[2026-09-28T14:46:36.643Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF/connections/eve/0 failed: permission_denied
+[2026-09-28T14:46:36.721Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF/connections/alice/0 failed: permission_denied
+[2026-09-28T14:46:36.876Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF/connections/alice/0 failed: permission_denied
+[2026-09-28T14:46:36.986Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ tournaments: presence belongs to members themselves, including deletion via room transaction (564.0909ms)
+[2026-09-28T14:46:37.307Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:37.676Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ tournaments: bot skills validated, host add/remove supported, non-host cannot become bot (603.8451ms)
+[2026-09-28T14:46:37.828Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:38.001Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:38.107Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ friendly close allowed only for host while no match playing; tournament delete protects connected peers (430.7941ms)
+[2026-09-28T14:46:38.544Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:38.789Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ full mixed tournament schedule and deterministic bot results accepted atomically (682.0008ms)
+[2026-09-28T14:46:38.908Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/live/ABCDEF_0_0_1/checkpoint failed: permission_denied
+[2026-09-28T14:46:39.012Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/live/ABCDEF_0_0_1/checkpoint failed: permission_denied
+[2026-09-28T14:46:39.148Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/live/ABCDEF_0_0_1/actions/bob/1 failed: permission_denied
+[2026-09-28T14:46:39.189Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/live/ABCDEF_0_0_1/actions/bob/1 failed: permission_denied
+[2026-09-28T14:46:39.240Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/live/ABCDEF_0_0_1/actions/eve/1 failed: permission_denied
+[2026-09-28T14:46:39.251Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/live/ABCDEF_0_0_1/actions/bob/16 failed: permission_denied
+[2026-09-28T14:46:39.427Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/live/ABCDEF_0_0_1/actions/bob/2 failed: permission_denied
+✔ checkpoint authority/revision and live action ownership/ring order (637.9094ms)
+[2026-09-28T14:46:39.555Z]  @firebase/database: FIREBASE WARNING: set at /tripleShot/users/alice/profile failed: permission_denied
+✔ unchanged TripleShot own-user and leaderboard rules still work; cross-user writes denied (284.7179ms)
+✔ all tournament sizes 2–8 and both legs accept complete schedules (4542.6234ms)
+[2026-09-28T14:46:44.476Z]  @firebase/database: FIREBASE WARNING: update at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:44.601Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:44.685Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ roster index cannot hide a participant or exceed capacity (430.442ms)
+[2026-09-28T14:46:45.008Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:45.177Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:45.292Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+✔ host cannot skip Ready; non-authority cannot change scores while playing (606.7261ms)
+[2026-09-28T14:46:45.457Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:45.531Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:45.615Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+[2026-09-28T14:46:45.738Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+✔ invalid final scores rejected; hard deuce result accepted (548.6628ms)
+✔ SDK transactions reserve a code once and persist concurrent independent Ready flags (441.2055ms)
+✔ onDisconnect removes only own presence token, preserving room and Ready (206.9226ms)
+[2026-09-28T14:46:46.933Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+✔ unified friendly: add house player, schedule, Ready and start with existing production rules (817.6029ms)
+[2026-09-28T14:46:47.613Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF failed: permission_denied
+✔ unified friendly: house selection cannot overwrite a human who joined first (346.16ms)
+[2026-09-28T14:46:47.808Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/GreenFrog failed: permission_denied
+[2026-09-28T14:46:47.951Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/FreeText failed: permission_denied
+[2026-09-28T14:46:47.998Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/GreenFrog0 failed: permission_denied
+[2026-09-28T14:46:48.043Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/GreenFrog10000 failed: permission_denied
+[2026-09-28T14:46:48.090Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/profiles/alice failed: permission_denied
+✔ generated nicknames are exclusive, bilingual, and reject free text (437.638ms)
+[2026-09-28T14:46:48.848Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/openSlots/alice/friendlyRooms/3 failed: permission_denied
+[2026-09-28T14:46:48.882Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/openSlots/alice/friendlyRooms/0 failed: permission_denied
+[2026-09-28T14:46:48.924Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/openSlots/alice/friendlyRooms failed: permission_denied
+[2026-09-28T14:46:49.019Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/DEFGHJ failed: permission_denied
+✔ three open slots per category cannot be bypassed or removed while active (1018.6213ms)
+[2026-09-28T14:46:49.264Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ joining requires own free reservation; creation without one is rejected (306.346ms)
+[2026-09-28T14:46:49.657Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF/lastActivityAt failed: permission_denied
+[2026-09-28T14:46:49.708Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF/lastActivityAt failed: permission_denied
+[2026-09-28T14:46:49.772Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF/lastActivityAt failed: permission_denied
+✔ activity uses any member, cannot go backwards or be erased (356.6517ms)
+[2026-09-28T14:46:50.178Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:50.272Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ bounded stale query and atomic room/live cleanup; fresh or connected sessions protected (597.0581ms)
+[2026-09-28T14:46:50.496Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ house player character cannot be selected twice, distinct characters allowed (191.5111ms)
+[2026-09-28T14:46:50.696Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:50.751Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:50.904Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:50.933Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:51.058Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:51.105Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ tournament deletion allowed to sole connected human even non-host and during play (600.2932ms)
+[2026-09-28T14:46:51.516Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF/connections/alice/0 failed: permission_denied
+✔ waiting host leaves, transfers to connected human and frees own slot (355.0233ms)
+[2026-09-28T14:46:51.952Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF/connections/alice/0 failed: permission_denied
+[2026-09-28T14:46:52.024Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF/lastActivityAt failed: permission_denied
+[2026-09-28T14:46:52.092Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ active departure preserves scores, cancels only leaver fixtures and transfers management (626.7036ms)
+[2026-09-28T14:46:52.288Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:52.353Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:52.534Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:52.645Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+[2026-09-28T14:46:52.755Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ departure cannot evict a peer, steal host, alter results or cancel unrelated matches (612.2075ms)
+[2026-09-28T14:46:53.412Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/tournaments/ABCDEF failed: permission_denied
+✔ concurrent Ready flags start exactly once; same human cannot start another fixture (656.9632ms)
+[2026-09-28T14:46:53.551Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/live/ABCDEF_0_0_1 failed: permission_denied
+✔ deleted tournament live state can be cleaned; existing live state cannot (255.8995ms)
+[2026-09-28T14:46:53.807Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/BestJune failed: permission_denied
+[2026-09-28T14:46:53.884Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/HappyJune1 failed: permission_denied
+[2026-09-28T14:46:53.944Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/GreenMiniko failed: permission_denied
+[2026-09-28T14:46:54.043Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/WinterCoach67 failed: permission_denied
+[2026-09-28T14:46:54.106Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/סהר בקיץ failed: permission_denied
+[2026-09-28T14:46:54.197Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/מיניקו בירוק22 failed: permission_denied
+[2026-09-28T14:46:54.247Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/צפרדע ממוזלת failed: permission_denied
+[2026-09-28T14:46:54.293Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/נמר ממוזל failed: permission_denied
+[2026-09-28T14:46:54.339Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/JollyFrog failed: permission_denied
+[2026-09-28T14:46:54.389Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/CozyCub failed: permission_denied
+[2026-09-28T14:46:54.436Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/JuneAnything failed: permission_denied
+[2026-09-28T14:46:54.482Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/nicknames/<Flare> failed: permission_denied
+✔ character names reserve uniquely; removed words and free text are rejected (813.4172ms)
+[2026-09-28T14:46:54.639Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/profiles/alice failed: permission_denied
+[2026-09-28T14:46:54.831Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF/participants/alice/identity/characterId failed: permission_denied
+[2026-09-28T14:46:54.911Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF/participants/alice/identity/characterId failed: permission_denied
+[2026-09-28T14:46:54.978Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF/participants/alice/bot failed: permission_denied
+[2026-09-28T14:46:55.043Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/friendlyRooms/ABCDEF/participants/alice/identity/characterId failed: permission_denied
+✔ human characters round-trip in profiles and active games without AI privileges (630.1454ms)
+[2026-09-28T14:46:55.287Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization/codes/private failed: permission_denied
+[2026-09-28T14:46:55.385Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization/purchases/fake failed: permission_denied
+[2026-09-28T14:46:55.477Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization/rate/fake failed: permission_denied
+[2026-09-28T14:46:55.557Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization failed: permission_denied
+[2026-09-28T14:46:55.637Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization/codes/private failed: permission_denied
+[2026-09-28T14:46:55.724Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization/purchases/fake failed: permission_denied
+[2026-09-28T14:46:55.806Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization/rate/fake failed: permission_denied
+[2026-09-28T14:46:55.894Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization failed: permission_denied
+[2026-09-28T14:46:55.989Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization/codes/private failed: permission_denied
+[2026-09-28T14:46:56.089Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization/purchases/fake failed: permission_denied
+[2026-09-28T14:46:56.181Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization/rate/fake failed: permission_denied
+[2026-09-28T14:46:56.263Z]  @firebase/database: FIREBASE WARNING: set at /minikPingPong/monetization failed: permission_denied
+[2026-09-28T14:46:56.399Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization/codes/private failed: permission_denied
+[2026-09-28T14:46:56.493Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization/purchases/fake failed: permission_denied
+[2026-09-28T14:46:56.589Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization/rate/fake failed: permission_denied
+[2026-09-28T14:46:56.681Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization failed: permission_denied
+[2026-09-28T14:46:56.762Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization/codes/private failed: permission_denied
+[2026-09-28T14:46:56.856Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization/purchases/fake failed: permission_denied
+[2026-09-28T14:46:56.929Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization/rate/fake failed: permission_denied
+[2026-09-28T14:46:57.029Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization failed: permission_denied
+[2026-09-28T14:46:57.107Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization/codes/private failed: permission_denied
+[2026-09-28T14:46:57.197Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization/purchases/fake failed: permission_denied
+[2026-09-28T14:46:57.291Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization/rate/fake failed: permission_denied
+[2026-09-28T14:46:57.386Z]  @firebase/database: FIREBASE WARNING: set at /minikMath/monetization failed: permission_denied
+✔ monetization codes and purchase records remain server-only for both apps (2274.2456ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 32047.0346
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  database: Stopping Database Emulator
+!  Database Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

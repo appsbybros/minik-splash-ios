@@ -1,0 +1,132 @@
+name: MinikMath Unsigned IPA
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-unsigned-ipa:
+    runs-on: macos-26
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Print environment information
+        run: |
+          sw_vers
+          xcodebuild -version
+          swift --version
+
+      - name: Install XcodeGen
+        run: |
+          if ! command -v xcodegen >/dev/null 2>&1; then
+            brew install xcodegen
+          fi
+          xcodegen --version
+
+      - name: Generate Xcode project
+        run: |
+          xcodegen generate
+          if [[ ! -d Minik.xcodeproj ]]; then
+            echo "Error: XcodeGen did not generate Minik.xcodeproj." >&2
+            exit 1
+          fi
+
+      - name: Build unsigned MinikMath app
+        run: |
+          xcodebuild \
+            -project Minik.xcodeproj \
+            -scheme MinikMath \
+            -configuration Debug \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$RUNNER_TEMP/MinikDerivedData" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            build
+
+      - name: Resolve built application path
+        run: |
+          BUILD_SETTINGS="$(xcodebuild \
+            -project Minik.xcodeproj \
+            -scheme MinikMath \
+            -configuration Debug \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$RUNNER_TEMP/MinikDerivedData" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            -showBuildSettings)"
+
+          TARGET_BUILD_DIRS="$(printf '%s\n' "$BUILD_SETTINGS" | sed -n 's/^[[:space:]]*TARGET_BUILD_DIR = //p' | sort -u)"
+          PRODUCT_NAMES="$(printf '%s\n' "$BUILD_SETTINGS" | sed -n 's/^[[:space:]]*FULL_PRODUCT_NAME = //p' | sort -u)"
+          TARGET_BUILD_DIR_COUNT="$(printf '%s\n' "$TARGET_BUILD_DIRS" | sed '/^$/d' | wc -l | tr -d ' ')"
+          PRODUCT_NAME_COUNT="$(printf '%s\n' "$PRODUCT_NAMES" | sed '/^$/d' | wc -l | tr -d ' ')"
+
+          if [[ "$TARGET_BUILD_DIR_COUNT" != "1" ]]; then
+            echo "Error: Expected exactly one TARGET_BUILD_DIR, found $TARGET_BUILD_DIR_COUNT." >&2
+            printf '%s\n' "$TARGET_BUILD_DIRS" >&2
+            exit 1
+          fi
+          if [[ "$PRODUCT_NAME_COUNT" != "1" ]]; then
+            echo "Error: Expected exactly one FULL_PRODUCT_NAME, found $PRODUCT_NAME_COUNT." >&2
+            printf '%s\n' "$PRODUCT_NAMES" >&2
+            exit 1
+          fi
+
+          TARGET_BUILD_DIR="$TARGET_BUILD_DIRS"
+          FULL_PRODUCT_NAME="$PRODUCT_NAMES"
+          if [[ "$FULL_PRODUCT_NAME" != *.app ]]; then
+            echo "Error: Expected an application product, got '$FULL_PRODUCT_NAME'." >&2
+            exit 1
+          fi
+
+          APP_MATCHES="$(find "$TARGET_BUILD_DIR" -maxdepth 1 -type d -name "$FULL_PRODUCT_NAME" -print)"
+          APP_MATCH_COUNT="$(printf '%s\n' "$APP_MATCHES" | sed '/^$/d' | wc -l | tr -d ' ')"
+          if [[ "$APP_MATCH_COUNT" != "1" ]]; then
+            echo "Error: Expected exactly one built MinikMath app, found $APP_MATCH_COUNT." >&2
+            printf '%s\n' "$APP_MATCHES" >&2
+            exit 1
+          fi
+
+          BUILT_APP_PATH="$APP_MATCHES"
+          echo "Resolved built application: $BUILT_APP_PATH"
+          echo "BUILT_APP_PATH=$BUILT_APP_PATH" >> "$GITHUB_ENV"
+          echo "BUILT_APP_NAME=$FULL_PRODUCT_NAME" >> "$GITHUB_ENV"
+
+      - name: Package unsigned IPA
+        run: |
+          PACKAGE_ROOT="$(mktemp -d "$RUNNER_TEMP/minikmath-ipa.XXXXXX")"
+          mkdir -p "$PACKAGE_ROOT/Payload"
+          cp -R "$BUILT_APP_PATH" "$PACKAGE_ROOT/Payload/$BUILT_APP_NAME"
+
+          cd "$PACKAGE_ROOT"
+          zip -qry "$GITHUB_WORKSPACE/MinikMath-unsigned.ipa" Payload
+
+      - name: Verify unsigned IPA
+        run: |
+          IPA_PATH="$GITHUB_WORKSPACE/MinikMath-unsigned.ipa"
+          if [[ ! -s "$IPA_PATH" ]]; then
+            echo "Error: MinikMath-unsigned.ipa is missing or empty." >&2
+            exit 1
+          fi
+
+          EXPECTED_APP_ENTRY="Payload/$BUILT_APP_NAME/"
+          if ! unzip -Z1 "$IPA_PATH" | grep -Fxq "$EXPECTED_APP_ENTRY"; then
+            echo "Error: IPA does not contain the expected '$EXPECTED_APP_ENTRY' directory." >&2
+            unzip -l "$IPA_PATH" >&2
+            exit 1
+          fi
+
+          unzip -l "$IPA_PATH"
+          ls -lh "$IPA_PATH"
+          echo "IPA size in bytes: $(stat -f '%z' "$IPA_PATH")"
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v7
+        with:
+          name: MinikMath-unsigned-ipa
+          path: MinikMath-unsigned.ipa
+          if-no-files-found: error
+          compression-level: 0

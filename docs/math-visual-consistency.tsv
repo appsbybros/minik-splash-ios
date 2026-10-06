@@ -1,0 +1,14 @@
+activity_id	representative_levels	presentation	static_status	runtime_gate
+learnMath	M1;M5;M10	LearnView with precise typed Math representations, white Minik surface, math frame, branded close/replay	static_consistent_runtime_pending	Confirm low/mid/high typography, fit, replay, and Dynamic Type on iPhone/iPad
+mathPairs	M1;M5;M10	PairsView with typed equivalence representations, Minik cards/feedback, math frame	static_consistent_runtime_pending	Confirm responsive columns/tiles, selection, and representation clarity
+buildNumber	M1;M5;M10	BuildView with ordered numeric tokens, Minik controls/feedback, LTR math	static_consistent_runtime_pending	Confirm token fit, order, retry, and high-level expressions
+buildQuantity	M1;M5;M10	Count, structured, fraction, and number-line construction views with exact native representations	static_consistent_runtime_pending	Confirm drag/tap alternatives, precise geometry, zero, grouping, fractions, and number-line placement
+visualToAnswer	M1;M5;M10	MultipleChoiceView with visual/structured prompt and answer choices	static_consistent_runtime_pending	Confirm prompt/choice hierarchy and high-level representation fit
+answerToRepresentation	M1;M5;M10	MultipleChoiceView with numeral/expression prompt and equivalent typed representation choices	static_consistent_runtime_pending	Confirm dense high-level choices and LTR behavior under RTL interface
+buildMath	M1;M5;M10	BuildView with ordered expression construction and typed mathematical validation	static_consistent_runtime_pending	Confirm operator/token spacing, LTR order, retry, and readability
+mathMixed	M1;M5;M10	Level-specific coordinator rotating only approved shared child presentations	static_consistent_runtime_pending	Confirm transition continuity, variety, focus, and no intermediate dashboard
+mathCards	M1;M5;M10	MathCardsView with branded replay, white fact card, typed facts/relationships	static_consistent_runtime_pending	Confirm card density, timed/manual controls, replay, and high-level fact readability
+mathSoccer	M1;M5;M10	SoccerView with typed Math answers in original Minik soccer scene	static_consistent_runtime_pending	Confirm answer fit, kick controls, scoring feedback, and shot timing
+mathTower	M1;M5;M10	Count/Build tower presentations with typed values, Minik frame, branded controls	static_consistent_runtime_pending	Confirm bottom-up construction, block fit, drag/tap alternatives, and high-level values
+mathMemory	M1;M5;M10	MemoryView with typed equivalent Math pairs, blank gradient backs, Minik feedback	static_consistent_runtime_pending	Confirm equivalence clarity, responsive grid, reveal timing, and card fit
+pingPong	M1;M5;M10	PingPongView using the dedicated table/mascot arena; non-curriculum at every level	static_consistent_runtime_pending	Confirm serve feel/hit targeting, typography, arena crop, controls, and match flow

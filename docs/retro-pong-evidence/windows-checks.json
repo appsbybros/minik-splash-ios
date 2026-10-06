@@ -1,0 +1,83 @@
+[
+  {
+    "command": [
+      "node",
+      "Tests/RetroPong/engine.test.cjs"
+    ],
+    "exit_code": 0,
+    "stdout": "PASS Syntax and native iOS capability gates\nPASS All match settings persist; legacy swipe preference cannot remove arrows\nPASS Highest rank always sets both arrow design and player paddle color/width\nPASS Train collision only with Balloon Madness; tap works either way\nPASS Replay goes straight to the countdown; Start label is localized\nPASS Countdown emits game_start exactly once and pause defers it\nPASS Native app help explains paddle rank and has no computer-only instruction\nPASS New start audio is present, identical to its embedded audio bank\nPASS Native app menu entry skips automatic Help and countdown belongs to court\nPASS Native app train crosses both arrow gutters and keeps court-relative hit boxes\nPASS Native pause freezes train/rally clocks and adjusts countdown deadlines on resume\nPASS Train horn fires once per visit; world freezes and recovers gradually after one accepted tap\nPASS Wrong train tap reduces arithmetic level once and never changes match score\nPASS All arithmetic operations produce four distinct choices and one exact answer across levels\nPASS Opponent tuning and actual movement are ordered Beginner, Medium, Hard\nPASS Player and Minik contact/point sounds retain distinct semantic mappings\n16 refinement checks passed for C:\\Projects\\Minik-to-IOS\\ios-main-merge\\Resources\\RetroPong\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "Tests/RetroPong/host.test.cjs"
+    ],
+    "exit_code": 0,
+    "stdout": "✔ Native progress seeds the game before it boots and only Pong is mirrored (1.3172ms)\n✔ Native mirror keeps working if WebKit storage refuses a write (0.7934ms)\n✔ Paused launch and later foreground/background events control the game clock and audio (1.4851ms)\n✔ An early lifecycle update survives until game boot (0.6307ms)\n✔ Exit first uses the existing game cleanup, then notifies its native host (0.5649ms)\n✔ Menu music only sends commands to the single native player (0.5047ms)\n✔ Unknown language falls back to game selection, unsupported bridge remains harmless (0.5879ms)\nℹ tests 7\nℹ suites 0\nℹ pass 7\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 65.0432\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python",
+      "Scripts/audit-retro-pong.py"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"checks_passed\": 191, \"payload_entries\": 73, \"native_build_verified\": false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python",
+      "Scripts/audit-modern-pong.py"
+    ],
+    "exit_code": 0,
+    "stdout": "{\n  \"status\": \"PASS\",\n  \"source_asset_config_checks\": 152,\n  \"swift_tests_authored_not_executed\": 25,\n  \"asset_bytes\": 40431581,\n  \"checks\": [\n    \"Standalone target links required native services\",\n    \"Standalone resources contain Modern only\",\n    \"Standalone launches the new Full entry point\",\n    \"New shared Modern implementation has no legacy/80s dependencies\",\n    \"Apple Firebase registration matches the standalone bundle and project\",\n    \"Firebase client uses the existing regional Ping Pong namespace\",\n    \"Test ads enabled for Debug only; Release ads disabled\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/ModernPongAppIcon.appiconset/AppIcon.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_app_icon.imageset/app_icon.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_bot_amber.imageset/bot_amber.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_bot_coach67.imageset/bot_coach67.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_bot_comet.imageset/bot_comet.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_bot_flare.imageset/bot_flare.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_bot_gaya.imageset/bot_gaya.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_bot_june.imageset/bot_june.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_bot_kyra.imageset/bot_kyra.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_bot_mia.imageset/bot_mia.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_bot_miniko.imageset/bot_miniko.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_bot_moshiko.imageset/bot_moshiko.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_left_accelerate.imageset/minik_left_accelerate.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_left_contact.imageset/minik_left_contact.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_left_follow.imageset/minik_left_follow.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_left_ready.imageset/minik_left_ready.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_left_windup.imageset/minik_left_windup.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_motion_accelerate.imageset/minik_motion_accelerate.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_motion_back.imageset/minik_motion_back.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_motion_body.imageset/minik_motion_body.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_motion_contact.imageset/minik_motion_contact.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_motion_follow.imageset/minik_motion_follow.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_motion_ready.imageset/minik_motion_ready.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_motion_step.imageset/minik_motion_step.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_minik_motion_windup.imageset/minik_motion_windup.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_ping_pong_arena.imageset/ping_pong_arena.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_ping_pong_ball.imageset/ping_pong_ball.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_ping_pong_player_easy_backhand.imageset/ping_pong_player_easy_backhand.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_ping_pong_player_easy_forehand.imageset/ping_pong_player_easy_forehand.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_ping_pong_player_hard_backhand.imageset/ping_pong_player_hard_backhand.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_ping_pong_player_hard_forehand.imageset/ping_pong_player_hard_forehand.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_ping_pong_player_medium_backhand.imageset/ping_pong_player_medium_backhand.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_ping_pong_player_medium_forehand.imageset/ping_pong_player_medium_forehand.png\",\n    \"Asset exists: Resources/ModernPongAssets.xcassets/mp_ping_pong_player_starter_paddle.imageset/ping_pong_player_starter_paddle.png\",\n    \"Payload exists: app_icon.png\",\n    \"Android reference unchanged: app_icon.webp\",\n    \"Payload exists: ping_pong_arena.png\",\n    \"Android reference unchanged: ping_pong_arena.webp\",\n    \"Payload exists: ping_pong_ball.png\",\n    \"Android reference unchanged: ping_pong_ball.webp\",\n    \"Payload exists: ping_pong_player_starter_paddle.png\",\n    \"Android reference unchanged: ping_pong_player_starter_paddle.webp\",\n    \"Payload exists: ping_pong_player_easy_forehand.png\",\n    \"Android reference unchanged: ping_pong_player_easy_forehand.webp\",\n    \"Payload exists: ping_pong_player_easy_backhand.png\",\n    \"Android reference unchanged: ping_pong_player_easy_backhand.webp\",\n    \"Payload exists: ping_pong_player_medium_forehand.png\",\n    \"Android reference unchanged: ping_pong_player_medium_forehand.webp\",\n    \"Payload exists: ping_pong_player_medium_backhand.png\",\n    \"Android reference unchanged: ping_pong_player_medium_backhand.webp\",\n    \"Payload exists: ping_pong_player_hard_forehand.png\",\n    \"Android reference unchanged: ping_pong_player_hard_forehand.webp\",\n    \"Payload exists: ping_pong_player_hard_backhand.png\",\n    \"Android reference unchanged: ping_pong_player_hard_backhand.webp\",\n    \"Payload exists: minik_motion_ready.png\",\n    \"Android reference unchanged: minik_motion_ready.webp\",\n    \"Payload exists: minik_motion_step.png\",\n    \"Android reference unchanged: minik_motion_step.webp\",\n    \"Payload exists: minik_motion_back.png\",\n    \"Android reference unchanged: minik_motion_back.webp\",\n    \"Payload exists: minik_motion_windup.png\",\n    \"Android reference unchanged: minik_motion_windup.webp\",\n    \"Payload exists: minik_motion_accelerate.png\",\n    \"Android reference unchanged: minik_motion_accelerate.webp\",\n    \"Payload exists: minik_motion_contact.png\",\n    \"Android reference unchanged: minik_motion_contact.webp\",\n    \"Payload exists: minik_motion_follow.png\",\n    \"Android reference unchanged: minik_motion_follow.webp\",\n    \"Payload exists: minik_motion_body.png\",\n    \"Android reference unchanged: minik_motion_body.webp\",\n    \"Payload exists: minik_left_ready.png\",\n    \"Android reference unchanged: minik_left_ready.webp\",\n    \"Payload exists: minik_left_windup.png\",\n    \"Android reference unchanged: minik_left_windup.webp\",\n    \"Payload exists: minik_left_accelerate.png\",\n    \"Android reference unchanged: minik_left_accelerate.webp\",\n    \"Payload exists: minik_left_contact.png\",\n    \"Android reference unchanged: minik_left_contact.webp\",\n    \"Payload exists: minik_left_follow.png\",\n    \"Android reference unchanged: minik_left_follow.webp\",\n    \"Payload exists: bot_flare.png\",\n    \"Android reference unchanged: bot_flare.webp\",\n    \"Payload exists: bot_kyra.png\",\n    \"Android reference unchanged: bot_kyra.webp\",\n    \"Payload exists: bot_gaya.png\",\n    \"Android reference unchanged: bot_gaya.webp\",\n    \"Payload exists: bot_mia.png\",\n    \"Android reference unchanged: bot_mia.webp\",\n    \"Payload exists: bot_amber.png\",\n    \"Android reference unchanged: bot_amber.webp\",\n    \"Payload exists: bot_comet.png\",\n    \"Android reference unchanged: bot_comet.webp\",\n    \"Payload exists: bot_june.png\",\n    \"Android reference unchanged: bot_june.webp\",\n    \"Payload exists: bot_moshiko.png\",\n    \"Android reference unchanged: bot_moshiko.webp\",\n    \"Payload exists: bot_miniko.png\",\n    \"Android reference unchanged: bot_miniko.webp\",\n    \"Payload exists: bot_coach67.png\",\n    \"Android reference unchanged: bot_coach67.webp\",\n    \"Payload exists: minik_kick.mp3\",\n    \"Android reference unchanged: minik_kick.mp3\",\n    \"Payload exists: minik_kick2.mp3\",\n    \"Android reference unchanged: minik_kick2.mp3\",\n    \"Payload exists: splash.mp3\",\n    \"Android reference unchanged: splash.mp3\",\n    \"Payload exists: failure_sound.mp3\",\n    \"Android reference unchanged: failure_sound.mp3\",\n    \"Payload exists: success_in_a_raw_sound.mp3\",\n    \"Android reference unchanged: success_in_a_raw_sound.mp3\",\n    \"Payload exists: minik_claps.mp3\",\n    \"Android reference unchanged: minik_claps.mp3\",\n    \"Payload exists: success_pictures_screen_sound.mp3\",\n    \"Android reference unchanged: success_pictures_screen_sound.mp3\",\n    \"Payload exists: connected.mp3\",\n    \"Android reference unchanged: connected.mp3\",\n    \"Payload exists: player_ready.mp3\",\n    \"Android reference unchanged: player_ready.mp3\",\n    \"Payload exists: cool_music2.mp3\",\n    \"Android reference unchanged: cool_music2.mp3\",\n    \"Sound reference resolves: minik_kick2\",\n    \"Sound reference resolves: connected\",\n    \"Sound reference resolves: splash\",\n    \"Sound reference resolves: player_ready\",\n    \"Sound reference resolves: minik_claps\",\n    \"Sound reference resolves: minik_kick\",\n    \"Sound reference resolves: failure_sound\",\n    \"Guide loop asset included\",\n    \"Exact Android AI profile: Easy\",\n    \"Exact Android AI profile: Medium\",\n    \"Exact Android AI profile: Hard\",\n    \"Exact Android AI profile: Super hard\",\n    \"Eleven Android house players available\",\n    \"Exact Android house-player identity/skills: minik\",\n    \"Exact Android house-player identity/skills: flare\",\n    \"Exact Android house-player identity/skills: kyra\",\n    \"Exact Android house-player identity/skills: gaya\",\n    \"Exact Android house-player identity/skills: mia\",\n    \"Exact Android house-player identity/skills: amber\",\n    \"Exact Android house-player identity/skills: comet\",\n    \"Exact Android house-player identity/skills: june\",\n    \"Exact Android house-player identity/skills: moshiko\",\n    \"Exact Android house-player identity/skills: miniko\",\n    \"Exact Android house-player identity/skills: coach67\",\n    \"Focused XCTest cases registered: 25\"\n  ]\n}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-File",
+      "Scripts/audit-release-configuration.ps1"
+    ],
+    "exit_code": 0,
+    "stdout": "RELEASE_APPICON_SETS_FOUND=5\nRELEASE_ENTITLEMENT_FILES_FOUND=1\nRELEASE_CANONICAL_BUNDLE_IDENTIFIERS=5\nRELEASE_FORBIDDEN_BUNDLE_IDENTIFIER_ERRORS=0\nRELEASE_FIREBASE_PLIST_MAPPINGS=2\nRELEASE_FIREBASE_PLIST_MISMATCH_ERRORS=0\nRELEASE_FIREBASE_CONFIGURE_CALLS=1\nRELEASE_REQUIRED_REASON_API_CATEGORIES=UserDefaults\nRELEASE_OTHER_REQUIRED_REASON_API_REFERENCES=0\nRELEASE_CONFIGURATION_AUDIT_ERRORS=0\nRELEASE_CONFIGURATION_AUDIT_OK\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-File",
+      "Scripts/audit-minik-ads.ps1"
+    ],
+    "exit_code": 0,
+    "stdout": "MINIK_ADS_AUDIT_ERRORS=0\nMINIK_ADS_AUDIT_OK\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-File",
+      "Scripts/audit-minik-commerce.ps1"
+    ],
+    "exit_code": 0,
+    "stdout": "MINIK_COMMERCE_ERRORS=0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-File",
+      "Scripts/audit-product-configuration-tests.ps1"
+    ],
+    "exit_code": 0,
+    "stdout": "PRODUCT_CONFIGURATION_TEST_FILES_AUDITED=95\nPRODUCT_CONFIGURATION_TEST_LINES_AUDITED=19898\nMANIFEST_ENTRY_CALLS_AUDITED=2\nTEST_MANIFEST_ENTRY_CALLS_AUDITED=1\nLEARNING_TEXT_CALLS_AUDITED=34\nOPTIONAL_ANDROID_WORD_ID_INTERPOLATIONS=0\nTEST_OPAQUE_VIEW_RETURN_SITES=0\nPRODUCT_CONFIGURATION_TEST_COMPATIBILITY_ERRORS=0\nM3_BUILD_BOUNDARY_SELF_TESTS=5 rejected mutations\nM3_BUILD_BOUNDARY_CONTRACT_OK\nLIMIT: Source contracts only; randomized values, Swift typechecking and XCTest execution are not evaluated by this script.\n",
+    "stderr": ""
+  }
+]

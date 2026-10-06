@@ -1,0 +1,117 @@
+name: iOS CI
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: macos-26
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Print environment information
+        run: |
+          sw_vers
+          xcodebuild -version
+          swift --version
+
+      - name: Install XcodeGen
+        run: |
+          if ! command -v xcodegen >/dev/null 2>&1; then
+            brew install xcodegen
+          fi
+          xcodegen --version
+
+      - name: Generate Xcode project
+        run: |
+          xcodegen generate
+          if [[ ! -d Minik.xcodeproj ]]; then
+            echo "Error: XcodeGen did not generate Minik.xcodeproj." >&2
+            exit 1
+          fi
+
+      - name: Build Minik Plus
+        run: |
+          xcodebuild \
+            -project Minik.xcodeproj \
+            -scheme MinikPlus \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Build Minik Plus English
+        run: |
+          xcodebuild \
+            -project Minik.xcodeproj \
+            -scheme MinikPlusEnglish \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Build Minik Math
+        run: |
+          xcodebuild \
+            -project Minik.xcodeproj \
+            -scheme MinikMath \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Select an available iPhone simulator
+        run: |
+          SIMULATOR_SELECTION="$(xcrun simctl list devices available -j | python3 -c '
+          import json
+          import re
+          import sys
+
+          devices_by_runtime = json.load(sys.stdin)["devices"]
+          candidates = []
+
+          for runtime, devices in devices_by_runtime.items():
+              match = re.search(r"\.iOS-(\d+(?:-\d+)*)$", runtime)
+              if not match:
+                  continue
+
+              version = tuple(int(component) for component in match.group(1).split("-"))
+              for device in devices:
+                  if device.get("isAvailable") and device.get("name", "").startswith("iPhone"):
+                      candidates.append((version, runtime, device["name"], device["udid"]))
+
+          if candidates:
+              newest_version = max(candidate[0] for candidate in candidates)
+              newest_devices = sorted(
+                  (candidate for candidate in candidates if candidate[0] == newest_version),
+                  key=lambda candidate: (candidate[2], candidate[3]),
+              )
+              _, runtime, name, udid = newest_devices[0]
+              print(f"{runtime}\t{name}\t{udid}")
+          ')"
+
+          if [[ -z "$SIMULATOR_SELECTION" ]]; then
+            echo "Error: No available iPhone simulator was found." >&2
+            xcrun simctl list devices available
+            exit 1
+          fi
+
+          IFS=$'\t' read -r SIMULATOR_RUNTIME SIMULATOR_NAME SIMULATOR_UDID <<< "$SIMULATOR_SELECTION"
+          echo "Selected iOS runtime: $SIMULATOR_RUNTIME"
+          echo "Selected iPhone simulator: $SIMULATOR_NAME ($SIMULATOR_UDID)"
+          echo "SIMULATOR_UDID=$SIMULATOR_UDID" >> "$GITHUB_ENV"
+
+      - name: Run ProductConfiguration tests
+        run: |
+          xcodebuild \
+            -project Minik.xcodeproj \
+            -scheme MinikPlus \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_UDID" \
+            CODE_SIGNING_ALLOWED=NO \
+            test

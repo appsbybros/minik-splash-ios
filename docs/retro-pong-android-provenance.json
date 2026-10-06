@@ -1,0 +1,534 @@
+[
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\app.js",
+    "sourceSHA256": "f7fe7c1f043a63e3da3d591e57f51857cfa8391aa888e141a3aac4f0df307a2b",
+    "output": "Resources/RetroPong/app.js",
+    "outputSHA256": "b36e315cf7443208597ad6beea4471fb8af575f469c91a83c181e6892681cb61",
+    "outputHashMode": "lf-text"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\arrow_back.webp",
+    "sourceSHA256": "88520b783ce5b23253047ed95fae9f452573066913bda2872c80a32088c37bed",
+    "output": "Resources/RetroPong/assets/arrow_back.webp",
+    "outputSHA256": "88520b783ce5b23253047ed95fae9f452573066913bda2872c80a32088c37bed",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\ball_hit.mp3",
+    "sourceSHA256": "de20197edd7aec007b8a3d2e45e6add57163b6878c446e71501e4b51f531980e",
+    "output": "Resources/RetroPong/assets/audio/ball_hit.mp3",
+    "outputSHA256": "de20197edd7aec007b8a3d2e45e6add57163b6878c446e71501e4b51f531980e",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\balloon_explode.mp3",
+    "sourceSHA256": "a76b6e8696aae24bed43c28af28a71820b9eca0aa88a81618d9cd4daa3e643bd",
+    "output": "Resources/RetroPong/assets/audio/balloon_explode.mp3",
+    "outputSHA256": "a76b6e8696aae24bed43c28af28a71820b9eca0aa88a81618d9cd4daa3e643bd",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\car_hit.mp3",
+    "sourceSHA256": "bc6e59b89bcd1610d6f50a412d838c360925350eecbd65887d9a92aa10eb8878",
+    "output": "Resources/RetroPong/assets/audio/car_hit.mp3",
+    "outputSHA256": "bc6e59b89bcd1610d6f50a412d838c360925350eecbd65887d9a92aa10eb8878",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\failure_answer_sound.mp3",
+    "sourceSHA256": "4d349c088c0fef8a96265fefeb310182b6adbee888349af78fe10df28b2cabad",
+    "output": "Resources/RetroPong/assets/audio/failure_answer_sound.mp3",
+    "outputSHA256": "4d349c088c0fef8a96265fefeb310182b6adbee888349af78fe10df28b2cabad",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\failure_sound.mp3",
+    "sourceSHA256": "c3af78f5f0a591aa006b0959aedaa8b20e0224bc7e1454857ac4784807cfd896",
+    "output": "Resources/RetroPong/assets/audio/failure_sound.mp3",
+    "outputSHA256": "c3af78f5f0a591aa006b0959aedaa8b20e0224bc7e1454857ac4784807cfd896",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\game_start.mp3",
+    "sourceSHA256": "7602947cfc346901b9fea88e9ea881c7260a828ace9f2ff0d49937d8ab45e782",
+    "output": "Resources/RetroPong/assets/audio/game_start.mp3",
+    "outputSHA256": "7602947cfc346901b9fea88e9ea881c7260a828ace9f2ff0d49937d8ab45e782",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\minik_kick.mp3",
+    "sourceSHA256": "3b5bf005e77004c80e785ad396a4d110f631dd35638117af6e356cfd9e1ad020",
+    "output": "Resources/RetroPong/assets/audio/minik_kick.mp3",
+    "outputSHA256": "3b5bf005e77004c80e785ad396a4d110f631dd35638117af6e356cfd9e1ad020",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\minik_kick2.mp3",
+    "sourceSHA256": "d2a6e6eb3191c0498637b24897b420717bcae71c4b73f1ab5237db9c47a802f6",
+    "output": "Resources/RetroPong/assets/audio/minik_kick2.mp3",
+    "outputSHA256": "d2a6e6eb3191c0498637b24897b420717bcae71c4b73f1ab5237db9c47a802f6",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\splash.mp3",
+    "sourceSHA256": "de20197edd7aec007b8a3d2e45e6add57163b6878c446e71501e4b51f531980e",
+    "output": "Resources/RetroPong/assets/audio/splash.mp3",
+    "outputSHA256": "de20197edd7aec007b8a3d2e45e6add57163b6878c446e71501e4b51f531980e",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\success_in_a_raw_sound.mp3",
+    "sourceSHA256": "e5d4f4c8c99745d054493aeb5dc33ad30c0888777ccd327c9747c6ad45c406c1",
+    "output": "Resources/RetroPong/assets/audio/success_in_a_raw_sound.mp3",
+    "outputSHA256": "e5d4f4c8c99745d054493aeb5dc33ad30c0888777ccd327c9747c6ad45c406c1",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\success_sound.mp3",
+    "sourceSHA256": "3d542f91232b31cd1d9f45c50eb22c8c2f9184eb342c00c0548317b332f2913e",
+    "output": "Resources/RetroPong/assets/audio/success_sound.mp3",
+    "outputSHA256": "3d542f91232b31cd1d9f45c50eb22c8c2f9184eb342c00c0548317b332f2913e",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\train_hit.mp3",
+    "sourceSHA256": "92c1ab475858749c406d52a16da1fbc1ca613a8dab097225b1c1a56232cb102b",
+    "output": "Resources/RetroPong/assets/audio/train_hit.mp3",
+    "outputSHA256": "92c1ab475858749c406d52a16da1fbc1ca613a8dab097225b1c1a56232cb102b",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\audio\\train_horn.mp3",
+    "sourceSHA256": "680ff8c5333710dad10228cae64a64864a000ba8b1bf3c385e08d09fef046e80",
+    "output": "Resources/RetroPong/assets/audio/train_horn.mp3",
+    "outputSHA256": "680ff8c5333710dad10228cae64a64864a000ba8b1bf3c385e08d09fef046e80",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\balloon1.webp",
+    "sourceSHA256": "cfb5344a8d04641a0ef05a8cf7bc08f483f04d09c79f00f4931cf5822f46aa51",
+    "output": "Resources/RetroPong/assets/balloon1.webp",
+    "outputSHA256": "cfb5344a8d04641a0ef05a8cf7bc08f483f04d09c79f00f4931cf5822f46aa51",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\balloon2.webp",
+    "sourceSHA256": "16513fcf46c887c6c67d61edb6039408bba277038bc189d547de6e3f075ef5c3",
+    "output": "Resources/RetroPong/assets/balloon2.webp",
+    "outputSHA256": "16513fcf46c887c6c67d61edb6039408bba277038bc189d547de6e3f075ef5c3",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\balloon3.webp",
+    "sourceSHA256": "fffd6d53e9b2499efd52e7e4521d3ebd3f6277741c51ae143bf8b41430225287",
+    "output": "Resources/RetroPong/assets/balloon3.webp",
+    "outputSHA256": "fffd6d53e9b2499efd52e7e4521d3ebd3f6277741c51ae143bf8b41430225287",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\balloon4.webp",
+    "sourceSHA256": "52b8bd3c62c8fab327b1fa2d1d354f28848ee8fd0fda7c4190bac998566e9b20",
+    "output": "Resources/RetroPong/assets/balloon4.webp",
+    "outputSHA256": "52b8bd3c62c8fab327b1fa2d1d354f28848ee8fd0fda7c4190bac998566e9b20",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\balloon5.webp",
+    "sourceSHA256": "2661936756e7938ad178a0104753131be584944db34f4cdad2cebf836f1d6899",
+    "output": "Resources/RetroPong/assets/balloon5.webp",
+    "outputSHA256": "2661936756e7938ad178a0104753131be584944db34f4cdad2cebf836f1d6899",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\balloon6.webp",
+    "sourceSHA256": "3a002f363c8324dc7a8ee3e956a8f4ed84e1bf3884e69aa3af4b99a024373333",
+    "output": "Resources/RetroPong/assets/balloon6.webp",
+    "outputSHA256": "3a002f363c8324dc7a8ee3e956a8f4ed84e1bf3884e69aa3af4b99a024373333",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\balloon7.webp",
+    "sourceSHA256": "f9e713dfc96e8d66d04fb2cfe6bab3cbfbc801eb476428cbfcb8e4d8e109409a",
+    "output": "Resources/RetroPong/assets/balloon7.webp",
+    "outputSHA256": "f9e713dfc96e8d66d04fb2cfe6bab3cbfbc801eb476428cbfcb8e4d8e109409a",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\balloon8.webp",
+    "sourceSHA256": "d29a25a32e995351562d026b77db435a508e09fa3e2420891c0bdbb49d3630ba",
+    "output": "Resources/RetroPong/assets/balloon8.webp",
+    "outputSHA256": "d29a25a32e995351562d026b77db435a508e09fa3e2420891c0bdbb49d3630ba",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\bounce-logo.webp",
+    "sourceSHA256": "e20b8da645f3efb7b0d1126ffb534e0b4128cb1a4cbd36680c7e40d02d44987c",
+    "output": "Resources/RetroPong/assets/bounce-logo.webp",
+    "outputSHA256": "e20b8da645f3efb7b0d1126ffb534e0b4128cb1a4cbd36680c7e40d02d44987c",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\bounce-mark.webp",
+    "sourceSHA256": "8e2549c68e27dd0e795ede946a537f180a25f7f7990d65fc83b3ede395be8527",
+    "output": "Resources/RetroPong/assets/bounce-mark.webp",
+    "outputSHA256": "8e2549c68e27dd0e795ede946a537f180a25f7f7990d65fc83b3ede395be8527",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\cloud_blue_a.webp",
+    "sourceSHA256": "7a3c0bb4a198aeb473b5ddaa7cacebb413baf814049e0a5317834bd55bac6432",
+    "output": "Resources/RetroPong/assets/cloud_blue_a.webp",
+    "outputSHA256": "7a3c0bb4a198aeb473b5ddaa7cacebb413baf814049e0a5317834bd55bac6432",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\cloud_blue_b.webp",
+    "sourceSHA256": "7769733c07640d3815eb07e427ccc30cfacad4eca5bea53516fbef31a7ff771b",
+    "output": "Resources/RetroPong/assets/cloud_blue_b.webp",
+    "outputSHA256": "7769733c07640d3815eb07e427ccc30cfacad4eca5bea53516fbef31a7ff771b",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\cloud_yellow.webp",
+    "sourceSHA256": "7ba01f86cc1f92fe84f6106376fd1494d414f40d6d206274db92ac48a73f2e15",
+    "output": "Resources/RetroPong/assets/cloud_yellow.webp",
+    "outputSHA256": "7ba01f86cc1f92fe84f6106376fd1494d414f40d6d206274db92ac48a73f2e15",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\cotton_candy_ball.webp",
+    "sourceSHA256": "c459eff7ec0981931d13ece7ed3837ae1d400a704f528b16ec0e524114bc722a",
+    "output": "Resources/RetroPong/assets/cotton_candy_ball.webp",
+    "outputSHA256": "c459eff7ec0981931d13ece7ed3837ae1d400a704f528b16ec0e524114bc722a",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_left_blue.webp",
+    "sourceSHA256": "c76e4ec9b48788a20023225a8fcfe3dc049d4dc53d252a59b26a5aea15c4f541",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_blue.webp",
+    "outputSHA256": "c76e4ec9b48788a20023225a8fcfe3dc049d4dc53d252a59b26a5aea15c4f541",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_left_blue_with_border.webp",
+    "sourceSHA256": "6587ffed4a6fb4150d33a3fda2cdb7a800546a22960573b70de157052855a821",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_blue_with_border.webp",
+    "outputSHA256": "6587ffed4a6fb4150d33a3fda2cdb7a800546a22960573b70de157052855a821",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_left_green.webp",
+    "sourceSHA256": "1e5883a39f2ca1ba290622cc1b42dcd03cc9c3be5d7ca3ecd48cb22c5527f80c",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_green.webp",
+    "outputSHA256": "1e5883a39f2ca1ba290622cc1b42dcd03cc9c3be5d7ca3ecd48cb22c5527f80c",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_left_green_with_border.webp",
+    "sourceSHA256": "5e61f4b353ac585f3c27024f58386c26675262e249ed0e563fceaaa3611297ff",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_green_with_border.webp",
+    "outputSHA256": "5e61f4b353ac585f3c27024f58386c26675262e249ed0e563fceaaa3611297ff",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_left_red.webp",
+    "sourceSHA256": "48b50013923e6bcfd6da1e9b68a8a724cfba02c7b1ebd5fbcebb5dc46d384439",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_red.webp",
+    "outputSHA256": "48b50013923e6bcfd6da1e9b68a8a724cfba02c7b1ebd5fbcebb5dc46d384439",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_left_red_with_border.webp",
+    "sourceSHA256": "940c6fa78af8bb55059dd8659d8e91153c8fe4bc84586c52bdce36a529b04d89",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_red_with_border.webp",
+    "outputSHA256": "940c6fa78af8bb55059dd8659d8e91153c8fe4bc84586c52bdce36a529b04d89",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_left_silver_with_border.webp",
+    "sourceSHA256": "5388c8363dd0fbcbdf55e7c911365cb43c8501926de1b305016b0cac83e29f19",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_silver_with_border.webp",
+    "outputSHA256": "5388c8363dd0fbcbdf55e7c911365cb43c8501926de1b305016b0cac83e29f19",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_left_yellow.webp",
+    "sourceSHA256": "3fa5a2db64288752a2e90c1716e1815a54c38e438096c955f3827e72fc010c20",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_left_yellow.webp",
+    "outputSHA256": "3fa5a2db64288752a2e90c1716e1815a54c38e438096c955f3827e72fc010c20",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_right_blue.webp",
+    "sourceSHA256": "65dd68c3fcfea3835735123587a2ef1b5667d1d9552bb8e0af743a9ffa07f906",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_blue.webp",
+    "outputSHA256": "65dd68c3fcfea3835735123587a2ef1b5667d1d9552bb8e0af743a9ffa07f906",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_right_blue_with_border.webp",
+    "sourceSHA256": "9f679624d91ad542e2568f0fc32a93f67cd10c8b2f99b39eb90291348bef0379",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_blue_with_border.webp",
+    "outputSHA256": "9f679624d91ad542e2568f0fc32a93f67cd10c8b2f99b39eb90291348bef0379",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_right_green.webp",
+    "sourceSHA256": "b1d2e48099e2dfae1f1f8b6de3833fca6a56efba59423d6e1ef915babcb9361c",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_green.webp",
+    "outputSHA256": "b1d2e48099e2dfae1f1f8b6de3833fca6a56efba59423d6e1ef915babcb9361c",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_right_green_with_border.webp",
+    "sourceSHA256": "2e26e42e540aaf81a8e88f363e56a62c6f211cfc54df08380db3367bd6cdc51b",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_green_with_border.webp",
+    "outputSHA256": "2e26e42e540aaf81a8e88f363e56a62c6f211cfc54df08380db3367bd6cdc51b",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_right_red.webp",
+    "sourceSHA256": "741cf292f6ece683aa8c0fe1ab38c67c98fa0691f9da14769ca4607ec595afac",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_red.webp",
+    "outputSHA256": "741cf292f6ece683aa8c0fe1ab38c67c98fa0691f9da14769ca4607ec595afac",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_right_red_with_border.webp",
+    "sourceSHA256": "19a6f679009a9e9f0db43f8dab2f4ee8e014fc22e011def89b990d7c8090f63b",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_red_with_border.webp",
+    "outputSHA256": "19a6f679009a9e9f0db43f8dab2f4ee8e014fc22e011def89b990d7c8090f63b",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_right_silver_with_border.webp",
+    "sourceSHA256": "583ffae74694f8a33bdcf38deb106f61584e0c36cc96125fa0d52ba1a3e2bc89",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_silver_with_border.webp",
+    "outputSHA256": "583ffae74694f8a33bdcf38deb106f61584e0c36cc96125fa0d52ba1a3e2bc89",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\ping_ping_arrow_right_yellow.webp",
+    "sourceSHA256": "c388c61a46e2f22b15de885b26733dc96bd664535bef5d8698938dc686460883",
+    "output": "Resources/RetroPong/assets/expansion/ping_ping_arrow_right_yellow.webp",
+    "outputSHA256": "c388c61a46e2f22b15de885b26733dc96bd664535bef5d8698938dc686460883",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\train_engine.webp",
+    "sourceSHA256": "1ccb5d9c69f7c1b3d3dd10847b6705df2dd05e62dfe8c64ed9d584f9ad49cb8a",
+    "output": "Resources/RetroPong/assets/expansion/train_engine.webp",
+    "outputSHA256": "1ccb5d9c69f7c1b3d3dd10847b6705df2dd05e62dfe8c64ed9d584f9ad49cb8a",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\train_smoke.webp",
+    "sourceSHA256": "97c82903c6b20187a70ebf44bc54215c160e4cd1faeb04f29d50b486eda954fc",
+    "output": "Resources/RetroPong/assets/expansion/train_smoke.webp",
+    "outputSHA256": "97c82903c6b20187a70ebf44bc54215c160e4cd1faeb04f29d50b486eda954fc",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\train_wagon1.webp",
+    "sourceSHA256": "906fef7c0c068cfaaf62780bb20412a4d1a95fff55a19e4bd3d774c5015b0560",
+    "output": "Resources/RetroPong/assets/expansion/train_wagon1.webp",
+    "outputSHA256": "906fef7c0c068cfaaf62780bb20412a4d1a95fff55a19e4bd3d774c5015b0560",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\train_wagon2.webp",
+    "sourceSHA256": "ffc33f7ec6bac5324fad9225d7053eef1150655c0b6f26620f145fa5137e6c28",
+    "output": "Resources/RetroPong/assets/expansion/train_wagon2.webp",
+    "outputSHA256": "ffc33f7ec6bac5324fad9225d7053eef1150655c0b6f26620f145fa5137e6c28",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\train_wagon3.webp",
+    "sourceSHA256": "08112119762b148ec1cd5e7f268fafb8d6aee80ac1a97bb2fef67eeef2a14cd2",
+    "output": "Resources/RetroPong/assets/expansion/train_wagon3.webp",
+    "outputSHA256": "08112119762b148ec1cd5e7f268fafb8d6aee80ac1a97bb2fef67eeef2a14cd2",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\expansion\\train_wagon4.webp",
+    "sourceSHA256": "7b3ae89e73cf6d00b28935bfafd76aaa21ef09eaba493a1ab6c99ab32c18266d",
+    "output": "Resources/RetroPong/assets/expansion/train_wagon4.webp",
+    "outputSHA256": "7b3ae89e73cf6d00b28935bfafd76aaa21ef09eaba493a1ab6c99ab32c18266d",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\karting_minik_background.webp",
+    "sourceSHA256": "9ef6049ec43e8137313b701ab679263c098a4aa464d8748c94a7cb7d6920fd29",
+    "output": "Resources/RetroPong/assets/karting_minik_background.webp",
+    "outputSHA256": "9ef6049ec43e8137313b701ab679263c098a4aa464d8748c94a7cb7d6920fd29",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\mascot-rainbow-cat.webp",
+    "sourceSHA256": "8f630875032c01be2681fc5576b9308a5693e4e1f1df505a191012cf7ee4f394",
+    "output": "Resources/RetroPong/assets/mascot-rainbow-cat.webp",
+    "outputSHA256": "8f630875032c01be2681fc5576b9308a5693e4e1f1df505a191012cf7ee4f394",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-brand.png",
+    "sourceSHA256": "5e3452ddf5c729f418937c8c2565e448c0760540571a9538cb7d5c14e04bd5fe",
+    "output": "Resources/RetroPong/assets/minik-brand.png",
+    "outputSHA256": "5e3452ddf5c729f418937c8c2565e448c0760540571a9538cb7d5c14e04bd5fe",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-close.webp",
+    "sourceSHA256": "b5c1826926860dd2398f4884fad3b1732473e1c800dcf9aa2257ab4d212888ed",
+    "output": "Resources/RetroPong/assets/minik-close.webp",
+    "outputSHA256": "b5c1826926860dd2398f4884fad3b1732473e1c800dcf9aa2257ab4d212888ed",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-logo.webp",
+    "sourceSHA256": "355ba69ef3ed25c1376899ee9aca07434231704cd183a34960aab2498666e7d1",
+    "output": "Resources/RetroPong/assets/minik-logo.webp",
+    "outputSHA256": "355ba69ef3ed25c1376899ee9aca07434231704cd183a34960aab2498666e7d1",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-love.webp",
+    "sourceSHA256": "ca978449bffc9f76673ed47b0dfcb9c577d04d58e4195d042e2c25181452ce98",
+    "output": "Resources/RetroPong/assets/minik-love.webp",
+    "outputSHA256": "ca978449bffc9f76673ed47b0dfcb9c577d04d58e4195d042e2c25181452ce98",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-no-0.webp",
+    "sourceSHA256": "7cec4ae0cc48db8192042f29fbcfe4830e49ce480009518dfae41f2fc3eff700",
+    "output": "Resources/RetroPong/assets/minik-no-0.webp",
+    "outputSHA256": "7cec4ae0cc48db8192042f29fbcfe4830e49ce480009518dfae41f2fc3eff700",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-no-1.webp",
+    "sourceSHA256": "02b6a80afae418de6c75f0e7609e73488da62641a16fdb3d128a069e51d16739",
+    "output": "Resources/RetroPong/assets/minik-no-1.webp",
+    "outputSHA256": "02b6a80afae418de6c75f0e7609e73488da62641a16fdb3d128a069e51d16739",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-no-2.webp",
+    "sourceSHA256": "8fcb7ad04a129ffbfdf1c576bbf9d83cdfe6478fa2a4c634138ced9efa32b873",
+    "output": "Resources/RetroPong/assets/minik-no-2.webp",
+    "outputSHA256": "8fcb7ad04a129ffbfdf1c576bbf9d83cdfe6478fa2a4c634138ced9efa32b873",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-no-3.webp",
+    "sourceSHA256": "282bcd9a0aabeeedeee811a1f2e67f8a43a8137128c83e217d6c7d4b9efc1d1e",
+    "output": "Resources/RetroPong/assets/minik-no-3.webp",
+    "outputSHA256": "282bcd9a0aabeeedeee811a1f2e67f8a43a8137128c83e217d6c7d4b9efc1d1e",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-no-4.webp",
+    "sourceSHA256": "d03c91dfc00b8f54151bdf8f0b8738d8ead8588d5f31f3c92700e2fcd5e07e62",
+    "output": "Resources/RetroPong/assets/minik-no-4.webp",
+    "outputSHA256": "d03c91dfc00b8f54151bdf8f0b8738d8ead8588d5f31f3c92700e2fcd5e07e62",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-ping-pong-logo.webp",
+    "sourceSHA256": "f550d8f0d1b15bbc06076f4f175c573003a1a96f6c843236c232a3ea4f423bf9",
+    "output": "Resources/RetroPong/assets/minik-ping-pong-logo.webp",
+    "outputSHA256": "f550d8f0d1b15bbc06076f4f175c573003a1a96f6c843236c232a3ea4f423bf9",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-pong.webp",
+    "sourceSHA256": "fb49ce3521e05c442ac6ae5726134f5b0a26bef2cf603df36c53e0a98938ec13",
+    "output": "Resources/RetroPong/assets/minik-pong.webp",
+    "outputSHA256": "fb49ce3521e05c442ac6ae5726134f5b0a26bef2cf603df36c53e0a98938ec13",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik-success.webp",
+    "sourceSHA256": "d7a8e3295a2f20e970af309f48ad77c1636c742f529421fed50ad2540f16cbf9",
+    "output": "Resources/RetroPong/assets/minik-success.webp",
+    "outputSHA256": "d7a8e3295a2f20e970af309f48ad77c1636c742f529421fed50ad2540f16cbf9",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\minik_rainbow_car.webp",
+    "sourceSHA256": "b38b0c000978bbe933bf311c9a2ede009a8fcecb459f8174c1646d7c6e9374e9",
+    "output": "Resources/RetroPong/assets/minik_rainbow_car.webp",
+    "outputSHA256": "b38b0c000978bbe933bf311c9a2ede009a8fcecb459f8174c1646d7c6e9374e9",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\s05_beach_ball_3d.webp",
+    "sourceSHA256": "1499e24824b3fac08fe6ea35f35c10df8f63d332809b17ae33dc95363ee5563e",
+    "output": "Resources/RetroPong/assets/s05_beach_ball_3d.webp",
+    "outputSHA256": "1499e24824b3fac08fe6ea35f35c10df8f63d332809b17ae33dc95363ee5563e",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\s05_beach_ball_round.webp",
+    "sourceSHA256": "167068b354cf3c111a8859327f305f944177168c0ff3959d7f4588fa472e54d2",
+    "output": "Resources/RetroPong/assets/s05_beach_ball_round.webp",
+    "outputSHA256": "167068b354cf3c111a8859327f305f944177168c0ff3959d7f4588fa472e54d2",
+    "outputHashMode": "bytes"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\assets\\settings-gear.svg",
+    "sourceSHA256": "0dd642d2ed2f7a296812c2b5cefbd89e73c97c624f2e325a88db307146e36321",
+    "output": "Resources/RetroPong/assets/settings-gear.svg",
+    "outputSHA256": "0dd642d2ed2f7a296812c2b5cefbd89e73c97c624f2e325a88db307146e36321",
+    "outputHashMode": "lf-text"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\index.html",
+    "sourceSHA256": "6a3a460440358707f92dbeccddcf5e6e52d18b598816e9d8157dba9e9d2767a8",
+    "output": "Resources/RetroPong/index.html",
+    "outputSHA256": "d34599b945b2db578ebb0c875a36d542b0a97b2fc6f191faace0f4eabab0e24d",
+    "outputHashMode": "lf-text"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\minik-audio-bank.js",
+    "sourceSHA256": "3e598375a34469f28914b325df8602128c373f116145ac792ace211e14dda823",
+    "output": "Resources/RetroPong/minik-audio-bank.js",
+    "outputSHA256": "3e598375a34469f28914b325df8602128c373f116145ac792ace211e14dda823",
+    "outputHashMode": "lf-text"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\minik-audio.js",
+    "sourceSHA256": "782255915b71603da556c7ce26f1978192813d67776ee47b29a22238b5c0c7c1",
+    "output": "Resources/RetroPong/minik-audio.js",
+    "outputSHA256": "782255915b71603da556c7ce26f1978192813d67776ee47b29a22238b5c0c7c1",
+    "outputHashMode": "lf-text"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\pong-extras.css",
+    "sourceSHA256": "f9780aaa565fcb1b64b7a7674ac679aaa92702d4107f373c574816b6add4a972",
+    "output": "Resources/RetroPong/pong-extras.css",
+    "outputSHA256": "f9780aaa565fcb1b64b7a7674ac679aaa92702d4107f373c574816b6add4a972",
+    "outputHashMode": "lf-text"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\pong-extras.js",
+    "sourceSHA256": "879d0313a58b7450d9e141c703f7f5124cffd08c7abcf9f6e693f1e817bd814d",
+    "output": "Resources/RetroPong/pong-extras.js",
+    "outputSHA256": "b037a7e63f187b4d2766b1d442879d9a49fca2edadb2ad8f171e1afd40c0daff",
+    "outputHashMode": "lf-text"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\pong-layout.css",
+    "sourceSHA256": "bbeb4bdd1ee75aac5fe39c6bbbcbd128e04ca73e5d698924a6ec363cea79f372",
+    "output": "Resources/RetroPong/pong-layout.css",
+    "outputSHA256": "bbeb4bdd1ee75aac5fe39c6bbbcbd128e04ca73e5d698924a6ec363cea79f372",
+    "outputHashMode": "lf-text"
+  },
+  {
+    "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\styles.css",
+    "sourceSHA256": "0edee1913f3b426749b2d23dad595acb9bfe9f3749b18e0c925fbd3cf92be1a5",
+    "output": "Resources/RetroPong/styles.css",
+    "outputSHA256": "0edee1913f3b426749b2d23dad595acb9bfe9f3749b18e0c925fbd3cf92be1a5",
+    "outputHashMode": "lf-text"
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "Records & Streaks": {
+    "am": "ሪከርዶች እና ተከታታይ ስኬቶች",
+    "ar": "الأرقام القياسية وسلاسل النجاح",
+    "de": "Rekorde und Erfolgsserien",
+    "es": "Récords y rachas",
+    "fr": "Records et séries",
+    "he": "שיאים ורצפים",
+    "nl": "Records en reeksen",
+    "pt-BR": "Recordes e sequências",
+    "pt-PT": "Recordes e sequências",
+    "ru": "Рекорды и серии"
+  },
+  "Replay current card": {
+    "am": "የአሁኑን ካርድ እንደገና አጫውት",
+    "ar": "استمع إلى البطاقة مرة أخرى",
+    "de": "Aktuelle Karte erneut anhören",
+    "es": "Escuchar la tarjeta de nuevo",
+    "fr": "Réécouter la carte",
+    "he": "השמעת הכרטיס שוב",
+    "nl": "Luister opnieuw naar de kaart",
+    "pt-BR": "Ouvir o cartão novamente",
+    "pt-PT": "Ouvir o cartão novamente",
+    "ru": "Прослушать карточку ещё раз"
+  },
+  "Replay current word": {
+    "am": "የአሁኑን ቃል እንደገና አጫውት",
+    "ar": "استمع إلى الكلمة مرة أخرى",
+    "de": "Aktuelles Wort erneut anhören",
+    "es": "Escuchar la palabra de nuevo",
+    "fr": "Réécouter le mot",
+    "he": "השמעת המילה שוב",
+    "nl": "Luister opnieuw naar het woord",
+    "pt-BR": "Ouvir a palavra novamente",
+    "pt-PT": "Ouvir a palavra novamente",
+    "ru": "Прослушать слово ещё раз"
+  }
+}

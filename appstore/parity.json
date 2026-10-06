@@ -1,0 +1,146 @@
+{
+  "about": "Android parity captures. The 'Android parity captures' workflow (.github/workflows/android-parity.yml) launches each scene with -MinikScreenshotScene <scene> plus the app, rewards and scene arguments below on an iPad mini and an iPhone Simulator at each text size; Scripts/parity-compose.py then puts every capture beside its Android reference. 'exact' is false when no scene opens the reference's screen and 'scene' is only the closest one; 'wanted' then names the screen to capture and 'wantedScene' the scene that would open it once the app handles it. 'note' says how the captured state differs from the reference. See docs/android-parity-capture.md.",
+  "referenceDir": "docs/reference/android-ui",
+  "defaultWait": 7,
+  "apps": {
+    "MinikPlus": {
+      "variant": "minikPlus",
+      "arguments": ["-AppleLanguages", "(he)", "-AppleLocale", "he_IL", "-minik.interface-locale.v1", "he"],
+      "note": "Hebrew interface learning English, as in the Android references."
+    },
+    "MinikPlusEnglish": {
+      "variant": "minikPlusEnglish",
+      "arguments": ["-AppleLanguages", "(en)", "-AppleLocale", "en_US", "-minik.interface-locale.v1", "en"],
+      "note": "English interface (English Only). The references are Hebrew and right-to-left, so compare the composition only."
+    }
+  },
+  "rewards": {
+    "about": "Seeds the Points / Current streak / Best streak badges with the values in the references through the launch argument -minik.rewards.v1 <ledger JSON as property-list data>, read only for this launch. If the badges show 0 the seed was not read; the layout is still comparable.",
+    "key": "minik.rewards.v1",
+    "points": 211,
+    "currentStreak": 4,
+    "bestStreak": 13
+  },
+  "references": [
+    {
+      "id": "01-language-word-to-picture-pea",
+      "title": "Word to picture",
+      "scene": "language.wordToImage",
+      "exact": true,
+      "note": "Opens on a fresh question; the word and the four pictures are random."
+    },
+    {
+      "id": "02-language-picture-to-word-pig",
+      "title": "Picture to word",
+      "scene": "language.imageToWord",
+      "exact": true,
+      "note": "Captures the unanswered question. The reference shows the Minik success jump and stars after a correct answer, which needs a tap."
+    },
+    {
+      "id": "03-language-first-letter-picture-to-letter",
+      "title": "First letter: picture to letter",
+      "scene": "language.firstLetterChoices",
+      "exact": true,
+      "note": "Opens on a fresh question; the picture and the letters are random."
+    },
+    {
+      "id": "04-language-first-letter-letter-to-picture",
+      "title": "First letter: letter to picture",
+      "scene": "language.firstLetterPictures",
+      "exact": true,
+      "note": "Captures the unanswered question. The reference shows the state after a pick (the picked card tinted pink, a Minik reaction and the Next button), which needs a tap."
+    },
+    {
+      "id": "05-language-word-cards-corn",
+      "title": "Word cards",
+      "scene": "language.wordCards",
+      "exact": true,
+      "note": "The word is random."
+    },
+    {
+      "id": "06-language-build-word-hebrew",
+      "title": "Build the word",
+      "scene": "language.wordBuild",
+      "exact": true,
+      "note": "Captures an empty answer box; the reference already has two letters placed ('Ar' of Arrow)."
+    },
+    {
+      "id": "07-language-letter-pairs",
+      "title": "Letter pairs",
+      "scene": "language.letterPairs",
+      "exact": true,
+      "note": "The reference has one card selected (yellow border); the capture has none selected."
+    },
+    {
+      "id": "08-soccer-instructions",
+      "title": "Soccer instructions",
+      "scene": "language.soccer",
+      "exact": true,
+      "wait": 8,
+      "arguments": ["-minik.languageSoccer.introductionPresentationCount.v1", "0"],
+      "note": "The launch argument makes the introduction show on every launch (normally only the first three)."
+    },
+    {
+      "id": "09-soccer-gameplay",
+      "title": "Soccer gameplay",
+      "scene": "language.soccer",
+      "exact": true,
+      "wait": 8,
+      "arguments": ["-minik.languageSoccer.introductionPresentationCount.v1", "3"],
+      "note": "The launch argument skips the introduction. The capture shows the start of a round; the reference shows the 'Sorry' result after a kick, and its balls carry Hebrew letters."
+    },
+    {
+      "id": "10-language-picture-memory",
+      "title": "Picture memory",
+      "scene": "language.wordMemory",
+      "exact": true,
+      "note": "All cards are face down; the reference shows one matched pair and two more cards turned."
+    },
+    {
+      "id": "11-language-alphabet-blocks",
+      "title": "Alphabet blocks",
+      "scene": "language.tower",
+      "exact": true,
+      "wait": 8,
+      "note": "Captures the start of a word; the reference has a Hebrew word partly built."
+    },
+    {
+      "id": "12-tic-tac-toe",
+      "title": "Tic-tac-toe",
+      "scene": "language.ticTacToe",
+      "exact": true,
+      "note": "Empty board before the first move; the reference has an X and an O placed."
+    },
+    {
+      "id": "13-language-learn-letter-b-banana",
+      "title": "Learn a letter",
+      "scene": "language.learn",
+      "exact": true,
+      "note": "Opens on the session's first letter, not necessarily B and Banana."
+    },
+    {
+      "id": "14-main-menu-language-activities",
+      "title": "Activity menu (top)",
+      "scene": "menu",
+      "exact": true,
+      "wait": 6,
+      "note": "The hub opens the activity menu (LanguageMenuView) at its top. Captures skip the first-visit 'more below' hint and spoken prompt, as the reference shows neither."
+    },
+    {
+      "id": "15-main-menu-games",
+      "title": "Activity menu (Games)",
+      "scene": "menu.games",
+      "exact": true,
+      "wait": 6,
+      "note": "The menu scrolled to its end (LanguageMenuView.applyStoreScreenshotScroll), so the Games section shows as in the reference. Where the whole board fits the screen nothing scrolls, and Games is already in view."
+    },
+    {
+      "id": "16-parent-area",
+      "title": "Parent Area",
+      "scene": "parents",
+      "exact": true,
+      "wait": 6,
+      "note": "The Parent Area over the Intro screen, as in the reference."
+    }
+  ]
+}

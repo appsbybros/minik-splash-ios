@@ -1,0 +1,201 @@
+name: App Store Commerce Package Tests
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package-tests:
+    runs-on: macos-15
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+        working-directory: Packages/AppStoreCommerceKit
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Record toolchain and discover an available simulator
+        run: |
+          set -euo pipefail
+          diagnostics="$GITHUB_WORKSPACE/app-store-commerce-diagnostics.log"
+          simulator_json="$RUNNER_TEMP/available-simulators.json"
+          scheme_destinations="$RUNNER_TEMP/app-store-commerce-destinations.txt"
+          selection="$RUNNER_TEMP/selected-simulator.tsv"
+          {
+            echo "checked_out_sha=$(git rev-parse HEAD)"
+            xcodebuild -version
+            simulator_sdk="$(xcrun --sdk iphonesimulator --show-sdk-version)"
+            echo "ios_simulator_sdk=$simulator_sdk"
+            echo "scheme_destinations:"
+            xcodebuild -scheme AppStoreCommerceKit -showdestinations | tee "$scheme_destinations"
+            echo "hosted_scheme_destinations:"
+            xcodebuild -project IntegrationTestHost/AppStoreCommerceKitTestHost.xcodeproj \
+              -scheme AppStoreCommerceKitHostedIntegrationTests -showdestinations
+            echo "hosted_test_plans:"
+            xcodebuild -project IntegrationTestHost/AppStoreCommerceKitTestHost.xcodeproj \
+              -scheme AppStoreCommerceKitHostedIntegrationTests -showTestPlans
+            echo "available_simulators:"
+            xcrun simctl list devices available
+            xcrun simctl list devices available -j > "$simulator_json"
+            python3 - "$simulator_json" "$simulator_sdk" > "$selection" <<'PY'
+          import json
+          import re
+          import sys
+
+          with open(sys.argv[1], encoding="utf-8") as source:
+              devices_by_runtime = json.load(source)["devices"]
+
+          sdk_match = re.fullmatch(r"\s*(\d+)(?:\.(\d+))?\s*", sys.argv[2])
+          if not sdk_match:
+              raise SystemExit(f"Unable to parse iOS Simulator SDK version: {sys.argv[2]!r}")
+          sdk_version = (int(sdk_match.group(1)), int(sdk_match.group(2) or 0))
+
+          candidates = []
+          for runtime, devices in devices_by_runtime.items():
+              match = re.search(r"\.iOS-(\d+)(?:-(\d+))?(?:-|$)", runtime)
+              if not match:
+                  continue
+              version = (int(match.group(1)), int(match.group(2) or 0))
+              if version < (17, 0):
+                  continue
+              for device in devices:
+                  if device.get("isAvailable") and device.get("name", "").startswith("iPhone"):
+                      preference = 1 if "Pro" in device["name"] else 0
+                      candidates.append((version, preference, device["name"], runtime, device["udid"]))
+
+          exact = [candidate for candidate in candidates if candidate[0] == sdk_version]
+          if exact:
+              selection_mode = "exact_sdk_runtime"
+              eligible = exact
+          else:
+              minimum_fallback_major = max(17, sdk_version[0] - 1)
+              eligible = [
+                  candidate
+                  for candidate in candidates
+                  if minimum_fallback_major <= candidate[0][0] <= sdk_version[0]
+                  and candidate[0] <= sdk_version
+              ]
+              selection_mode = "bounded_older_runtime"
+
+          if not eligible:
+              available_versions = sorted({candidate[0] for candidate in candidates})
+              formatted_versions = ", ".join(f"{major}.{minor}" for major, minor in available_versions)
+              raise SystemExit(
+                  "No available iPhone Simulator matches SDK "
+                  f"{sdk_version[0]}.{sdk_version[1]} or the bounded compatible range; "
+                  f"available iOS runtimes: {formatted_versions or 'none'}"
+              )
+
+          _, _, name, runtime, udid = max(eligible)
+          print(f"{selection_mode}\t{runtime}\t{udid}\t{name}")
+          PY
+            IFS=$'\t' read -r simulator_selection_mode simulator_runtime simulator_udid simulator_name < "$selection"
+            test -n "$simulator_selection_mode"
+            test -n "$simulator_runtime"
+            test -n "$simulator_udid"
+            echo "simulator_selection_mode=$simulator_selection_mode"
+            echo "selected_runtime=$simulator_runtime"
+            echo "selected_udid=$simulator_udid"
+            echo "selected_name=$simulator_name"
+            echo "SIMULATOR_SELECTION_MODE=$simulator_selection_mode" >> "$GITHUB_ENV"
+            echo "SIMULATOR_RUNTIME=$simulator_runtime" >> "$GITHUB_ENV"
+            echo "SIMULATOR_UDID=$simulator_udid" >> "$GITHUB_ENV"
+            echo "SIMULATOR_NAME=$simulator_name" >> "$GITHUB_ENV"
+
+            device_state="$(python3 - "$simulator_json" "$simulator_udid" <<'PY'
+          import json
+          import sys
+
+          with open(sys.argv[1], encoding="utf-8") as source:
+              devices_by_runtime = json.load(source)["devices"]
+          for devices in devices_by_runtime.values():
+              for device in devices:
+                  if device.get("udid") == sys.argv[2]:
+                      print(device.get("state", "Unknown"))
+                      raise SystemExit(0)
+          raise SystemExit("Selected simulator UDID disappeared before boot")
+          PY
+            )"
+            case "$device_state" in
+              Booted)
+                echo "boot_result=already_booted"
+                ;;
+              Shutdown)
+                if boot_output="$(xcrun simctl boot "$simulator_udid" 2>&1)"; then
+                  test -z "$boot_output" || echo "$boot_output"
+                  echo "boot_result=booted_by_workflow"
+                else
+                  boot_exit=$?
+                  if grep -q "current state: Booted" <<< "$boot_output"; then
+                    echo "$boot_output"
+                    echo "boot_result=already_booted_during_boot_race"
+                  else
+                    echo "$boot_output"
+                    echo "boot_result=failed:$boot_exit"
+                    exit "$boot_exit"
+                  fi
+                fi
+                ;;
+              *)
+                echo "boot_result=unsupported_initial_state:$device_state"
+                exit 1
+                ;;
+            esac
+            if xcrun simctl bootstatus "$simulator_udid" -b; then
+              echo "bootstatus_result=ready"
+            else
+              bootstatus_exit=$?
+              echo "bootstatus_result=failed:$bootstatus_exit"
+              exit "$bootstatus_exit"
+            fi
+          } 2>&1 | tee "$diagnostics"
+
+      - name: Run AppStoreCommerceKit package unit tests
+        run: |
+          set -euo pipefail
+          xcodebuild test \
+            -scheme AppStoreCommerceKit \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_UDID" \
+            -parallel-testing-enabled NO \
+            -only-testing:AppStoreCommerceKitTests \
+            -resultBundlePath "$GITHUB_WORKSPACE/app-store-commerce-package-tests.xcresult" \
+            2>&1 | tee "$GITHUB_WORKSPACE/app-store-commerce-package-tests.log"
+
+      - name: Run hosted StoreKit integration tests
+        if: ${{ always() && env.SIMULATOR_UDID != '' }}
+        run: |
+          set -euo pipefail
+          xcodebuild test \
+            -project IntegrationTestHost/AppStoreCommerceKitTestHost.xcodeproj \
+            -scheme AppStoreCommerceKitHostedIntegrationTests \
+            -testPlan AppStoreCommerceKitHostedIntegrationTests \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_UDID" \
+            -parallel-testing-enabled NO \
+            -resultBundlePath "$GITHUB_WORKSPACE/app-store-commerce-hosted-tests.xcresult" \
+            2>&1 | tee "$GITHUB_WORKSPACE/app-store-commerce-hosted-tests.log"
+
+      - name: Upload package logs and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-store-commerce-tests
+          path: |
+            app-store-commerce-diagnostics.log
+            app-store-commerce-package-tests.log
+            app-store-commerce-hosted-tests.log
+          if-no-files-found: warn
+          retention-days: 3
+
+      - name: Upload package xcresult when produced
+        if: ${{ always() && (hashFiles('app-store-commerce-package-tests.xcresult/**') != '' || hashFiles('app-store-commerce-hosted-tests.xcresult/**') != '') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-store-commerce-xcresult
+          path: |
+            app-store-commerce-package-tests.xcresult
+            app-store-commerce-hosted-tests.xcresult
+          if-no-files-found: error
+          retention-days: 3

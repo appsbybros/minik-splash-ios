@@ -1,0 +1,191 @@
+MINIK VOCABULARY SPRITE-SHEET IMAGE GENERATION PROMPT
+=====================================================
+
+You are generating educational vocabulary artwork for the Minik child-learning app.
+
+IMPORTANT WORKFLOW
+- Generate ONE sprite sheet per request, using the requested sheet section below.
+- Do not generate separate image files for the individual objects.
+- Return the sprite sheet itself as the image output.
+- Use a true transparent background (alpha), not white, gray, checkerboard, or a fake transparency pattern.
+
+GLOBAL ART DIRECTION
+- Friendly, polished, playful educational illustration suitable for children.
+- Bright, clean, modern Minik personality: soft rounded forms, expressive but not babyish.
+- Clear object identity is more important than decorative detail.
+- Consistent visual language across all sheets.
+- No text anywhere in the artwork.
+- No letters, numbers, logos, captions, labels, watermarks, UI, signs with readable writing, or brand marks.
+- No cell borders, no frames, no boxes, no background panels.
+- Avoid photorealism; use clean illustrated objects/scenes.
+- Do not add unrelated decorative objects.
+
+LAYOUT RULES
+- Use a 4 x 4 logical grid for sheets with 16 cells.
+- For the final partial sheet, preserve the same 4-column grid and leave unused cells fully transparent.
+- Cells are numbered left-to-right, top-to-bottom: 1..16.
+- Put exactly ONE requested vocabulary concept in each assigned cell.
+- Keep every concept entirely inside its own cell.
+- No object may overlap or touch another cell.
+- Leave clear transparent gutters between cells.
+- Center each object/scene in its cell.
+- Keep object scale visually consistent while allowing naturally long/wide items to fit.
+- Preserve all disconnected parts belonging to one concept inside its cell.
+
+CROPPING / DOWNSTREAM PROCESSING
+- Do NOT add deliberate transparent padding around the object inside its cell beyond what is needed to avoid clipping.
+- After generation, each cell will be cropped again using the non-transparent alpha bounding box.
+- Therefore the artwork itself must be complete and must not touch the cell boundary.
+- Do not use a drop shadow that extends far from the artwork; subtle contained shading is fine.
+
+AMBIGUITY RULES
+- Follow the visual brief exactly.
+- When 'avoid ambiguity with' is provided, make the requested concept clearly distinct from those concepts.
+- For abstract-looking items that remain in this manifest, use the concrete composition described in the brief rather than symbolic text.
+
+DO NOT GENERATE NATIONAL FLAGS HERE.
+Country/flag assets are handled separately as trusted non-generative assets.
+
+HOW TO USE THIS PROMPT
+1. Start a new regular ChatGPT conversation with image generation enabled.
+2. Paste this whole prompt once.
+3. Then ask: 'Generate sheet_001 now.'
+4. After reviewing it, continue sheet_002, sheet_003, etc.
+5. Do not change the cell mapping between generations.
+
+
+SHEET_001
+---------
+Generate this sheet with 16 assigned cells.
+
+Cell 01 | assetKey=flood | Flood / שיטפון | street with rising water around parked cars and sidewalk, isolated scene. Avoid ambiguity with: lake, ocean.
+Cell 02 | assetKey=waste | Waste / פסולת | single waste shown in a minimal real-world scene.
+Cell 03 | assetKey=wildfire | Wildfire / שרפת יער | line of burning trees with visible smoke, isolated scene. Avoid ambiguity with: campfire, sunset.
+Cell 04 | assetKey=bagel | Bagel / בייגל | single bagel presented clearly on plain background.
+Cell 05 | assetKey=burrito | Burrito / בוריטו | single burrito presented clearly on plain background.
+Cell 06 | assetKey=cereal | Cereal / דגני בוקר | single cereal presented clearly on plain background.
+Cell 07 | assetKey=chicken_nuggets | Chicken nuggets / נאגטס עוף | single chicken nuggets presented clearly on plain background.
+Cell 08 | assetKey=chicken_soup | Chicken soup / מרק עוף | single chicken soup presented clearly on plain background.
+Cell 09 | assetKey=crepe | Crepe / קרפ | single crepe presented clearly on plain background.
+Cell 10 | assetKey=donut | Donut / דונאט | single donut presented clearly on plain background.
+Cell 11 | assetKey=falafel | Falafel / פלאפל | single falafel presented clearly on plain background.
+Cell 12 | assetKey=fish_sticks | Fish sticks / אצבעות דג | single fish sticks presented clearly on plain background.
+Cell 13 | assetKey=french_fries | French fries / צ׳יפס | single french fries presented clearly on plain background.
+Cell 14 | assetKey=french_toast | French toast / טוסט צרפתי | single french toast presented clearly on plain background.
+Cell 15 | assetKey=grilled_cheese | Grilled cheese / טוסט גבינה | single grilled cheese presented clearly on plain background.
+Cell 16 | assetKey=hamburger | Hamburger / המבורגר | single hamburger presented clearly on plain background.
+
+SHEET_002
+---------
+Generate this sheet with 16 assigned cells.
+
+Cell 01 | assetKey=hot_dog | Hot dog / נקניקייה | single hot dog presented clearly on plain background.
+Cell 02 | assetKey=hummus | Hummus / חומוס | single hummus presented clearly on plain background.
+Cell 03 | assetKey=ketchup | Ketchup / קטשופ | single ketchup presented clearly on plain background.
+Cell 04 | assetKey=label | Label / תווית | single product label sticker attached to plain package, close view. Avoid ambiguity with: sticker, note.
+Cell 05 | assetKey=lasagna | Lasagna / לזניה | single lasagna presented clearly on plain background.
+Cell 06 | assetKey=lunchbox | Lunchbox / קופסת אוכל | closed rectangular lunchbox with lid and side clips, isolated.
+Cell 07 | assetKey=mac_and_cheese | Mac and cheese / מקרוני עם גבינה | single mac and cheese presented clearly on plain background.
+Cell 08 | assetKey=nachos | Nachos / נאצ׳וס | single nachos presented clearly on plain background.
+Cell 09 | assetKey=peanut_butter | Peanut butter / חמאת בוטנים | single peanut butter presented clearly on plain background.
+Cell 10 | assetKey=popsicle | Popsicle / ארטיק | single popsicle presented clearly on plain background.
+Cell 11 | assetKey=pretzel | Pretzel / בייגלה | single pretzel presented clearly on plain background.
+Cell 12 | assetKey=pudding | Pudding / פודינג | single pudding presented clearly on plain background.
+Cell 13 | assetKey=quesadilla | Quesadilla / קסדייה | single quesadilla presented clearly on plain background.
+Cell 14 | assetKey=quiche | Quiche / קיש | single quiche presented clearly on plain background.
+Cell 15 | assetKey=ravioli | Ravioli / רביולי | single ravioli presented clearly on plain background.
+Cell 16 | assetKey=reusable_bottle | Reusable bottle / בקבוק רב פעמי | single reusable water bottle with screw cap, upright, isolated.
+
+SHEET_003
+---------
+Generate this sheet with 16 assigned cells.
+
+Cell 01 | assetKey=scrambled_eggs | Scrambled eggs / חביתה | single scrambled eggs presented clearly on plain background.
+Cell 02 | assetKey=snack_bar | Snack bar / מזנון | small snack counter with shelves of packaged snacks, isolated composition.
+Cell 03 | assetKey=sushi | Sushi / סושי | single sushi presented clearly on plain background.
+Cell 04 | assetKey=tahini | Tahini / טחינה | single tahini presented clearly on plain background.
+Cell 05 | assetKey=waffle | Waffle / וופל | single waffle presented clearly on plain background.
+Cell 06 | assetKey=accordion | Accordion / אקורדיון | single accordion shown clearly in isolated composition.
+Cell 07 | assetKey=armour | Armour / שריון | single armour shown clearly in isolated composition.
+Cell 08 | assetKey=bandage | Bandage / תחבושת | single adhesive bandage with paper tabs removed, front view, isolated. Avoid ambiguity with: medical tape, scarf.
+Cell 09 | assetKey=binoculars | Binoculars / משקפת | single binoculars shown clearly in isolated composition.
+Cell 10 | assetKey=calendar | Calendar / לוח שנה | single calendar shown clearly in isolated composition.
+Cell 11 | assetKey=catapult | Catapult / קטפולטה | single catapult shown clearly in isolated composition.
+Cell 12 | assetKey=costume | Costume / תחפושת | single costume shown clearly in isolated composition.
+Cell 13 | assetKey=forest | Forest / יער | small cluster of several green trees with visible trunks, no landscape background.
+Cell 14 | assetKey=harmonica | Harmonica / מפוחית | single harmonica shown clearly in isolated composition.
+Cell 15 | assetKey=kaleidoscope | Kaleidoscope / קליידוסקופ | single kaleidoscope shown clearly in isolated composition.
+Cell 16 | assetKey=labyrinth | Labyrinth / מבוך | single labyrinth shown clearly in isolated composition.
+
+SHEET_004
+---------
+Generate this sheet with 16 assigned cells.
+
+Cell 01 | assetKey=lantern | Lantern / פנס | single lantern shown clearly in isolated composition.
+Cell 02 | assetKey=medicine | Medicine / תרופה | single medicine shown clearly in isolated composition.
+Cell 03 | assetKey=metronome | Metronome / מטרונום | single metronome shown clearly in isolated composition.
+Cell 04 | assetKey=museum | Museum / מוזיאון | single museum building with wide steps and columns, isolated exterior. Avoid ambiguity with: library, school.
+Cell 05 | assetKey=orchestra | Orchestra / תזמורת | small seated orchestra group with conductor and visible instruments, isolated composition.
+Cell 06 | assetKey=parachute | Parachute / מצנח | single parachute shown clearly in isolated composition.
+Cell 07 | assetKey=periscope | Periscope / פריסקופ | single periscope shown clearly in isolated composition.
+Cell 08 | assetKey=puzzle | Puzzle / פאזל | single puzzle shown clearly in isolated composition.
+Cell 09 | assetKey=race | Race / מירוץ | three child runners crossing a finish line, isolated scene. Avoid ambiguity with: running, sports team portrait.
+Cell 10 | assetKey=scarecrow | Scarecrow / דחליל | single scarecrow shown clearly in isolated composition.
+Cell 11 | assetKey=seat_belt | Seat belt / חגורת בטיחות | buckled seat belt stretched across a car seat, close view.
+Cell 12 | assetKey=sunscreen | Sunscreen / קרם הגנה | single sunscreen shown clearly in isolated composition.
+Cell 13 | assetKey=sword | Sword / חרב | single sword shown clearly in isolated composition.
+Cell 14 | assetKey=treasure | Treasure / אוצר | single treasure shown clearly in isolated composition.
+Cell 15 | assetKey=trumpet | Trumpet / חצוצרה | single trumpet shown clearly in isolated composition.
+Cell 16 | assetKey=xylophone | Xylophone / קסילופון | single xylophone shown clearly in isolated composition.
+
+SHEET_005
+---------
+Generate this sheet with 16 assigned cells.
+
+Cell 01 | assetKey=hair_conditioner | Hair conditioner / מרכך שיער | single bottle of hair conditioner with flip cap, front view, isolated.
+Cell 02 | assetKey=astronomer | Astronomer / אסטרונומית | one astronomer with one recognizable role-specific tool, isolated figure.
+Cell 03 | assetKey=baby_boy | Baby boy / תינוק | one baby boy with one recognizable role-specific tool, isolated figure.
+Cell 04 | assetKey=baby_girl | Baby girl / תינוקת | one baby girl with one recognizable role-specific tool, isolated figure.
+Cell 05 | assetKey=butcher | Butcher / קצב | one butcher with one recognizable role-specific tool, isolated figure.
+Cell 06 | assetKey=manager | Manager / מנהל | one manager with one recognizable role-specific tool, isolated figure.
+Cell 07 | assetKey=plumber | Plumber / שרברב | one plumber with one recognizable role-specific tool, isolated figure.
+Cell 08 | assetKey=community_center | Community center / מרכז קהילתי | simple community center building exterior with front doors and notice board, isolated.
+Cell 09 | assetKey=museum_guide | Museum guide / מדריך במוזיאון | one museum guide gesturing toward a display stand, isolated scene.
+Cell 10 | assetKey=recycling_station | Recycling station / תחנת מיחזור | single recycling station shown clearly in a simple exterior or object view.
+Cell 11 | assetKey=prickly_pear | Prickly pear / סברס | single prickly pear with stem or leaf visible, isolated composition.
+Cell 12 | assetKey=backpack | Backpack / תיק גב | single school backpack with shoulder straps and zipper pockets, front three-quarter view.
+Cell 13 | assetKey=tuning_fork | Tuning fork / מזלג כוונון | single tuning fork clearly visible from front view, isolated.
+Cell 14 | assetKey=laboratory | Laboratory / מעבדה | compact science lab bench with microscope, flasks and test tubes, isolated composition.
+Cell 15 | assetKey=planet | Planet / כוכב לכת | single round planet with visible land and cloud bands, isolated on plain background. Avoid ambiguity with: moon, star.
+Cell 16 | assetKey=solar_panel | Solar panel / פאנל סולארי | single rooftop solar panel angled toward the sun, isolated composition.
+
+SHEET_006
+---------
+Generate this sheet with 16 assigned cells.
+
+Cell 01 | assetKey=cylinder | Cylinder / גליל | single bold cylinder symbol centered on plain background.
+Cell 02 | assetKey=dark_blue | Dark Blue / כחול כהה | single bold dark blue symbol centered on plain background.
+Cell 03 | assetKey=ivory | Ivory / שנהב | single bold ivory symbol centered on plain background.
+Cell 04 | assetKey=khaki | Khaki / חאקי | single bold khaki symbol centered on plain background.
+Cell 05 | assetKey=light_blue | Light Blue / תכלת | single bold light blue symbol centered on plain background.
+Cell 06 | assetKey=light_green | Light Green / ירוק בהיר | single bold light green symbol centered on plain background.
+Cell 07 | assetKey=parallelogram | Parallelogram / מקבילית | single bold parallelogram symbol centered on plain background.
+Cell 08 | assetKey=pyramid | Pyramid / פירמידה | single bold pyramid symbol centered on plain background.
+Cell 09 | assetKey=3d_printer | 3D printer / מדפסת תלת מימד | single 3d printer device or tool in front three-quarter view, isolated.
+Cell 10 | assetKey=battery | Battery / סוללה | single household battery cylinder, close view, isolated.
+Cell 11 | assetKey=charger | Charger / מטען | single wall charger block with cable attached, front three-quarter view. Avoid ambiguity with: adapter, cable only.
+Cell 12 | assetKey=microphone | Microphone / מיקרופון | single handheld microphone with mesh head, isolated.
+Cell 13 | assetKey=boarding_pass | Boarding pass / כרטיס עלייה למטוס | single boarding pass card with barcode blocks only, front view, isolated.
+Cell 14 | assetKey=bridge | Bridge / גשר | small arched bridge spanning water, isolated composition.
+Cell 15 | assetKey=crosswalk | Crosswalk / מעבר חציה | street crosswalk with bold white stripes and curb edges, isolated scene.
+Cell 16 | assetKey=intersection | Intersection / צומת | single intersection shown clearly in travel context, isolated scene.
+
+SHEET_007
+---------
+Generate this sheet with 5 assigned cells.
+
+Cell 01 | assetKey=luggage | Luggage / מזוודות | single luggage shown clearly in travel context, isolated scene.
+Cell 02 | assetKey=passport | Passport / דרכון | closed passport booklet with plain cover and no emblem, front view.
+Cell 03 | assetKey=platform | Platform / רציף | train platform edge with safety line and station sign frame, isolated scene. Avoid ambiguity with: stage, flat platform.
+Cell 04 | assetKey=ticket | Ticket / כרטיס | single paper event or travel ticket with punched corner, isolated. Avoid ambiguity with: card, receipt.
+Cell 05 | assetKey=tour_guide | Tour guide / מדריך טיולים | one tour guide leading a small group with arm raised, isolated scene.

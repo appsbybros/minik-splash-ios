@@ -1,0 +1,5 @@
+filename	android_source	sha256	conversion
+success_sound.mp3	../android/app/src/main/res/raw/success_sound.mp3	3d542f91232b31cd1d9f45c50eb22c8c2f9184eb342c00c0548317b332f2913e	exact original
+failure_pictures_screen_sound.mp3	../android/app/src/main/res/raw/failure_pictures_screen_sound.mp3	4d349c088c0fef8a96265fefeb310182b6adbee888349af78fe10df28b2cabad	exact original
+success_pictures_screen_sound.mp3	../android/app/src/main/res/raw/success_pictures_screen_sound.mp3	a65e2e731b6a7ae699546ae6531356ccf855c4f3d0d3d2b6acd67e022e520863	exact original
+success_in_a_raw_sound.mp3	../android/app/src/main/res/raw/success_in_a_raw_sound.mp3	e5d4f4c8c99745d054493aeb5dc33ad30c0888777ccd327c9747c6ad45c406c1	exact original

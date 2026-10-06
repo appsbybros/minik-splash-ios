@@ -1,0 +1,194 @@
+name: App Store screenshots
+
+# Captures every scene in appstore/screenshots.json on a 6.9-inch iPhone and a
+# 13-inch iPad Simulator, then frames them with captions at Apple's exact sizes.
+on:
+  workflow_dispatch:
+    inputs:
+      products:
+        description: Apps to capture, separated by spaces
+        required: true
+        default: MinikPlus MinikPlusEnglish MinikMath MinikPingPong MinikRetroPingPong
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Generate project
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          if ! command -v xcodegen >/dev/null 2>&1; then
+            brew install xcodegen
+          fi
+          xcodegen generate
+
+      - name: Build apps for the Simulator
+        shell: bash
+        env:
+          PRODUCTS: ${{ inputs.products }}
+        run: |
+          set -uo pipefail
+          mkdir -p build/logs
+          failed=""
+          for SCHEME in $PRODUCTS; do
+            echo "Building $SCHEME"
+            if ! xcodebuild build \
+              -project Minik.xcodeproj \
+              -scheme "$SCHEME" \
+              -configuration Debug \
+              -sdk iphonesimulator \
+              -destination "generic/platform=iOS Simulator" \
+              -derivedDataPath build/DerivedData/Shared \
+              CODE_SIGNING_ALLOWED=NO \
+              ARCHS=arm64 \
+              ONLY_ACTIVE_ARCH=NO \
+              > "build/logs/$SCHEME-build.log" 2>&1; then
+              echo "::error::Build failed for $SCHEME"
+              grep -E "error:" "build/logs/$SCHEME-build.log" | sort -u | head -30 || true
+              failed="$failed $SCHEME"
+            fi
+          done
+          echo "FAILED_BUILDS=$failed" >> "$GITHUB_ENV"
+
+      - name: Start the iPhone and iPad Simulators
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcrun simctl list devices available -j > build/available-devices.json
+          python3 - <<'PY' > build/simulators.tsv
+          import json
+          import re
+
+          data = json.load(open("build/available-devices.json", encoding="utf-8"))
+          phones, tablets = [], []
+          for runtime, devices in data.get("devices", {}).items():
+              if ".iOS-" not in runtime:
+                  continue
+              version = tuple(int(value) for value in re.findall(r"\d+", runtime))
+              for device in devices:
+                  name = device.get("name", "")
+                  if not device.get("isAvailable"):
+                      continue
+                  if name.startswith("iPhone") and "Pro Max" in name:
+                      model = re.search(r"iPhone\s+(\d+)", name)
+                      phones.append((version, int(model.group(1)) if model else 0, name, device["udid"]))
+                  elif name.startswith("iPad Pro") and "13" in name:
+                      tablets.append((version, name, device["udid"]))
+          if not phones or not tablets:
+              raise SystemExit("No 6.9-inch iPhone Pro Max or 13-inch iPad Pro Simulator is available")
+          phone, tablet = max(phones), max(tablets)
+          print(f"iphone\t{phone[3]}\t{phone[2]}")
+          print(f"ipad\t{tablet[2]}\t{tablet[1]}")
+          PY
+          while IFS=$'\t' read -r DEVICE UDID NAME; do
+            echo "$DEVICE: $NAME"
+            xcrun simctl boot "$UDID" < /dev/null || true
+            xcrun simctl bootstatus "$UDID" -b < /dev/null
+            xcrun simctl status_bar "$UDID" override --time "9:41" \
+              --dataNetwork wifi --wifiMode active --wifiBars 3 \
+              --cellularMode active --cellularBars 4 \
+              --batteryState charged --batteryLevel 100 < /dev/null
+          done < build/simulators.tsv
+
+      - name: Capture scenes
+        shell: bash
+        env:
+          PRODUCTS: ${{ inputs.products }}
+        run: |
+          set -uo pipefail
+          missing=0
+          for SCHEME in $PRODUCTS; do
+            case " $FAILED_BUILDS " in *" $SCHEME "*) continue ;; esac
+            APP="build/DerivedData/Shared/Build/Products/Debug-iphonesimulator/$SCHEME.app"
+            BUNDLE="$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$APP/Info.plist")"
+            LANGUAGES="$(python3 -c "import json,sys; print(' '.join(json.load(open('appstore/screenshots.json', encoding='utf-8'))['apps'][sys.argv[1]]['languages']))" "$SCHEME")"
+            python3 Scripts/appstore-screenshots.py scenes "$SCHEME" > "build/$SCHEME-scenes.txt"
+            while IFS=$'\t' read -r DEVICE UDID NAME; do
+              xcrun simctl uninstall "$UDID" "$BUNDLE" < /dev/null > /dev/null 2>&1 || true
+              xcrun simctl install "$UDID" "$APP" < /dev/null
+              for LANGUAGE in $LANGUAGES; do
+                case "$LANGUAGE" in he) LOCALE=he_IL ;; *) LOCALE=en_US ;; esac
+                while IFS='|' read -r ID SCENE WAIT IPHONE_ORIENTATION IPAD_ORIENTATION; do
+                  ORIENTATION="$IPHONE_ORIENTATION"
+                  [ "$DEVICE" = "ipad" ] && ORIENTATION="$IPAD_ORIENTATION"
+                  OUT="build/appstore-raw/$SCHEME/$LANGUAGE/$DEVICE/$ID.png"
+                  mkdir -p "$(dirname "$OUT")"
+                  xcrun simctl terminate "$UDID" "$BUNDLE" < /dev/null > /dev/null 2>&1 || true
+                  # -MinikOfflineSmoke keeps Modern Ping Pong away from production Firebase.
+                  xcrun simctl launch "$UDID" "$BUNDLE" \
+                    -MinikScreenshotScene "$SCENE" \
+                    -MinikScreenshotOrientation "$ORIENTATION" \
+                    -MinikOfflineSmoke YES \
+                    -AppleLanguages "($LANGUAGE)" \
+                    -AppleLocale "$LOCALE" < /dev/null > /dev/null
+                  sleep "$WAIT"
+                  if xcrun simctl io "$UDID" screenshot "$OUT" < /dev/null > /dev/null 2>&1 && [ -s "$OUT" ]; then
+                    echo "Captured $SCHEME $LANGUAGE $DEVICE $ID"
+                  else
+                    echo "::warning::No capture for $SCHEME $LANGUAGE $DEVICE $ID"
+                    missing=$((missing + 1))
+                  fi
+                done < "build/$SCHEME-scenes.txt"
+              done
+              xcrun simctl terminate "$UDID" "$BUNDLE" < /dev/null > /dev/null 2>&1 || true
+            done < build/simulators.tsv
+          done
+          echo "Missing captures: $missing"
+          if [ -n "$FAILED_BUILDS" ]; then
+            echo "::error::Not captured because the build failed:$FAILED_BUILDS"
+            exit 1
+          fi
+
+      - name: Upload raw captures
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: AppStore-raw-screenshots
+          path: |
+            build/appstore-raw
+            build/logs
+          if-no-files-found: ignore
+          retention-days: 7
+
+  compose:
+    needs: capture
+    if: ${{ always() && needs.capture.result != 'cancelled' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download raw captures
+        uses: actions/download-artifact@v4
+        with:
+          name: AppStore-raw-screenshots
+          path: build/raw-artifact
+
+      - name: Frame screenshots with captions
+        shell: bash
+        env:
+          PRODUCTS: ${{ inputs.products }}
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet pillow
+          python3 Scripts/appstore-screenshots.py compose \
+            --raw build/raw-artifact/appstore-raw \
+            --out build/appstore-screenshots \
+            --apps $PRODUCTS
+
+      - name: Upload App Store screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: AppStore-screenshots
+          path: build/appstore-screenshots
+          retention-days: 14

@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "minik_feedback_try_again.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

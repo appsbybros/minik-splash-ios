@@ -1,0 +1,51 @@
+name: Educational Image Format Benchmark
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: macos-26
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Print environment information
+        run: |
+          sw_vers
+          xcodebuild -version
+          xcrun swift --version
+
+      - name: Run Apple-native image benchmark
+        id: benchmark
+        continue-on-error: true
+        run: |
+          xcrun swift Scripts/image_format_benchmark.swift benchmark-output
+
+      - name: Print benchmark summary
+        if: always()
+        run: |
+          if [[ -f benchmark-output/summary.md ]]; then
+            cat benchmark-output/summary.md
+          else
+            echo "Benchmark did not produce summary.md." >&2
+          fi
+
+      - name: Upload benchmark output
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: image-format-benchmark
+          path: benchmark-output
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Fail when native benchmark failed
+        if: steps.benchmark.outcome == 'failure'
+        run: |
+          echo "The Apple-native benchmark reported a failure. See the uploaded report." >&2
+          exit 1

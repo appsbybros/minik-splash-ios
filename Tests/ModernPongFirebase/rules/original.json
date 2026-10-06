@@ -1,0 +1,400 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "tripleShot": {
+      "users": {
+        "$uid": {
+          ".read": "auth != null && auth.uid == $uid",
+          ".write": "auth != null && auth.uid == $uid",
+          "profile": {
+            "uid": {
+              ".validate": "newData.isString() && newData.val() == $uid"
+            },
+            "displayName": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 18"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            },
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            }
+          },
+          "knowledge": {
+            "allTime": {
+              "$category": {
+                "total": {
+                  ".validate": "newData.isNumber() && newData.val() >= 0"
+                },
+                "correct": {
+                  ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= newData.parent().child('total').val()"
+                },
+                "updatedAt": {
+                  ".validate": "newData.isNumber() && newData.val() >= 0"
+                }
+              }
+            },
+            "monthly": {
+              "$month": {
+                "$category": {
+                  "total": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0"
+                  },
+                  "correct": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= newData.parent().child('total').val()"
+                  },
+                  "updatedAt": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0"
+                  }
+                }
+              }
+            },
+            "weekly": {
+              "$week": {
+                "$category": {
+                  "total": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0"
+                  },
+                  "correct": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= newData.parent().child('total').val()"
+                  },
+                  "updatedAt": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0"
+                  }
+                }
+              }
+            }
+          },
+          "knowledgeAttempts": {
+            "$attempt": {
+              "questionId": {
+                ".validate": "newData.isString() && newData.val().length <= 96"
+              },
+              "category": {
+                ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 64"
+              },
+              "prompt": {
+                ".validate": "newData.isString() && newData.val().length <= 600"
+              },
+              "selectedAnswer": {
+                ".validate": "newData.isString() && newData.val().length <= 400"
+              },
+              "correctAnswer": {
+                ".validate": "newData.isString() && newData.val().length <= 400"
+              },
+              "qualityPercent": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+              },
+              "correct": {
+                ".validate": "newData.isBoolean()"
+              },
+              "gameType": {
+                ".validate": "newData.isString() && newData.val().length <= 32"
+              },
+              "answeredAt": {
+                ".validate": "newData.isNumber() && newData.val() >= 0"
+              }
+            }
+          }
+        }
+      },
+      "leaderboard": {
+        ".read": "auth != null",
+        ".indexOn": [
+          "bestScore",
+          "bestShootingStreak"
+        ],
+        "$uid": {
+          ".write": "auth != null && auth.uid == $uid",
+          "uid": {
+            ".validate": "newData.isString() && newData.val() == $uid"
+          },
+          "name": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 18"
+          },
+          "bestScore": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+          "bestShootingStreak": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+          "bestKnowledgeStreak": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+          "bestCorrectAnswers": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+          "bestRunCorrectAnswers": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+          "bestRunShots": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+          "bestRunMadeShots": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= newData.parent().child('bestRunShots').val()"
+          },
+          "bestRunKnowledgeAccuracyPercent": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+          "bestRunShootingPercent": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+          "bestRunCategories": {
+            "$index": {
+              ".validate": "newData.isString()"
+            }
+          },
+          "updatedAt": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          }
+        }
+      },
+      "communityKnowledge": {
+        ".read": "auth != null",
+        "allTime": {
+          "$category": {
+            "total": {
+              ".write": "auth != null && newData.isNumber() && ((!data.exists() && newData.val() == 1) || (data.isNumber() && newData.val() == data.val() + 1))"
+            },
+            "correct": {
+              ".write": "auth != null && newData.isNumber() && ((!data.exists() && newData.val() == 1) || (data.isNumber() && newData.val() == data.val() + 1))"
+            },
+            "updatedAt": {
+              ".write": "auth != null && newData.isNumber()"
+            }
+          }
+        },
+        "monthly": {
+          "$month": {
+            "$category": {
+              "total": {
+                ".write": "auth != null && newData.isNumber() && ((!data.exists() && newData.val() == 1) || (data.isNumber() && newData.val() == data.val() + 1))"
+              },
+              "correct": {
+                ".write": "auth != null && newData.isNumber() && ((!data.exists() && newData.val() == 1) || (data.isNumber() && newData.val() == data.val() + 1))"
+              },
+              "updatedAt": {
+                ".write": "auth != null && newData.isNumber()"
+              }
+            }
+          }
+        }
+      },
+      "rooms": {
+        "$code": {
+          ".read": "auth != null",
+          ".write": "auth != null && !newData.exists() && data.child('meta').child('hostUid').val() == auth.uid && data.child('meta').child('status').val() == 'WAITING'",
+          "meta": {
+            ".write": "auth != null && ((!data.exists() && newData.child('hostUid').val() == auth.uid) || data.child('hostUid').val() == auth.uid)",
+            "hostUid": {
+              ".validate": "newData.isString() && ((!data.exists() && newData.val() == auth.uid) || newData.val() == data.val())"
+            },
+            "status": {
+              ".validate": "newData.isString() && (newData.val() == 'WAITING' || newData.val() == 'PLAYING' || newData.val() == 'FINISHED')",
+              ".write": "auth != null && (data.parent().child('hostUid').val() == auth.uid || (newData.val() == 'FINISHED' && root.child('tripleShot').child('rooms').child($code).child('players').child(auth.uid).exists() && root.child('tripleShot').child('rooms').child($code).child('horse').child('winnerUid').isString() && root.child('tripleShot').child('rooms').child($code).child('horse').child('winnerUid').val().length > 0))"
+            },
+            "seed": {
+              ".validate": "newData.isNumber()"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            },
+            "startedAt": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            },
+            "gameType": {
+              ".validate": "newData.isString() && (newData.val() == 'SHOOTING_CHALLENGE' || newData.val() == 'HORSE' || newData.val() == 'ONE_ON_ONE' || newData.val() == 'TEAM_MATCH')"
+            },
+            "selectedCategories": {
+              "$index": {
+                ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 48"
+              }
+            },
+            "timeLimitSeconds": {
+              ".validate": "newData.isNumber() && newData.val() >= 10 && newData.val() <= 600"
+            },
+            "categories": {
+              "$index": {
+                ".validate": "newData.isString()"
+              }
+            },
+            "maxPlayers": {
+              ".validate": "newData.isNumber() && newData.val() >= 2 && newData.val() <= 6"
+            }
+          },
+          "players": {
+            "$uid": {
+              ".write": "auth != null && auth.uid == $uid",
+              "uid": {
+                ".validate": "newData.isString() && newData.val() == $uid"
+              },
+              "name": {
+                ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 18"
+              },
+              "score": {
+                ".validate": "newData.isNumber() && newData.val() >= 0"
+              },
+              "knowledgeStreak": {
+                ".validate": "newData.isNumber() && newData.val() >= 0"
+              },
+              "shootingStreak": {
+                ".validate": "newData.isNumber() && newData.val() >= 0"
+              },
+              "bestKnowledgeStreak": {
+                ".validate": "newData.isNumber() && newData.val() >= 0"
+              },
+              "bestShootingStreak": {
+                ".validate": "newData.isNumber() && newData.val() >= 0"
+              },
+              "correctAnswers": {
+                ".validate": "newData.isNumber() && newData.val() >= 0"
+              },
+              "madeShots": {
+                ".validate": "newData.isNumber() && newData.val() >= 0"
+              },
+              "shots": {
+                ".validate": "newData.isNumber() && newData.val() >= 0"
+              },
+              "lastEvent": {
+                ".validate": "newData.isString() && newData.val().length <= 120"
+              },
+              "updatedAt": {
+                ".validate": "newData.isNumber() && newData.val() >= 0"
+              },
+              "finished": {
+                ".validate": "newData.isBoolean()"
+              }
+            }
+          },
+          "shots": {
+            ".read": "auth != null",
+            ".indexOn": [
+              "releasedAt"
+            ],
+            "$shotId": {
+              ".write": "auth != null && !data.exists() && newData.child('playerUid').val() == auth.uid",
+              "id": {
+                ".validate": "newData.isString() && newData.val() == $shotId"
+              },
+              "playerUid": {
+                ".validate": "newData.isString() && newData.val() == auth.uid"
+              },
+              "playerName": {
+                ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 18"
+              },
+              "shotSpotX": {
+                ".validate": "newData.isNumber()"
+              },
+              "shotSpotY": {
+                ".validate": "newData.isNumber()"
+              },
+              "aimError": {
+                ".validate": "newData.isNumber()"
+              },
+              "powerError": {
+                ".validate": "newData.isNumber()"
+              },
+              "arcError": {
+                ".validate": "newData.isNumber()"
+              },
+              "rawPeakGyro": {
+                ".validate": "newData.isNumber()"
+              },
+              "rawReleasePitchDeg": {
+                ".validate": "newData.isNumber()"
+              },
+              "pullBack": {
+                ".validate": "newData.isNumber()"
+              },
+              "hotHand": {
+                ".validate": "newData.isBoolean()"
+              },
+              "releasedAt": {
+                ".validate": "newData.isNumber() && newData.val() > 0"
+              },
+              "made": {
+                ".validate": "newData.isBoolean()"
+              },
+              ".validate": "newData.hasChildren(['id','playerUid','playerName','shotSpotX','shotSpotY','aimError','powerError','arcError','rawPeakGyro','rawReleasePitchDeg','pullBack','hotHand','releasedAt','made'])",
+              "samples": {
+                "$index": {
+                  ".validate": "$index.matches(/^([0-9]|[1-5][0-9])$/) && newData.hasChildren(['tMs','x','y','depth'])",
+                  "tMs": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000"
+                  },
+                  "x": {
+                    ".validate": "newData.isNumber() && newData.val() >= -1200 && newData.val() <= 2400"
+                  },
+                  "y": {
+                    ".validate": "newData.isNumber() && newData.val() >= -1200 && newData.val() <= 3000"
+                  },
+                  "depth": {
+                    ".validate": "newData.isNumber() && newData.val() >= -10 && newData.val() <= 10"
+                  }
+                }
+              }
+            }
+          },
+          "horse": {
+            ".read": "auth != null",
+            ".write": "auth != null && root.child('tripleShot').child('rooms').child($code).child('players').child(auth.uid).exists()",
+            "phase": {
+              ".validate": "newData.isString() && (newData.val() == 'SETTING' || newData.val() == 'ATTEMPT' || newData.val() == 'FINISHED')"
+            },
+            "setterUid": {
+              ".validate": "newData.isString()"
+            },
+            "currentPlayerUid": {
+              ".validate": "newData.isString()"
+            },
+            "challengeEstablished": {
+              ".validate": "newData.isBoolean()"
+            },
+            "challengeCategory": {
+              ".validate": "newData.isString() && newData.val().length <= 48"
+            },
+            "challengeSpotId": {
+              ".validate": "newData.isString() && newData.val().length <= 80"
+            },
+            "challengeSpotX": {
+              ".validate": "newData.isNumber() && newData.val() >= -300 && newData.val() <= 1400"
+            },
+            "challengeSpotY": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1900"
+            },
+            "playerOrder": {
+              "$index": {
+                ".validate": "newData.isString() && newData.val().length > 0"
+              }
+            },
+            "attemptedUids": {
+              "$index": {
+                ".validate": "newData.isString() && newData.val().length > 0"
+              }
+            },
+            "penalties": {
+              "$uid": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 5"
+              }
+            },
+            "spectatorSlots": {
+              "$uid": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2"
+              }
+            },
+            "winnerUid": {
+              ".validate": "newData.isString()"
+            },
+            "turnNumber": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            },
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            }
+          }
+        }
+      }
+    }
+  }
+}

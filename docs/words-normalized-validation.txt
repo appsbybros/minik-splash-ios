@@ -1,0 +1,81 @@
+Minik normalized vocabulary XML validation
+===========================================
+
+Source active XML words: 835
+Source active XML arrays: 90
+Source audit rows: 835
+Source active levels: A=184, B=189, C=250, D=136, E=76
+Unicode/source EN+HE roundtrip: PASS
+
+Generated XML parse: PASS
+Generated arrays: 142
+Generated normalized categories: 46
+Generated total entries: 1270
+Generated lexical entries: 955
+Generated sentence entries: 315
+
+Final lexical counts:
+  A=181
+  B=192
+  C=241
+  D=162
+  E=179
+
+Final sentence counts:
+  A=0
+  B=6
+  C=9
+  D=100
+  E=200
+
+Expert/archive source rows omitted from standard XML: 34
+Merged duplicate source rows omitted from standard XML: 10
+New curriculum rows added: 479
+  lexical additions: 184
+  sentence additions: 295
+
+Schema checks:
+  resources/string-array/word structure: PASS
+  normalized array names <category>_<a-e>: PASS
+  unique stable keys across XML rows: 1270 PASS
+  non-empty EN for every generated word: PASS
+  non-empty HE for every generated word: PASS
+  stableKey manifest mappings: 543 PASS
+  unique manifest assetKeys: 543 PASS
+  dangling manifest stable keys: 0 PASS
+  XML/manifest metadata mismatches: 0 PASS
+  ASCII-safe stableKey/assetKey/category identifiers: PASS
+  valid manifest action/status combinations: PASS
+  historical ID preservation: fruits_a + vegetables_garlic + other_king PASS
+  duplicate exact EN+HE semantic rows: 0
+  same-level English lexical surface collisions: 0 PASS
+  same-level Hebrew lexical surface collisions: 0 PASS
+  standard mixed_other arrays: 0 PASS
+  standard sports_future arrays: 0 PASS
+
+Manifest lifecycle counts:
+  reuse_ios: 543
+  migrate_android: 0
+  trusted_acquire: 0
+  create_new: 0
+  trusted_external status rows: 33
+
+Current ready assets:
+  existing/reusable iOS assets: 543
+  original ready assets unchanged: 12
+  validated Android migrations: 397 (395 WebP, 2 PNG)
+  validated deterministic masters: 8
+  validated trusted acquisitions: 33 (32 flags, 1 Africa silhouette)
+  validated generated masters: 93
+  migration report rows: 397 PASS
+  generated provenance rows: 93 PASS
+  generated PNG dimensions/alpha/source-output SHA-256: PASS
+
+Parity checks:
+  docs/words-normalized.xml == Resources/Vocabulary/words-normalized.xml: PASS
+  docs/vocabulary-image-manifest.tsv == Resources/Vocabulary/vocabulary-image-manifest.tsv: PASS
+
+Compatibility note:
+  Existing source rows preserve all original multilingual attributes.
+  New curriculum rows currently contain EN + HE only.
+  Normalized/new internal categories require Android Category/loader mapping updates before all arrays are reachable at runtime.

@@ -1,0 +1,159 @@
+rules_version = '2';
+
+// SECURE ACTIVE-LEADERBOARD MIGRATION TARGET — DO NOT DEPLOY YET.
+// Before deployment, archive and clear legacy public records, then release
+// clients that create v2_ profile IDs and immutable private ownership bindings.
+// The exact coordinated sequence is docs/firebase-leaderboard-migration.md.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSecurePlayerID(playerID) {
+      return playerID is string
+        && playerID.size() == 39
+        && playerID.matches('^v2_[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+    }
+
+    function ownsPlayerID(playerID) {
+      return isSignedIn()
+        && isSecurePlayerID(playerID)
+        && exists(/databases/$(database)/documents/leaderboard_owners/$(playerID))
+        && get(/databases/$(database)/documents/leaderboard_owners/$(playerID)).data.owner_uid
+          == request.auth.uid;
+    }
+
+    function isOwnedDocument(playerID, data) {
+      return playerID == data.player_id && ownsPlayerID(playerID);
+    }
+
+    function isCuratedAlias(value) {
+      return value is string
+        && value.size() >= 7
+        && value.size() <= 32
+        && value.matches('^(Bright|Brave|Clever|Cosmic|Friendly|Happy|Mighty|Playful|Quick|Sunny|Super|Wise) (Dolphin|Fox|Koala|Lion|Otter|Owl|Panda|Penguin|Rabbit|Tiger|Turtle|Whale) ([1-9]|[1-9][0-9])$');
+    }
+
+    function hasValidAvatar(data) {
+      return !('avatar_id' in data)
+        || (data.avatar_id is string
+          && data.avatar_id in ['bolt', 'leaf', 'moon', 'rainbow', 'rocket', 'star']);
+    }
+
+    function hasCommonValues(data) {
+      return data.app_id == '3'
+        && isSecurePlayerID(data.player_id)
+        && isCuratedAlias(data.user_name)
+        && hasValidAvatar(data)
+        && data.correct_answers_in_row is int
+        && data.correct_answers_in_row >= 0
+        && data.correct_answers_in_row <= 1000000
+        && data.date_achived is timestamp
+        && data.date_achived == request.time;
+    }
+
+    function isValidScoreDocument(data) {
+      return data.keys().hasAll([
+          'app_id', 'player_id', 'score', 'correct_answers_in_row',
+          'date_achived', 'user_name'
+        ])
+        && data.keys().hasOnly([
+          'app_id', 'player_id', 'score', 'correct_answers_in_row',
+          'date_achived', 'user_name', 'avatar_id'
+        ])
+        && hasCommonValues(data)
+        && data.score is int
+        && data.score > 0
+        && data.score <= 1000000000;
+    }
+
+    function isValidStreakDocument(data) {
+      return data.keys().hasAll([
+          'app_id', 'player_id', 'correct_answers_in_row',
+          'date_achived', 'user_name'
+        ])
+        && data.keys().hasOnly([
+          'app_id', 'player_id', 'correct_answers_in_row',
+          'date_achived', 'user_name', 'avatar_id'
+        ])
+        && hasCommonValues(data)
+        && data.correct_answers_in_row > 0;
+    }
+
+    function isLeaderboardList() {
+      return isSignedIn()
+        && request.query.limit != null
+        && request.query.limit > 0
+        && request.query.limit <= 20;
+    }
+
+    function scoreDoesNotRegress() {
+      return request.resource.data.score >= resource.data.score
+        && request.resource.data.correct_answers_in_row >= resource.data.correct_answers_in_row;
+    }
+
+    function streakDoesNotRegress() {
+      return request.resource.data.correct_answers_in_row >= resource.data.correct_answers_in_row;
+    }
+
+    // Private ownership capability: the document ID is the opaque profile ID,
+    // and owner_uid is never exposed through client reads or public records.
+    match /leaderboard_owners/{playerID} {
+      allow read: if false;
+      allow create: if isSignedIn()
+        && isSecurePlayerID(playerID)
+        && request.resource.data.keys().hasAll(['owner_uid'])
+        && request.resource.data.keys().hasOnly(['owner_uid'])
+        && request.resource.data.owner_uid is string
+        && request.resource.data.owner_uid == request.auth.uid;
+      allow update: if isSignedIn()
+        && isSecurePlayerID(playerID)
+        && resource.data.owner_uid == request.auth.uid
+        && request.resource.data.keys().hasAll(['owner_uid'])
+        && request.resource.data.keys().hasOnly(['owner_uid'])
+        && request.resource.data.owner_uid == resource.data.owner_uid;
+      allow delete: if false;
+    }
+
+    match /score_records/{playerID} {
+      allow list: if isLeaderboardList();
+      allow create: if isOwnedDocument(playerID, request.resource.data)
+        && isValidScoreDocument(request.resource.data);
+      allow update: if isOwnedDocument(playerID, request.resource.data)
+        && resource.data.player_id == playerID
+        && isValidScoreDocument(request.resource.data)
+        && scoreDoesNotRegress();
+      allow delete: if ownsPlayerID(playerID)
+        && resource.data.player_id == playerID;
+    }
+
+    match /score_records_english_only/{playerID} {
+      allow list: if isLeaderboardList();
+      allow create: if isOwnedDocument(playerID, request.resource.data)
+        && isValidScoreDocument(request.resource.data);
+      allow update: if isOwnedDocument(playerID, request.resource.data)
+        && resource.data.player_id == playerID
+        && isValidScoreDocument(request.resource.data)
+        && scoreDoesNotRegress();
+      allow delete: if ownsPlayerID(playerID)
+        && resource.data.player_id == playerID;
+    }
+
+    match /correct_answers_in_row/{playerID} {
+      allow list: if isLeaderboardList();
+      allow create: if isOwnedDocument(playerID, request.resource.data)
+        && isValidStreakDocument(request.resource.data);
+      allow update: if isOwnedDocument(playerID, request.resource.data)
+        && resource.data.player_id == playerID
+        && isValidStreakDocument(request.resource.data)
+        && streakDoesNotRegress();
+      allow delete: if ownsPlayerID(playerID)
+        && resource.data.player_id == playerID;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "4F867F71-B914-4B55-9C86-15E929D9FB11",
+      "name" : "Configuration 1",
+      "options" : {
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "storeKitConfiguration" : {
+      "identifier" : "AppStoreCommerceKit.storekit"
+    },
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:AppStoreCommerceKitTestHost.xcodeproj",
+      "identifier" : "E00000000000000000000001",
+      "name" : "AppStoreCommerceKitTestHost"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:AppStoreCommerceKitTestHost.xcodeproj",
+        "identifier" : "E00000000000000000000002",
+        "name" : "AppStoreCommerceKitHostedIntegrationTests"
+      }
+    }
+  ],
+  "version" : 1
+}

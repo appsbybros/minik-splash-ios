@@ -1,0 +1,115 @@
+{
+  "about": "App Store screenshots. The 'App Store screenshots' workflow launches each scene in the Simulator with -MinikScreenshotScene <scene>, then Scripts/appstore-screenshots.py frames every capture with its caption. Captions are [eyebrow, title, subtitle]. Avoid 'for kids' / 'for children': Apple reserves those words for the Kids category.",
+  "devices": {
+    "iphone": {"label": "iPhone 6.9-inch", "portrait": [1320, 2868], "landscape": [2868, 1320]},
+    "ipad": {"label": "iPad 13-inch", "portrait": [2064, 2752], "landscape": [2752, 2064]}
+  },
+  "palettes": {
+    "language": {"top": "#e5487e", "bottom": "#ff9d42", "eyebrow": "#fff27a", "title": "#ffffff", "text": "#fff3ea"},
+    "math": {"top": "#fff3cc", "bottom": "#ffe1ab", "eyebrow": "#704ee8", "title": "#172745", "text": "#172745"},
+    "pong": {"top": "#05495e", "bottom": "#129caa", "eyebrow": "#6dffe2", "title": "#ffffff", "text": "#e6fffc"},
+    "bounce": {"top": "#231273", "bottom": "#5740d4", "eyebrow": "#72fff0", "title": "#ffffff", "text": "#f7f0ff"}
+  },
+  "apps": {
+    "MinikPlus": {
+      "name": "Minik",
+      "palette": "language",
+      "languages": ["en", "he"],
+      "scenes": [
+        {"id": "01-home", "scene": "home", "wait": 6,
+         "caption": {"en": ["LEARN A NEW LANGUAGE", "Play your way to new words", "Words, letters and games with Minik."],
+                     "he": ["לומדים שפה חדשה", "משחקים ולומדים מילים", "מילים, אותיות ומשחקים עם מיניק."]}},
+        {"id": "02-learn", "scene": "language.learn", "wait": 7,
+         "caption": {"en": ["PICTURES, SOUNDS AND WORDS", "Meet a new word", "Hear it, see it and say it."],
+                     "he": ["תמונה, צליל ומילה", "מכירים מילה חדשה", "שומעים, רואים ואומרים."]}},
+        {"id": "03-build", "scene": "language.wordBuild", "wait": 7,
+         "caption": {"en": ["LETTER BY LETTER", "Build the word", "Spelling practice with friendly hints."],
+                     "he": ["אות אחרי אות", "בונים את המילה", "תרגול איות עם רמזים ידידותיים."]}},
+        {"id": "04-memory", "scene": "language.memory", "wait": 7,
+         "caption": {"en": ["MATCH AND REMEMBER", "Picture Memory", "Find the pairs and grow your vocabulary."],
+                     "he": ["מתאימים וזוכרים", "משחק זיכרון", "מוצאים זוגות ומרחיבים את אוצר המילים."]}},
+        {"id": "05-soccer", "scene": "language.soccer", "wait": 8,
+         "caption": {"en": ["PRACTICE THAT FEELS LIKE PLAY", "Score with every right answer", "Soccer, towers and more word games."],
+                     "he": ["תרגול שמרגיש כמו משחק", "כל תשובה נכונה היא גול", "כדורגל, מגדלים ועוד משחקי מילים."]}},
+        {"id": "06-progress", "scene": "progress", "wait": 6,
+         "caption": {"en": ["WATCH YOUR PROGRESS", "Every word counts", "Levels grow as you learn."],
+                     "he": ["רואים את ההתקדמות", "כל מילה נחשבת", "הרמה עולה ככל שלומדים."]}}
+      ]
+    },
+    "MinikPlusEnglish": {
+      "name": "Minik English",
+      "palette": "language",
+      "languages": ["en"],
+      "scenes": [
+        {"id": "01-home", "scene": "home", "wait": 6,
+         "caption": {"en": ["LEARN ENGLISH WITH MINIK", "Play your way to new words", "Words, letters and games in one place."]}},
+        {"id": "02-learn", "scene": "language.learn", "wait": 7,
+         "caption": {"en": ["PICTURES, SOUNDS AND WORDS", "Meet a new word", "Hear it, see it and say it."]}},
+        {"id": "03-build", "scene": "language.wordBuild", "wait": 7,
+         "caption": {"en": ["LETTER BY LETTER", "Build the word", "Spelling practice with friendly hints."]}},
+        {"id": "04-memory", "scene": "language.memory", "wait": 7,
+         "caption": {"en": ["MATCH AND REMEMBER", "Picture Memory", "Find the pairs and grow your vocabulary."]}},
+        {"id": "05-soccer", "scene": "language.soccer", "wait": 8,
+         "caption": {"en": ["PRACTICE THAT FEELS LIKE PLAY", "Score with every right answer", "Soccer, towers and more word games."]}}
+      ]
+    },
+    "MinikMath": {
+      "name": "Minik Math",
+      "palette": "math",
+      "languages": ["en", "he"],
+      "scenes": [
+        {"id": "01-home", "scene": "home", "wait": 6,
+         "caption": {"en": ["YOUR COLORFUL MATH COMPANION", "Learn. Play. Grow.", "Short practice sessions that fit your day."],
+                     "he": ["חבר צבעוני לדרך", "ללמוד. לשחק. להצליח.", "סבבי תרגול קצרים שמתאימים ליום שלכם."]}},
+        {"id": "02-learn", "scene": "math.learnMath", "wait": 7,
+         "caption": {"en": ["LITTLE PRACTICE. BIG SMILES.", "Math with a friend", "Add, subtract, multiply and divide with Minik."],
+                     "he": ["קצת תרגול. הרבה חיוכים.", "לומדים עם מיניק", "חיבור, חיסור, כפל וחילוק בדרך משחקית."]}},
+        {"id": "03-build", "scene": "math.buildMath", "wait": 7,
+         "caption": {"en": ["BUILD IT. SEE IT.", "Hands-on math", "Build numbers and quantities step by step."],
+                     "he": ["בונים ורואים", "חשבון בידיים", "בונים מספרים וכמויות צעד אחר צעד."]}},
+        {"id": "04-soccer", "scene": "math.mathSoccer", "wait": 8,
+         "caption": {"en": ["PLAY WHILE YOU PRACTICE", "Score with math", "Soccer, towers and memory games."],
+                     "he": ["משחקים ומתרגלים", "מבקיעים עם חשבון", "כדורגל, מגדלים ומשחקי זיכרון."]}},
+        {"id": "05-memory", "scene": "math.mathMemory", "wait": 7,
+         "caption": {"en": ["MATCH AND REMEMBER", "Math Memory", "Find matching pairs of numbers and facts."],
+                     "he": ["מתאימים וזוכרים", "זיכרון חשבוני", "מוצאים זוגות של מספרים ותרגילים."]}}
+      ]
+    },
+    "MinikPingPong": {
+      "name": "Minik Ping Pong",
+      "palette": "pong",
+      "languages": ["en", "he"],
+      "scenes": [
+        {"id": "01-rally", "scene": "pong.play", "wait": 9,
+         "caption": {"en": ["YOUR NEXT GREAT RALLY", "Step up to the table", "Bright courts. Distinct rivals. Your shot."],
+                     "he": ["החבטה הבאה שלכם", "נפגשים ליד השולחן", "מגרש צבעוני, יריבים מגוונים והחבטה שלכם."]}},
+        {"id": "02-beginner", "scene": "pong.guide", "wait": 6,
+         "caption": {"en": ["A FRIENDLY FIRST RALLY", "Move. We time the hit.", "Beginner helps you learn by playing."],
+                     "he": ["מתחילים לשחק בנחת", "מזיזים והמחבט חובט", "ברמת מתחילים המשחק עוזר בתזמון."]}},
+        {"id": "03-rivals", "scene": "pong.rival", "wait": 6,
+         "caption": {"en": ["MEET YOUR NEXT RIVAL", "Choose your challenge", "Every house player has their own strengths."],
+                     "he": ["מכירים את שחקני הבית", "בוחרים את האתגר", "לכל שחקן חוזקות וסגנון משלו."]}}
+      ]
+    },
+    "MinikRetroPingPong": {
+      "name": "Minik Bounce",
+      "palette": "bounce",
+      "languages": ["en", "he"],
+      "orientation": {"iphone": "landscape", "ipad": "portrait"},
+      "scenes": [
+        {"id": "01-balloon-madness", "scene": "bounce.play", "wait": 14,
+         "caption": {"en": ["RETRO PONG. COLORFUL SURPRISES.", "Balloon Madness", "Balloons, bouncing balls and a little chaos."],
+                     "he": ["פינג פונג עם הפתעות", "טירוף הבלונים", "בלונים, כדורים קופצים ועוד קצת הפתעות."]}},
+        {"id": "02-train", "scene": "bounce.train", "wait": 16,
+         "caption": {"en": ["CHOOSE YOUR MATH CHALLENGE", "Catch the next question", "12 math levels, from small sums to bigger challenges."],
+                     "he": ["בוחרים את האתגר החשבוני", "השאלה הבאה בדרך", "רמות קושי שונות, מתרגילים פשוטים ועד אתגרים גדולים."]}},
+        {"id": "03-colors", "scene": "bounce.help", "wait": 8,
+         "caption": {"en": ["YOUR COLORS SHOW YOUR PROGRESS", "Level up your paddle and arrows", "Collect total points to unlock new color ranks."],
+                     "he": ["הצבע שלכם מציג את ההתקדמות", "עולים בדרגת המחבט והחיצים", "צוברים נקודות ומתקדמים לדרגות צבע חדשות."]}},
+        {"id": "04-setup", "scene": "bounce.setup", "wait": 7,
+         "caption": {"en": ["PLAY AT YOUR PACE", "Your next round, your way", "Choose Minik’s level and switch Balloon Madness on."],
+                     "he": ["משחקים בקצב שלכם", "המשחק הבא שלכם", "בוחרים את הרמה של מיניק ואת טירוף הבלונים."]}}
+      ]
+    }
+  }
+}

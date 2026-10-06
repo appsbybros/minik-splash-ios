@@ -1,0 +1,342 @@
+name: Android parity captures
+
+# Captures the iOS screens that match the 16 Android reference screenshots
+# (docs/reference/android-ui) on an iPad mini and an iPhone Simulator at each text
+# size, then puts every capture beside its Android reference. The mapping lives in
+# appstore/parity.json; see docs/android-parity-capture.md. Manual runs only.
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: App to capture
+        type: choice
+        options:
+          - MinikPlus
+          - MinikPlusEnglish
+        default: MinikPlus
+      text_sizes:
+        description: Text sizes (simctl content_size names), separated by spaces
+        required: true
+        default: large extra-extra-large
+      references:
+        description: Reference numbers to capture, e.g. 01 09 16 (empty for all 16)
+        required: false
+        default: ""
+      iphone:
+        description: iPhone Simulator name (empty for a 6.1-inch iPhone, else the newest non-Max)
+        required: false
+        default: ""
+      ipad:
+        description: iPad Simulator name (empty for the newest iPad mini)
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: macos-latest
+    timeout-minutes: 90
+    env:
+      APP: ${{ inputs.app }}
+      TEXT_SIZES: ${{ inputs.text_sizes }}
+      REFERENCES: ${{ inputs.references }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check the parity mapping
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 Scripts/parity-compose.py validate --app "$APP" --text-sizes "$TEXT_SIZES" --references "$REFERENCES"
+
+      - name: Generate project
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          if ! command -v xcodegen >/dev/null 2>&1; then
+            brew install xcodegen
+          fi
+          xcodegen generate
+
+      - name: Build the app for the Simulator
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p build/logs
+          echo "Building $APP"
+          if ! xcodebuild build \
+            -project Minik.xcodeproj \
+            -scheme "$APP" \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination "generic/platform=iOS Simulator" \
+            -derivedDataPath build/DerivedData/Shared \
+            CODE_SIGNING_ALLOWED=NO \
+            ARCHS=arm64 \
+            ONLY_ACTIVE_ARCH=NO \
+            > "build/logs/$APP-build.log" 2>&1; then
+            echo "::error::Build failed for $APP"
+            grep -E "error:" "build/logs/$APP-build.log" | sort -u | head -30 || true
+            exit 1
+          fi
+          if [ ! -d "build/DerivedData/Shared/Build/Products/Debug-iphonesimulator/$APP.app" ]; then
+            echo "::error::The build produced no $APP.app"
+            exit 1
+          fi
+
+      - name: Pick and boot an iPad mini and an iPhone Simulator
+        shell: bash
+        env:
+          IPHONE_NAME: ${{ inputs.iphone }}
+          IPAD_NAME: ${{ inputs.ipad }}
+        run: |
+          set -euo pipefail
+          mkdir -p build/parity
+          xcrun simctl list runtimes -j < /dev/null > build/parity/runtimes.json
+          xcrun simctl list devicetypes -j < /dev/null > build/parity/device-types.json
+          xcrun simctl list devices available -j < /dev/null > build/parity/available-devices.json
+          python3 Scripts/parity-compose.py simulators \
+            --devices build/parity/available-devices.json \
+            --runtimes build/parity/runtimes.json \
+            --device-types build/parity/device-types.json \
+            --iphone "$IPHONE_NAME" \
+            --ipad "$IPAD_NAME" > build/parity/selected.tsv
+          : > build/parity/simulators.tsv
+          : > build/parity/unbooted.tsv
+          while IFS=$'\t' read -r DEVICE UDID NAME RUNTIME; do
+            echo "$DEVICE: $NAME ($RUNTIME) $UDID"
+            xcrun simctl boot "$UDID" < /dev/null || true
+            if ! xcrun simctl bootstatus "$UDID" -b < /dev/null > "build/parity/boot-$DEVICE.log" 2>&1; then
+              echo "::error::$NAME did not boot"
+              printf '%s\t%s\t%s\t%s\n' "$DEVICE" "$UDID" "$NAME" "$RUNTIME" >> build/parity/unbooted.tsv
+              continue
+            fi
+            # The Android references are in light mode.
+            xcrun simctl ui "$UDID" appearance light < /dev/null \
+              || echo "::warning::Could not set the light appearance on $NAME"
+            xcrun simctl status_bar "$UDID" override --time "9:41" \
+              --dataNetwork wifi --wifiMode active --wifiBars 3 \
+              --cellularMode active --cellularBars 4 \
+              --batteryState charged --batteryLevel 100 < /dev/null \
+              || echo "::warning::Could not override the status bar on $NAME"
+            printf '%s\t%s\t%s\t%s\n' "$DEVICE" "$UDID" "$NAME" "$RUNTIME" >> build/parity/simulators.tsv
+          done < build/parity/selected.tsv
+          if [ ! -s build/parity/simulators.tsv ]; then
+            echo "::error::No Simulator booted"
+            exit 1
+          fi
+          # The text-size names this simctl accepts, for the log.
+          xcrun simctl help ui < /dev/null || true
+
+      - name: Capture every reference scene at each text size
+        shell: bash
+        run: |
+          set -uo pipefail
+          APP_PATH="build/DerivedData/Shared/Build/Products/Debug-iphonesimulator/$APP.app"
+          PLISTBUDDY="${PLISTBUDDY:-/usr/libexec/PlistBuddy}"
+          RAW=build/parity-raw
+          mkdir -p "$RAW" build/parity/crashes
+          if ! BUNDLE="$("$PLISTBUDDY" -c "Print :CFBundleIdentifier" "$APP_PATH/Info.plist")"; then
+            echo "::error::No bundle identifier in $APP_PATH"
+            exit 1
+          fi
+          if ! python3 Scripts/parity-compose.py scenes --app "$APP" --references "$REFERENCES" > build/parity/scenes.tsv; then
+            exit 1
+          fi
+          printf 'device\ttext_size\tapplied\tsimulator\truntime\tapp\n' > "$RAW/captures.tsv"
+          printf 'device\ttext_size\tid\tstatus\n' > "$RAW/shots.tsv"
+          # One captures.tsv row per device and text size: device, size, what simctl reports, name, runtime.
+          variant_row() {
+            printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$1" "$2" "$3" "$4" "$5" "$APP" >> "$RAW/captures.tsv"
+          }
+          # Marks every scene of one device and text size as not captured, so the report shows the gap.
+          all_scenes_failed() {
+            awk -F'\t' -v device="$1" -v size="$2" -v status="$3" \
+              '{ print device "\t" size "\t" $1 "\t" status }' build/parity/scenes.tsv >> "$RAW/shots.tsv"
+          }
+          touch build/parity/capture-start.marker
+          captured=0
+          problems=0
+          if [ -s build/parity/unbooted.tsv ]; then
+            while IFS=$'\t' read -r DEVICE UDID NAME RUNTIME; do
+              for SIZE in $TEXT_SIZES; do
+                variant_row "$DEVICE" "$SIZE" "" "$NAME" "$RUNTIME"
+                all_scenes_failed "$DEVICE" "$SIZE" boot-failed
+              done
+              problems=$((problems + 1))
+            done < build/parity/unbooted.tsv
+          fi
+          # Every simctl call reads /dev/null so it cannot swallow the lines these loops read.
+          while IFS=$'\t' read -r DEVICE UDID NAME RUNTIME; do
+            echo "== $NAME ($RUNTIME)"
+            xcrun simctl uninstall "$UDID" "$BUNDLE" < /dev/null > /dev/null 2>&1 || true
+            if ! xcrun simctl install "$UDID" "$APP_PATH" < /dev/null; then
+              echo "::error::Could not install $APP on $NAME"
+              problems=$((problems + 1))
+              for SIZE in $TEXT_SIZES; do
+                variant_row "$DEVICE" "$SIZE" "" "$NAME" "$RUNTIME"
+                all_scenes_failed "$DEVICE" "$SIZE" install-failed
+              done
+              continue
+            fi
+            # The first launch after an install is the slowest; keep it out of the captures.
+            xcrun simctl launch "$UDID" "$BUNDLE" -MinikScreenshotScene home < /dev/null > /dev/null 2>&1 || true
+            sleep 10
+            for SIZE in $TEXT_SIZES; do
+              xcrun simctl terminate "$UDID" "$BUNDLE" < /dev/null > /dev/null 2>&1 || true
+              if ! xcrun simctl ui "$UDID" content_size "$SIZE" < /dev/null; then
+                echo "::error::$NAME did not accept text size $SIZE"
+                problems=$((problems + 1))
+                variant_row "$DEVICE" "$SIZE" "" "$NAME" "$RUNTIME"
+                all_scenes_failed "$DEVICE" "$SIZE" size-rejected
+                continue
+              fi
+              sleep 2
+              APPLIED="$(xcrun simctl ui "$UDID" content_size < /dev/null 2>/dev/null | tr -d '\r' | tail -n 1)" || APPLIED=""
+              echo "-- text size $SIZE (simctl reports: ${APPLIED:-nothing})"
+              variant_row "$DEVICE" "$SIZE" "$APPLIED" "$NAME" "$RUNTIME"
+              while IFS=$'\t' read -r ID SCENE WAIT ARGS; do
+                WAIT="${WAIT%$'\r'}"
+                ARGS="${ARGS%$'\r'}"
+                OUT="$RAW/$DEVICE/$SIZE/$ID.png"
+                mkdir -p "$(dirname "$OUT")"
+                EXTRA=()
+                IFS=' ' read -r -a EXTRA <<< "$ARGS"
+                xcrun simctl terminate "$UDID" "$BUNDLE" < /dev/null > /dev/null 2>&1 || true
+                if ! LAUNCH_OUTPUT="$(xcrun simctl launch "$UDID" "$BUNDLE" -MinikScreenshotScene "$SCENE" ${EXTRA[@]+"${EXTRA[@]}"} < /dev/null 2>&1)"; then
+                  echo "$LAUNCH_OUTPUT"
+                  STATUS=launch-failed
+                else
+                  APP_PID="$(printf '%s\n' "$LAUNCH_OUTPUT" | sed -nE 's/^.*: ([0-9]+)$/\1/p' | tail -n 1)"
+                  sleep "$WAIT"
+                  STATUS=ok
+                  # A Home Screen capture after a crash must not pass for the scene.
+                  if [ -n "$APP_PID" ] && ! ps -p "$APP_PID" > /dev/null 2>&1; then
+                    STATUS=not-running
+                  fi
+                  if ! xcrun simctl io "$UDID" screenshot "$OUT" < /dev/null > /dev/null 2>&1 || [ ! -s "$OUT" ]; then
+                    STATUS=no-screenshot
+                  fi
+                fi
+                printf '%s\t%s\t%s\t%s\n' "$DEVICE" "$SIZE" "$ID" "$STATUS" >> "$RAW/shots.tsv"
+                if [ "$STATUS" = ok ]; then
+                  captured=$((captured + 1))
+                  echo "Captured $DEVICE $SIZE $ID"
+                else
+                  problems=$((problems + 1))
+                  echo "::warning::$DEVICE $SIZE $ID: $STATUS"
+                fi
+              done < build/parity/scenes.tsv
+            done
+            xcrun simctl terminate "$UDID" "$BUNDLE" < /dev/null > /dev/null 2>&1 || true
+          done < build/parity/simulators.tsv
+
+          # Every device, text size and scene gets one shots.tsv row; fewer means a loop ended early.
+          devices_count=$(awk 'END { print NR }' build/parity/simulators.tsv)
+          if [ -s build/parity/unbooted.tsv ]; then
+            devices_count=$((devices_count + $(awk 'END { print NR }' build/parity/unbooted.tsv)))
+          fi
+          sizes_count=$(set -- $TEXT_SIZES; echo $#)
+          scenes_count=$(awk 'END { print NR }' build/parity/scenes.tsv)
+          expected=$((devices_count * sizes_count * scenes_count))
+          recorded=$(awk 'END { print NR - 1 }' "$RAW/shots.tsv")
+          if [ "$recorded" -ne "$expected" ]; then
+            echo "::error::Recorded $recorded shots, expected $expected: a capture loop ended early"
+            problems=$((problems + 1))
+          fi
+
+          # Crash reports written during the captures, from the Mac and each Simulator.
+          CRASH_ROOT="$HOME/Library/Logs/DiagnosticReports"
+          if [ -d "$CRASH_ROOT" ]; then
+            find "$CRASH_ROOT" -type f -newer build/parity/capture-start.marker -name "$APP*" \
+              -exec cp {} build/parity/crashes/ \; < /dev/null 2>/dev/null || true
+          fi
+          while IFS=$'\t' read -r DEVICE UDID NAME RUNTIME; do
+            CRASH_ROOT="$HOME/Library/Developer/CoreSimulator/Devices/$UDID/data/Library/Logs/DiagnosticReports"
+            if [ -d "$CRASH_ROOT" ]; then
+              find "$CRASH_ROOT" -type f -newer build/parity/capture-start.marker -name "$APP*" \
+                -exec cp {} build/parity/crashes/ \; < /dev/null 2>/dev/null || true
+            fi
+          done < build/parity/simulators.tsv
+          crashes="$(find build/parity/crashes -type f | wc -l | tr -d ' ')"
+
+          echo "Captured $captured of $expected; problems $problems; crash reports $crashes"
+          {
+            echo "## Android parity captures: $APP"
+            echo
+            echo "Captured $captured of $expected. Problems: $problems. Crash reports: $crashes (in Android-parity-raw, parity/crashes)."
+            echo
+            echo "| Device | Simulator | Runtime | Text size | simctl reports |"
+            echo "|---|---|---|---|---|"
+            # awk keeps empty columns, which a tab-separated 'read' would merge.
+            awk -F'\t' 'NR > 1 { print "| " $1 " | " $4 " | " $5 " | " $2 " | " $3 " |" }' "$RAW/captures.tsv"
+            if [ "$problems" -gt 0 ]; then
+              echo
+              echo "Shots that are not ok:"
+              echo
+              awk -F'\t' 'NR > 1 && $4 != "ok" { print "- " $1 " " $2 " " $3 ": " $4 }' "$RAW/shots.tsv"
+            fi
+          } >> "${GITHUB_STEP_SUMMARY:-/dev/null}"
+          if [ "$captured" -eq 0 ] || [ "$problems" -gt 0 ]; then
+            exit 1
+          fi
+
+      - name: Upload raw captures
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-parity-raw
+          path: |
+            build/parity-raw
+            build/parity
+            build/logs
+          if-no-files-found: ignore
+          retention-days: 7
+
+  compose:
+    needs: capture
+    if: ${{ always() && needs.capture.result != 'cancelled' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download raw captures
+        uses: actions/download-artifact@v4
+        with:
+          name: Android-parity-raw
+          path: build/raw-artifact
+
+      - name: Put every capture beside its Android reference
+        shell: bash
+        run: |
+          set -uo pipefail
+          python -m pip install --quiet pillow || exit 1
+          # The artifact keeps parity-raw/ under its root because it also holds parity/ and logs/.
+          RAW=build/raw-artifact/parity-raw
+          [ -d "$RAW" ] || RAW=build/raw-artifact
+          status=0
+          python Scripts/parity-compose.py compose --raw "$RAW" --out build/android-parity || status=$?
+          if [ -f build/android-parity/summary.md ]; then
+            cat build/android-parity/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit "$status"
+
+      - name: Upload side-by-side images
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-parity-side-by-side
+          path: build/android-parity
+          if-no-files-found: ignore
+          retention-days: 14

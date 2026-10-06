@@ -1,0 +1,732 @@
+name: iOS Simulator Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_tests:
+        description: Also run ProductConfigurationTests (adds build and test time)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Print environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          swift --version
+          node --version
+
+      - name: Run Bounce web game tests
+        id: bounce_web_tests
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          node Tests/RetroPong/engine.test.cjs
+          node --test Tests/RetroPong/host.test.cjs
+          python3 -B Scripts/audit-retro-pong.py
+
+      - name: Install or verify XcodeGen
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v xcodegen >/dev/null 2>&1; then
+            brew install xcodegen
+          fi
+          xcodegen --version
+
+      - name: Generate project and list schemes
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodegen generate
+          xcodebuild -project Minik.xcodeproj -list
+
+      - name: Build and package all Simulator apps
+        id: product_builds
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/artifacts build/logs
+
+          SCHEMES=(MinikPlus MinikPlusEnglish MinikMath MinikPingPong MinikRetroPingPong)
+          minik_plus_built=false
+          minik_plus_english_built=false
+          minik_math_built=false
+          minik_ping_pong_built=false
+          minik_retro_ping_pong_built=false
+          minik_plus_ready=false
+          minik_plus_english_ready=false
+          minik_math_ready=false
+          minik_ping_pong_ready=false
+          minik_retro_ping_pong_ready=false
+          failed_schemes=()
+          failed_packages=()
+
+          # One shared DerivedData builds Firebase, Google Mobile Ads and the commerce
+          # package once for all apps; arm64 matches the Apple-silicon runner's Simulator.
+          DERIVED_DATA="build/DerivedData/Shared"
+          for SCHEME in "${SCHEMES[@]}"; do
+            set +e
+            xcodebuild build \
+              -project Minik.xcodeproj \
+              -scheme "$SCHEME" \
+              -configuration Debug \
+              -sdk iphonesimulator \
+              -destination "generic/platform=iOS Simulator" \
+              -derivedDataPath "$DERIVED_DATA" \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO \
+              ARCHS=arm64 \
+              ONLY_ACTIVE_ARCH=NO \
+              > "build/logs/$SCHEME.log" 2>&1
+            build_status=${PIPESTATUS[0]}
+            set -e
+
+            if (( build_status != 0 )); then
+              echo "Build failed for $SCHEME with exit status $build_status." >&2
+              failed_schemes+=("$SCHEME")
+              continue
+            fi
+
+            APP_PATH="$DERIVED_DATA/Build/Products/Debug-iphonesimulator/$SCHEME.app"
+            if [ ! -d "$APP_PATH" ]; then
+              echo "Expected Simulator app was not produced: $APP_PATH" >&2
+              if [ -d "$DERIVED_DATA/Build/Products" ]; then
+                find "$DERIVED_DATA/Build/Products" -maxdepth 3 -name "*.app" -print >&2
+              else
+                echo "Build products directory is also missing: $DERIVED_DATA/Build/Products" >&2
+              fi
+              failed_schemes+=("$SCHEME")
+              continue
+            fi
+
+            case "$SCHEME" in
+              MinikPlus) minik_plus_built=true ;;
+              MinikPlusEnglish) minik_plus_english_built=true ;;
+              MinikMath) minik_math_built=true ;;
+              MinikPingPong) minik_ping_pong_built=true ;;
+              MinikRetroPingPong) minik_retro_ping_pong_built=true ;;
+            esac
+
+            ZIP_PATH="build/artifacts/$SCHEME-simulator.zip"
+            if ! ditto -c -k --sequesterRsrc --keepParent \
+              "$APP_PATH" "$ZIP_PATH"; then
+              echo "Packaging failed for $SCHEME." >&2
+              failed_packages+=("$SCHEME")
+              continue
+            fi
+            if [ ! -s "$ZIP_PATH" ]; then
+              echo "Packaged Simulator ZIP is missing or empty for $SCHEME: $ZIP_PATH" >&2
+              failed_packages+=("$SCHEME")
+              continue
+            fi
+
+            case "$SCHEME" in
+              MinikPlus) minik_plus_ready=true ;;
+              MinikPlusEnglish) minik_plus_english_ready=true ;;
+              MinikMath) minik_math_ready=true ;;
+              MinikPingPong) minik_ping_pong_ready=true ;;
+              MinikRetroPingPong) minik_retro_ping_pong_ready=true ;;
+            esac
+          done
+
+          compiles_clean=true
+          if (( ${#failed_schemes[@]} > 0 )); then
+            compiles_clean=false
+            printf 'Build failures: %s\n' "${failed_schemes[*]}" >&2
+          fi
+          packages_clean=$compiles_clean
+          if (( ${#failed_packages[@]} > 0 )); then
+            packages_clean=false
+            printf 'Packaging failures: %s\n' "${failed_packages[*]}" >&2
+          fi
+
+          {
+            echo "minikplus_built=$minik_plus_built"
+            echo "minikplusenglish_built=$minik_plus_english_built"
+            echo "minikmath_built=$minik_math_built"
+            echo "minikpingpong_built=$minik_ping_pong_built"
+            echo "minikretropingpong_built=$minik_retro_ping_pong_built"
+            echo "minikplus_ready=$minik_plus_ready"
+            echo "minikplusenglish_ready=$minik_plus_english_ready"
+            echo "minikmath_ready=$minik_math_ready"
+            echo "minikpingpong_ready=$minik_ping_pong_ready"
+            echo "minikretropingpong_ready=$minik_retro_ping_pong_ready"
+            echo "compiles_clean=$compiles_clean"
+            echo "packages_clean=$packages_clean"
+            echo "failed_schemes=${failed_schemes[*]:-}"
+            echo "failed_packages=${failed_packages[*]:-}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Upload Simulator build logs
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Simulator-build-logs
+          path: build/logs/*.log
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Select and boot modern iPhone and iPad Simulators
+        id: prepare_simulator
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p \
+            build/smoke/screenshots \
+            build/smoke/logs \
+            build/smoke/simulator \
+            build/smoke/crashes
+          touch build/smoke/crash-scan-start.marker
+
+          xcodebuild -version > build/smoke/simulator/xcode-version.txt 2>&1
+          swift --version > build/smoke/simulator/swift-version.txt 2>&1
+          uname -a > build/smoke/simulator/host.txt 2>&1
+          xcrun simctl list runtimes -j > build/smoke/simulator/runtimes.json 2>&1
+          xcrun simctl list devicetypes -j > build/smoke/simulator/device-types.json 2>&1
+          xcrun simctl list devices available -j > build/smoke/simulator/available-devices.json 2>&1
+
+          if ! python3 - <<'PY' \
+            > build/smoke/simulator/selected-simulators.tsv \
+            2> build/smoke/simulator/selection-error.log
+          import json
+          import re
+          from pathlib import Path
+
+          source = Path("build/smoke/simulator/available-devices.json")
+          data = json.loads(source.read_text(encoding="utf-8"))
+          phones = []
+          tablets = []
+
+          for runtime, devices in data.get("devices", {}).items():
+              if ".iOS-" not in runtime:
+                  continue
+              runtime_numbers = tuple(int(value) for value in re.findall(r"\d+", runtime))
+              for device in devices:
+                  name = device.get("name", "")
+                  if not device.get("isAvailable"):
+                      continue
+                  if name.startswith("iPhone"):
+                      model_match = re.search(r"iPhone\s+(\d+)", name)
+                      model_number = int(model_match.group(1)) if model_match else 0
+                      variant_rank = 4 if "Pro Max" in name else 3 if "Pro" in name else 2 if "Plus" in name else 1
+                      phones.append((runtime_numbers, model_number, variant_rank, name, device["udid"], runtime))
+                  elif name.startswith("iPad"):
+                      variant_rank = 4 if "Pro" in name and "13" in name else 3 if "Pro" in name else 2 if "Air" in name else 0 if "mini" in name else 1
+                      tablets.append((runtime_numbers, variant_rank, name, device["udid"], runtime))
+
+          if not phones:
+              raise SystemExit("No available iPhone Simulator was found")
+
+          phone = max(phones)
+          phone_runtime = phone[0]
+          same_runtime_tablets = [tablet for tablet in tablets if tablet[0] == phone_runtime]
+          tablet = max(same_runtime_tablets or tablets) if tablets else None
+
+          selected = {
+              "iPhone": {
+                  "name": phone[3],
+                  "udid": phone[4],
+                  "runtime": phone[5],
+                  "runtime_version": ".".join(str(value) for value in phone[0]),
+              },
+              "iPad": None if tablet is None else {
+                  "name": tablet[2],
+                  "udid": tablet[3],
+                  "runtime": tablet[4],
+                  "runtime_version": ".".join(str(value) for value in tablet[0]),
+              },
+          }
+          Path("build/smoke/simulator/selected-simulator.json").write_text(
+              json.dumps(selected, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          print(f"iPhone\t{phone[4]}\t{phone[3]}\t{phone[5]}")
+          if tablet is not None:
+              print(f"iPad\t{tablet[3]}\t{tablet[2]}\t{tablet[4]}")
+          PY
+          then
+            echo "simulator_ready=false" >> "$GITHUB_OUTPUT"
+            echo "ipad_ready=false" >> "$GITHUB_OUTPUT"
+            echo "No available modern iPhone Simulator could be selected." >&2
+            exit 0
+          fi
+
+          ipad_ready=false
+          while IFS=$'\t' read -r ROLE SIMULATOR_UDID SIMULATOR_NAME SIMULATOR_RUNTIME; do
+            {
+              echo "$ROLE selected: $SIMULATOR_NAME"
+              echo "UDID: $SIMULATOR_UDID"
+              echo "Runtime: $SIMULATOR_RUNTIME"
+            } >> build/smoke/simulator/selection.txt
+
+            xcrun simctl boot "$SIMULATOR_UDID" \
+              > "build/smoke/simulator/boot-$ROLE.log" 2>&1
+            boot_request_status=$?
+            echo "simctl boot exit status: $boot_request_status" \
+              >> "build/smoke/simulator/boot-$ROLE.log"
+
+            xcrun simctl bootstatus "$SIMULATOR_UDID" -b \
+              >> "build/smoke/simulator/boot-$ROLE.log" 2>&1
+            boot_status=$?
+
+            if [ "$ROLE" = "iPhone" ]; then
+              echo "udid=$SIMULATOR_UDID" >> "$GITHUB_OUTPUT"
+              if (( boot_status != 0 )); then
+                echo "simulator_ready=false" >> "$GITHUB_OUTPUT"
+                echo "iPhone Simulator boot failed with exit status $boot_status." >&2
+              else
+                echo "simulator_ready=true" >> "$GITHUB_OUTPUT"
+                xcrun simctl getenv "$SIMULATOR_UDID" SIMULATOR_RUNTIME_VERSION \
+                  > build/smoke/simulator/runtime-version.txt 2>&1
+              fi
+            else
+              echo "ipad_udid=$SIMULATOR_UDID" >> "$GITHUB_OUTPUT"
+              if (( boot_status == 0 )); then
+                ipad_ready=true
+              else
+                echo "iPad Simulator boot failed with exit status $boot_status." >&2
+              fi
+            fi
+          done < build/smoke/simulator/selected-simulators.tsv
+
+          echo "ipad_ready=$ipad_ready" >> "$GITHUB_OUTPUT"
+          xcrun simctl list devices -j > build/smoke/simulator/devices-after-boot.json 2>&1
+
+      - name: Run ProductConfigurationTests once
+        id: product_tests
+        if: ${{ inputs.run_tests && steps.product_builds.outputs.compiles_clean == 'true' && steps.prepare_simulator.outputs.simulator_ready == 'true' }}
+        continue-on-error: true
+        shell: bash
+        env:
+          SIMULATOR_UDID: ${{ steps.prepare_simulator.outputs.udid }}
+        run: |
+          set -euo pipefail
+          mkdir -p build/logs build/TestResults
+          xcodebuild test \
+            -project Minik.xcodeproj \
+            -scheme MinikPlus \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_UDID" \
+            -derivedDataPath build/DerivedData/Shared \
+            -resultBundlePath build/TestResults/ProductConfigurationTests.xcresult \
+            -only-testing:ProductConfigurationTests \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            ARCHS=arm64 \
+            ONLY_ACTIVE_ARCH=NO \
+            > build/logs/ProductConfigurationTests.log 2>&1
+
+      - name: Install, launch, capture, and terminate all Simulator apps
+        id: simulator_smoke
+        if: ${{ always() }}
+        shell: bash
+        env:
+          IPHONE_UDID: ${{ steps.prepare_simulator.outputs.udid }}
+          IPHONE_READY: ${{ steps.prepare_simulator.outputs.simulator_ready }}
+          IPAD_UDID: ${{ steps.prepare_simulator.outputs.ipad_udid }}
+          IPAD_READY: ${{ steps.prepare_simulator.outputs.ipad_ready }}
+          MINIKPLUS_BUILT: ${{ steps.product_builds.outputs.minikplus_built }}
+          MINIKPLUSENGLISH_BUILT: ${{ steps.product_builds.outputs.minikplusenglish_built }}
+          MINIKMATH_BUILT: ${{ steps.product_builds.outputs.minikmath_built }}
+          MINIKPINGPONG_BUILT: ${{ steps.product_builds.outputs.minikpingpong_built }}
+          MINIKRETROPINGPONG_BUILT: ${{ steps.product_builds.outputs.minikretropingpong_built }}
+        run: |
+          set -uo pipefail
+          mkdir -p build/smoke/screenshots build/smoke/logs build/smoke/crashes
+          RESULTS_TSV="build/smoke/smoke-results.tsv"
+          printf 'device\tproduct\tbuild_succeeded\tbundle_identifier\tinstall_status\tlaunch_status\tstable\tscreenshot_status\tterminate_status\tresult\tdetail\n' \
+            > "$RESULTS_TSV"
+          overall_clean=true
+          DEVICE_ROLES=(iPhone iPad)
+          SCHEMES=(MinikPlus MinikPlusEnglish MinikMath MinikPingPong MinikRetroPingPong)
+
+          record_result() {
+            local product="$1"
+            local build_succeeded="$2"
+            local bundle_identifier="$3"
+            local install_status="$4"
+            local launch_status="$5"
+            local stable="$6"
+            local screenshot_status="$7"
+            local terminate_status="$8"
+            local result="$9"
+            local detail="${10//$'\t'/ }"
+            detail="${detail//$'\n'/ }"
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+              "$DEVICE_ROLE" "$product" "$build_succeeded" "$bundle_identifier" "$install_status" \
+              "$launch_status" "$stable" "$screenshot_status" "$terminate_status" \
+              "$result" "$detail" >> "$RESULTS_TSV"
+          }
+
+          for DEVICE_ROLE in "${DEVICE_ROLES[@]}"; do
+            case "$DEVICE_ROLE" in
+              iPhone) SIMULATOR_UDID="$IPHONE_UDID"; SIMULATOR_READY="$IPHONE_READY" ;;
+              iPad) SIMULATOR_UDID="$IPAD_UDID"; SIMULATOR_READY="$IPAD_READY" ;;
+            esac
+
+            for SCHEME in "${SCHEMES[@]}"; do
+              case "$SCHEME" in
+                MinikPlus) BUILD_SUCCEEDED="$MINIKPLUS_BUILT" ;;
+                MinikPlusEnglish) BUILD_SUCCEEDED="$MINIKPLUSENGLISH_BUILT" ;;
+                MinikMath) BUILD_SUCCEEDED="$MINIKMATH_BUILT" ;;
+                MinikPingPong) BUILD_SUCCEEDED="$MINIKPINGPONG_BUILT" ;;
+                MinikRetroPingPong) BUILD_SUCCEEDED="$MINIKRETROPINGPONG_BUILT" ;;
+              esac
+
+              APP_PATH="build/DerivedData/Shared/Build/Products/Debug-iphonesimulator/$SCHEME.app"
+              LAUNCH_LOG="build/smoke/logs/$SCHEME-$DEVICE_ROLE-launch.log"
+              CONSOLE_LOG="build/smoke/logs/$SCHEME-$DEVICE_ROLE-console.log"
+              PROCESS_LOG="build/smoke/logs/$SCHEME-$DEVICE_ROLE-processes.log"
+              SCREENSHOT_PATH="build/smoke/screenshots/$SCHEME-$DEVICE_ROLE.png"
+              : > "$LAUNCH_LOG"
+
+              if [ "$BUILD_SUCCEEDED" != "true" ]; then
+                echo "Built app was not available; runtime validation was not attempted." >> "$LAUNCH_LOG"
+                record_result "$SCHEME" false "" not_run not_run false not_run not_run failed build_not_ready
+                overall_clean=false
+                continue
+              fi
+
+              if [ "$SIMULATOR_READY" != "true" ] || [ -z "$SIMULATOR_UDID" ]; then
+                echo "$DEVICE_ROLE Simulator was unavailable; runtime validation was not attempted." >> "$LAUNCH_LOG"
+                record_result "$SCHEME" true "" not_run not_run false not_run not_run failed simulator_unavailable
+                overall_clean=false
+                continue
+              fi
+
+              if [ ! -d "$APP_PATH" ]; then
+                echo "Built app is missing: $APP_PATH" >> "$LAUNCH_LOG"
+                record_result "$SCHEME" true "" not_run not_run false not_run not_run failed app_missing
+                overall_clean=false
+                continue
+              fi
+
+              BUNDLE_IDENTIFIER="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP_PATH/Info.plist" 2>> "$LAUNCH_LOG")"
+              bundle_status=$?
+              if (( bundle_status != 0 )) || [ -z "$BUNDLE_IDENTIFIER" ]; then
+                echo "Could not read CFBundleIdentifier from $APP_PATH/Info.plist." >> "$LAUNCH_LOG"
+                record_result "$SCHEME" true "" not_run not_run false not_run not_run failed bundle_identifier_unavailable
+                overall_clean=false
+                continue
+              fi
+              echo "Bundle identifier from built Info.plist: $BUNDLE_IDENTIFIER" >> "$LAUNCH_LOG"
+
+              xcrun simctl uninstall "$SIMULATOR_UDID" "$BUNDLE_IDENTIFIER" \
+                >> "$LAUNCH_LOG" 2>&1
+              uninstall_status=$?
+              echo "Pre-install uninstall exit status: $uninstall_status" >> "$LAUNCH_LOG"
+
+              xcrun simctl install "$SIMULATOR_UDID" "$APP_PATH" \
+                >> "$LAUNCH_LOG" 2>&1
+              install_status=$?
+              if (( install_status != 0 )); then
+                echo "Install failed with exit status $install_status." >> "$LAUNCH_LOG"
+                record_result "$SCHEME" true "$BUNDLE_IDENTIFIER" "$install_status" not_run false not_run not_run failed install_failed
+                overall_clean=false
+                continue
+              fi
+
+              xcrun simctl get_app_container "$SIMULATOR_UDID" "$BUNDLE_IDENTIFIER" app \
+                >> "$LAUNCH_LOG" 2>&1
+              container_status=$?
+              echo "get_app_container exit status: $container_status" >> "$LAUNCH_LOG"
+
+              # -MinikOfflineSmoke keeps Modern Ping Pong from writing test profiles
+              # to the production online database; other apps ignore it.
+              launch_output="$(xcrun simctl launch "$SIMULATOR_UDID" "$BUNDLE_IDENTIFIER" -MinikOfflineSmoke YES 2>&1)"
+              launch_status=$?
+              printf '%s\n' "$launch_output" >> "$LAUNCH_LOG"
+              if (( launch_status != 0 )); then
+                echo "Launch failed with exit status $launch_status." >> "$LAUNCH_LOG"
+                xcrun simctl terminate "$SIMULATOR_UDID" "$BUNDLE_IDENTIFIER" \
+                  >> "$LAUNCH_LOG" 2>&1
+                terminate_status=$?
+                record_result "$SCHEME" true "$BUNDLE_IDENTIFIER" 0 "$launch_status" false not_run "$terminate_status" failed launch_failed
+                overall_clean=false
+                continue
+              fi
+
+              APP_PID="$(printf '%s\n' "$launch_output" | sed -nE 's/^.*: ([0-9]+)$/\1/p' | tail -1)"
+              if [[ ! "$APP_PID" =~ ^[0-9]+$ ]]; then
+                echo "simctl launch did not return a process identifier." >> "$LAUNCH_LOG"
+                xcrun simctl terminate "$SIMULATOR_UDID" "$BUNDLE_IDENTIFIER" \
+                  >> "$LAUNCH_LOG" 2>&1
+                terminate_status=$?
+                record_result "$SCHEME" true "$BUNDLE_IDENTIFIER" 0 0 false not_run "$terminate_status" failed launch_pid_unavailable
+                overall_clean=false
+                continue
+              fi
+
+              echo "Launched process identifier: $APP_PID" >> "$LAUNCH_LOG"
+              sleep 5
+              ps -p "$APP_PID" -o pid=,ppid=,state=,etime=,command= \
+                > "$PROCESS_LOG" 2>&1
+              process_status=$?
+              stable=false
+              if (( process_status == 0 )) && grep -Eq "^[[:space:]]*$APP_PID[[:space:]]" "$PROCESS_LOG"; then
+                stable=true
+              fi
+
+              xcrun simctl io "$SIMULATOR_UDID" screenshot "$SCREENSHOT_PATH" \
+                >> "$LAUNCH_LOG" 2>&1
+              screenshot_status=$?
+              if (( screenshot_status == 0 )) && [ ! -s "$SCREENSHOT_PATH" ]; then
+                screenshot_status=1
+                echo "Screenshot command returned success but produced no image." >> "$LAUNCH_LOG"
+              fi
+
+              xcrun simctl spawn "$SIMULATOR_UDID" log show \
+                --style compact \
+                --last 3m \
+                --predicate "processIdentifier == $APP_PID" \
+                > "$CONSOLE_LOG" 2>&1
+              console_status=$?
+              echo "Console diagnostic exit status: $console_status" >> "$LAUNCH_LOG"
+
+              xcrun simctl terminate "$SIMULATOR_UDID" "$BUNDLE_IDENTIFIER" \
+                >> "$LAUNCH_LOG" 2>&1
+              terminate_status=$?
+
+              if [ "$stable" = "true" ] && (( screenshot_status == 0 )) && (( terminate_status == 0 )); then
+                record_result "$SCHEME" true "$BUNDLE_IDENTIFIER" 0 0 true 0 0 passed ok
+              else
+                detail="stable=$stable screenshot_status=$screenshot_status terminate_status=$terminate_status"
+                record_result "$SCHEME" true "$BUNDLE_IDENTIFIER" 0 0 "$stable" "$screenshot_status" "$terminate_status" failed "$detail"
+                overall_clean=false
+              fi
+            done
+          done
+
+          sleep 2
+          CRASH_MANIFEST="build/smoke/crashes/manifest.txt"
+          : > "$CRASH_MANIFEST"
+          crash_count=0
+          crash_roots=("$HOME/Library/Logs/DiagnosticReports")
+          for DEVICE_UDID in "$IPHONE_UDID" "$IPAD_UDID"; do
+            if [ -n "$DEVICE_UDID" ]; then
+              crash_roots+=(
+                "$HOME/Library/Developer/CoreSimulator/Devices/$DEVICE_UDID/data/Library/Logs/CrashReporter"
+                "$HOME/Library/Developer/CoreSimulator/Devices/$DEVICE_UDID/data/Library/Logs/DiagnosticReports"
+              )
+            fi
+          done
+
+          for crash_root in "${crash_roots[@]}"; do
+            if [ ! -d "$crash_root" ]; then
+              continue
+            fi
+            while IFS= read -r -d '' crash_file; do
+              crash_count=$((crash_count + 1))
+              crash_name="$(printf '%04d-%s' "$crash_count" "$(basename "$crash_file")")"
+              cp "$crash_file" "build/smoke/crashes/$crash_name"
+              copy_status=$?
+              if (( copy_status == 0 )); then
+                printf '%s\t%s\n' "$crash_name" "$crash_file" >> "$CRASH_MANIFEST"
+              else
+                printf 'COPY_FAILED\t%s\n' "$crash_file" >> "$CRASH_MANIFEST"
+              fi
+            done < <(find "$crash_root" -type f -newer build/smoke/crash-scan-start.marker -print0)
+          done
+          if (( crash_count == 0 )); then
+            echo "No crash reports were generated after the smoke gate started." > build/smoke/crashes/none.txt
+          fi
+
+          if ! python3 - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          source = Path("build/smoke/smoke-results.tsv")
+          products = []
+          with source.open(encoding="utf-8", newline="") as handle:
+              for row in csv.DictReader(handle, delimiter="\t"):
+                  products.append({
+                      "device": row["device"],
+                      "product": row["product"],
+                      "build_succeeded": row["build_succeeded"] == "true",
+                      "bundle_identifier": row["bundle_identifier"] or None,
+                      "installed": row["install_status"] == "0",
+                      "launched": row["launch_status"] == "0",
+                      "stable_initial_render": row["stable"] == "true",
+                      "screenshot_captured": row["screenshot_status"] == "0",
+                      "terminated": row["terminate_status"] == "0",
+                      "result": row["result"],
+                      "detail": row["detail"],
+                  })
+
+          simulator_path = Path("build/smoke/simulator/selected-simulator.json")
+          simulator = json.loads(simulator_path.read_text(encoding="utf-8")) if simulator_path.exists() else None
+          summary = {
+              "schema_version": 2,
+              "simulators": simulator,
+              "all_required_products_passed": len(products) == 10 and all(item["result"] == "passed" for item in products),
+              "products": products,
+          }
+          Path("build/smoke/smoke-summary.json").write_text(
+              json.dumps(summary, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          PY
+          then
+            overall_clean=false
+            printf '{"schema_version":2,"all_required_products_passed":false,"error":"summary_generation_failed"}\n' \
+              > build/smoke/smoke-summary.json
+          fi
+
+          echo "smoke_clean=$overall_clean" >> "$GITHUB_OUTPUT"
+
+      - name: Upload MinikPlus Simulator artifact
+        if: ${{ !cancelled() && steps.product_builds.outputs.minikplus_ready == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: MinikPlus-simulator
+          path: |
+            build/artifacts/MinikPlus-simulator.zip
+            build/logs/MinikPlus.log
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Upload MinikPlusEnglish Simulator artifact
+        if: ${{ !cancelled() && steps.product_builds.outputs.minikplusenglish_ready == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: MinikPlusEnglish-simulator
+          path: |
+            build/artifacts/MinikPlusEnglish-simulator.zip
+            build/logs/MinikPlusEnglish.log
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Upload MinikMath Simulator artifact
+        if: ${{ !cancelled() && steps.product_builds.outputs.minikmath_ready == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: MinikMath-simulator
+          path: |
+            build/artifacts/MinikMath-simulator.zip
+            build/logs/MinikMath.log
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Upload MinikPingPong Simulator artifact
+        if: ${{ !cancelled() && steps.product_builds.outputs.minikpingpong_ready == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: MinikPingPong-simulator
+          path: |
+            build/artifacts/MinikPingPong-simulator.zip
+            build/logs/MinikPingPong.log
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Upload MinikRetroPingPong Simulator artifact
+        if: ${{ !cancelled() && steps.product_builds.outputs.minikretropingpong_ready == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: MinikRetroPingPong-simulator
+          path: |
+            build/artifacts/MinikRetroPingPong-simulator.zip
+            build/logs/MinikRetroPingPong.log
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Upload ProductConfigurationTests results
+        if: ${{ !cancelled() && steps.product_builds.outputs.compiles_clean == 'true' && (steps.product_tests.outcome == 'success' || steps.product_tests.outcome == 'failure') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ProductConfigurationTests
+          path: |
+            build/TestResults/ProductConfigurationTests.xcresult
+            build/logs/ProductConfigurationTests.log
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Upload Simulator smoke validation
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Simulator-smoke-validation
+          path: build/smoke
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Shut down selected Simulators
+        if: ${{ always() && steps.prepare_simulator.outputs.udid != '' }}
+        shell: bash
+        env:
+          IPHONE_UDID: ${{ steps.prepare_simulator.outputs.udid }}
+          IPAD_UDID: ${{ steps.prepare_simulator.outputs.ipad_udid }}
+        run: |
+          set -uo pipefail
+          for DEVICE_UDID in "$IPHONE_UDID" "$IPAD_UDID"; do
+            if [ -n "$DEVICE_UDID" ]; then
+              xcrun simctl shutdown "$DEVICE_UDID"
+              echo "simctl shutdown exit status for $DEVICE_UDID: $?"
+            fi
+          done
+          exit 0
+
+      - name: Evaluate complete Simulator gate
+        if: ${{ always() }}
+        shell: bash
+        env:
+          BOUNCE_WEB_TESTS: ${{ steps.bounce_web_tests.outcome }}
+          COMPILES_CLEAN: ${{ steps.product_builds.outputs.compiles_clean }}
+          PACKAGES_CLEAN: ${{ steps.product_builds.outputs.packages_clean }}
+          FAILED_SCHEMES: ${{ steps.product_builds.outputs.failed_schemes }}
+          FAILED_PACKAGES: ${{ steps.product_builds.outputs.failed_packages }}
+          SIMULATOR_READY: ${{ steps.prepare_simulator.outputs.simulator_ready }}
+          IPAD_READY: ${{ steps.prepare_simulator.outputs.ipad_ready }}
+          RUN_TESTS: ${{ inputs.run_tests }}
+          TEST_OUTCOME: ${{ steps.product_tests.outcome }}
+          SMOKE_CLEAN: ${{ steps.simulator_smoke.outputs.smoke_clean }}
+        run: |
+          set -uo pipefail
+          failures=()
+
+          if [ "$BOUNCE_WEB_TESTS" != "success" ]; then
+            failures+=("Bounce web game tests: ${BOUNCE_WEB_TESTS:-not_run}")
+          fi
+          if [ "$COMPILES_CLEAN" != "true" ]; then
+            failures+=("build failures: ${FAILED_SCHEMES:-unknown}")
+          fi
+          if [ "$PACKAGES_CLEAN" != "true" ]; then
+            failures+=("packaging failures: ${FAILED_PACKAGES:-caused by build failure}")
+          fi
+          if [ "$SIMULATOR_READY" != "true" ]; then
+            failures+=("modern iPhone Simulator selection or boot failed")
+          fi
+          if [ "$IPAD_READY" != "true" ]; then
+            failures+=("iPad Simulator selection or boot failed")
+          fi
+          if [ "$RUN_TESTS" = "true" ] && [ "$COMPILES_CLEAN" = "true" ] && [ "$TEST_OUTCOME" != "success" ]; then
+            failures+=("ProductConfigurationTests outcome: ${TEST_OUTCOME:-not_run}")
+          fi
+          if [ "$SMOKE_CLEAN" != "true" ]; then
+            failures+=("one or more required product smoke checks failed")
+          fi
+
+          if (( ${#failures[@]} > 0 )); then
+            for failure in "${failures[@]}"; do
+              echo "::error::$failure"
+            done
+            exit 1
+          fi
+
+          echo "All five products built, packaged, launched, rendered, captured screenshots, and terminated cleanly on iPhone and iPad (ProductConfigurationTests run: $RUN_TESTS)."

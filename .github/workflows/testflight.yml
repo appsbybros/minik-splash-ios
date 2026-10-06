@@ -1,0 +1,233 @@
+name: TestFlight upload
+
+on:
+  workflow_dispatch:
+    inputs:
+      products:
+        description: Schemes to archive and upload, separated by spaces
+        required: true
+        default: MinikPlus MinikPlusEnglish MinikMath MinikPingPong MinikRetroPingPong
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    # Checks the API key, its signing access, the app records and App IDs on Linux,
+    # so a setup problem stops the run before any macOS minutes are used.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check App Store Connect setup
+        shell: bash
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          PRODUCTS: ${{ inputs.products }}
+        run: |
+          set -euo pipefail
+          if [ -z "$(printf '%s' "$APPLE_TEAM_ID" | tr -d '[:space:]')" ]; then
+            echo "::error::Missing repository secret: APPLE_TEAM_ID"
+            exit 1
+          fi
+          export ASC_KEY_ID="$(printf '%s' "$ASC_KEY_ID" | tr -d '[:space:]')"
+          export ASC_ISSUER_ID="$(printf '%s' "$ASC_ISSUER_ID" | tr -d '[:space:]')"
+          python3 -m pip install --quiet "pyjwt[crypto]"
+          python3 Scripts/appstore-register-bundle-ids.py --check $PRODUCTS
+
+  upload:
+    needs: preflight
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Write App Store Connect API key
+        shell: bash
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          key_id="$(printf '%s' "$ASC_KEY_ID" | tr -d '[:space:]')"
+          key_directory="$RUNNER_TEMP/app-store-connect"
+          mkdir -p "$key_directory"
+          key_path="$key_directory/AuthKey_$key_id.p8"
+          printf '%s\n' "$ASC_PRIVATE_KEY" > "$key_path"
+          chmod 600 "$key_path"
+          {
+            echo "ASC_KEY_PATH=$key_path"
+            echo "ASC_KEY_ID=$key_id"
+            echo "ASC_ISSUER_ID=$(printf '%s' "$ASC_ISSUER_ID" | tr -d '[:space:]')"
+            echo "APPLE_TEAM_ID=$(printf '%s' "$APPLE_TEAM_ID" | tr -d '[:space:]')"
+          } >> "$GITHUB_ENV"
+
+      - name: Prepare upload tool
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/asc-venv"
+          "$RUNNER_TEMP/asc-venv/bin/pip" install --quiet "pyjwt[crypto]"
+          echo "ASC_PYTHON=$RUNNER_TEMP/asc-venv/bin/python" >> "$GITHUB_ENV"
+
+      - name: Generate project
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          if ! command -v xcodegen >/dev/null 2>&1; then
+            brew install xcodegen
+          fi
+          xcodegen generate
+
+      - name: Archive, sign and upload
+        shell: bash
+        env:
+          PRODUCTS: ${{ inputs.products }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        run: |
+          set -uo pipefail
+          mkdir -p build/logs build/archives build/export
+          # Each run gets a higher build number than every earlier upload.
+          BUILD_NUMBER=$((1000 + GITHUB_RUN_NUMBER * 10 + GITHUB_RUN_ATTEMPT))
+          echo "Build number: $BUILD_NUMBER"
+
+          cat > build/ExportOptions.plist <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>export</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>teamID</key><string>${APPLE_TEAM_ID}</string>
+            <key>uploadSymbols</key><true/>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+          </dict>
+          </plist>
+          PLIST
+
+          uploaded=""
+          failed=""
+          for SCHEME in $PRODUCTS; do
+            ARCHIVE="build/archives/$SCHEME.xcarchive"
+            # Archive unsigned: a fresh runner has no Apple Development certificate or
+            # profile. Export below signs for distribution with Apple's cloud-managed
+            # certificate through the App Store Connect API key.
+            if ! xcodebuild archive \
+              -project Minik.xcodeproj \
+              -scheme "$SCHEME" \
+              -configuration Release \
+              -destination "generic/platform=iOS" \
+              -archivePath "$ARCHIVE" \
+              -derivedDataPath build/DerivedData/Shared \
+              CODE_SIGNING_ALLOWED=NO \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGN_IDENTITY="" \
+              DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+              MINIK_BUILD_NUMBER="$BUILD_NUMBER" \
+              > "build/logs/$SCHEME-archive.log" 2>&1; then
+              echo "::error::Archive failed for $SCHEME"
+              grep -E "error:|ARCHIVE FAILED" "build/logs/$SCHEME-archive.log" | sort -u | head -40 || true
+              failed="$failed $SCHEME"
+              continue
+            fi
+
+            # The unsigned archive keeps Google's own signature on the embedded Google
+            # Mobile Ads frameworks, which export leaves in place and Apple rejects
+            # (ITMS-90035). Replacing it lets export sign them for the App Store.
+            APP="$ARCHIVE/Products/Applications/$SCHEME.app"
+            framework_failed=""
+            for framework in "$APP"/Frameworks/*.framework "$APP"/Frameworks/*.dylib; do
+              [ -e "$framework" ] || continue
+              if ! codesign --force --sign - --timestamp=none "$framework"; then
+                framework_failed="$framework"
+                break
+              fi
+            done
+            if [ -n "$framework_failed" ]; then
+              echo "::error::Could not prepare $framework_failed for signing in $SCHEME"
+              failed="$failed $SCHEME"
+              continue
+            fi
+
+            # The two Language apps need App Attest for the leaderboard's App Check.
+            # Stamp it on the unsigned app so the distribution signature keeps it.
+            case "$SCHEME" in
+              MinikPlus|MinikPlusEnglish)
+                if ! codesign --force --sign - --timestamp=none \
+                  --entitlements Resources/Entitlements/MinikLanguage.entitlements "$APP"; then
+                  echo "::error::Could not add App Attest to $SCHEME"
+                  failed="$failed $SCHEME"
+                  continue
+                fi
+                ;;
+            esac
+
+            # Export signs the .ipa for the App Store with the API key. Xcode's own
+            # upload needs an Xcode account, so the API upload below sends it.
+            if ! xcodebuild -exportArchive \
+              -archivePath "$ARCHIVE" \
+              -exportOptionsPlist build/ExportOptions.plist \
+              -exportPath "build/export/$SCHEME" \
+              -allowProvisioningUpdates \
+              -authenticationKeyPath "$ASC_KEY_PATH" \
+              -authenticationKeyID "$ASC_KEY_ID" \
+              -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+              > "build/logs/$SCHEME-export.log" 2>&1; then
+              echo "::error::Signing (export) failed for $SCHEME"
+              grep -E "error|Error|EXPORT FAILED" "build/logs/$SCHEME-export.log" | sort -u | head -40 || true
+              echo "--- last export log lines ---"
+              tail -25 "build/logs/$SCHEME-export.log" || true
+              distribution_logs="$(grep -oE "/[^' ]+\.xcdistributionlogs" "build/logs/$SCHEME-export.log" | head -1 || true)"
+              if [ -n "$distribution_logs" ] && [ -d "$distribution_logs" ]; then
+                cp -R "$distribution_logs" "build/logs/$SCHEME-distribution-logs" || true
+              fi
+              failed="$failed $SCHEME"
+              continue
+            fi
+
+            IPA="$(find "build/export/$SCHEME" -maxdepth 1 -name '*.ipa' | head -1)"
+            if [ -z "$IPA" ]; then
+              echo "::error::Export produced no .ipa for $SCHEME"
+              failed="$failed $SCHEME"
+              continue
+            fi
+            if ! "$ASC_PYTHON" Scripts/appstore-register-bundle-ids.py --upload "$IPA" \
+              > "build/logs/$SCHEME-upload.log" 2>&1; then
+              echo "::error::Upload failed for $SCHEME"
+              cat "build/logs/$SCHEME-upload.log"
+              failed="$failed $SCHEME"
+              continue
+            fi
+            cat "build/logs/$SCHEME-upload.log"
+            uploaded="$uploaded $SCHEME"
+          done
+
+          echo "Uploaded:${uploaded:- none}"
+          if [ -n "$failed" ]; then
+            echo "::error::Failed:$failed"
+            exit 1
+          fi
+
+      - name: Upload archive and upload logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestFlight-logs
+          path: build/logs
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Remove API key
+        if: ${{ always() }}
+        shell: bash
+        run: rm -rf "$RUNNER_TEMP/app-store-connect"

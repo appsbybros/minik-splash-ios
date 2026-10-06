@@ -1,0 +1,13 @@
+{
+  "name": "minik-ios-firebase-rules-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:firebase-rules": "firebase emulators:exec --only firestore --project demo-minik-rules \"node --test Tests/FirebaseRules/firestore.rules.test.mjs\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "5.0.2",
+    "firebase": "12.19.0",
+    "firebase-tools": "15.30.0"
+  }
+}

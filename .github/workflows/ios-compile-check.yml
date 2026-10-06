@@ -1,0 +1,107 @@
+name: iOS Compile Check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install or verify XcodeGen
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          if ! command -v xcodegen >/dev/null 2>&1; then
+            brew install xcodegen
+          fi
+          xcodegen --version
+
+      - name: Generate project
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodegen generate
+
+      - name: Compile every app and the tests, stopping at the first failure
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p build/logs
+          # One shared DerivedData builds Firebase, Google Mobile Ads and the commerce
+          # package once for all apps. Compile only for the Apple-silicon simulator.
+          DERIVED_DATA="build/DerivedData/Shared"
+          COMMON=(-project Minik.xcodeproj -configuration Debug -sdk iphonesimulator
+                  -destination "generic/platform=iOS Simulator" -derivedDataPath "$DERIVED_DATA"
+                  CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+                  ARCHS=arm64 ONLY_ACTIVE_ARCH=NO)
+          status=0
+          # MinikPlus compiles nearly all shared code. If it passes, the tests and the other
+          # apps are compiled too; a test failure does not stop the apps from being checked.
+          for SCHEME in MinikPlus MinikPingPong MinikRetroPingPong MinikMath MinikPlusEnglish MinikMultiPingPong MinikAmudu MinikSplash; do
+            echo "Compiling $SCHEME"
+            xcodebuild build -scheme "$SCHEME" "${COMMON[@]}" > "build/logs/$SCHEME.log" 2>&1
+            scheme_status=$?
+            if (( scheme_status != 0 )); then
+              echo "::error::Compile failed for $SCHEME"
+              status=$scheme_status
+              break
+            fi
+            # Each app with a test target also compiles its tests.
+            TESTS=""
+            case "$SCHEME" in
+              MinikPlus) TESTS=ProductConfigurationTests ;;
+              MinikMultiPingPong) TESTS=MultiPongTests ;;
+              MinikAmudu) TESTS=AmuduTests ;;
+              MinikSplash) TESTS=SplashTests ;;
+            esac
+            if [ -n "$TESTS" ]; then
+              echo "Compiling $TESTS"
+              xcodebuild build-for-testing -scheme "$SCHEME" "${COMMON[@]}" > "build/logs/$TESTS.log" 2>&1
+              test_status=$?
+              if (( test_status != 0 )); then
+                echo "::error::Compile failed for $TESTS"
+                status=$test_status
+              fi
+            fi
+          done
+
+          # Every distinct compiler error with file and line, in the log and the run summary.
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          root = os.environ.get("GITHUB_WORKSPACE", "") + "/"
+          seen = []
+          for log in sorted(Path("build/logs").glob("*.log")):
+              for line in log.read_text(encoding="utf-8", errors="replace").splitlines():
+                  if re.search(r"(^|\s|:)(error|fatal error): ", line) or line.startswith("ld: ") or "Undefined symbol" in line:
+                      entry = line.replace(root, "").strip()
+                      if entry not in seen:
+                          seen.append(entry)
+          text = "\n".join(seen) if seen else "No compiler errors."
+          Path("build/logs/errors.txt").write_text(text + "\n", encoding="utf-8")
+          print(text)
+          summary = os.environ.get("GITHUB_STEP_SUMMARY")
+          if summary:
+              with open(summary, "a", encoding="utf-8") as handle:
+                  handle.write("## Compiler errors (%d)\n\n```\n%s\n```\n" % (len(seen), text))
+          PY
+          exit $status
+
+      - name: Upload compile logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Compile-check-logs
+          path: build/logs
+          if-no-files-found: ignore
+          retention-days: 3

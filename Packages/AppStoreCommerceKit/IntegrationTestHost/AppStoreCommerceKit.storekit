@@ -1,0 +1,84 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "A6B3A445-E79F-4A3A-9FE3-5A7F2A8C1A64",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "F01A6C75-D8DF-4F01-8E37-E2451A32A8E0",
+      "localizations" : [
+        {
+          "description" : "Local StoreKit test fixture.",
+          "displayName" : "Fixture Permanent Feature",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "org.example.appstorecommerce.fixture.permanent",
+      "referenceName" : "Fixture Permanent Feature",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "528B2C0E-4FCD-487D-9816-0DCB4CB67C3A",
+      "localizations" : [
+        {
+          "description" : "Local StoreKit subscription fixture.",
+          "displayName" : "Fixture Subscription",
+          "locale" : "en_US"
+        }
+      ],
+      "name" : "Fixture Subscription Group",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "2.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "698A4B8C-84F4-4C60-B73B-6C88BFF6D252",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Local monthly subscription fixture.",
+              "displayName" : "Fixture Monthly Access",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "org.example.appstorecommerce.fixture.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Fixture Monthly Access",
+          "subscriptionGroupID" : "528B2C0E-4FCD-487D-9816-0DCB4CB67C3A",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : []
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

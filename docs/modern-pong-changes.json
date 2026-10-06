@@ -1,0 +1,704 @@
+[
+  {
+    "path": ".gitignore",
+    "operation": "modified",
+    "beforeSHA256": "618732a888cb454a8ec01c804bffcc30175f3933e6525765501b669ce3b119b5",
+    "afterSHA256": "a0d6d22f2839ebf8b7209fd0d9ac55e356995241fe7db0ed8110c5b6ef93304a"
+  },
+  {
+    "path": "Config/Firebase/MinikPingPong/GoogleService-Info.plist",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "f72bcfb13bb7e4e799be56a7b4f0a36919ebeaf98fa7c485f56f7cafd6140da0"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "e8e8ef4b27126d62305af321d12a6e64b866ca0b160f0f83efae90111f0ee576"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/ModernPongAppIcon.appiconset/AppIcon.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "035f38e4f5084d97c4f39d1e7ddd1cf241085751d8f4fcf6e083188abe6c2f23"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/ModernPongAppIcon.appiconset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "da89a3b60169a0c4656a789c47d2d20e623f72c103ab822c922ed87339d41cf6"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_app_icon.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "664992f3eae0ed59afa04a0d0eccc1d6cbceb8c29f1bffee811daa0ba34c7c23"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_app_icon.imageset/app_icon.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "3f2863050f91ad0d0720726759948eb4ecce0800bb17f042fcc9b89d5919186b"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_amber.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "a6f625be99debc504ec5a19ed9b50e91d8bc3c036da5ece94b0849ae4bcda285"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_amber.imageset/bot_amber.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "7c9eeda4c3cf6679e865bb12201f18653de2bcccf4fb9d87c7a2c235d120bcae"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_coach67.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "6103ecf758befb1c0054e87cf98db0135f2865a479b7fd627366c3a95aa38d30"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_coach67.imageset/bot_coach67.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "a51bbc3e84657539da2f34b8b44958c0b8cdebd30140a0219c190b54dcd62b71"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_comet.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "73204ba93d5d0104f6e507b198ae7ea8e4cb6f073a075ecce49d7fc8c0504a9d"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_comet.imageset/bot_comet.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "45971a1c012008ee141be06d2e76dd2fab9676882056a0c98c1e860ac6bfef68"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_flare.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "edd14c1a918080ea0c2e51f74c0604ad500a1833fbafddb8b0e1aa3b3eef254e"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_flare.imageset/bot_flare.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "bb62bf3d3b1daed12955c2d05cde0b0a66cc642970f7ff7f44516b25a6dd7667"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_gaya.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "f1bc59799313bf0568726c0b059726393f20aa44649e59ffe09bff956ae8ae35"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_gaya.imageset/bot_gaya.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "36a64af282178859d5e58bbcedbbc7961c1a1c85521222610fa4d2a96e3a0a00"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_june.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "694dd6f1dcfc02d4b975c1328f2869b1730f1d2786d20b79ae1cb83d1c048f07"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_june.imageset/bot_june.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "a7cddc3206421842c4239b8c226f1e56f4de75eed0f0a13523f39d9c55647307"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_kyra.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "5cee28a8184340727503aba6dd9a0cc855915cbf99af198ce853b95bfd395bb8"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_kyra.imageset/bot_kyra.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "14c36098481d8e990b7457568facd8c42e1511d4b4ed282334df74ede73aa5bf"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_mia.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "2d7eeb5a6a377418f54dc875f30d1cf2f2ed0e7ade28eeb1bf2cfca8efb31294"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_mia.imageset/bot_mia.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "455338a64aba8c7f67ecfd21830075326a519ce725bd4de4a3d084c63ff5c5a9"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_miniko.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "d6c65a9b459eea1e480f5b563368201f4b40220d81f3b2fc7f667b2aa93fa9a2"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_miniko.imageset/bot_miniko.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "9ded5b5399728017404a09090fc27e5d4e94cf59ba74b707c26805678d521260"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_moshiko.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "f636d9ebd2ead26b2549d3e64a010f3d0852f96b112fcb8e3358572468ab2bb9"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_bot_moshiko.imageset/bot_moshiko.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "eb20ae75ca385c7f377a4aa79c05d2761fb99eb67278779ab62023fe8ef64334"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_left_accelerate.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "b298a739c56fd1dae2b63c46e472387be461c8079a056b7e63e10c3f840a1b57"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_left_accelerate.imageset/minik_left_accelerate.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "fecb26a9dfa9448b6f1da4541ce351eea6b6f90697fa9a7db1217f6be8200c5e"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_left_contact.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "9650b806e7eaf56578efd0c657c8ff75d73b0ef647edb3fcaff4e7f5fa6e1adf"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_left_contact.imageset/minik_left_contact.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "aeeae753b8ad7684860b8481ef631b3cd48b7c0e792d45fe27c7fb1941032eb9"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_left_follow.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "f6114d82f28af7b19e46358af25760a8b614bc59d5e2acf7c9faa6ab7086be6f"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_left_follow.imageset/minik_left_follow.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "53abde7bfd738cc2cd908c108e3908cf3bd0b211af5fd4a886a91771f18d9f38"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_left_ready.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "6ff07a8c053ff5634a3aa318665a4abe661cebdd801e75de6223af9a4a76dde9"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_left_ready.imageset/minik_left_ready.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "44ca6732d9c8d82f5f8cb43ace54be7793b7ee443711c4b6ee9b03c92dc8f153"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_left_windup.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "2fb045d53892c65991858760cb8a3b7eab31dfb4ff2ab1224892ec7d9a917c9f"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_left_windup.imageset/minik_left_windup.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "982f757e980acdebe2a4d6190890ae768c6c2c7a769690dbc7205cc80898e532"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_accelerate.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "2032a38806d2f95c71c38124108fc63e1c2b8e1f4c86535ff7a8228d839dd9c7"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_accelerate.imageset/minik_motion_accelerate.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "c478d1f6a80fd751f8cad53bdfe0379d330aa6652bdb34a81d60927eb1cc3850"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_back.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "06238fd264ef48fea56a3d7bb58e8e56013df174566c3f5bd5ee4351c1899e27"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_back.imageset/minik_motion_back.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "d8419adf6e5a29644b533e66d21c6c4890035aced74ace48f1e592dfd32d395e"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_body.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "93583807d3750d8e48d948c1726d343901354b300b900d795a98ecf91ff8db34"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_body.imageset/minik_motion_body.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "d412eaad2dc326febe72d6af273efc48960bc44f815cac920cc6e385a905d42c"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_contact.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "1b43c0b453038a0f9c44e0a5baee6ac62d49b8d2aba7c08db9f002c9e1b16337"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_contact.imageset/minik_motion_contact.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "c817da838b38a58974a0137bdbc7196dc533b9261fd4b44a26755c03cc5656b5"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_follow.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "d226050e4a2878e88025719523165eae3d800b611651fb44c4f08ed83f2a22c9"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_follow.imageset/minik_motion_follow.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "b891764fc28e7a31862a1b8fbfdb9fbb4ca1595a996694d6458513809fea0de4"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_ready.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "2bcf64437955168a1423d4f97863b564158b0a0049f77d947597755037acc335"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_ready.imageset/minik_motion_ready.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "102c835909799a21a49014b693c1d4148a76563b0f00e7f84b53c4d61384de5d"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_step.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "4ff29aa5d039552043c0e411cb86cb84016a4e80c9944c5d59df00fa78ad7ca7"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_step.imageset/minik_motion_step.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "28224fd6a44e1f6a653e7112a275842d7b018dc1a1a51532f44bebd565a74e85"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_windup.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "698fa9afe626d5271db9a8de0ebdf52970aaa4e209623a413e658be1c23caab5"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_minik_motion_windup.imageset/minik_motion_windup.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "2da046e68c0afc0a9e057739feb7f9d7f1677859ec00ad2381d60a82e4d6638e"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_arena.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "7839cd6d66354227c8a86e4b580c05b50ba44f0f71924da536899b895bb0fa56"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_arena.imageset/ping_pong_arena.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "32d2f1e95ae87a2685133f9e3ae842d9643d35dcf54c77ff6255051be5fa5863"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_ball.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "a9b8f39e6b7172d6a7740954fc11007f361c281fa7824c86f2b3334a12f3d614"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_ball.imageset/ping_pong_ball.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "3097698470183ea2442842ace87f2659e52d7a3eb031727a1499792c5ef9edec"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_easy_backhand.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "57d34c9739087f68fbeb200b7a4c597655098c2cdab1bcdd9f47c5901c0f86ef"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_easy_backhand.imageset/ping_pong_player_easy_backhand.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "23e8aa4767e928ff66f7106211c5aedca8a35f5922545a3e650de6e07ebfbae9"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_easy_forehand.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "d6284f4b7f9db88fd66ec8c7d24edd7b54bf43de2c23de671b2864b1d07dda80"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_easy_forehand.imageset/ping_pong_player_easy_forehand.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "11d498168c1f637da89ebb5da950c9fe99c302fd1273560501a7d537a57729bd"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_hard_backhand.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "b9036d6401106350b3164ba697f3127360d0f242ab299d5591146b67e81fbc61"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_hard_backhand.imageset/ping_pong_player_hard_backhand.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "543afa69cc66d8a4ef45f6f1c6a13ac9d45f9e0b01176e497c16f1a4d9975e66"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_hard_forehand.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "309deb9f4cd73066ba8cdda8bf23c07ca833ce24b67c1232a2b6570b2de95b67"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_hard_forehand.imageset/ping_pong_player_hard_forehand.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "79dcca2271aeb6b693e0cc33625c914a017ba2c5830b17a53c393d56184358b8"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_medium_backhand.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "76dcb27d6e25b525a74b3e2218b7a165e82559d272ad7f1f5fc181e44866d6dc"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_medium_backhand.imageset/ping_pong_player_medium_backhand.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "543afa69cc66d8a4ef45f6f1c6a13ac9d45f9e0b01176e497c16f1a4d9975e66"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_medium_forehand.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "ebce4db8564294b22bf3134f8640ece08f4508418522ea19a5d721841deb91ff"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_medium_forehand.imageset/ping_pong_player_medium_forehand.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "629c633719df220e306dce37aa5047893e69d796ba9a22abdf7380860b31a0dd"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_starter_paddle.imageset/Contents.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "5c6cf5b130d4bc9c758f8a606ae758dc0465b15fa87302745506b38c5ecd5bf9"
+  },
+  {
+    "path": "Resources/ModernPongAssets.xcassets/mp_ping_pong_player_starter_paddle.imageset/ping_pong_player_starter_paddle.png",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "a7e1673d92ba00322f33def7cbea9b508f6c9fe172a8d633fc35d84fce0edcbe"
+  },
+  {
+    "path": "Resources/ModernPongAudio/connected.mp3",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "7ef89d2e8bbc02e558b0bdbad3e0ae67b171ff8759e59a24bcd69ba0124f71e8"
+  },
+  {
+    "path": "Resources/ModernPongAudio/cool_music2.mp3",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "8739c47026ed62f4dde407a432d013b151af6d191a3d9a4fc5a0392c9071563e"
+  },
+  {
+    "path": "Resources/ModernPongAudio/failure_sound.mp3",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "c3af78f5f0a591aa006b0959aedaa8b20e0224bc7e1454857ac4784807cfd896"
+  },
+  {
+    "path": "Resources/ModernPongAudio/minik_claps.mp3",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "65351faabbd4556856842528ccb78d1afd81a159b609162b53c599644b7c889b"
+  },
+  {
+    "path": "Resources/ModernPongAudio/minik_kick.mp3",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "3b5bf005e77004c80e785ad396a4d110f631dd35638117af6e356cfd9e1ad020"
+  },
+  {
+    "path": "Resources/ModernPongAudio/minik_kick2.mp3",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "d2a6e6eb3191c0498637b24897b420717bcae71c4b73f1ab5237db9c47a802f6"
+  },
+  {
+    "path": "Resources/ModernPongAudio/player_ready.mp3",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "e36d07f178d49a49ebebdd56ae26dcfd0b9e5a5e4f45024d9eae8ffbe7e8c8e9"
+  },
+  {
+    "path": "Resources/ModernPongAudio/splash.mp3",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "de20197edd7aec007b8a3d2e45e6add57163b6878c446e71501e4b51f531980e"
+  },
+  {
+    "path": "Resources/ModernPongAudio/success_in_a_raw_sound.mp3",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "e5d4f4c8c99745d054493aeb5dc33ad30c0888777ccd327c9747c6ad45c406c1"
+  },
+  {
+    "path": "Resources/ModernPongAudio/success_pictures_screen_sound.mp3",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "a65e2e731b6a7ae699546ae6531356ccf855c4f3d0d3d2b6acd67e022e520863"
+  },
+  {
+    "path": "Resources/Privacy/ModernPong/PrivacyInfo.xcprivacy",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "657e8a833ece2e6805798c6b2b61d9702e54b2a314ba8ae46f0b708da9b1ac5f"
+  },
+  {
+    "path": "Scripts/audit-minik-ads.ps1",
+    "operation": "modified",
+    "beforeSHA256": "dd5b32fb2762c86534fdc42b8442b55b2a880852904bd86aa074b66483e38f82",
+    "afterSHA256": "a26827dd345ddf817559a66d2c189af679628636671fe1df5af260c88f4bd83b"
+  },
+  {
+    "path": "Scripts/audit-modern-pong.py",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "183afe2e0e8ad9303ffd0f877d99aabafa031fb593a70d912eb2149d49ca4313"
+  },
+  {
+    "path": "Scripts/audit-release-configuration.ps1",
+    "operation": "modified",
+    "beforeSHA256": "f3a52e4e883cfc7a80f9c03ffc03b32c362c0485fc92fb9418758829e4dbfdec",
+    "afterSHA256": "d96cdba4dc19c0cb5d1625895723eeaf6a7d28151aa8fd9fc872e89c2451e472"
+  },
+  {
+    "path": "Sources/ModernPong/MPAds.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "15eb1e81f4d7f19e326a077276feb420bc781b8a15d88cfffb13be6f28cf7b08"
+  },
+  {
+    "path": "Sources/ModernPong/MPAudio.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "db35e40788afbfc3443e818355e33e6c6e1268ef80024c00f1dd469b7b8afdb3"
+  },
+  {
+    "path": "Sources/ModernPong/MPController.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "9bb8a7e6e01c8af9977032e7a991e9aec560d730bc4ca82b37180a8d2f4214c6"
+  },
+  {
+    "path": "Sources/ModernPong/MPEngine.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "76278f73c6f48ce0fce0e71229925d7fc588e56a367a068b2e7405766013c189"
+  },
+  {
+    "path": "Sources/ModernPong/MPMatchLink.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "c65102c57281e50017a632a2a688e9c7b91242263132fd96f2890e841290ece8"
+  },
+  {
+    "path": "Sources/ModernPong/MPMultiplayerModels.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "81c584a667cbfea5f218d3fe96ec7e40f7c8e17bfd799aadabd298b36f808860"
+  },
+  {
+    "path": "Sources/ModernPong/MPPhysics.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "6d423733dfc2e3e06359c09aa0a0831738e111f4e31cadbecce1ef8bae29e4c7"
+  },
+  {
+    "path": "Sources/ModernPong/MPPreferences.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "e04b29fc9487e7ca64074ceafca41a68c2d8b1f1433d00060efd16fc672f61c2"
+  },
+  {
+    "path": "Sources/ModernPong/MPRepository.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "4b95ffe6744a0a3d162db441860b9cdf4efc2a942b13ac721f1c1885769ec286"
+  },
+  {
+    "path": "Sources/ModernPong/MPRoster.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "75c67c49dfcc2a01053751c8475e236633881328a762bf3e5fc188beebc39d32"
+  },
+  {
+    "path": "Sources/ModernPong/MPScene.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "2a559b706d89aadb9985a57ea51309d44026cb9536ac2b6b349547483cd486e1"
+  },
+  {
+    "path": "Sources/ModernPong/MPTuning.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "0bfc76acfac62c8ec900303231238625eb087cf314edaa10108acccb966b3764"
+  },
+  {
+    "path": "Sources/ModernPong/MPTutorial.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "d916253c3c7334f861b4e3fb45cadc0084e8bda2ac19fd6b019350f24f03766f"
+  },
+  {
+    "path": "Sources/ModernPong/ModernPongView.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "3b753be7aa4874bbb46d6846843da7f9a0c66131f33660d61bf9a2579cf574a7"
+  },
+  {
+    "path": "Sources/PingPongOnlyRootView.swift",
+    "operation": "modified",
+    "beforeSHA256": "312f39cf48b43a95157b9a6d307136fd3ad1691ba9c79014c8fd3885fb3eefd6",
+    "afterSHA256": "6042f36a218c516c7fef280056ad2e628bf639fb3ac02ed6fa43eb8a04410fbb"
+  },
+  {
+    "path": "Sources/RootView.swift",
+    "operation": "modified",
+    "beforeSHA256": "b04c29239c8dc0f59f34f44cdf13724fb738c958bd927a1d03a4303aaff0b05b",
+    "afterSHA256": "36601a82f3a7293b0bafaf15b1677266c11c79238ed93f9e0312655cf8991e8b"
+  },
+  {
+    "path": "Tests/ModernPongFirebase/firebase.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "c1ccbe6fdb71f817a977a5ca6b5926949203aa4817035d98cab214d7f4be3f63"
+  },
+  {
+    "path": "Tests/ModernPongFirebase/package.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "e7545f1668def2a46d59b83d461cd57e5e15b5f7104db936d5a668f0d6bfba2c"
+  },
+  {
+    "path": "Tests/ModernPongFirebase/rules/merged.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "21f7352b6aff5d83774c6fb0c4368a7576c9509539a6141e59d914ca4d155bda"
+  },
+  {
+    "path": "Tests/ModernPongFirebase/rules/original.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "940de3346a8d45a74f971d933efbaa6c83264985ced79f449c65b7b80b01533d"
+  },
+  {
+    "path": "Tests/ModernPongFirebase/rules/pingpong.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "911643f6c507da9a6c53d04ca4b5f187010261852100410a23769b86b2ae49ac"
+  },
+  {
+    "path": "Tests/ModernPongFirebase/tests/rules.test.cjs",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "5f8faf74553a22896f228f626dae7547e239b6bf738a227a9594346a481c7a57"
+  },
+  {
+    "path": "Tests/ProductConfigurationTests/ModernPongParityTests.swift",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "8de1d94839065cec3c114efea1b3d2866873c73faff404e617ba2c200185ff03"
+  },
+  {
+    "path": "docs/MINIK_MASTER_PLAN.md",
+    "operation": "modified",
+    "beforeSHA256": "3f811816f3c0cfa1d37bd495154564d6c59b164c21cc53eb9fa4bdae229d4ac5",
+    "afterSHA256": "c06976ee8ba0d550e8e08bf5dd18f86c83acade4e17ff6932898459697a58556"
+  },
+  {
+    "path": "docs/app-store-privacy-data-inventory.md",
+    "operation": "modified",
+    "beforeSHA256": "0da6fb1ae56acd1fa86c6fb877fc048486ea834a550b378507d3b42de92d7bd8",
+    "afterSHA256": "4cc58f154bc551b1fbd85814cac9e37ff076cdd59d155d882f2190b77b6422aa"
+  },
+  {
+    "path": "docs/apple-release-checklist.md",
+    "operation": "modified",
+    "beforeSHA256": "f3ab85d4698dcf78629b0dfd29e6183876f326ddd42ed1c261c609894ac67904",
+    "afterSHA256": "38618a4cb53393f17a7f2a7f52875bb1d0ba7ccbedaeb0fe9cf24decef27df45"
+  },
+  {
+    "path": "docs/modern-pong-android-assets.json",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "607f3bde830a354aa70f1e82b163e0db261037206fde41bc5746068113aefccb"
+  },
+  {
+    "path": "docs/modern-pong-ios-handoff.md",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "d0a3b5b9630aab2d5ca7c35b6d122f62cf495b16795a11c68d2de0b6ff0b8106"
+  },
+  {
+    "path": "docs/modern-pong-verification/firebase-rules-test.log",
+    "operation": "added",
+    "beforeSHA256": null,
+    "afterSHA256": "efaa1701173376c74bb5cb1240fb65c327fee50aca4b90479159de5818dfa080"
+  },
+  {
+    "path": "docs/privacy-policy-website-replacement.md",
+    "operation": "modified",
+    "beforeSHA256": "151e5d80bd2e95d6fd098505a5033192c74c629ce14f300f1e4f07da99e4485a",
+    "afterSHA256": "b53ed64bcb2ad1e87081a33ff69dc8390ee6e515be2773bdfe6492546a34c61f"
+  },
+  {
+    "path": "docs/release-configuration.md",
+    "operation": "modified",
+    "beforeSHA256": "c45a4495e2f40b15978a6209638513f5b4a09133cd3b8c3c09894bb5d5133ba1",
+    "afterSHA256": "aa35cc82c5b51a073e0900739a14371e0e792a6ab698e9a6dff5b4db87592d09"
+  },
+  {
+    "path": "project.yml",
+    "operation": "modified",
+    "beforeSHA256": "c5630628be2eb160663b30a91957e91329618d95d1a05137dd1ab3c0fb4b2f28",
+    "afterSHA256": "6ac867bb56194926a24597f9eb39d50feb11a3b4a954c357adcfe9120a4a89c1"
+  }
+]

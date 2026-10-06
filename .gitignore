@@ -1,0 +1,37 @@
+# Generated Xcode project and property lists
+*.xcodeproj/
+!Packages/AppStoreCommerceKit/IntegrationTestHost/AppStoreCommerceKitTestHost.xcodeproj/
+GeneratedInfoPlists/
+
+# Keep arbitrary Firebase account files out; the two provided production
+# Language configurations and the Modern Ping Pong registration are canonical exceptions.
+**/GoogleService-Info.plist
+**/GoogleService-Info-*.plist
+!Config/Firebase/MinikPlus/GoogleService-Info.plist
+!Config/Firebase/MinikPlusEnglish/GoogleService-Info.plist
+!Config/Firebase/MinikPingPong/GoogleService-Info.plist
+
+# Xcode user data and build output
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Swift Package Manager local output
+.build/
+.swiftpm/
+
+# Repository-local Firebase Rules test output
+node_modules/
+firebase-debug.log
+firestore-debug.log
+
+# Local Modern Ping Pong RTDB emulator output
+database-debug.log
+
+# Local QA evidence, exported Android website and stray local files
+artifacts/
+website/
+website.zip
+docs/*.zip
+rollout-*
+/%USERPROFILE%/

@@ -1,0 +1,42 @@
+/* WKWebView is already constrained to the native safe area, as in the Android inset host. */
+html, body { -webkit-text-size-adjust:100%; overscroll-behavior:none; }
+body { -webkit-touch-callout:none; }
+.site-footer { display:none !important; }
+button, select { touch-action:manipulation; }
+/* Standalone iOS has no parent screen to exit to. Keep the balanced header slot,
+   but remove its root-only Exit button from both display and keyboard focus. */
+html.minik-ios-standalone .pong-setup-nav .pong-exit-btn { display:none !important; }
+
+/* iOS can present this game in a portrait Math sheet. Android's activity is
+   landscape-only; keep the same setup reachable here without a hidden Start. */
+@media (orientation:portrait) {
+  body[data-view="pong"].pong-waiting { overflow:hidden; }
+  body[data-view="pong"].pong-waiting .pong-panel { backdrop-filter:none; -webkit-backdrop-filter:none; }
+  body[data-view="pong"].pong-waiting .site-header,
+  body[data-view="pong"].pong-waiting .pong-header-row,
+  body[data-view="pong"].pong-waiting .pong-control-dock,
+  body[data-view="pong"].pong-waiting .pong-side { visibility:hidden; }
+  body[data-view="pong"].pong-waiting .pong-landscape-setup {
+    position:fixed; inset:0; width:100%; height:100dvh; z-index:30; display:grid !important;
+    grid-template-rows:auto minmax(0,1fr) auto; gap:20px;
+    padding:20px max(18px,env(safe-area-inset-right)) 24px max(18px,env(safe-area-inset-left));
+    background:linear-gradient(155deg,#302054,#170d32); color:white;
+    overflow:auto; border-radius:0;
+  }
+  .pong-setup-header {
+    display:grid; grid-template-columns:52px minmax(0,1fr) 52px;
+    gap:8px; align-items:center; width:100%;
+  }
+  .pong-setup-title { grid-column:2; grid-row:1; margin:0; font-size:23px; text-align:center; color:white; }
+  .pong-setup-logo { grid-column:3; grid-row:1; width:52px; height:52px; object-fit:contain; }
+  .pong-setup-body { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px; min-height:0; }
+  .pong-setup-body .pong-landscape-art { display:block; width:min(220px,40vh); height:min(220px,26vh); object-fit:contain; }
+  .pong-landscape-setup-controls { display:grid; gap:18px; width:min(100%,420px); max-width:100%; }
+  .pong-landscape-control-row { display:grid; gap:8px; margin:0; }
+  .pong-landscape-control-row > span { color:white; font-size:16px; font-weight:800; }
+  .pong-difficulty-buttons { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+  .pong-landscape-setup-controls button, .pong-landscape-setup-controls select { min-height:44px; font-size:16px; }
+  .pong-setup-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; width:min(100%,540px); justify-self:center; }
+  .pong-setup-actions button { width:100%; min-width:0; min-height:48px; padding:8px; font-size:16px; font-weight:800; }
+  body.pong-waiting #pongOrientationHint { display:none; }
+}

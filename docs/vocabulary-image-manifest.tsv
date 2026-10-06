@@ -1,0 +1,544 @@
+stableKey	assetKey	source	english	hebrew	proposedBaseLevel	proposedCategory	iosAssetStatus	androidAssetStatus	imageAction	visualBrief	avoidAmbiguityWith	sheetTheme	sheetID	cellIndex
+fruits_apple	apple	existing:fruits_a	Apple	תפוח	A	fruits	existing_ios	existing_android	reuse_ios
+fruits_banana	banana	existing:fruits_a	Banana	בננה	A	fruits	existing_ios	existing_android	reuse_ios
+vegetables_garlic	garlic	existing:vegetables_a	Garlic	שום	A	vegetables	existing_ios	existing_android	reuse_ios
+fruits_grapes	grapes	existing:fruits_a	Grapes	ענבים	A	fruits	existing_ios	existing_android	reuse_ios
+other_king	king	existing:other_a	King	מלך	A	fantasy_adventure	existing_ios	existing_android	reuse_ios
+fruits_kiwi	kiwi	existing:fruits_a	Kiwi	קיווי	A	fruits	existing_ios	existing_android	reuse_ios
+fruits_lemon	lemon	existing:fruits_a	Lemon	לימון	A	fruits	existing_ios	existing_android	reuse_ios
+fruits_lime	lime	existing:fruits_a	Lime	ליים	A	fruits	existing_ios	existing_android	reuse_ios
+fruits_mango	mango	existing:fruits_a	Mango	מנגו	A	fruits	existing_ios	existing_android	reuse_ios
+fruits_orange	orange	existing:fruits_a	Orange	תפוז	A	fruits	existing_ios	existing_android	reuse_ios
+fruits_peach	peach	existing:fruits_a	Peach	אפרסק	A	fruits	existing_ios	existing_android	reuse_ios
+fruits_plum	plum	existing:fruits_a	Plum	שזיף	A	fruits	existing_ios	existing_android	reuse_ios
+school_abacus	abacus	existing:school_c	Abacus	חשבונייה	C	school_supplies	existing_ios	existing_android	reuse_ios
+jobs_accountant	accountant	existing:jobs_d	Accountant	רואה חשבון	D	professions	existing_ios	existing_android	reuse_ios
+jobs_actor	actor	existing:jobs_a	Actor	שחקן	A	professions	existing_ios	existing_android	reuse_ios
+home_air_conditioner	air_conditioner	existing:home_d	Air Conditioner	מזגן	C	household	existing_ios	existing_android	reuse_ios
+animals_alligator	alligator	existing:animals_c	Alligator	תנין	C	animals	existing_ios	existing_android	reuse_ios
+colors_amber	amber	existing:colors_c	Amber	ענבר	C	colors	existing_ios	existing_android	reuse_ios
+fruits_apricot	apricot	existing:fruits_b	Apricot	משמש	B	fruits	existing_ios	existing_android	reuse_ios
+jobs_architect	architect	existing:jobs_d	Architect	אדריכל	D	professions	existing_ios	existing_android	reuse_ios
+shapes_arrow	arrow	existing:shapes_a	Arrow	חץ	A	shapes	existing_ios	existing_android	reuse_ios
+vegetables_artichoke	artichoke	existing:vegetables_c	Artichoke	ארטישוק	C	vegetables	existing_ios	existing_android	reuse_ios
+jobs_artist	artist	existing:jobs_b	Artist	אמן	B	professions	existing_ios	existing_android	reuse_ios
+vegetables_arugula	arugula	existing:vegetables_d	Arugula	ארוגולה	D	vegetables	existing_ios	existing_android	reuse_ios
+fruits_avocado	avocado	existing:fruits_b	Avocado	אבוקדו	B	fruits	existing_ios	existing_android	reuse_ios
+people_baby	baby	existing:people_a	Baby	תינוק	A	family_people	existing_ios	existing_android	reuse_ios
+school_bag	bag	existing:school_a	Bag	תיק	A	school_supplies	existing_ios	existing_android	reuse_ios
+jobs_baker	baker	existing:jobs_a	Baker	אופה	A	professions	existing_ios	existing_android	reuse_ios
+home_balcony	balcony	existing:home_b	Balcony	מרפסת	B	household	existing_ios	existing_android	reuse_ios
+shapes_ball	ball	existing:shapes_a	Ball	כדור	A	sports	existing_ios	existing_android	reuse_ios
+other_balloon	balloon	existing:other_a	Balloon	בלון	A	toys_games	existing_ios	existing_android	reuse_ios
+school_barometer	barometer	existing:school_d	Barometer	ברומטר	D	science_objects	existing_ios	existing_android	reuse_ios
+home_basket	basket	existing:home_b	Basket	סל	B	household	existing_ios	existing_android	reuse_ios
+shapes_basketball	basketball	existing:shapes_b	Basketball	כדור כדורסל	B	sports	existing_ios	existing_android	reuse_ios
+home_bathtub	bathtub	existing:home_c	Bathtub	אמבטיה	C	household	existing_ios	existing_android	reuse_ios
+shapes_beach_ball	beach_ball	existing:shapes_c	Beach ball	כדור ים	C	sports	existing_ios	existing_android	reuse_ios
+school_beaker	beaker	existing:school_d	Beaker	כוס מדידה	D	science_objects	existing_ios	existing_android	reuse_ios
+vegetables_bean	bean	existing:vegetables_b	Bean	שעועית	B	vegetables	existing_ios	existing_android	reuse_ios
+animals_bear	bear	existing:animals_b	Bear	דוב	B	animals	existing_ios	existing_android	reuse_ios
+home_bed	bed	existing:transport_a	Bed	מיטה	A	household	existing_ios	existing_android	reuse_ios
+vegetables_beet	beet	existing:vegetables_b	Beet	סלק	B	vegetables	existing_ios	existing_android	reuse_ios
+colors_beige	beige	existing:colors_c	Beige	בז׳	C	colors	existing_ios	existing_android	reuse_ios
+transport_bicycle	bicycle	existing:transport_b	Bicycle	אופניים	B	transport	existing_ios	existing_android	reuse_ios
+animals_bird	bird	existing:animals_a	Bird	ציפור	A	animals	existing_ios	existing_android	reuse_ios
+colors_black	black	existing:colors_a	Black	שחור	A	colors	existing_ios	existing_android	reuse_ios
+home_blanket	blanket	existing:home_c	Blanket	שמיכה	C	household	existing_ios	existing_android	reuse_ios
+colors_blue	blue	existing:colors_a	Blue	כחול	A	colors	existing_ios	existing_android	reuse_ios
+fruits_blueberry	blueberry	existing:fruits_b	Blueberry	אוכמנית	B	fruits	existing_ios	existing_android	reuse_ios
+school_board	board	existing:school_a	Board	לוח	A	school_supplies	existing_ios	existing_android	reuse_ios
+home_boat	boat	existing:home_a	Boat	סירה	A	transport	existing_ios	existing_android	reuse_ios
+school_book	book	existing:school_a	Book	ספר	A	school_supplies	existing_ios	existing_android	reuse_ios
+home_bookshelf	bookshelf	existing:home_c	Bookshelf	כוננית ספרים	C	household	existing_ios	existing_android	reuse_ios
+people_boy	boy	existing:people_a	Boy	ילד	A	family_people	existing_ios	existing_android	reuse_ios
+people_bride	bride	existing:people_c	Bride	כלה	C	family_people	existing_ios	existing_android	reuse_ios
+vegetables_broccolini	broccolini	existing:vegetables_d	Broccolini	ברוקוליני	D	vegetables	existing_ios	existing_android	reuse_ios
+people_brothers	brothers	existing:people_a	Brothers	אחים	A	family_people	existing_ios	existing_android	reuse_ios
+jobs_builder	builder	existing:jobs_b	Builder	בנאי	B	professions	existing_ios	existing_android	reuse_ios
+transport_bus	bus	existing:transport_a	Bus	אוטובוס	A	transport	existing_ios	existing_android	reuse_ios
+tech_button	button	existing:tech_b	Button	כפתור	B	technology	existing_ios	existing_android	reuse_ios
+vegetables_cabbage	cabbage	existing:vegetables_b	Cabbage	כרוב	B	vegetables	existing_ios	existing_android	reuse_ios
+food_cake	cake	existing:food_a	Cake	עוגה	A	food	existing_ios	existing_android	reuse_ios
+school_calculator	calculator	existing:school_b	Calculator	מחשבון	B	school_supplies	existing_ios	existing_android	reuse_ios
+school_caliper	caliper	existing:school_d	Caliper	קליבר	D	science_objects	existing_ios	existing_android	reuse_ios
+tech_camera	camera	existing:tech_b	Camera	מצלמה	B	technology	existing_ios	existing_android	reuse_ios
+food_candy	candy	existing:food_a	Candy	סוכרייה	A	food	existing_ios	existing_android	reuse_ios
+transport_car	car	existing:transport_a	Car	מכונית	A	transport	existing_ios	existing_android	reuse_ios
+fruits_carob	carob	existing:fruits_c	Carob	חרוב	C	fruits	existing_ios	existing_android	reuse_ios
+jobs_carpenter	carpenter	existing:jobs_c	Carpenter	נגר	C	professions	existing_ios	existing_android	reuse_ios
+vegetables_carrot	carrot	existing:vegetables_a	Carrot	גזר	A	vegetables	existing_ios	existing_android	reuse_ios
+jobs_cashier	cashier	existing:jobs_c	Cashier	קופאי	C	professions	existing_ios	existing_android	reuse_ios
+other_castle	castle	existing:other_a	Castle	טירה	A	fantasy_adventure	existing_ios	existing_android	reuse_ios
+animals_cat	cat	existing:animals_a	Cat	חתול	A	animals	existing_ios	existing_android	reuse_ios
+verbs_catch	catch_img	existing:verbs_c	Catch	לתפוס	C	actions	existing_ios	existing_android	reuse_ios
+vegetables_cauliflower	cauliflower	existing:vegetables_d	Cauliflower	כרובית	D	vegetables	existing_ios	existing_android	reuse_ios
+home_chair	chair	existing:home_a	Chair	כיסא	A	household	existing_ios	existing_android	reuse_ios
+school_chalk	chalk	existing:school_b	Chalk	גיר	B	school_supplies	existing_ios	existing_android	reuse_ios
+vegetables_chard	chard	existing:vegetables_d	Chard	מנגולד	D	vegetables	existing_ios	existing_android	reuse_ios
+food_cheese	cheese	existing:food_b	Cheese	גבינה	B	food	existing_ios	existing_android	reuse_ios
+jobs_chef	chef	existing:jobs_c	Chef	טבח	C	professions	existing_ios	existing_android	reuse_ios
+fruits_cherry	cherry	existing:fruits_b	Cherry	דובדבן	B	fruits	existing_ios	existing_android	reuse_ios
+animals_chicken	chicken	existing:animals_c	Chicken	תרנגולת	C	animals	existing_ios	existing_android	reuse_ios
+food_chocolate	chocolate	existing:food_b	Chocolate	שוקולד	B	food	existing_ios	existing_android	reuse_ios
+shapes_circle	circle	existing:shapes_a	Circle	עיגול	A	shapes	existing_ios	existing_android	reuse_ios
+verbs_clean	clean	existing:verbs_c	Clean	לנקות	C	actions	existing_ios	existing_android	reuse_ios
+fruits_clementine	clementine	existing:fruits_c	Clementine	קלמנטינה	C	fruits	existing_ios	existing_android	reuse_ios
+home_clock	clock	existing:home_b	Clock	שעון	B	household	existing_ios	existing_android	reuse_ios
+home_closet	closet	existing:home_b	Closet	ארון	B	household	existing_ios	existing_android	reuse_ios
+fruits_coconut	coconut	existing:fruits_c	Coconut	קוקוס	C	fruits	existing_ios	existing_android	reuse_ios
+school_compass	compass	existing:school_c	Compass	מצפן	C	school_supplies	existing_ios	existing_android	reuse_ios
+tech_computer	computer	existing:tech_a	Computer	מחשב	A	technology	existing_ios	existing_android	reuse_ios
+shapes_cone	cone	existing:shapes_b	Cone	חרוט	B	shapes	existing_ios	existing_android	reuse_ios
+verbs_cook	cook	existing:verbs_a	Cook	לבשל	A	actions	existing_ios	existing_android	reuse_ios
+food_cookie	cookie	existing:food_a	Cookie	עוגייה	A	food	existing_ios	existing_android	reuse_ios
+vegetables_corn	corn	existing:vegetables_a	Corn	תירס	A	vegetables	existing_ios	existing_android	reuse_ios
+verbs_count	count	existing:verbs_b	Count	לספור	B	actions	existing_ios	existing_android	reuse_ios
+animals_cow	cow	existing:animals_a	Cow	פרה	A	animals	existing_ios	existing_android	reuse_ios
+fruits_cranberry	cranberry	existing:fruits_c	Cranberry	חמוצית	C	fruits	existing_ios	existing_android	reuse_ios
+school_crayon	crayon	existing:school_b	Crayon	צבעי שעווה	B	school_supplies	existing_ios	existing_android	reuse_ios
+shapes_crescent	crescent	existing:shapes_d	Crescent	סהר	D	shapes	existing_ios	existing_android	reuse_ios
+colors_crimson	crimson	existing:colors_d	Crimson	ארגמן	E	colors	existing_ios	existing_android	reuse_ios
+other_crown	crown	existing:other_a	Crown	כתר	A	fantasy_adventure	existing_ios	existing_android	reuse_ios
+other_crystal	crystal	existing:other_b	Crystal	גביש	B	science_objects	existing_ios	existing_android	reuse_ios
+shapes_cube	cube	existing:shapes_b	Cube	קובייה	B	shapes	existing_ios	existing_android	reuse_ios
+vegetables_cucumber	cucumber	existing:vegetables_b	Cucumber	מלפפון	B	vegetables	existing_ios	existing_android	reuse_ios
+home_cup	cup	existing:home_a	Cup	כוס	A	household	existing_ios	existing_android	reuse_ios
+other_cup_of_coffee	cup_of_coffee	existing:other_c	Cup of coffee	כוס קפה	C	food	existing_ios	existing_android	reuse_ios
+home_curtain	curtain	existing:home_c	Curtain	וילון	C	household	existing_ios	existing_android	reuse_ios
+colors_cyan	cyan	existing:colors_c	Cyan	ציאן	C	colors	existing_ios	existing_android	reuse_ios
+people_dad	dad	existing:people_a	Dad	אבא	A	family_people	existing_ios	existing_android	reuse_ios
+verbs_dance	dance	existing:verbs_b	Dance	לרקוד	B	actions	existing_ios	existing_android	reuse_ios
+jobs_dancer	dancer	existing:jobs_a	Dancer	רקדנית	A	professions	existing_ios	existing_android	reuse_ios
+colors_dark_green	dark_green	existing:colors_b	Dark Green	ירוק כהה	B	colors	existing_ios	existing_android	reuse_ios
+fruits_dates	dates	existing:fruits_c	Dates	תמרים	C	fruits	existing_ios	existing_android	reuse_ios
+people_daughter	daughter	existing:people_c	Daughter	בת	C	family_people	existing_ios	existing_android	reuse_ios
+home_dehumidifier	dehumidifier	existing:home_e	Dehumidifier	מייבש לחות	E	household	existing_ios	existing_android	reuse_ios
+jobs_dentist	dentist	existing:jobs_c	Dentist	רופא שיניים	C	professions	existing_ios	existing_android	reuse_ios
+tech_design	design	existing:tech_c	Design	עיצוב	C	technology	existing_ios	existing_android	reuse_ios
+jobs_designer	designer	existing:jobs_c	Designer	מעצב	C	professions	existing_ios	existing_android	reuse_ios
+home_desk	desk	existing:home_b	Desk	שולחן כתיבה	B	household	existing_ios	existing_android	reuse_ios
+shapes_diamond	diamond	existing:shapes_b	Diamond	יהלום	B	shapes	existing_ios	existing_android	reuse_ios
+vegetables_dill	dill	existing:vegetables_c	Dill	שמיר	C	vegetables	existing_ios	existing_android	reuse_ios
+home_dishwasher	dishwasher	existing:home_d	Dishwasher	מדיח כלים	D	household	existing_ios	existing_android	reuse_ios
+jobs_doctor	doctor	existing:jobs_a	Doctor	רופא	A	professions	existing_ios	existing_android	reuse_ios
+animals_dog	dog	existing:animals_a	Dog	כלב	A	animals	existing_ios	existing_android	reuse_ios
+animals_dolphin	dolphin	existing:animals_c	Dolphin	דולפין	C	animals	existing_ios	existing_android	reuse_ios
+home_door	door	existing:home_a	Door	דלת	A	household	existing_ios	existing_android	reuse_ios
+other_dragon	dragon	existing:other_b	Dragon	דרקון	B	fantasy_adventure	existing_ios	existing_android	reuse_ios
+fruits_dragonfruit	dragonfruit	existing:fruits_d	Dragonfruit	פיטאיה	D	fruits	existing_ios	existing_android	reuse_ios
+verbs_draw	draw	existing:verbs_c	Draw	לצייר	C	actions	existing_ios	existing_android	reuse_ios
+home_drawer	drawer	existing:home_c	Drawer	מגירה	C	household	existing_ios	existing_android	reuse_ios
+verbs_drink	drink	existing:verbs_a	Drink	לשתות	A	actions	existing_ios	existing_android	reuse_ios
+jobs_driver	driver	existing:jobs_a	Driver	נהג	A	professions	existing_ios	existing_android	reuse_ios
+tech_drone	drone	existing:tech_c	Drone	רחפן	C	technology	existing_ios	existing_android	reuse_ios
+other_drum	drum	existing:other_a	Drum	תוף	A	music	existing_ios	existing_android	reuse_ios
+home_dryer	dryer	existing:home_c	Dryer	מייבש כביסה	C	household	existing_ios	existing_android	reuse_ios
+animals_duck	duck	existing:animals_a	Duck	ברווז	A	animals	existing_ios	existing_android	reuse_ios
+body_ear	ear	existing:body_a	Ear	אוזן	A	body	existing_ios	existing_android	reuse_ios
+verbs_eat	eat	existing:verbs_a	Eat	לאכול	A	actions	existing_ios	existing_android	reuse_ios
+vegetables_eggplant	eggplant	existing:vegetables_c	Eggplant	חציל	C	vegetables	existing_ios	existing_android	reuse_ios
+jobs_electrician	electrician	existing:jobs_c	Electrician	חשמלאי	C	professions	existing_ios	existing_android	reuse_ios
+animals_elephant	elephant	existing:animals_c	Elephant	פיל	C	animals	existing_ios	existing_android	reuse_ios
+shapes_ellipse	ellipse	existing:shapes_c	Ellipse	אליפסה	C	shapes	existing_ios	existing_android	reuse_ios
+vegetables_endive	endive	existing:vegetables_d	Endive	אנדיב	D	vegetables	existing_ios	existing_android	reuse_ios
+jobs_engineer	engineer	existing:jobs_c	Engineer	מהנדס	C	professions	existing_ios	existing_android	reuse_ios
+school_eraser	eraser	existing:school_a	Eraser	מחק	A	school_supplies	existing_ios	existing_android	reuse_ios
+home_extension_cord	extension_cord	existing:home_e	Extension Cord	כבל מאריך	E	household	existing_ios	existing_android	reuse_ios
+body_eye	eye	existing:body_a	Eye	עין	A	body	existing_ios	existing_android	reuse_ios
+other_fairy	fairy	existing:other_b	Fairy	פיה	B	fantasy_adventure	existing_ios	existing_android	reuse_ios
+people_family	family	existing:people_b	Family	משפחה	B	family_people	existing_ios	existing_android	reuse_ios
+jobs_farmer	farmer	existing:jobs_a	Farmer	חקלאי	A	professions	existing_ios	existing_android	reuse_ios
+vegetables_fennel	fennel	existing:vegetables_d	Fennel	שומר	D	vegetables	existing_ios	existing_android	reuse_ios
+fruits_fig	fig	existing:fruits_c	Fig	תאנה	C	fruits	existing_ios	existing_android	reuse_ios
+jobs_firefighter	firefighter	existing:jobs_b	Firefighter	כבאית	B	professions	existing_ios	existing_android	reuse_ios
+animals_fish	fish	existing:animals_a	Fish	דג	A	animals	existing_ios	existing_android	reuse_ios
+other_flag	flag	existing:other_a	Flag	דגל	A	symbols	existing_ios	existing_android	reuse_ios
+school_folder	folder	existing:school_c	Folder	תיקייה	C	school_supplies	existing_ios	existing_android	reuse_ios
+animals_fox	fox	existing:animals_a	Fox	שועל	A	animals	existing_ios	existing_android	reuse_ios
+shapes_frame	frame	existing:shapes_c	Frame	מסגרת	C	household	existing_ios	existing_android	reuse_ios
+home_fridge	fridge	existing:home_c	Fridge	מקרר	C	household	existing_ios	existing_android	reuse_ios
+people_friends	friends	existing:people_a	Friends	חברים	A	family_people	existing_ios	existing_android	reuse_ios
+animals_frog	frog	existing:animals_a	Frog	צפרדע	A	animals	existing_ios	existing_android	reuse_ios
+tech_game	game	existing:tech_a	Game	משחק	A	toys_games	existing_ios	existing_android	reuse_ios
+tech_game_console	game_console	existing:tech_d	Game console	קונסולת משחקים	D	technology	existing_ios	existing_android	reuse_ios
+people_girl	girl	existing:people_a	Girl	ילדה	A	family_people	existing_ios	existing_android	reuse_ios
+school_globe	globe	existing:school_b	Globe	גלובוס	B	school_supplies	existing_ios	existing_android	reuse_ios
+school_glue	glue	existing:school_a	Glue	דבק	A	school_supplies	existing_ios	existing_android	reuse_ios
+animals_goat	goat	existing:animals_c	Goat	עז	A	animals	existing_ios	existing_android	reuse_ios
+colors_gold	gold	existing:colors_b	Gold	זהב	B	colors	existing_ios	existing_android	reuse_ios
+animals_goose	goose	existing:animals_a	Goose	אווז	A	animals	existing_ios	existing_android	reuse_ios
+fruits_gooseberry	gooseberry	existing:fruits_d	Gooseberry	דומדמניות	D	fruits	existing_ios	existing_android	reuse_ios
+people_grandchild	grandchild	existing:people_d	Grandchild	נכד	D	family_people	existing_ios	existing_android	reuse_ios
+people_grandma	grandma	existing:people_b	Grandma	סבתא	B	family_people	existing_ios	existing_android	reuse_ios
+people_grandpa	grandpa	existing:people_b	Grandpa	סבא	B	family_people	existing_ios	existing_android	reuse_ios
+fruits_grapefruit	grapefruit	existing:fruits_b	Grapefruit	אשכולית	B	fruits	existing_ios	existing_android	reuse_ios
+tech_graphics	graphics	existing:tech_d	Graphics	גרפיקה	D	technology	existing_ios	existing_android	reuse_ios
+colors_gray	gray	existing:colors_a	Gray	אפור	A	colors	existing_ios	existing_android	reuse_ios
+colors_green	green	existing:colors_a	Green	ירוק	A	colors	existing_ios	existing_android	reuse_ios
+body_hand	hand	existing:body_a	Hand	יד	A	body	existing_ios	existing_android	reuse_ios
+body_head	head	existing:body_a	Head	ראש	A	body	existing_ios	existing_android	reuse_ios
+tech_headphones	headphones	existing:tech_c	Headphones	אוזניות	C	technology	existing_ios	existing_android	reuse_ios
+verbs_hear	hear	existing:verbs_b	Hear	לשמוע	B	actions	existing_ios	existing_android	reuse_ios
+shapes_heart	heart	existing:shapes_a	Heart	לב	A	shapes	existing_ios	existing_android	reuse_ios
+shapes_helix	helix	existing:shapes_e	Helix	סליל	E	shapes	existing_ios	existing_android	reuse_ios
+other_helmet	helmet	existing:other_b	Helmet	קסדה	B	health_safety	existing_ios	existing_android	reuse_ios
+shapes_hexagon	hexagon	existing:shapes_c	Hexagon	משושה	C	shapes	existing_ios	existing_android	reuse_ios
+animals_horse	horse	existing:animals_a	Horse	סוס	A	animals	existing_ios	existing_android	reuse_ios
+other_hotel	hotel	existing:other_b	Hotel	בית מלון	B	places	existing_ios	existing_android	reuse_ios
+home_house	house	existing:transport_b	House	בית	B	household	existing_ios	existing_android	reuse_ios
+home_humidifier	humidifier	existing:home_e	Humidifier	מכשיר אדים	E	household	existing_ios	existing_android	reuse_ios
+food_ice_cream	ice_cream	existing:food_a	Ice cream	גלידה	A	food	existing_ios	existing_android	reuse_ios
+food_ice_cream_cone	ice_cream_cone	existing:food_d	Ice cream cone	גביע גלידה	D	food	existing_ios	existing_android	reuse_ios
+food_ice_cream_truck	ice_cream_truck	existing:food_d	Ice cream truck	אוטו גלידה	D	food	existing_ios	existing_android	reuse_ios
+fruits_jackfruit	jackfruit	existing:fruits_d	Jackfruit	ג׳קפרוט	D	fruits	existing_ios	existing_android	reuse_ios
+food_jam	jam	existing:food_a	Jam	ריבה	A	food	existing_ios	existing_android	reuse_ios
+vegetables_jerusalem_artichoke	jerusalem_artichoke	existing:vegetables_e	Jerusalem artichoke	ארטישוק ירושלמי	E	vegetables	existing_ios	existing_android	reuse_ios
+tech_joystick	joystick	existing:tech_b	Joystick	ג'ויסטיק	B	technology	existing_ios	existing_android	reuse_ios
+jobs_judge	judge	existing:jobs_c	Judge	שופט	C	professions	existing_ios	existing_android	reuse_ios
+food_juice	juice	existing:food_a	Juice	מיץ	A	food	existing_ios	existing_android	reuse_ios
+verbs_jump	jump	existing:verbs_b	Jump	לקפוץ	B	actions	existing_ios	existing_android	reuse_ios
+vegetables_kale	kale	existing:vegetables_c	Kale	קייל	C	vegetables	existing_ios	existing_android	reuse_ios
+animals_kangaroo	kangaroo	existing:animals_c	Kangaroo	קנגורו	B	animals	existing_ios	existing_android	reuse_ios
+tech_keyboard	keyboard	existing:tech_b	Keyboard	מקלדת	B	technology	existing_ios	existing_android	reuse_ios
+other_knight	knight	existing:other_b	Knight	אביר	B	fantasy_adventure	existing_ios	existing_android	reuse_ios
+vegetables_kohlrabi	kohlrabi	existing:vegetables_d	Kohlrabi	קולרבי	D	vegetables	existing_ios	existing_android	reuse_ios
+fruits_kumquat	kumquat	existing:fruits_e	Kumquat	קומקוואט (תפוז סיני)	E	fruits	existing_ios	existing_android	reuse_ios
+home_lamp	lamp	existing:transport_a	Lamp	מנורה	A	household	existing_ios	existing_android	reuse_ios
+tech_laptop	laptop	existing:tech_a	Laptop	מחשב נייד	A	technology	existing_ios	existing_android	reuse_ios
+home_laundry_detergent	laundry_detergent	existing:home_e	Laundry Detergent	אבקת כביסה	E	household	existing_ios	existing_android	reuse_ios
+jobs_lawyer	lawyer	existing:jobs_c	Lawyer	עורך דין	C	professions	existing_ios	existing_android	reuse_ios
+vegetables_leek	leek	existing:vegetables_c	Leek	כרישה	C	vegetables	existing_ios	existing_android	reuse_ios
+body_leg	leg	existing:body_a	Leg	רגל	A	body	existing_ios	existing_android	reuse_ios
+jobs_librarian	librarian	existing:jobs_e	Librarian	ספרנית	E	professions	existing_ios	existing_android	reuse_ios
+home_lid	lid	existing:transport_b	Lid	מכסה	B	household	existing_ios	existing_android	reuse_ios
+colors_lilac	lilac	existing:colors_c	Lilac	לילך	C	colors	existing_ios	existing_android	reuse_ios
+shapes_line	line	existing:shapes_a	Line	קו	A	shapes	existing_ios	existing_android	reuse_ios
+animals_lion	lion	existing:animals_b	Lion	אריה	B	animals	existing_ios	existing_android	reuse_ios
+verbs_listen	listen	existing:verbs_b	Listen	להקשיב	B	actions	existing_ios	existing_android	reuse_ios
+transport_locomotive	locomotive	existing:transport_b	Locomotive	קטר	C	transport	existing_ios	existing_android	reuse_ios
+food_lollipop	lollipop	existing:food_b	Lollipop	סוכרייה על מקל	B	food	existing_ios	existing_android	reuse_ios
+verbs_look	look	existing:verbs_b	Look	להסתכל	B	actions	existing_ios	existing_android	reuse_ios
+fruits_loquat	loquat	existing:fruits_e	Loquat	שסק	E	fruits	existing_ios	existing_android	reuse_ios
+other_magic	magic	existing:other_a	Magic	קסם	A	fantasy_adventure	existing_ios	existing_android	reuse_ios
+school_magnet	magnet	existing:school_d	Magnet	מגנט	D	science_objects	existing_ios	existing_android	reuse_ios
+people_man	man	existing:people_a	Man	איש	A	family_people	existing_ios	existing_android	reuse_ios
+fruits_mandarin	mandarin	existing:fruits_c	Mandarin	מנדרינה	C	fruits	existing_ios	existing_android	reuse_ios
+school_marker	marker	existing:school_b	Marker	טוש	B	school_supplies	existing_ios	existing_android	reuse_ios
+colors_maroon	maroon	existing:colors_c	Maroon	בורדו	C	colors	existing_ios	existing_android	reuse_ios
+home_mattress	mattress	existing:home_d	Mattress	מזרן	D	household	existing_ios	existing_android	reuse_ios
+jobs_mechanic	mechanic	existing:jobs_c	Mechanic	מכונאי	C	professions	existing_ios	existing_android	reuse_ios
+school_microscope	microscope	existing:school_c	Microscope	מיקרוסקופ	C	science_objects	existing_ios	existing_android	reuse_ios
+home_microwave	microwave	existing:home_c	Microwave	מיקרוגל	C	household	existing_ios	existing_android	reuse_ios
+food_milk	milk	existing:food_a	Milk	חלב	A	food	existing_ios	existing_android	reuse_ios
+people_mom	mom	existing:people_a	Mom	אמא	A	family_people	existing_ios	existing_android	reuse_ios
+animals_monkey	monkey	existing:animals_b	Monkey	קוף	B	animals	existing_ios	existing_android	reuse_ios
+home_motorcycle	motorcycle	existing:home_b	Motorcycle	אופנוע	B	transport	existing_ios	existing_android	reuse_ios
+animals_mouse	mouse	existing:animals_b	Mouse	עכבר	B	animals	existing_ios	existing_android	reuse_ios
+vegetables_mushroom	mushroom	existing:vegetables_c	Mushroom	פטרייה	C	vegetables	existing_ios	existing_android	reuse_ios
+jobs_musician	musician	existing:jobs_d	Musician	מוזיקאי	D	professions	existing_ios	existing_android	reuse_ios
+colors_mustard	mustard	existing:colors_d	Mustard	חרדל	D	colors	existing_ios	existing_android	reuse_ios
+fruits_nectarine	nectarine	existing:fruits_c	Nectarine	נקטרינה	C	fruits	existing_ios	existing_android	reuse_ios
+people_neighbor	neighbor	existing:people_b	Neighbor	שכן	B	family_people	existing_ios	existing_android	reuse_ios
+body_nose	nose	existing:body_a	Nose	אף	A	body	existing_ios	existing_android	reuse_ios
+school_supplies_notebook	notebook	new:lexical	Notebook	מחברת	C	school_supplies	existing_ios	existing_android	reuse_ios
+jobs_nurse	nurse	existing:jobs_a	Nurse	אחות	A	professions	existing_ios	existing_android	reuse_ios
+shapes_octagon	octagon	existing:shapes_c	Octagon	מתומן	C	shapes	existing_ios	existing_android	reuse_ios
+home_oven	oven	existing:home_b	Oven	תנור	B	household	existing_ios	existing_android	reuse_ios
+other_palace	palace	existing:other_b	Palace	ארמון	B	fantasy_adventure	existing_ios	existing_android	reuse_ios
+food_pancake	pancake	existing:food_b	Pancake	פנקייק	B	food	existing_ios	existing_android	reuse_ios
+fruits_papaya	papaya	existing:fruits_b	Papaya	פפאיה	B	fruits	existing_ios	existing_android	reuse_ios
+jobs_paramedic	paramedic	existing:jobs_e	Paramedic	פרמדיק	E	professions	existing_ios	existing_android	reuse_ios
+vegetables_parsley	parsley	existing:vegetables_d	Parsley	פטרוזיליה	D	vegetables	existing_ios	existing_android	reuse_ios
+vegetables_parsley_root	parsley_root	existing:vegetables_e	Parsley root	שורש פטרוזיליה	E	vegetables	existing_ios	existing_android	reuse_ios
+food_pasta	pasta	existing:food_b	Pasta	פסטה	B	food	existing_ios	existing_android	reuse_ios
+vegetables_pea	pea	existing:vegetables_a	Pea	אפונה	A	vegetables	existing_ios	existing_android	reuse_ios
+fruits_pear	pear	existing:fruits_b	Pear	אגס	B	fruits	existing_ios	existing_android	reuse_ios
+school_pen	pen	existing:school_a	Pen	עט	A	school_supplies	existing_ios	existing_android	reuse_ios
+school_pencil	pencil	existing:school_a	Pencil	עיפרון	A	school_supplies	existing_ios	existing_android	reuse_ios
+shapes_pentagon	pentagon	existing:shapes_c	Pentagon	מחומש	C	shapes	existing_ios	existing_android	reuse_ios
+vegetables_pepper	pepper	existing:vegetables_a	Pepper	פלפל	A	vegetables	existing_ios	existing_android	reuse_ios		peppers
+fruits_persimmon	persimmon	existing:fruits_d	Persimmon	אפרסמון	C	fruits	existing_ios	existing_android	reuse_ios
+jobs_pharmacist	pharmacist	existing:jobs_c	Pharmacist	רוקח	C	professions	existing_ios	existing_android	reuse_ios
+home_phone	phone	existing:home_b	Phone	טלפון	B	household	existing_ios	existing_android	reuse_ios
+jobs_photographer	photographer	existing:jobs_c	Photographer	צלם	B	professions	existing_ios	existing_android	reuse_ios
+animals_pig	pig	existing:animals_a	Pig	חזיר	A	animals	existing_ios	existing_android	reuse_ios
+jobs_pilot	pilot	existing:jobs_b	Pilot	טייס	B	professions	existing_ios	existing_android	reuse_ios
+fruits_pineapple	pineapple	existing:fruits_c	Pineapple	אננס	B	fruits	existing_ios	existing_android	reuse_ios
+colors_pink	pink	existing:colors_a	Pink	ורוד	A	colors	existing_ios	existing_android	reuse_ios
+other_pirate	pirate	existing:other_b	Pirate	פיראט	B	fantasy_adventure	existing_ios	existing_android	reuse_ios
+food_pita	pita	existing:food_b	Pita	פיתה	B	food	existing_ios	existing_android	reuse_ios
+food_pizza	pizza	existing:food_a	Pizza	פיצה	A	food	existing_ios	existing_android	reuse_ios
+transport_plane	plane	existing:transport_b	Plane	מטוס	B	transport	existing_ios	existing_android	reuse_ios
+home_plate	plate	existing:home_a	Plate	צלחת	A	household	existing_ios	existing_android	reuse_ios
+verbs_play	play	existing:verbs_a	Play	לשחק	A	actions	existing_ios	existing_android	reuse_ios
+jobs_police_officer	police_officer	existing:jobs_b	Police officer	שוטר	B	professions	existing_ios	existing_android	reuse_ios
+fruits_pomegranate	pomegranate	existing:fruits_d	Pomegranate	רימון	D	fruits	existing_ios	existing_android	reuse_ios
+vegetables_potato	potato	existing:vegetables_b	Potato	תפוח אדמה	B	vegetables	existing_ios	existing_android	reuse_ios
+home_power_outlet	power_outlet	existing:home_e	Power Outlet	שקע חשמל	E	household	existing_ios	existing_android	reuse_ios
+other_prince	prince	existing:other_a	Prince	נסיך	A	fantasy_adventure	existing_ios	existing_android	reuse_ios
+other_princess	princess	existing:other_a	Princess	נסיכה	A	fantasy_adventure	existing_ios	existing_android	reuse_ios
+tech_printer	printer	existing:tech_b	Printer	מדפסת	B	technology	existing_ios	existing_android	reuse_ios
+shapes_prism	prism	existing:shapes_d	Prism	מנסרה	D	shapes	existing_ios	existing_android	reuse_ios
+jobs_programmer	programmer	existing:jobs_c	Programmer	מתכנת	B	professions	existing_ios	existing_android	reuse_ios
+school_projector	projector	existing:school_c	Projector	מקרן	C	school_supplies	existing_ios	existing_android	reuse_ios
+school_protractor	protractor	existing:school_c	Protractor	מד זווית	C	school_supplies	existing_ios	existing_android	reuse_ios
+vegetables_pumpkin	pumpkin	existing:vegetables_c	Pumpkin	דלעת	B	vegetables	existing_ios	existing_android	reuse_ios
+colors_purple	purple	existing:colors_a	Purple	סגול	A	colors	existing_ios	existing_android	reuse_ios
+other_queen	queen	existing:other_a	Queen	מלכה	A	fantasy_adventure	existing_ios	existing_android	reuse_ios
+fruits_quince	quince	existing:fruits_e	Quince	חבוש	E	fruits	existing_ios	existing_android	reuse_ios
+animals_rabbit	rabbit	existing:animals_b	Rabbit	ארנב	A	animals	existing_ios	existing_android	reuse_ios
+tech_radio	radio	existing:tech_a	Radio	רדיו	A	technology	existing_ios	existing_android	reuse_ios
+vegetables_radish	radish	existing:vegetables_b	Radish	צנון	B	vegetables	existing_ios	existing_android	reuse_ios
+fruits_raspberry	raspberry	existing:fruits_c	Raspberry	פטל	C	fruits	existing_ios	existing_android	reuse_ios
+verbs_read	read	existing:verbs_b	Read	לקרוא	B	actions	existing_ios	existing_android	reuse_ios
+shapes_rectangle	rectangle	existing:shapes_b	Rectangle	מלבן	B	shapes	existing_ios	existing_android	reuse_ios
+home_recycling_bin	recycling_bin	existing:home_e	Recycling Bin	פח מחזור	E	household	existing_ios	existing_android	reuse_ios
+colors_red	red	existing:colors_a	Red	אדום	A	colors	existing_ios	existing_android	reuse_ios
+tech_remote_control	remote_control	existing:tech_c	Remote control	שלט רחוק	C	technology	existing_ios	existing_android	reuse_ios
+food_restaurant	restaurant	existing:food_d	Restaurant	מסעדה	D	food	existing_ios	existing_android	reuse_ios
+shapes_rhombus	rhombus	existing:shapes_d	Rhombus	מעוין	D	shapes	existing_ios	existing_android	reuse_ios
+food_rice	rice	existing:food_b	Rice	אורז	B	food	existing_ios	existing_android	reuse_ios
+shapes_ring	ring	existing:shapes_b	Ring	טבעת	B	shapes	existing_ios	existing_android	reuse_ios
+tech_robot	robot	existing:tech_a	Robot	רובוט	A	technology	existing_ios	existing_android	reuse_ios
+tech_rocket	rocket	existing:tech_a	Rocket	טיל	A	transport	existing_ios	existing_android	reuse_ios
+tech_router	router	existing:tech_d	Router	ראוטר	D	technology	existing_ios	existing_android	reuse_ios
+colors_ruby	ruby	existing:colors_d	Ruby	אודם	D	colors	existing_ios	existing_android	reuse_ios
+home_rug	rug	existing:home_b	Rug	שטיח	B	household	existing_ios	existing_android	reuse_ios
+school_ruler	ruler	existing:school_a	Ruler	סרגל	A	school_supplies	existing_ios	existing_android	reuse_ios
+verbs_run	run	existing:verbs_a	Run	לרוץ	A	actions	existing_ios	existing_android	reuse_ios
+jobs_sailor	sailor	existing:jobs_b	Sailor	מלח	B	professions	existing_ios	existing_android	reuse_ios
+food_sandwich	sandwich	existing:food_b	Sandwich	כריך	B	food	existing_ios	existing_android	reuse_ios
+tech_satellite	satellite	existing:tech_e	Satellite	לוויין	E	technology	existing_ios	existing_android	reuse_ios
+vegetables_scallion	scallion	existing:vegetables_d	Scallion	בצל ירוק	D	vegetables	existing_ios	existing_android	reuse_ios
+jobs_scientist	scientist	existing:jobs_c	Scientist	מדען	C	professions	existing_ios	existing_android	reuse_ios
+school_scissors	scissors	existing:school_c	Scissors	מספריים	C	school_supplies	existing_ios	existing_android	reuse_ios
+tech_screen	screen	existing:tech_a	Screen	מסך	A	technology	existing_ios	existing_android	reuse_ios
+vegetables_shallot	shallot	existing:vegetables_d	Shallot	שאלוט	D	vegetables	existing_ios	existing_android	reuse_ios
+animals_shark	shark	existing:animals_c	Shark	כריש	C	animals	existing_ios	existing_android	reuse_ios
+school_sharpener	sharpener	existing:school_c	Sharpener	מחדד	C	school_supplies	existing_ios	existing_android	reuse_ios
+animals_sheep	sheep	existing:animals_b	Sheep	כבשה	B	animals	existing_ios	existing_android	reuse_ios
+home_shelf	shelf	existing:home_c	Shelf	מדף	C	household	existing_ios	existing_android	reuse_ios
+other_shield	shield	existing:other_b	Shield	מגן	B	fantasy_adventure	existing_ios	existing_android	reuse_ios
+transport_ship	ship	existing:transport_a	Ship	ספינה	A	transport	existing_ios	existing_android	reuse_ios
+home_shower	shower	existing:home_c	Shower	מקלחת	C	household	existing_ios	existing_android	reuse_ios
+people_siblings	siblings	existing:people_c	Siblings	אחים	C	family_people	existing_ios	existing_android	reuse_ios
+tech_sign	sign	existing:tech_b	Sign	שלט	B	symbols	existing_ios	existing_android	reuse_ios
+colors_silver	silver	existing:colors_b	Silver	כסף	B	colors	existing_ios	existing_android	reuse_ios
+verbs_sing	sing	existing:verbs_b	Sing	לשיר	B	actions	existing_ios	existing_android	reuse_ios
+jobs_singer	singer	existing:jobs_a	Singer	זמרת	A	professions	existing_ios	existing_android	reuse_ios
+home_sink	sink	existing:home_b	Sink	כיור	B	household	existing_ios	existing_android	reuse_ios
+people_sisters	sisters	existing:people_a	Sisters	אחיות	A	family_people	existing_ios	existing_android	reuse_ios
+verbs_sit	sit	existing:verbs_a	Sit	לשבת	A	actions	existing_ios	existing_android	reuse_ios
+verbs_sleep	sleep	existing:verbs_a	Sleep	לישון	A	actions	existing_ios	existing_android	reuse_ios
+tech_smartwatch	smartwatch	existing:tech_d	Smartwatch	שעון חכם	D	technology	existing_ios	existing_android	reuse_ios
+home_smoke_detector	smoke_detector	existing:home_d	Smoke Detector	גלאי עשן	D	household	existing_ios	existing_android	reuse_ios
+animals_snake	snake	existing:animals_c	Snake	נחש	C	animals	existing_ios	existing_android	reuse_ios
+home_soap	soap	existing:home_b	Soap	סבון	B	household	existing_ios	existing_android	reuse_ios
+shapes_soccer_ball	soccer_ball	existing:shapes_b	Soccer ball	כדור כדורגל	B	sports	existing_ios	existing_android	reuse_ios
+home_sofa	sofa	existing:home_a	Sofa	ספה	A	household	existing_ios	existing_android	reuse_ios
+jobs_soldier	soldier	existing:jobs_c	Soldier	חייל	C	professions	existing_ios	existing_android	reuse_ios
+people_son	son	existing:people_c	Son	בן	C	family_people	existing_ios	existing_android	reuse_ios
+food_soup	soup	existing:food_b	Soup	מרק	B	food	existing_ios	existing_android	reuse_ios
+fruits_soursop	soursop	existing:fruits_d	Soursop	גואנבנה	D	fruits	existing_ios	existing_android	reuse_ios
+tech_speaker	speaker	existing:tech_b	Speaker	רמקול	B	technology	existing_ios	existing_android	reuse_ios
+shapes_sphere	sphere	existing:shapes_c	Sphere	כדור	B	shapes	existing_ios	existing_android	reuse_ios
+shapes_square	square	existing:transport_b	Square	ריבוע	B	shapes	existing_ios	existing_android	reuse_ios
+verbs_stand	stand	existing:verbs_a	Stand	לעמוד	A	actions	existing_ios	existing_android	reuse_ios
+school_stapler	stapler	existing:school_c	Stapler	שדכן	C	school_supplies	existing_ios	existing_android	reuse_ios
+shapes_star	star	existing:shapes_a	Star	כוכב	A	shapes	existing_ios	existing_android	reuse_ios
+shapes_star_of_david	star_of_david	existing:shapes_e	Star of David	מגן דוד	E	symbols	existing_ios	existing_android	reuse_ios
+food_stew	stew	existing:food_c	Stew	תבשיל	C	food	existing_ios	existing_android	reuse_ios
+home_stopper	stopper	existing:transport_a	Stopper	פקק	A	household	existing_ios	existing_android	reuse_ios
+home_stove	stove	existing:home_c	Stove	כיריים	C	household	existing_ios	existing_android	reuse_ios
+people_stranger	stranger	existing:people_c	Stranger	זר	C	family_people	existing_ios	existing_android	reuse_ios
+fruits_strawberry	strawberry	existing:fruits_b	Strawberry	תות	B	fruits	existing_ios	existing_android	reuse_ios
+people_student	student	existing:people_b	Student	תלמיד	B	family_people	existing_ios	existing_android	reuse_ios
+vegetables_sweet_potato	sweet_potato	existing:vegetables_b	Sweet potato	בטטה	B	vegetables	existing_ios	existing_android	reuse_ios
+home_table	table	existing:home_a	Table	שולחן	A	household	existing_ios	existing_android	reuse_ios
+school_tablet	tablet	existing:school_b	Tablet	טאבלט	B	school_supplies	existing_ios	existing_android	reuse_ios
+jobs_tailor	tailor	existing:jobs_b	Tailor	חייט	B	professions	existing_ios	existing_android	reuse_ios
+fruits_tamarind	tamarind	existing:fruits_d	Tamarind	תמרהינדי	D	fruits	existing_ios	existing_android	reuse_ios
+home_taxi	taxi	existing:home_a	Taxi	מונית	A	transport	existing_ios	existing_android	reuse_ios
+jobs_teacher	teacher	existing:jobs_b	Teacher	מורה	B	professions	existing_ios	existing_android	reuse_ios
+school_telescope	telescope	existing:school_c	Telescope	טלסקופ	C	science_objects	existing_ios	existing_android	reuse_ios
+tech_television	television	existing:tech_b	Television	טלוויזיה	B	technology	existing_ios	existing_android	reuse_ios
+shapes_tennis_ball	tennis_ball	existing:shapes_b	Tennis ball	כדור טניס	B	sports	existing_ios	existing_android	reuse_ios
+school_test_tube	test_tube	existing:school_d	Test tube	מבחנה	D	science_objects	existing_ios	existing_android	reuse_ios
+school_thermometer	thermometer	existing:school_d	Thermometer	מדחום	D	science_objects	existing_ios	existing_android	reuse_ios
+home_thermostat	thermostat	existing:home_e	Thermostat	תרמוסטט	E	household	existing_ios	existing_android	reuse_ios
+verbs_throw	throw_img	existing:verbs_c	Throw	לזרוק	C	actions	existing_ios	existing_android	reuse_ios
+animals_tiger	tiger	existing:animals_b	Tiger	נמר	B	animals	existing_ios	existing_android	reuse_ios
+vegetables_tomato	tomato	existing:vegetables_a	Tomato	עגבנייה	A	vegetables	existing_ios	existing_android	reuse_ios
+home_toothbrush	toothbrush	existing:home_c	Toothbrush	מברשת שיניים	C	household	existing_ios	existing_android	reuse_ios
+home_toothpaste	toothpaste	existing:home_c	Toothpaste	משחת שיניים	C	household	existing_ios	existing_android	reuse_ios
+home_towel	towel	existing:home_c	Towel	מגבת	C	household	existing_ios	existing_android	reuse_ios
+transport_toy	toy	existing:transport_a	Toy	צעצוע	A	toys_games	existing_ios	existing_android	reuse_ios
+transport_traffic_light	traffic_light	existing:transport_b	Traffic light	רמזור	B	transport	existing_ios	existing_android	reuse_ios
+transport_train	train	existing:transport_a	Train	רכבת	A	transport	existing_ios	existing_android	reuse_ios
+shapes_trapezoid	trapezoid	existing:shapes_d	Trapezoid	טרפז	D	shapes	existing_ios	existing_android	reuse_ios
+shapes_triangle	triangle	existing:shapes_b	Triangle	משולש	B	shapes	existing_ios	existing_android	reuse_ios
+other_trophy	trophy	existing:other_c	Trophy	גביע	C	sports	existing_ios	existing_android	reuse_ios
+home_truck	truck	existing:home_a	Truck	משאית	A	transport	existing_ios	existing_android	reuse_ios
+vegetables_turnip	turnip	existing:vegetables_c	Turnip	לפת	C	vegetables	existing_ios	existing_android	reuse_ios
+colors_turquoise	turquoise	existing:colors_d	Turquoise	טורקיז	D	colors	existing_ios	existing_android	reuse_ios
+animals_turtle	turtle	existing:animals_c	Turtle	צב	C	animals	existing_ios	existing_android	reuse_ios
+people_twins	twins	existing:people_b	Twins	תאומים	B	family_people	existing_ios	existing_android	reuse_ios
+other_unicorn	unicorn	existing:other_b	Unicorn	חד־קרן	B	fantasy_adventure	existing_ios	existing_android	reuse_ios
+home_vacuum_cleaner	vacuum_cleaner	existing:home_d	Vacuum Cleaner	שואב אבק	D	household	existing_ios	existing_android	reuse_ios
+jobs_veterinarian	veterinarian	existing:jobs_d	Veterinarian	וטרינר	D	professions	existing_ios	existing_android	reuse_ios
+colors_violet	violet	existing:colors_c	Violet	סגול בהיר	C	colors	existing_ios	existing_android	reuse_ios
+other_violin	violin	existing:other_b	Violin	כינור	B	music	existing_ios	existing_android	reuse_ios
+shapes_volleyball	volleyball	existing:shapes_b	Volleyball	כדור כדורעף	B	sports	existing_ios	existing_android	reuse_ios
+verbs_wash	wash	existing:verbs_c	Wash	לשטוף	C	actions	existing_ios	existing_android	reuse_ios
+home_washing_machine	washing_machine	existing:home_c	Washing Machine	מכונת כביסה	C	household	existing_ios	existing_android	reuse_ios
+food_water	water	existing:food_a	Water	מים	A	food	existing_ios	existing_android	reuse_ios
+vegetables_watercress	watercress	existing:vegetables_e	Watercress	גרגר הנחלים	E	vegetables	existing_ios	existing_android	reuse_ios
+fruits_watermelon	watermelon	existing:fruits_c	Watermelon	אבטיח	C	fruits	existing_ios	existing_android	reuse_ios
+animals_whale	whale	existing:animals_c	Whale	לווייתן	C	animals	existing_ios	existing_android	reuse_ios
+transport_wheel	wheel	existing:transport_a	Wheel	גלגל	A	transport	existing_ios	existing_android	reuse_ios
+colors_white	white	existing:colors_a	White	לבן	A	colors	existing_ios	existing_android	reuse_ios
+school_whiteboard	whiteboard	existing:school_c	Whiteboard	לוח לבן	C	school_supplies	existing_ios	existing_android	reuse_ios
+home_window	window	existing:home_a	Window	חלון	A	household	existing_ios	existing_android	reuse_ios
+other_wizard	wizard	existing:other_b	Wizard	קוסם	B	fantasy_adventure	existing_ios	existing_android	reuse_ios
+animals_wolf	wolf	existing:animals_b	Wolf	זאב	B	animals	existing_ios	existing_android	reuse_ios
+people_woman	woman	existing:people_a	Woman	אישה	A	family_people	existing_ios	existing_android	reuse_ios
+verbs_write	write	existing:verbs_c	Write	לכתוב	C	actions	existing_ios	existing_android	reuse_ios
+colors_yellow	yellow	existing:colors_a	Yellow	צהוב	A	colors	existing_ios	existing_android	reuse_ios
+food_yogurt	yogurt	existing:food_b	Yogurt	יוגורט	B	food	existing_ios	existing_android	reuse_ios
+animals_zebra	zebra	existing:animals_b	Zebra	זברה	B	animals	existing_ios	existing_android	reuse_ios
+vegetables_zucchini	zucchini	existing:vegetables_b	Zucchini	קישוא	B	vegetables	existing_ios	existing_android	reuse_ios
+geography_africa	africa	existing:countries_b	Africa	אפריקה	B	geography	existing_ios	trusted_external	reuse_ios	verified outline map of Africa continent, simple filled silhouette		geography_assets
+countries_argentina	argentina	existing:countries_c	Argentina	ארגנטינה	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of Argentina		trusted_flags
+countries_australia	australia	existing:countries_c	Australia	אוסטרליה	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of Australia		trusted_flags
+countries_belgium	belgium	existing:countries_d	Belgium	בלגיה	D	countries	existing_ios	trusted_external	reuse_ios	official national flag of Belgium		trusted_flags
+countries_brazil	brazil	existing:countries_b	Brazil	ברזיל	B	countries	existing_ios	trusted_external	reuse_ios	official national flag of Brazil		trusted_flags
+countries_bulgaria	bulgaria	existing:countries_c	Bulgaria	בולגריה	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of Bulgaria		trusted_flags
+countries_chile	chile	existing:countries_d	Chile	צ'ילה	D	countries	existing_ios	trusted_external	reuse_ios	official national flag of Chile		trusted_flags
+countries_cyprus	cyprus	existing:countries_c	Cyprus	קפריסין	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of Cyprus		trusted_flags
+countries_czech_republic	czech_republic	existing:countries_d	Czech Republic	צ'כיה	D	countries	existing_ios	trusted_external	reuse_ios	official national flag of Czech Republic		trusted_flags
+countries_denmark	denmark	existing:countries_c	Denmark	דנמרק	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of Denmark		trusted_flags
+countries_egypt	egypt	existing:countries_d	Egypt	מצרים	D	countries	existing_ios	trusted_external	reuse_ios	official national flag of Egypt		trusted_flags
+countries_finland	finland	existing:countries_b	Finland	פינלנד	B	countries	existing_ios	trusted_external	reuse_ios	official national flag of Finland		trusted_flags
+countries_germany	germany	existing:countries_b	Germany	גרמניה	B	countries	existing_ios	trusted_external	reuse_ios	official national flag of Germany		trusted_flags
+countries_greece	greece	existing:countries_c	Greece	יוון	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of Greece		trusted_flags
+countries_hungary	hungary	existing:countries_c	Hungary	הונגריה	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of Hungary		trusted_flags
+countries_israel	israel	existing:countries_b	Israel	ישראל	B	countries	existing_ios	trusted_external	reuse_ios	official national flag of Israel		trusted_flags
+countries_italy	italy	existing:countries_b	Italy	איטליה	B	countries	existing_ios	trusted_external	reuse_ios	official national flag of Italy		trusted_flags
+countries_liechtenstein	liechtenstein	existing:countries_d	Liechtenstein	ליכטנשטיין	D	countries	existing_ios	trusted_external	reuse_ios	official national flag of Liechtenstein		trusted_flags
+countries_luxembourg	luxembourg	existing:countries_d	Luxembourg	לוקסמבורג	D	countries	existing_ios	trusted_external	reuse_ios	official national flag of Luxembourg		trusted_flags
+countries_monaco	monaco	existing:countries_b	Monaco	מונקו	B	countries	existing_ios	trusted_external	reuse_ios	official national flag of Monaco		trusted_flags
+countries_netherlands	netherlands	existing:countries_d	Netherlands	הולנד	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of Netherlands		trusted_flags
+countries_norway	norway	existing:countries_c	Norway	נורווגיה	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of Norway		trusted_flags
+countries_poland	poland	existing:countries_c	Poland	פולין	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of Poland		trusted_flags
+countries_portugal	portugal	existing:countries_c	Portugal	פורטוגל	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of Portugal		trusted_flags
+countries_romania	romania	existing:countries_b	Romania	רומניה	B	countries	existing_ios	trusted_external	reuse_ios	official national flag of Romania		trusted_flags
+countries_russia	russia	existing:countries_c	Russia	רוסיה	B	countries	existing_ios	trusted_external	reuse_ios	official national flag of Russia		trusted_flags
+countries_san_marino	san_marino	existing:countries_b	San Marino	סן מרינו	B	countries	existing_ios	trusted_external	reuse_ios	official national flag of San Marino		trusted_flags
+countries_spain	spain	existing:countries_b	Spain	ספרד	B	countries	existing_ios	trusted_external	reuse_ios	official national flag of Spain		trusted_flags
+countries_sweden	sweden	existing:countries_d	Sweden	שוודיה	D	countries	existing_ios	trusted_external	reuse_ios	official national flag of Sweden		trusted_flags
+countries_switzerland	switzerland	existing:countries_d	Switzerland	שוויץ	D	countries	existing_ios	trusted_external	reuse_ios	official national flag of Switzerland		trusted_flags
+countries_united_kingdom	united_kingdom	existing:countries_c	United Kingdom	בריטניה	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of United Kingdom		trusted_flags
+countries_united_states	united_states	existing:countries_c	United States	ארצות הברית	C	countries	existing_ios	trusted_external	reuse_ios	official national flag of United States		trusted_flags
+countries_uruguay	uruguay	existing:countries_d	Uruguay	אורוגוואי	D	countries	existing_ios	trusted_external	reuse_ios	official national flag of Uruguay		trusted_flags
+environment_flood	flood	new:lexical	Flood	שיטפון	E	environment	existing_ios	missing_android	reuse_ios	street with rising water around parked cars and sidewalk, isolated scene	lake, ocean	environment_objects	sheet_001	1
+environment_waste	waste	new:lexical	Waste	פסולת	E	environment	existing_ios	missing_android	reuse_ios	single waste shown in a minimal real-world scene		environment_objects	sheet_001	2
+environment_wildfire	wildfire	new:lexical	Wildfire	שרפת יער	E	environment	existing_ios	missing_android	reuse_ios	line of burning trees with visible smoke, isolated scene	campfire, sunset	environment_objects	sheet_001	3
+food_bagel	bagel	existing:food_b	Bagel	בייגל	B	food	existing_ios	missing_android	reuse_ios	single bagel presented clearly on plain background		food_objects	sheet_001	4
+food_burrito	burrito	existing:food_e	Burrito	בוריטו	E	food	existing_ios	missing_android	reuse_ios	single burrito presented clearly on plain background		food_objects	sheet_001	5
+food_cereal	cereal	existing:food_c	Cereal	דגני בוקר	C	food	existing_ios	missing_android	reuse_ios	single cereal presented clearly on plain background		food_objects	sheet_001	6
+food_chicken_nuggets	chicken_nuggets	existing:food_c	Chicken nuggets	נאגטס עוף	C	food	existing_ios	missing_android	reuse_ios	single chicken nuggets presented clearly on plain background		food_objects	sheet_001	7
+food_chicken_soup	chicken_soup	existing:food_c	Chicken soup	מרק עוף	C	food	existing_ios	missing_android	reuse_ios	single chicken soup presented clearly on plain background		food_objects	sheet_001	8
+food_crepe	crepe	existing:food_e	Crepe	קרפ	E	food	existing_ios	missing_android	reuse_ios	single crepe presented clearly on plain background		food_objects	sheet_001	9
+food_donut	donut	existing:food_c	Donut	דונאט	C	food	existing_ios	missing_android	reuse_ios	single donut presented clearly on plain background		food_objects	sheet_001	10
+food_falafel	falafel	existing:food_d	Falafel	פלאפל	D	food	existing_ios	missing_android	reuse_ios	single falafel presented clearly on plain background		food_objects	sheet_001	11
+food_fish_sticks	fish_sticks	existing:food_d	Fish sticks	אצבעות דג	D	food	existing_ios	missing_android	reuse_ios	single fish sticks presented clearly on plain background		food_objects	sheet_001	12
+food_french_fries	french_fries	existing:food_c	French fries	צ׳יפס	C	food	existing_ios	missing_android	reuse_ios	single french fries presented clearly on plain background		food_objects	sheet_001	13
+food_french_toast	french_toast	existing:food_d	French toast	טוסט צרפתי	D	food	existing_ios	missing_android	reuse_ios	single french toast presented clearly on plain background		food_objects	sheet_001	14
+food_grilled_cheese	grilled_cheese	existing:food_c	Grilled cheese	טוסט גבינה	C	food	existing_ios	missing_android	reuse_ios	single grilled cheese presented clearly on plain background		food_objects	sheet_001	15
+food_hamburger	hamburger	existing:food_c	Hamburger	המבורגר	C	food	existing_ios	missing_android	reuse_ios	single hamburger presented clearly on plain background		food_objects	sheet_001	16
+food_hot_dog	hot_dog	existing:food_c	Hot dog	נקניקייה	C	food	existing_ios	missing_android	reuse_ios	single hot dog presented clearly on plain background		food_objects	sheet_002	1
+food_hummus	hummus	existing:food_c	Hummus	חומוס	C	food	existing_ios	missing_android	reuse_ios	single hummus presented clearly on plain background		food_objects	sheet_002	2
+food_ketchup	ketchup	existing:food_c	Ketchup	קטשופ	C	food	existing_ios	missing_android	reuse_ios	single ketchup presented clearly on plain background		food_objects	sheet_002	3
+food_label	label	new:lexical	Label	תווית	E	food	existing_ios	missing_android	reuse_ios	single product label sticker attached to plain package, close view	sticker, note	food_objects	sheet_002	4
+food_lasagna	lasagna	existing:food_e	Lasagna	לזניה	E	food	existing_ios	missing_android	reuse_ios	single lasagna presented clearly on plain background		food_objects	sheet_002	5
+food_lunchbox	lunchbox	new:lexical	Lunchbox	קופסת אוכל	E	food	existing_ios	missing_android	reuse_ios	closed rectangular lunchbox with lid and side clips, isolated		food_objects	sheet_002	6
+food_mac_and_cheese	mac_and_cheese	existing:food_c	Mac and cheese	מקרוני עם גבינה	C	food	existing_ios	missing_android	reuse_ios	single mac and cheese presented clearly on plain background		food_objects	sheet_002	7
+food_nachos	nachos	existing:food_e	Nachos	נאצ׳וס	E	food	existing_ios	missing_android	reuse_ios	single nachos presented clearly on plain background		food_objects	sheet_002	8
+food_peanut_butter	peanut_butter	existing:food_c	Peanut butter	חמאת בוטנים	C	food	existing_ios	missing_android	reuse_ios	single peanut butter presented clearly on plain background		food_objects	sheet_002	9
+food_popsicle	popsicle	existing:food_c	Popsicle	ארטיק	C	food	existing_ios	missing_android	reuse_ios	single popsicle presented clearly on plain background		food_objects	sheet_002	10
+food_pretzel	pretzel	existing:food_c	Pretzel	בייגלה	C	food	existing_ios	missing_android	reuse_ios	single pretzel presented clearly on plain background		food_objects	sheet_002	11
+food_pudding	pudding	existing:food_d	Pudding	פודינג	D	food	existing_ios	missing_android	reuse_ios	single pudding presented clearly on plain background		food_objects	sheet_002	12
+food_quesadilla	quesadilla	existing:food_e	Quesadilla	קסדייה	E	food	existing_ios	missing_android	reuse_ios	single quesadilla presented clearly on plain background		food_objects	sheet_002	13
+food_quiche	quiche	existing:food_e	Quiche	קיש	E	food	existing_ios	missing_android	reuse_ios	single quiche presented clearly on plain background		food_objects	sheet_002	14
+food_ravioli	ravioli	existing:food_e	Ravioli	רביולי	E	food	existing_ios	missing_android	reuse_ios	single ravioli presented clearly on plain background		food_objects	sheet_002	15
+food_reusable_bottle	reusable_bottle	new:lexical	Reusable bottle	בקבוק רב פעמי	E	food	existing_ios	missing_android	reuse_ios	single reusable water bottle with screw cap, upright, isolated		food_objects	sheet_002	16
+food_scrambled_eggs	scrambled_eggs	existing:food_c	Scrambled eggs	חביתה	C	food	existing_ios	missing_android	reuse_ios	single scrambled eggs presented clearly on plain background		food_objects	sheet_003	1
+food_snack_bar	snack_bar	new:lexical	Snack bar	מזנון	E	food	existing_ios	missing_android	reuse_ios	small snack counter with shelves of packaged snacks, isolated composition		food_objects	sheet_003	2
+food_sushi	sushi	existing:food_d	Sushi	סושי	C	food	existing_ios	missing_android	reuse_ios	single sushi presented clearly on plain background		food_objects	sheet_003	3
+food_tahini	tahini	existing:food_e	Tahini	טחינה	E	food	existing_ios	missing_android	reuse_ios	single tahini presented clearly on plain background		food_objects	sheet_003	4
+food_waffle	waffle	existing:food_c	Waffle	וופל	C	food	existing_ios	missing_android	reuse_ios	single waffle presented clearly on plain background		food_objects	sheet_003	5
+other_accordion	accordion	existing:other_c	Accordion	אקורדיון	C	music	existing_ios	missing_android	reuse_ios	single accordion shown clearly in isolated composition		general_objects	sheet_003	6
+other_armour	armour	existing:other_c	Armour	שריון	C	fantasy_adventure	existing_ios	missing_android	reuse_ios	single armour shown clearly in isolated composition		general_objects	sheet_003	7
+health_safety_bandage	bandage	new:lexical	Bandage	תחבושת	D	health_safety	existing_ios	missing_android	reuse_ios	single adhesive bandage with paper tabs removed, front view, isolated	medical tape, scarf	general_objects	sheet_003	8
+other_binoculars	binoculars	existing:other_d	Binoculars	משקפת	D	science_objects	existing_ios	missing_android	reuse_ios	single binoculars shown clearly in isolated composition		general_objects	sheet_003	9
+planning_calendar	calendar	new:lexical	Calendar	לוח שנה	E	planning	existing_ios	missing_android	reuse_ios	single calendar shown clearly in isolated composition		general_objects	sheet_003	10
+other_catapult	catapult	existing:other_e	Catapult	קטפולטה	E	fantasy_adventure	existing_ios	missing_android	reuse_ios	single catapult shown clearly in isolated composition		general_objects	sheet_003	11
+other_costume	costume	existing:other_c	Costume	תחפושת	C	fantasy_adventure	existing_ios	missing_android	reuse_ios	single costume shown clearly in isolated composition		general_objects	sheet_003	12
+mixed_other_forest	forest	new:lexical	Forest	יער	C	environment	existing_ios	missing_android	reuse_ios	small cluster of several green trees with visible trunks, no landscape background		general_objects	sheet_003	13
+other_harmonica	harmonica	existing:other_c	Harmonica	מפוחית	C	music	existing_ios	missing_android	reuse_ios	single harmonica shown clearly in isolated composition		general_objects	sheet_003	14
+other_kaleidoscope	kaleidoscope	existing:other_e	Kaleidoscope	קליידוסקופ	E	science_objects	existing_ios	missing_android	reuse_ios	single kaleidoscope shown clearly in isolated composition		general_objects	sheet_003	15
+other_labyrinth	labyrinth	existing:other_d	Labyrinth	מבוך	D	toys_games	existing_ios	missing_android	reuse_ios	single labyrinth shown clearly in isolated composition		general_objects	sheet_003	16
+other_lantern	lantern	existing:other_c	Lantern	פנס	C	household	existing_ios	missing_android	reuse_ios	single lantern shown clearly in isolated composition		general_objects	sheet_004	1
+health_safety_medicine	medicine	new:lexical	Medicine	תרופה	D	health_safety	existing_ios	missing_android	reuse_ios	single medicine shown clearly in isolated composition		general_objects	sheet_004	2
+other_metronome	metronome	existing:other_e	Metronome	מטרונום	E	music	existing_ios	missing_android	reuse_ios	single metronome shown clearly in isolated composition		general_objects	sheet_004	3
+mixed_other_museum	museum	new:lexical	Museum	מוזיאון	C	places	existing_ios	missing_android	reuse_ios	single museum building with wide steps and columns, isolated exterior	library, school	general_objects	sheet_004	4
+other_orchestra	orchestra	existing:other_d	Orchestra	תזמורת	D	music	existing_ios	missing_android	reuse_ios	small seated orchestra group with conductor and visible instruments, isolated composition		general_objects	sheet_004	5
+other_parachute	parachute	existing:other_c	Parachute	מצנח	C	transport	existing_ios	missing_android	reuse_ios	single parachute shown clearly in isolated composition		general_objects	sheet_004	6
+other_periscope	periscope	existing:other_e	Periscope	פריסקופ	E	science_objects	existing_ios	missing_android	reuse_ios	single periscope shown clearly in isolated composition		general_objects	sheet_004	7
+other_puzzle	puzzle	existing:other_a	Puzzle	פאזל	A	toys_games	existing_ios	missing_android	reuse_ios	single puzzle shown clearly in isolated composition		general_objects	sheet_004	8
+other_race	race	existing:other_b	Race	מירוץ	B	sports	existing_ios	missing_android	reuse_ios	three child runners crossing a finish line, isolated scene	running, sports team portrait	general_objects	sheet_004	9
+other_scarecrow	scarecrow	existing:other_d	Scarecrow	דחליל	D	environment	existing_ios	missing_android	reuse_ios	single scarecrow shown clearly in isolated composition		general_objects	sheet_004	10
+health_safety_seat_belt	seat_belt	new:lexical	Seat belt	חגורת בטיחות	E	health_safety	existing_ios	missing_android	reuse_ios	buckled seat belt stretched across a car seat, close view		general_objects	sheet_004	11
+health_safety_sunscreen	sunscreen	new:lexical	Sunscreen	קרם הגנה	E	health_safety	existing_ios	missing_android	reuse_ios	single sunscreen shown clearly in isolated composition		general_objects	sheet_004	12
+other_sword	sword	existing:other_c	Sword	חרב	C	fantasy_adventure	existing_ios	missing_android	reuse_ios	single sword shown clearly in isolated composition		general_objects	sheet_004	13
+other_treasure	treasure	existing:other_c	Treasure	אוצר	C	fantasy_adventure	existing_ios	missing_android	reuse_ios	single treasure shown clearly in isolated composition		general_objects	sheet_004	14
+other_trumpet	trumpet	existing:other_c	Trumpet	חצוצרה	C	music	existing_ios	missing_android	reuse_ios	single trumpet shown clearly in isolated composition		general_objects	sheet_004	15
+other_xylophone	xylophone	existing:other_d	Xylophone	קסילופון	D	music	existing_ios	missing_android	reuse_ios	single xylophone shown clearly in isolated composition		general_objects	sheet_004	16
+personal_care_hair_conditioner	hair_conditioner	existing:home_d	Hair conditioner	מרכך שיער	D	personal_care	existing_ios	missing_android	reuse_ios	single bottle of hair conditioner with flip cap, front view, isolated		home_objects	sheet_005	1
+jobs_astronomer	astronomer	existing:jobs_b	Astronomer	אסטרונומית	B	professions	existing_ios	missing_android	reuse_ios	one astronomer with one recognizable role-specific tool, isolated figure		people_roles	sheet_005	2
+people_baby_boy	baby_boy	existing:people_c	Baby boy	תינוק	C	family_people	existing_ios	missing_android	reuse_ios	one baby boy with one recognizable role-specific tool, isolated figure		people_roles	sheet_005	3
+people_baby_girl	baby_girl	existing:people_c	Baby girl	תינוקת	C	family_people	existing_ios	missing_android	reuse_ios	one baby girl with one recognizable role-specific tool, isolated figure		people_roles	sheet_005	4
+jobs_butcher	butcher	existing:jobs_d	Butcher	קצב	D	professions	existing_ios	missing_android	reuse_ios	one butcher with one recognizable role-specific tool, isolated figure		people_roles	sheet_005	5
+jobs_manager	manager	existing:jobs_b	Manager	מנהל	B	professions	existing_ios	missing_android	reuse_ios	one manager with one recognizable role-specific tool, isolated figure		people_roles	sheet_005	6
+jobs_plumber	plumber	existing:jobs_d	Plumber	שרברב	D	professions	existing_ios	missing_android	reuse_ios	one plumber with one recognizable role-specific tool, isolated figure		people_roles	sheet_005	7
+civics_world_community_center	community_center	new:lexical	Community center	מרכז קהילתי	E	civics_world	existing_ios	missing_android	reuse_ios	simple community center building exterior with front doors and notice board, isolated		places_and_civic_objects	sheet_005	8
+civics_world_museum_guide	museum_guide	new:lexical	Museum guide	מדריך במוזיאון	E	civics_world	existing_ios	missing_android	reuse_ios	one museum guide gesturing toward a display stand, isolated scene		places_and_civic_objects	sheet_005	9
+civics_world_recycling_station	recycling_station	new:lexical	Recycling station	תחנת מיחזור	E	civics_world	existing_ios	missing_android	reuse_ios	single recycling station shown clearly in a simple exterior or object view		places_and_civic_objects	sheet_005	10
+fruits_prickly_pear	prickly_pear	existing:fruits_e	Prickly pear	סברס	D	fruits	existing_ios	missing_android	reuse_ios	single prickly pear with stem or leaf visible, isolated composition		produce	sheet_005	11
+school_supplies_backpack	backpack	new:lexical	Backpack	תיק גב	C	school_supplies	existing_ios	missing_android	reuse_ios	single school backpack with shoulder straps and zipper pockets, front three-quarter view		school_objects	sheet_005	12
+school_tuning_fork	tuning_fork	existing:school_e	Tuning fork	מזלג כוונון	E	science_objects	existing_ios	missing_android	reuse_ios	single tuning fork clearly visible from front view, isolated		school_objects	sheet_005	13
+science_laboratory	laboratory	new:lexical	Laboratory	מעבדה	E	science	existing_ios	missing_android	reuse_ios	compact science lab bench with microscope, flasks and test tubes, isolated composition		science_objects	sheet_005	14
+science_planet	planet	new:lexical	Planet	כוכב לכת	D	science	existing_ios	missing_android	reuse_ios	single round planet with visible land and cloud bands, isolated on plain background	moon, star	science_objects	sheet_005	15
+science_solar_panel	solar_panel	new:lexical	Solar panel	פאנל סולארי	E	science	existing_ios	missing_android	reuse_ios	single rooftop solar panel angled toward the sun, isolated composition		science_objects	sheet_005	16
+shapes_cylinder	cylinder	existing:shapes_c	Cylinder	גליל	C	shapes	existing_ios	missing_android	reuse_ios	single bold cylinder symbol centered on plain background		symbols_shapes	sheet_006	1
+colors_dark_blue	dark_blue	existing:colors_b	Dark Blue	כחול כהה	B	colors	existing_ios	missing_android	reuse_ios	single bold dark blue symbol centered on plain background		symbols_shapes	sheet_006	2
+colors_ivory	ivory	existing:colors_c	Ivory	שנהב	C	colors	existing_ios	missing_android	reuse_ios	single bold ivory symbol centered on plain background		symbols_shapes	sheet_006	3
+colors_khaki	khaki	existing:colors_d	Khaki	חאקי	D	colors	existing_ios	missing_android	reuse_ios	single bold khaki symbol centered on plain background		symbols_shapes	sheet_006	4
+colors_light_blue	light_blue	existing:colors_b	Light Blue	תכלת	B	colors	existing_ios	missing_android	reuse_ios	single bold light blue symbol centered on plain background		symbols_shapes	sheet_006	5
+colors_light_green	light_green	existing:colors_b	Light Green	ירוק בהיר	B	colors	existing_ios	missing_android	reuse_ios	single bold light green symbol centered on plain background		symbols_shapes	sheet_006	6
+shapes_parallelogram	parallelogram	existing:shapes_d	Parallelogram	מקבילית	D	shapes	existing_ios	missing_android	reuse_ios	single bold parallelogram symbol centered on plain background		symbols_shapes	sheet_006	7
+shapes_pyramid	pyramid	existing:shapes_c	Pyramid	פירמידה	C	shapes	existing_ios	missing_android	reuse_ios	single bold pyramid symbol centered on plain background		symbols_shapes	sheet_006	8
+tech_3d_printer	3d_printer	existing:tech_e	3D printer	מדפסת תלת מימד	E	technology	existing_ios	missing_android	reuse_ios	single 3d printer device or tool in front three-quarter view, isolated		technology_objects	sheet_006	9
+technology_battery	battery	new:lexical	Battery	סוללה	C	technology	existing_ios	missing_android	reuse_ios	single household battery cylinder, close view, isolated		technology_objects	sheet_006	10
+technology_charger	charger	new:lexical	Charger	מטען	D	technology	existing_ios	missing_android	reuse_ios	single wall charger block with cable attached, front three-quarter view	adapter, cable only	technology_objects	sheet_006	11
+technology_microphone	microphone	new:lexical	Microphone	מיקרופון	D	technology	existing_ios	missing_android	reuse_ios	single handheld microphone with mesh head, isolated		technology_objects	sheet_006	12
+travel_boarding_pass	boarding_pass	new:lexical	Boarding pass	כרטיס עלייה למטוס	E	travel	existing_ios	missing_android	reuse_ios	single boarding pass card with barcode blocks only, front view, isolated		travel_objects	sheet_006	13
+transport_bridge	bridge	new:lexical	Bridge	גשר	C	transport	existing_ios	missing_android	reuse_ios	small arched bridge spanning water, isolated composition		travel_objects	sheet_006	14
+travel_crosswalk	crosswalk	new:lexical	Crosswalk	מעבר חציה	E	travel	existing_ios	missing_android	reuse_ios	street crosswalk with bold white stripes and curb edges, isolated scene		travel_objects	sheet_006	15
+travel_intersection	intersection	new:lexical	Intersection	צומת	E	travel	existing_ios	missing_android	reuse_ios	single intersection shown clearly in travel context, isolated scene		travel_objects	sheet_006	16
+travel_luggage	luggage	new:lexical	Luggage	מזוודות	E	travel	existing_ios	missing_android	reuse_ios	single luggage shown clearly in travel context, isolated scene		travel_objects	sheet_007	1
+travel_passport	passport	new:lexical	Passport	דרכון	D	travel	existing_ios	missing_android	reuse_ios	closed passport booklet with plain cover and no emblem, front view		travel_objects	sheet_007	2
+travel_platform	platform	new:lexical	Platform	רציף	D	travel	existing_ios	missing_android	reuse_ios	train platform edge with safety line and station sign frame, isolated scene	stage, flat platform	travel_objects	sheet_007	3
+transport_ticket	ticket	new:lexical	Ticket	כרטיס	D	transport	existing_ios	missing_android	reuse_ios	single paper event or travel ticket with punched corner, isolated	card, receipt	travel_objects	sheet_007	4
+travel_tour_guide	tour_guide	new:lexical	Tour guide	מדריך טיולים	E	travel	existing_ios	missing_android	reuse_ios	one tour guide leading a small group with arm raised, isolated scene		travel_objects	sheet_007	5

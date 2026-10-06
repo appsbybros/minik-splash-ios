@@ -1,0 +1,214 @@
+import Foundation
+
+struct LanguageFirstLetterChoiceContentProvider: Sendable {
+    private let configuration: ProductConfiguration
+    private let categoryID: LanguageWordCategoryID?
+
+    init(
+        configuration: ProductConfiguration,
+        categoryID: LanguageWordCategoryID? = nil
+    ) {
+        self.configuration = configuration
+        self.categoryID = categoryID
+    }
+
+    func challenge(
+        for request: ChallengeRequest,
+        learnedLanguage: LanguageIdentifier
+    ) -> Challenge? {
+        guard configuration.contentDomain == .language,
+              configuration.allowsLearnedLanguage(learnedLanguage),
+              request.activityType == .chooseRepresentation,
+              let level = LanguageVocabularyLevel(curriculumStageID: request.curriculumStage),
+              request.primarySkill == LanguageSkillIDs.initialLetterAssociation,
+              request.interaction == .singleChoice else {
+            return nil
+        }
+
+        let levelContent = LanguageWordLevelContent.content(for: level)
+        guard let choiceCount = resolvedChoiceCount(for: request.countRequirement) else {
+            return nil
+        }
+
+        let eligibleItems = levelContent.eligibleItems(
+            constrainedTo: categoryID,
+            including: { $0.isImageReady },
+            where: { category in
+                distinctInitials(
+                    in: category.items,
+                    learnedLanguage: learnedLanguage
+                ).count >= choiceCount
+            }
+        )
+        guard let correctItem = eligibleItems.randomElement() else {
+            return nil
+        }
+
+        let categoryItems = levelContent.items(
+            constrainedTo: correctItem.categoryID,
+            including: { $0.isImageReady }
+        ).shuffled()
+        guard let correctInitial = LanguageLetterPairsContentProvider.initialLetter(
+                for: correctItem,
+                language: learnedLanguage
+              ),
+              let correctText = LanguageWordContentProvider.learnedText(
+                for: correctItem,
+                language: learnedLanguage
+              ),
+              let prompt = Prompt(
+                representations: [.imageAsset(correctItem.image)],
+                speechCue: correctText.learningSpeechCue
+              ),
+              let choices = choices(
+                from: categoryItems,
+                for: correctItem,
+                correctInitial: correctInitial,
+                learnedLanguage: learnedLanguage,
+                count: choiceCount
+              ) else {
+            return nil
+        }
+
+        let instanceID = UUID().uuidString
+
+        return Challenge(
+            id: ChallengeID(rawValue: "\(instanceID).challenge"),
+            prompt: prompt,
+            choices: choices.shuffled().enumerated().compactMap { index, choice in
+                Choice(
+                    id: ChoiceID(rawValue: "\(instanceID).choice.\(index)"),
+                    representation: choice.representation,
+                    semanticValue: choice.semanticValue,
+                    speechCue: choice.speechCue
+                )
+            },
+            interaction: .singleChoice,
+            validationRule: .exactIdentity,
+            expectedAnswer: .semanticValue(
+                .contentItem(
+                    LanguageLetterPairsContentProvider.initialConceptID(
+                        language: learnedLanguage,
+                        initial: correctInitial
+                    )
+                )
+            ),
+            primarySkill: LanguageSkillIDs.initialLetterAssociation,
+            secondarySkills: [],
+            curriculumStage: request.curriculumStage,
+            difficulty: request.difficulty
+        )
+    }
+
+    private func resolvedChoiceCount(
+        for requirement: ContentCountRequirement?
+    ) -> Int? {
+        guard let requirement else {
+            return 4
+        }
+        guard requirement.kind == .choices,
+              (2 ... 4).contains(requirement.count) else {
+            return nil
+        }
+        return requirement.count
+    }
+
+    private func choices(
+        from categoryItems: [LanguageWordCatalogItem],
+        for correctItem: LanguageWordCatalogItem,
+        correctInitial: String,
+        learnedLanguage: LanguageIdentifier,
+        count: Int
+    ) -> [Choice]? {
+        let distractors = categoryItems
+            .filter { candidate in
+                candidate.category == correctItem.category
+                    && candidate.id != correctItem.id
+            }
+            .shuffled()
+            .compactMap { candidate -> (LanguageWordCatalogItem, String)? in
+                guard let initial = LanguageLetterPairsContentProvider.initialLetter(
+                    for: candidate,
+                    language: learnedLanguage
+                ) else {
+                    return nil
+                }
+                return (candidate, initial)
+            }
+            .filter { _, initial in
+                initial != correctInitial
+            }
+            .reduce(into: [(LanguageWordCatalogItem, String)]()) { result, pair in
+                guard result.contains(where: { $0.1 == pair.1 }) == false else {
+                    return
+                }
+                result.append(pair)
+            }
+
+        let distractorCount = count - 1
+        guard distractors.count >= distractorCount,
+              let correctChoice = makeChoice(
+                initial: correctInitial,
+                learnedLanguage: learnedLanguage
+              ) else {
+            return nil
+        }
+
+        let distractorChoices = distractors.prefix(distractorCount).enumerated().compactMap {
+            _, pair in
+            makeChoice(
+                initial: pair.1,
+                learnedLanguage: learnedLanguage
+            )
+        }
+        guard distractorChoices.count == distractorCount else {
+            return nil
+        }
+
+        return [correctChoice] + distractorChoices
+    }
+
+    private func distinctInitials(
+        in items: [LanguageWordCatalogItem],
+        learnedLanguage: LanguageIdentifier
+    ) -> Set<String> {
+        Set(items.compactMap {
+            LanguageLetterPairsContentProvider.initialLetter(
+                for: $0,
+                language: learnedLanguage
+            )
+        })
+    }
+
+    private func makeChoice(
+        initial: String,
+        learnedLanguage: LanguageIdentifier
+    ) -> Choice? {
+        let direction: ContentDirection
+        switch learnedLanguage {
+        case .english:
+            direction = .leftToRight
+        case .hebrew:
+            direction = .rightToLeft
+        default:
+            return nil
+        }
+
+        return Choice(
+            id: ChoiceID(rawValue: "language.firstLetterChoice.initial.\(initial)"),
+            representation: .learningText(
+                LearningTextRepresentation(
+                    text: initial,
+                    language: learnedLanguage,
+                    direction: direction
+                )
+            ),
+            semanticValue: .contentItem(
+                LanguageLetterPairsContentProvider.initialConceptID(
+                    language: learnedLanguage,
+                    initial: initial
+                )
+            )
+        )
+    }
+}

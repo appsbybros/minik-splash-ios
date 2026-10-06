@@ -1,0 +1,108 @@
+asset	android_source	sha256	pixel_width	pixel_height	alpha_bounds	conversion
+language_letter_a	../android/app/src/main/res/drawable/minik_a.png	4e6df0f16c099c3ac5829c4dee41e91d8844c8eeba233a0655cb7eadf722faaa	270	289	(0, 0, 270, 289)	exact original
+language_letter_a_capital	../android/app/src/main/res/drawable/minik_a_capital.png	51dd4910f8d66f8288f6376461e436192fab9752e0e6bcff367050a78cfefad4	348	359	(0, 0, 348, 359)	exact original
+language_letter_b	../android/app/src/main/res/drawable/minik_b.png	d93de1a270fb932041eb7e2e4b953b6ee6c68ac4ec2b75297c744ebfb66e25f6	271	382	(0, 0, 271, 382)	exact original
+language_letter_b_capital	../android/app/src/main/res/drawable/minik_b_capital.png	dba985f823c583555f5760aec834a441cc39e666f0a2c69cdcf534cbc20abc77	289	359	(0, 0, 289, 359)	exact original
+language_letter_c	../android/app/src/main/res/drawable/minik_c.png	2f2b1d26228fe8633f13457959391919f6f3d2a8a82162426f6549c8185ba3dd	261	289	(0, 0, 261, 289)	exact original
+language_letter_c_capital	../android/app/src/main/res/drawable/minik_c_capital.png	ddb57c508c79354a5a4cb5a538d2a608a11941acf294062bbc81b65fdfa40fa5	320	368	(0, 0, 320, 368)	exact original
+language_letter_d	../android/app/src/main/res/drawable/minik_d.png	95cd323ff29f850d684e4752c83de8f5662cc7cb94aab06f39ee4b0e17a4b1dd	271	382	(0, 0, 271, 382)	exact original
+language_letter_d_capital	../android/app/src/main/res/drawable/minik_d_capital.png	754641390000b937a3ced020ff0416a2f25a0059771f57503552782d33e5018a	313	359	(0, 0, 313, 359)	exact original
+language_letter_e	../android/app/src/main/res/drawable/minik_e.png	ddf8e52f4929d06d9865ce20ec30f883ad4f26260e50634cc5e24480da0bea2b	263	289	(0, 0, 263, 289)	exact original
+language_letter_e_capital	../android/app/src/main/res/drawable/minik_e_capital.png	10fd6631fb84cc744886b0c8b2ca1a89dd6251ac8cf6233da0c166ffcfb94aa2	253	359	(0, 0, 253, 359)	exact original
+language_letter_f	../android/app/src/main/res/drawable/minik_f.png	7571dd9b5594f419b43d1e40481e7ece2bb894532e66fdc2cf5a5a1657757555	218	382	(0, 0, 218, 382)	exact original
+language_letter_f_capital	../android/app/src/main/res/drawable/minik_f_capital.png	49f92f7c1cbfc3b204192fbb7448a2a00ad4c9ed5473c6d64f1d2b61c65c8317	240	359	(0, 0, 240, 359)	exact original
+language_letter_g	../android/app/src/main/res/drawable/minik_g.png	b95a572123791ab75444253de776e43dcfe90c9d535861429791e647e572e4a3	274	419	(0, 0, 274, 419)	exact original
+language_letter_g_capital	../android/app/src/main/res/drawable/minik_g_capital.png	bb50b691d6b6a8e37b65eb24942b27ff7596d3f65188e3705c20007cb25479e5	317	368	(0, 0, 317, 368)	exact original
+language_letter_h	../android/app/src/main/res/drawable/minik_h.png	b49b8602bec657e87d1d18c4cf7ac84962df7e5b8b173621e862689801bf6088	255	377	(0, 0, 255, 377)	exact original
+language_letter_h_capital	../android/app/src/main/res/drawable/minik_h_capital.png	6eb56952f9c75d54de996980eb02678762745edd2616010d294e0cb23a63277c	308	359	(0, 0, 308, 359)	exact original
+language_letter_i	../android/app/src/main/res/drawable/minik_i.png	379a778669f21f746e7b38ce468e77fa8a2e58b49f82c7614ea4cce0e281c30a	111	381	(0, 0, 111, 381)	exact original
+language_letter_i_capital	../android/app/src/main/res/drawable/minik_i_capital.png	e52c6e93028968fadd1ba0a580fae6f1de345c0250d05dc84dbfc4b331403de9	99	359	(0, 0, 99, 359)	exact original
+language_letter_j	../android/app/src/main/res/drawable/minik_j.png	b963991912293ffd238aee4d798065ce89bf360851797180872ac256341401e8	165	485	(0, 0, 165, 485)	exact original
+language_letter_j_capital	../android/app/src/main/res/drawable/minik_j_capital.png	81d0631dcf9edc077e930d539ba50889d0b536efd70255adac0e1791996bb526	254	364	(0, 0, 254, 364)	exact original
+language_letter_k	../android/app/src/main/res/drawable/minik_k.png	ecd6a988b743cc74155c7b36344ee17ce1a790e1ac40437e5522f6339f7e7268	244	377	(0, 0, 244, 377)	exact original
+language_letter_k_capital	../android/app/src/main/res/drawable/minik_k_capital.png	bd190be3b6a34505cc1633e1b0e3313cf7a0e2e70549bf7482db2a7613aca989	292	359	(0, 0, 292, 359)	exact original
+language_letter_l	../android/app/src/main/res/drawable/minik_l.png	6b9994dfaf138390ad8ba56ca3593dbad583fffcd2cf3607a4aa87a2c4098a4d	136	382	(0, 0, 136, 382)	exact original
+language_letter_l_capital	../android/app/src/main/res/drawable/minik_l_capital.png	9be707b3d7107ffbecde1de9fd239e5447ec08358fdfd32e09cb5783db451b86	244	359	(0, 0, 244, 359)	exact original
+language_letter_m	../android/app/src/main/res/drawable/minik_m.png	b0fc0323d5fd0679b79755b166f00394045271b24c1ffbf5681a958d032b8045	392	284	(0, 0, 392, 284)	exact original
+language_letter_m_capital	../android/app/src/main/res/drawable/minik_m_capital.png	179fa83c739ca13d3f87b68374288572936bb75fcde5cfa5de545b0486c3e877	369	359	(0, 0, 369, 359)	exact original
+language_letter_n	../android/app/src/main/res/drawable/minik_n.png	2950e2952f1ac931a579a720b249f013731e210a10ac5c874070c871300ffa11	255	284	(0, 0, 255, 284)	exact original
+language_letter_n_capital	../android/app/src/main/res/drawable/minik_n_capital.png	e3c2e4159342622cdb1e3435486871ab2055ff06ad6230bceda9dcd9a0abea61	306	359	(0, 0, 306, 359)	exact original
+language_letter_o	../android/app/src/main/res/drawable/minik_o.png	fd802f7f343639bd5c6fac1cfd0b2746e435131ddada10faebd5bbdb3417d0fd	275	289	(0, 0, 275, 289)	exact original
+language_letter_o_capital	../android/app/src/main/res/drawable/minik_o_capital.png	88eb197ef1b3bcff63d584793fe61fa8b23fb6b799e5b30ff3802c4c59b7cc1f	337	368	(0, 0, 337, 368)	exact original
+language_letter_p	../android/app/src/main/res/drawable/minik_p.png	da809f78fa6d3e726dc970b105b8b750bad4cb130b2281a075d824e9fac3f926	271	383	(0, 0, 271, 383)	exact original
+language_letter_p_capital	../android/app/src/main/res/drawable/minik_p_capital.png	fb2869bd681c61fbcbfdaad5810731fd50a623f7ddf500fbbb5540616c7140f1	269	359	(0, 0, 269, 359)	exact original
+language_letter_q	../android/app/src/main/res/drawable/minik_q.png	f920ea75bfdbfca1eaec0024c682f44d920e3ecc33804d0f02f885806e46fc14	271	383	(0, 0, 271, 383)	exact original
+language_letter_q_capital	../android/app/src/main/res/drawable/minik_q_capital.png	dfcdcf7a3cd30009ae8f95bbbf5cf71bc01388e6b0439ebc4b129c1620965cb1	337	444	(0, 0, 337, 444)	exact original
+language_letter_r	../android/app/src/main/res/drawable/minik_r.png	a0cd7df7be2a9a344da04e6d5841b0790610c36a9ef78ecd849fd3d9def6cda4	191	281	(0, 0, 191, 281)	exact original
+language_letter_r_capital	../android/app/src/main/res/drawable/minik_r_capital.png	40a2f9e8e0d0a8eda563581519a8ecf7cc63161ec7a5b31f914dc71aa9bb8534	285	359	(0, 0, 285, 359)	exact original
+language_letter_s	../android/app/src/main/res/drawable/minik_s.png	aa1147e2a2584e135315d4099e7d53d94af9cca7e4d571c91c2e47dd7c1c5d4f	239	289	(0, 0, 239, 289)	exact original
+language_letter_s_capital	../android/app/src/main/res/drawable/minik_s_capital.png	5662d9a06c44d67b7cf5331fca59158d62633932218eb9d3b4dbf00121f59cbf	286	368	(0, 0, 286, 368)	exact original
+language_letter_t	../android/app/src/main/res/drawable/minik_t.png	cf948355dd1c4a21c9b7ffdfb2b551e465031bc7686a6d2726f50c021b0dc6b3	215	345	(0, 0, 215, 345)	exact original
+language_letter_t_capital	../android/app/src/main/res/drawable/minik_t_capital.png	b1fa523a3e23593548f185306b370c09d22ca3ffe8b7d0a619601563684c78de	286	359	(0, 0, 286, 359)	exact original
+language_letter_u	../android/app/src/main/res/drawable/minik_u.png	52a48e19a77cf051592ecbf9b571645dcc53e68cc161786c3a351a9496708823	251	284	(0, 0, 251, 284)	exact original
+language_letter_u_capital	../android/app/src/main/res/drawable/minik_u_capital.png	87056963aaf42f95083522db8d482415b56754ca0bb65e21bed0dda7194d8e1c	298	364	(0, 0, 298, 364)	exact original
+language_letter_v	../android/app/src/main/res/drawable/minik_v.png	e102946f04f2f5bb9e4d43cfbb63b3521905a1767952674a9c0522fe4c25f268	299	279	(0, 0, 299, 279)	exact original
+language_letter_v_capital	../android/app/src/main/res/drawable/minik_v_capital.png	f8b805dca1f0375345690130ad5ecf3e8ec78225345dd89e9ef1f867a52be046	341	359	(0, 0, 341, 359)	exact original
+language_letter_w	../android/app/src/main/res/drawable/minik_w.png	d2f5d02660c7eafb51752f02d2cafc42f5f66e355035ad6dda187fcf7bebd3b8	382	279	(0, 0, 382, 279)	exact original
+language_letter_w_capital	../android/app/src/main/res/drawable/minik_w_capital.png	6e07198f2a914f87ffca2099cd84fe1e97039494cd911272d56779d4f9f26e62	447	359	(0, 0, 447, 359)	exact original
+language_letter_x	../android/app/src/main/res/drawable/minik_x.png	80f89d03af75ca054a0b999e8b795e66d52ab1ef24cb5e2aa1579ea45f9c4772	271	279	(0, 0, 271, 279)	exact original
+language_letter_x_capital	../android/app/src/main/res/drawable/minik_x_capital.png	2a246072840453504b2cf04186cffd2e957aafbc5592b16491d5050783ad04c4	328	359	(0, 0, 328, 359)	exact original
+language_letter_y	../android/app/src/main/res/drawable/minik_y.png	cbd17efed1a300f1ba78b9c6cedcb6b86f6072f0de339be8cfdf21a457d6ecaf	299	383	(0, 0, 299, 383)	exact original
+language_letter_y_capital	../android/app/src/main/res/drawable/minik_y_capital.png	39e640c58f456ee53e7a01c54a56831dc39e61df90bd2916ca3fa1d18af76f97	328	359	(0, 0, 328, 359)	exact original
+language_letter_z	../android/app/src/main/res/drawable/minik_z.png	1d96dca7d7e89025aeee9f5765607b3843ae3a8862beb70f842f57f2c2340cf5	228	279	(0, 0, 228, 279)	exact original
+language_letter_z_capital	../android/app/src/main/res/drawable/minik_z_capital.png	94c74ff9e30cce7d01a565410e89c6840ca8d6300dc1e1ac2393e9bb8b7ed703	228	279	(0, 0, 228, 279)	exact original
+language_letter_alef	../android/app/src/main/res/drawable/minik_alef.webp	ad8767d9f42a8b52ad1daed83a0232f5ef2bd5c93ba1c94b04f64e69d4a81e66	229	258	(0, 0, 229, 258)	exact decoded RGBA pixels
+language_letter_alef_capital	../android/app/src/main/res/drawable/minik_alef_capital.webp	0be2962e5dd9397f30fa9d63d547aeeef1fe2e3a92fdd3b4290716cc9876c736	251	226	(0, 0, 251, 226)	exact decoded RGBA pixels
+language_letter_beit	../android/app/src/main/res/drawable/minik_beit.webp	116ecfefc80b05496dce65efc4f6c66080424643a1deffba23a5062bdca69668	196	230	(0, 0, 196, 230)	exact decoded RGBA pixels
+language_letter_beit_capital	../android/app/src/main/res/drawable/minik_beit_capital.webp	4126b4d084a39653830a76726d36449758f5fc6fb954c1d3a2a77d88236775f6	209	226	(0, 0, 209, 226)	exact decoded RGBA pixels
+language_letter_gimel	../android/app/src/main/res/drawable/minik_gimel.webp	76665d2da6d037a60059472e098ecb4f5ca32e325f5c076854b40fa1fbeb20dd	177	258	(0, 0, 177, 258)	exact decoded RGBA pixels
+language_letter_gimel_capital	../android/app/src/main/res/drawable/minik_gimel_capital.webp	9cce30778e6094399211b30945a496ebf2ea2e9af11ed827da0c4208599b5662	149	234	(0, 0, 149, 234)	exact decoded RGBA pixels
+language_letter_dalet	../android/app/src/main/res/drawable/minik_dalet.webp	6302ef52559afc012369b9320bd1b5f308750f4208e01a3cad562a84c7e0db88	199	255	(0, 0, 199, 255)	exact decoded RGBA pixels
+language_letter_dalet_capital	../android/app/src/main/res/drawable/minik_dalet_capital.webp	3219bbc4233ea556153500812e62b3fd445438e5c828d99f2717bb2a628650ca	209	227	(0, 0, 209, 227)	exact decoded RGBA pixels
+language_letter_eih	../android/app/src/main/res/drawable/minik_eih.webp	d3fb815af87afdca2c2af12aa54cba41a6e88fd54040b7ddf59c72df7fd4d252	243	226	(0, 0, 243, 226)	exact decoded RGBA pixels
+language_letter_eih_capital	../android/app/src/main/res/drawable/minik_eih_capital.webp	d9a52c83766f1ba371831abc4f2561ecc196568191a938047562cb2dd4d7d651	209	226	(0, 0, 209, 226)	exact decoded RGBA pixels
+language_letter_vav	../android/app/src/main/res/drawable/minik_vav.webp	e8a3f8a63d9c12b245752d0c316cee62e86f8a49a0ccb82ec733da40d5ee9682	127	240	(0, 0, 127, 240)	exact decoded RGBA pixels
+language_letter_vav_capital	../android/app/src/main/res/drawable/minik_vav_capital.webp	5c59f05b997284dba43850d2c67b26c3324fad6eb5805ea6fc7b858e4c59f29a	76	226	(0, 0, 76, 226)	exact decoded RGBA pixels
+language_letter_zain	../android/app/src/main/res/drawable/minik_zain.webp	c7a20d9d612b0339c5dfeb01126254bed6cb6b9b29a080fee95a4e8cf89613ea	227	299	(0, 0, 227, 299)	exact decoded RGBA pixels
+language_letter_zain_capital	../android/app/src/main/res/drawable/minik_zain_capital.webp	edcf3227520fb10813119e8d241bc3cdcfff1e2c3fa3c89040d75b526027db81	130	226	(0, 0, 130, 226)	exact decoded RGBA pixels
+language_letter_het	../android/app/src/main/res/drawable/minik_het.webp	fa5c575b31e5abdeab9603c29d4a5011cc5d33171d5cc3fb5ddd1824483d6d44	253	252	(0, 0, 253, 252)	exact decoded RGBA pixels
+language_letter_het_capital	../android/app/src/main/res/drawable/minik_het_capital.webp	43d2a90a4394de9575e8bb4bda65197d9a0a6ef0f9803247582e2777543b78f7	215	226	(0, 0, 215, 226)	exact decoded RGBA pixels
+language_letter_tet	../android/app/src/main/res/drawable/minik_tet.webp	c7992653b7f885f0e491883e1a3764e0583fde271b8d92b1e1219d5077418e9b	278	303	(0, 0, 278, 303)	exact decoded RGBA pixels
+language_letter_tet_capital	../android/app/src/main/res/drawable/minik_tet_capital.webp	9a093923e2e20cf93165dce83a481d89bb5c8fd95a1c23ca9d84a55c9880fa11	229	234	(0, 0, 229, 234)	exact decoded RGBA pixels
+language_letter_yud	../android/app/src/main/res/drawable/minik_yud.webp	7587483529b0a1f74c165c574dca97cc1fd130b1aec7fffc3d464fd8fd36811f	89	137	(0, 0, 89, 137)	exact decoded RGBA pixels
+language_letter_yud_capital	../android/app/src/main/res/drawable/minik_yud_capital.webp	bfd0a1f14fc8288d877442b4c30d6d7502676c8186cfc1597c23186b4f1c70f9	76	155	(0, 0, 76, 155)	exact decoded RGBA pixels
+language_letter_kaf	../android/app/src/main/res/drawable/minik_kaf.webp	35cbe9f18294a03de027116ec193e3a3a058569f7f10f2ea785622934bdef804	221	228	(0, 0, 221, 228)	exact decoded RGBA pixels
+language_letter_kaf_capital	../android/app/src/main/res/drawable/minik_kaf_capital.webp	2bd272fc006bfda5057128a8db143b00216a57180fe11076e5a164eb015f0023	200	226	(0, 0, 200, 226)	exact decoded RGBA pixels
+language_letter_lamed	../android/app/src/main/res/drawable/minik_lamed.webp	63e9e16334ca8e14b8718b2473741aef53dea0fbe13c0b8f5f627e7398cdbda2	153	325	(0, 0, 153, 325)	exact decoded RGBA pixels
+language_letter_lamed_capital	../android/app/src/main/res/drawable/minik_lamed_capital.webp	c6a3c8ea66293b2d2d3fbdfc736ec80c755d930e6fff6924b556cb3713987ffa	199	279	(0, 0, 199, 279)	exact decoded RGBA pixels
+language_letter_mem	../android/app/src/main/res/drawable/minik_mem.webp	ebbfc8cc7d8857fc48f930d527f6d8588371d255a8e06718cf48abb2b165f99d	213	237	(0, 0, 213, 237)	exact decoded RGBA pixels
+language_letter_mem_capital	../android/app/src/main/res/drawable/minik_mem_capital.webp	10cb7785541a2e75fb2b7862b7ca3e83da972a65b2ee4aecba01c86c6c07edb8	221	229	(0, 0, 221, 229)	exact decoded RGBA pixels
+language_letter_noon	../android/app/src/main/res/drawable/minik_noon.webp	6a90be5343dd725d4c8dd6f6788002033983003ca0323f87864d51f11359c3d2	263	320	(0, 0, 263, 320)	exact decoded RGBA pixels
+language_letter_noon_capital	../android/app/src/main/res/drawable/minik_noon_capital.webp	0d04d3a4921921313127f424f5bbe10a1e37638a69af4ab523c5976aa49cb48c	138	226	(0, 0, 138, 226)	exact decoded RGBA pixels
+language_letter_sameh	../android/app/src/main/res/drawable/minik_sameh.webp	72ef71ef3589d3f38c58543092d1c0c0025877471dcef5d5ad766a9546fbdbd0	198	222	(0, 0, 198, 222)	exact decoded RGBA pixels
+language_letter_sameh_capital	../android/app/src/main/res/drawable/minik_sameh_capital.webp	f38fef4bc81e59bbdf89fb963ff841c918f214fc926ef7506d45d008d0662a0e	245	231	(0, 0, 245, 231)	exact decoded RGBA pixels
+language_letter_hain	../android/app/src/main/res/drawable/minik_hain.webp	27da8d89d59b8b0f849aae157f56071ed7995e021e1c9da947c9e7b0abf11796	223	311	(0, 0, 223, 311)	exact decoded RGBA pixels
+language_letter_hain_capital	../android/app/src/main/res/drawable/minik_hain_capital.webp	9578428a50cefd3719b6245af858b541ad279518440c92c2cee61f90344a8cfb	232	226	(0, 0, 232, 226)	exact decoded RGBA pixels
+language_letter_pei	../android/app/src/main/res/drawable/minik_pei.webp	cb6e5e2be38e00316c6cc5ea32979cb6e7ea9370ba514fb91377b62eb8829b63	206	222	(0, 0, 206, 222)	exact decoded RGBA pixels
+language_letter_pei_capital	../android/app/src/main/res/drawable/minik_pei_capital.webp	67158126b764f8965909f753f30ff2c3382303752760e0c24d34b2b02d7de126	214	227	(0, 0, 214, 227)	exact decoded RGBA pixels
+language_letter_chadik	../android/app/src/main/res/drawable/minik_chadik.webp	f251c0d056a6c30d8c58f3fd0ececd094b199aaee931cd635d10b7015b9725d2	248	308	(0, 0, 248, 308)	exact decoded RGBA pixels
+language_letter_chadik_capital	../android/app/src/main/res/drawable/minik_chadik_capital.webp	1f9a77a9c398ac5f8602bd1b5512d5617a88e87d2343cc3d71d440f8ac4935c8	223	226	(0, 0, 223, 226)	exact decoded RGBA pixels
+language_letter_kuf	../android/app/src/main/res/drawable/minik_kuf.webp	6feec26e066f1ed8c8b082f94b0f0664a5a85e2ae19d918b957cf0cc7c22f5e8	234	308	(0, 0, 234, 308)	exact decoded RGBA pixels
+language_letter_kuf_capital	../android/app/src/main/res/drawable/minik_kuf_capital.webp	847d984aa8da19015b27c0d9fa5666daa05695636851fc65f5e96b748b55e6c7	218	307	(0, 0, 218, 307)	exact decoded RGBA pixels
+language_letter_reish	../android/app/src/main/res/drawable/minik_reish.webp	86e8fed78324d877a253e6712925a182b535aece902cbc6d4fea67b84c59b7ef	187	232	(0, 0, 187, 232)	exact decoded RGBA pixels
+language_letter_reish_capital	../android/app/src/main/res/drawable/minik_reish_capital.webp	2f7b93d639209df919abec7a39c08529b6cc393dcf480f6c55c82366c81b41f8	195	227	(0, 0, 195, 227)	exact decoded RGBA pixels
+language_letter_shin	../android/app/src/main/res/drawable/minik_shin.webp	b8c478a34837bce24f4bbf7db189bc3e8b4af6b2440799a6c85806eed7970c15	231	263	(0, 0, 231, 263)	exact decoded RGBA pixels
+language_letter_shin_capital	../android/app/src/main/res/drawable/minik_shin_capital.webp	1eaf762ce1a0a3f7437829c0407805ed7c3ec18a812fed210a59fa83ef3f2d26	261	227	(0, 0, 261, 227)	exact decoded RGBA pixels
+language_letter_taf	../android/app/src/main/res/drawable/minik_taf.webp	d601f46bf37c38dbab5db135d7db412af99c4d223bb65b0167c06bdc8354006a	233	269	(0, 0, 233, 269)	exact decoded RGBA pixels
+language_letter_taf_capital	../android/app/src/main/res/drawable/minik_taf_capital.webp	38c11efd63c6ea64a7ce9d9ceb1f331448e1edcc903da3701193a84deda9c186	230	227	(0, 0, 230, 227)	exact decoded RGBA pixels
+language_letter_kaf_sofit	../android/app/src/main/res/drawable/minik_kaf_sofit.webp	968a1be7b0b7a45a0c638677bfc20de8fb5bce2b11908e01efa6288e61c5dfe0	196	436	(0, 0, 196, 436)	exact decoded RGBA pixels
+language_letter_kaf_sofit_capital	../android/app/src/main/res/drawable/minik_kaf_sofit_capital.webp	f8222b70e78762344db8fc058405acb000bb3dff3c7393952d66b6328114f214	196	390	(0, 0, 196, 390)	exact decoded RGBA pixels
+language_letter_mem_sofit	../android/app/src/main/res/drawable/minik_mem_sofit.webp	ed90a3887ec11ec6aead478aba1f1b034ce4905fe0af2b9ca5f7fa4bcb54d6fd	235	279	(0, 0, 235, 279)	exact decoded RGBA pixels
+language_letter_mem_sofit_capital	../android/app/src/main/res/drawable/minik_mem_sofit_capital.webp	2172b3c1ce496cafeee936ab13a60b1724e76b6338d0eb5fbb0385021b9d8cd3	213	227	(0, 0, 213, 227)	exact decoded RGBA pixels
+language_letter_noon_sofit	../android/app/src/main/res/drawable/minik_noon_sofit.webp	464af9bc19ca5dfd4beb6304a79123e4a93074247b34167c60b9ac51a60f6b5b	47	297	(0, 0, 47, 297)	exact decoded RGBA pixels
+language_letter_noon_sofit_capital	../android/app/src/main/res/drawable/minik_noon_sofit_capital.webp	81f295c32a6f890163b6d3396696ae0268cde02ce9d507e59c40b9e956763e4e	110	307	(0, 0, 110, 307)	exact decoded RGBA pixels
+language_letter_pei_sofit	../android/app/src/main/res/drawable/minik_pei_sofit.webp	399fd3842eece8aa73f7308243cd82c426f0d9528d486d28020401a37ce1c2e6	141	321	(0, 0, 141, 321)	exact decoded RGBA pixels
+language_letter_pei_sofit_capital	../android/app/src/main/res/drawable/minik_pei_sofit_capital.webp	01bbb3043be7efebaea93aa8914796f9fc377f6a6319659f8fdbf95cb05e95ea	214	307	(0, 0, 214, 307)	exact decoded RGBA pixels
+language_letter_chadik_sofit	../android/app/src/main/res/drawable/minik_chadik_sofit.webp	f302e375cf00cfcddd6c8552dc03a89bc26e3956e243dff6e2c1405d48710fbf	177	326	(0, 0, 177, 326)	exact decoded RGBA pixels
+language_letter_chadik_sofit_capital	../android/app/src/main/res/drawable/minik_chadik_sofit_capital.webp	8ac681a01707366ebe9a4ee5db189777af4d55d7f69e2dadfa7e732a15bd7a32	211	307	(0, 0, 211, 307)	exact decoded RGBA pixels
+language_learn_divider	../android/app/src/main/res/drawable/minik_divider_line.png	5940490d0dad77a23fc4f5a1e36ac0329ae9c1f8e016256b06cfcc3b1136b758	1180	4	(0, 0, 1180, 4)	exact original

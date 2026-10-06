@@ -1,0 +1,31 @@
+
+/* Native HUD reading order: each total label is physically left of its value.
+   English player labels also precede their values; Hebrew player order stays as-is. */
+html.minik-android-inset-host[dir] body[data-view="pong"] .pong-mini-total,
+html.minik-android-inset-host[dir] body.pong-landscape-active[data-view="pong"] .pong-total{
+  direction:ltr !important;flex-direction:row !important;
+}
+html.minik-android-inset-host[dir] .pong-mini-total > *,
+html.minik-android-inset-host[dir] .pong-total > *{unicode-bidi:isolate;}
+html.minik-android-inset-host[dir="ltr"] .pong-mini-score > span:not(:nth-child(2)){
+  direction:ltr;flex-direction:row-reverse;
+}
+html.minik-android-inset-host[dir="ltr"] body.pong-immersive-playing[data-view="pong"] .pong-infield-hud{
+  grid-template-columns:64px minmax(142px,1fr) 44px minmax(112px,1fr) 64px;
+  grid-template-areas:"back total help score new";
+}
+html.minik-android-inset-host[dir="ltr"] .pong-infield-back{grid-area:back;}
+html.minik-android-inset-host[dir="ltr"] .pong-mini-total{grid-area:total;}
+html.minik-android-inset-host[dir="ltr"] .pong-infield-help{grid-area:help;}
+html.minik-android-inset-host[dir="ltr"] .pong-mini-score{grid-area:score;}
+html.minik-android-inset-host[dir="ltr"] .pong-infield-new{grid-area:new;}
+@media(max-width:700px){
+  html.minik-android-inset-host[dir="ltr"] body.pong-immersive-playing[data-view="pong"] .pong-infield-hud{
+    grid-template-columns:60px minmax(126px,1fr) 44px minmax(104px,1fr) 60px;
+  }
+}
+/* The 34px arrow must fit inside the 44px frame. Legacy 7px padding plus
+   borders made a 50px child footprint, displacing it below the button centre. */
+html.minik-android-inset-host[dir] body[data-view="pong"] .back-btn{
+  display:grid !important;place-items:center;padding:0 !important;line-height:1;box-sizing:border-box;
+}

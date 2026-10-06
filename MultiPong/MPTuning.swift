@@ -1,0 +1,17 @@
+// Numeric profiles imported from current Android Tuning.kt; see parity manifest.
+// Android `Tuning.forDifficulty(BEGINNER)` returns the STARTER values, so Beginner shares `.easy`.
+import Foundation
+extension MPTuning {
+    static func values(_ level: MPLevel) -> MPTuning {
+        switch level {
+        case .easy, .beginner:
+            return MPTuning([0.22, 0.52, 0.72, 0.2, 0.18, 0.2, 0.78, 1.0, 0.4, 0.005, 0.58, 3.6, 0.54, 0.075, 1.3, 1.82, 0.08, 0.42, 0.3, 0.52, 0.24, 0.18, 0.15, 0.08, 0.86, 0.8, 0.15000000000000002], profile: MPProfile(forehandServe: 0.8, serveSuccess: 0.85, serveMiddle: 0.8, serveSpeed: 1.0, serveVariation: 0.05, serveReceive: [MPChance(0.85, 0.8), MPChance(0.9, 0.85), MPChance(0.95, 0.9)], forehandSame: MPChance(0.9, 0.85), forehandCross: MPChance(0.8, 0.7), backhandSame: MPChance(0.8, 0.75), backhandCross: MPChance(0.7, 0.5), answerDrop: 0.05, goodDrop: 0.05, backhandCrossGoodDrop: 0.05, firstForehandSpeed: 1.03, firstBackhandSpeed: 0.98, accelerateChance: 0.8, forehandSpeedUp: 0.01...0.03, backhandSpeedUp: 0.01...0.03, speedDown: 0.0...0.02, maxSpeed: 1.22))
+        case .medium:
+            return MPTuning([0.18, 0.43, 0.86, 0.16, 0.3, 0.24, 0.96, 0.92, 0.5, 0.012, 0.78, 3.8, 0.55, 0.078, 1.27, 1.78, 0.1, 0.3, 0.38, 0.68, 0.15, 0.1, 0.1, 0.14, 0.94, 0.7, 0.09999999999999998], profile: MPProfile(forehandServe: 0.7, serveSuccess: 0.9, serveMiddle: 0.6, serveSpeed: 1.05, serveVariation: 0.05, serveReceive: [MPChance(0.85, 0.8), MPChance(0.9, 0.85), MPChance(0.95, 0.9)], forehandSame: MPChance(0.95, 0.9), forehandCross: MPChance(0.85, 0.75), backhandSame: MPChance(0.85, 0.8), backhandCross: MPChance(0.75, 0.55), answerDrop: 0.04, goodDrop: 0.04, backhandCrossGoodDrop: 0.04, firstForehandSpeed: 1.05, firstBackhandSpeed: 1.03, accelerateChance: 0.9, forehandSpeedUp: 0.02...0.05, backhandSpeedUp: 0.02...0.04, speedDown: 0.0...0.02, maxSpeed: 1.32))
+        case .hard:
+            return MPTuning([0.105, 0.25, 1.02, 0.095, 0.38, 0.28, 1.1, 0.68, 0.6, 0.018, 0.94, 4.0, 0.56, 0.08, 1.24, 1.74, 0.13, 0.21, 0.44, 0.84, 0.085, 0.055, 0.05, 0.25, 1.02, 0.6, 0.050000000000000044], profile: MPProfile(forehandServe: 0.6, serveSuccess: 0.95, serveMiddle: 0.2, serveSpeed: 1.15, serveVariation: 0.1, serveReceive: [MPChance(0.9, 0.85), MPChance(0.95, 0.9), MPChance(0.95, 0.95)], forehandSame: MPChance(0.95, 0.95), forehandCross: MPChance(0.9, 0.8), backhandSame: MPChance(0.9, 0.85), backhandCross: MPChance(0.8, 0.6), answerDrop: 0.03, goodDrop: 0.03, backhandCrossGoodDrop: 0.03, firstForehandSpeed: 1.12, firstBackhandSpeed: 1.08, accelerateChance: 0.9, forehandSpeedUp: 0.02...0.05, backhandSpeedUp: 0.02...0.04, speedDown: 0.0...0.02, maxSpeed: 1.52))
+        case .superHard:
+            return MPTuning([0.075, 0.18, 1.18, 0.072, 0.44, 0.32, 1.22, 0.42, 0.68, 0.024, 1.08, 4.2, 0.57, 0.082, 1.21, 1.7, 0.16, 0.15, 0.49, 0.94, 0.045, 0.025, 0.025, 0.34, 1.09, 0.5, 0.050000000000000044], profile: MPProfile(forehandServe: 0.5, serveSuccess: 0.95, serveMiddle: 0.1, serveSpeed: 1.2, serveVariation: 0.05, serveReceive: [MPChance(0.95, 0.9), MPChance(0.95, 0.9), MPChance(0.95, 0.95)], forehandSame: MPChance(0.95, 0.95), forehandCross: MPChance(0.95, 0.85), backhandSame: MPChance(0.95, 0.9), backhandCross: MPChance(0.85, 0.7), answerDrop: 0.02, goodDrop: 0.02, backhandCrossGoodDrop: 0.03, firstForehandSpeed: 1.15, firstBackhandSpeed: 1.1, accelerateChance: 0.9, forehandSpeedUp: 0.02...0.05, backhandSpeedUp: 0.02...0.04, speedDown: 0.0...0.02, maxSpeed: 1.68))
+        }
+    }
+}

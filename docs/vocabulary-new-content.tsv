@@ -1,0 +1,480 @@
+type	level	theme	proposedBaseLevel	proposedCategory	english	hebrew	contentKind	imageRequired	assetKey	reason
+lexical	C		C	school_supplies	Backpack	תיק גב	word	true	backpack	A familiar school item that supports richer classroom and travel language.
+lexical	C		C	school_supplies	Notebook	מחברת	word	true	notebook	A high-frequency study item that belongs naturally in later basic vocabulary.
+lexical	C		C	environment	Forest	יער	word	true	forest	Useful environment vocabulary that children encounter in stories, travel, and science.
+lexical	C		C	places	Museum	מוזיאון	word	true	museum	A common culture-and-places word that broadens world knowledge without being obscure.
+lexical	C		C	transport	Bridge	גשר	word	true	bridge	Supports both travel vocabulary and prepositions in later sentences.
+lexical	C		C	technology	Battery	סוללה	word	true	battery	A concrete everyday technology term with strong practical value.
+lexical	C		C	technology	Internet	אינטרנט	word	false		A core modern concept, but too abstract for text-free picture activities.
+lexical	C		C	time	Weather	מזג אוויר	word	false		Highly useful daily vocabulary that is better taught through text and speech than one image.
+lexical	D		D	travel	Passport	דרכון	word	true	passport	A practical travel document word appropriate for older children.
+lexical	D		D	transport	Ticket	כרטיס	word	true	ticket	Useful for buses, trains, events, and everyday travel talk.
+lexical	D		D	technology	Charger	מטען	word	true	charger	A concrete modern device accessory used in daily life.
+lexical	D		D	school_work	Project	פרויקט	word	false		A common school word that belongs in later study vocabulary, not picture matching.
+lexical	D		D	planning	Schedule	לוח זמנים	abstract_word	false		A planning concept with strong usefulness but weak single-image clarity.
+lexical	D		D	communication	Message	הודעה	abstract_word	false		Common modern communication vocabulary that is too context-dependent for a text-free picture.
+lexical	D		D	school_work	Experiment	ניסוי	word	false		A useful school-science term better taught lexically than as a picture target.
+lexical	D		D	social_concepts	Community	קהילה	abstract_word	false		A useful civic/social concept that should stay in the curriculum despite low imageability.
+lexical	D		D	reasoning	Goal	מטרה	abstract_word	false		Supports planning and motivation language for older children.
+lexical	D		D	reasoning	Reason	סיבה	abstract_word	false		A foundational abstract word for explanations, opinions, and cause/effect.
+lexical	D		D	school_work	Assignment	מטלה	word	false		A common school-management word for older elementary learners.
+lexical	D		D	school_work	Presentation	מצגת	word	false		Useful school-project vocabulary with clear later-grade relevance.
+lexical	D		D	school_work	Paragraph	פסקה	word	false		A basic literacy term that appears in reading and writing tasks.
+lexical	D		D	school_work	Summary	סיכום	word	false		Supports study skills and speaking about texts.
+lexical	D		D	technology	Password	סיסמה	word	false		A high-value digital safety word that is not picture-safe.
+lexical	D		D	technology	Website	אתר אינטרנט	word	false		Core web vocabulary for modern learners.
+lexical	D		D	technology	Search	חיפוש	word	false		Useful digital-action vocabulary better handled as text than image.
+lexical	D		D	technology	Download	הורדה	word	false		A common media and device term with strong practical value.
+lexical	D		D	technology	Upload	העלאה	word	false		Pairs naturally with modern school and media use.
+lexical	D		D	technology	Screen time	זמן מסך	word	false		An everyday family and school concept that is not picture-distinct.
+lexical	D		D	technology	Microphone	מיקרופון	word	true	microphone	A common media and classroom object with strong image clarity.
+lexical	D		D	science	Energy	אנרגיה	word	false		A central school-science word that is better taught lexically than pictorially.
+lexical	D		D	science	Material	חומר	word	false		A broadly useful school/science term for descriptions and experiments.
+lexical	D		D	science	Planet	כוכב לכת	word	true	planet	A useful science word with a clear visual referent.
+lexical	D		D	science	Gravity	כבידה	word	false		High-value science vocabulary that is too abstract for one illustration.
+lexical	D		D	science	Temperature	טמפרטורה	word	false		Useful in science and health contexts, but not reliably one-image identifiable.
+lexical	D		D	environment	Recycling	מיחזור	word	false		An everyday environmental concept that needs language more than a picture.
+lexical	D		D	environment	Nature	טבע	word	false		Useful broad vocabulary, but too general for a single text-free image.
+lexical	D		D	environment	Pollution	זיהום	word	false		Important world knowledge vocabulary that is not reliably picture-specific.
+lexical	D		D	travel	Map app	אפליקציית מפות	word	false		A modern travel/navigation term with practical value.
+lexical	D		D	travel	Platform	רציף	word	true	platform	Useful public-transport vocabulary with a concrete visual form.
+lexical	D		D	health_safety	Emergency	מקרה חירום	word	false		A crucial safety word that is better taught in text and speech.
+lexical	D		D	health_safety	Bandage	תחבושת	word	true	bandage	A clear first-aid item with strong picture clarity.
+lexical	D		D	health_safety	Medicine	תרופה	word	true	medicine	A common health word that can be illustrated concretely.
+lexical	D		D	health_safety	Allergy	אלרגיה	word	false		High-value health vocabulary but too abstract for image-only teaching.
+lexical	D		D	feelings	Proud	גאה	abstract_word	false		Useful socio-emotional vocabulary for older children.
+lexical	D		D	feelings	Nervous	לחוץ	abstract_word	false		A common self-expression word for school and social situations.
+lexical	D		D	feelings	Calm	רגוע	abstract_word	false		Useful emotional vocabulary that should not be forced into picture activities.
+lexical	D		D	opinions	Disagree	לא מסכים	word	false		Useful conversation vocabulary for older children.
+lexical	D		D	opinions	Prefer	מעדיף	word	false		Supports choices, comparison, and opinion language.
+lexical	D		D	planning	Plan	תוכנית	abstract_word	false		A foundational word for organization and future actions.
+lexical	D		D	planning	Prepare	להתכונן	abstract_word	false		Useful action vocabulary, but not safely image-distinct.
+lexical	D		D	communication	Invitation	הזמנה לאירוע	abstract_word	false		Clarify the event-invitation sense so it does not collide with reservation vocabulary.
+lexical	D		D	communication	Introduce	להציג	abstract_word	false		High-value social/classroom language without strong one-image clarity.
+lexical	E		E	social_concepts	Privacy	פרטיות	abstract_word	false		A modern safety and social concept that belongs in later vocabulary.
+lexical	E		E	school_work	Evidence	ראיה	word	false		A key school and reasoning term that should stay lexical.
+lexical	E		E	reasoning	Strategy	אסטרטגיה	abstract_word	false		A high-value planning/problem-solving word for older learners.
+lexical	E		E	time	Climate	אקלים	word	false		Important world-knowledge vocabulary that is not picture-specific.
+lexical	E		E	reasoning	Debate	דיון	abstract_word	false		Useful discussion vocabulary for school and social issues.
+lexical	E		E	social_concepts	Responsibility	אחריות	abstract_word	false		A core mature concept better taught through language than pictures.
+lexical	E		E	social_concepts	Respect	כבוד	abstract_word	false		High-frequency social vocabulary with low single-image clarity.
+lexical	E		E	family_people	Volunteer	מתנדב	word	false		Useful civic vocabulary, but visually ambiguous without context.
+lexical	E		E	school_work	Research	מחקר	word	false		A key school-project word that is too abstract for picture-only tasks.
+lexical	E		E	school_work	Argument	טיעון	word	false		Supports persuasive writing and structured discussion.
+lexical	E		E	school_work	Conclusion	מסקנה	word	false		Essential reasoning and writing vocabulary for older learners.
+lexical	E		E	school_work	Explanation	הסבר	word	false		A high-value school and conversation word.
+lexical	E		E	school_work	Source	מקור	word	false		Useful for media literacy and research skills.
+lexical	E		E	school_work	Report	דוח	word	false		A natural school-project term with broad usefulness.
+lexical	E		E	school_work	Data	נתונים	word	false		Common science and media vocabulary for older children.
+lexical	E		E	school_work	Feedback	משוב	word	false		A valuable classroom and teamwork word.
+lexical	E		E	school_work	Draft	טיוטה	word	false		Useful for writing and project work.
+lexical	E		E	school_work	Topic sentence	משפט נושא	word	false		A clear literacy term for upper-elementary writing.
+lexical	E		E	school_work	Citation	ציטוט	word	false		A useful later writing/research term without picture clarity.
+lexical	E		E	technology	Account	חשבון משתמש	word	false		A core digital-life word needed for websites and apps.
+lexical	E		E	technology	Profile	פרופיל	word	false		Common app and media vocabulary for older children.
+lexical	E		E	technology	Notification	התראה	word	false		A modern device word with strong practical value.
+lexical	E		E	technology	Update	עדכון	word	false		A frequent term in devices, apps, and news.
+lexical	E		E	technology	Settings	הגדרות	word	false		A core device-navigation word that is inherently interface-based.
+lexical	E		E	technology	Internet connection	חיבור לאינטרנט	word	false		Useful modern technology vocabulary, but the intended sense should be explicit and non-image.
+lexical	E		E	technology	Network	רשת	word	false		Important digital vocabulary for later learners.
+lexical	E		E	technology	Browser	דפדפן	word	false		A standard internet word that belongs in older-child vocabulary.
+lexical	E		E	technology	Link	קישור	word	false		Essential web and communication vocabulary.
+lexical	E		E	technology	Online	מקוון	word	false		Useful modern adjective for classes, games, and media.
+lexical	E		E	technology	Offline	לא מקוון	word	false		Practical paired vocabulary with strong daily use.
+lexical	E		E	technology	Podcast	פודקאסט	word	false		A contemporary media word older children recognize.
+lexical	E		E	technology	Video call	שיחת וידאו	word	false		A high-value communication term after widespread daily use.
+lexical	E		E	technology	Comment section	אזור תגובות	word	false		Useful media-literacy vocabulary.
+lexical	E		E	technology	Search result	תוצאת חיפוש	word	false		A practical internet term for school and home.
+lexical	E		E	science	Atom	אטום	word	false		A foundational science word for older children.
+lexical	E		E	science	Molecule	מולקולה	word	false		Useful introductory science vocabulary.
+lexical	E		E	science	Experiment result	תוצאת ניסוי	word	false		Supports school science language directly.
+lexical	E		E	science	Observation	תצפית	word	false		A high-value science process word.
+lexical	E		E	science	Hypothesis	השערה	word	false		Natural upper-elementary science vocabulary.
+lexical	E		E	science	Measure	למדוד	word	false		A useful academic verb that is too context-dependent for image-only use.
+lexical	E		E	science	Force	כוח	word	false		A central school-science term that needs language support.
+lexical	E		E	science	Orbit	מסלול הקפה	word	false		Useful astronomy vocabulary with more conceptual than pictorial value.
+lexical	E		E	science	Solar panel	פאנל סולארי	word	true	solar_panel	A concrete modern science/environment object.
+lexical	E		E	science	Laboratory	מעבדה	word	true	laboratory	A common place word with a recognizable visual scene.
+lexical	E		E	environment	Resource	משאב	word	false		A mature but useful world-knowledge concept.
+lexical	E		E	environment	Habitat	בית גידול	word	false		A strong science/environment term that benefits from lexical teaching.
+lexical	E		E	environment	Drought	בצורת	word	false		Useful environmental vocabulary with limited picture precision.
+lexical	E		E	environment	Flood	שיטפון	word	true	flood	A clear real-world event word with strong visual clarity.
+lexical	E		E	environment	Wildfire	שרפת יער	word	true	wildfire	A concrete environmental emergency word.
+lexical	E		E	environment	Compost	קומפוסט	word	false		Useful sustainability vocabulary, but too context-dependent for one image.
+lexical	E		E	environment	Renewable energy	אנרגיה מתחדשת	word	false		A modern concept better learned through text and discussion.
+lexical	E		E	environment	Carbon footprint	טביעת רגל פחמנית	word	false		Important contemporary vocabulary, but highly abstract.
+lexical	E		E	environment	Conservation	שימור	word	false		A useful civic/environment term not suited to picture-only use.
+lexical	E		E	environment	Waste	פסולת	word	true	waste	A concrete environment word with clear visual referent.
+lexical	E		E	travel	Reservation	הזמנת מקום	word	false		Clarify the booking sense so it does not collide with invitation vocabulary.
+lexical	E		E	travel	Destination	יעד	word	false		A practical planning word with low image clarity.
+lexical	E		E	travel	Itinerary	מסלול טיול	word	false		A useful later travel-planning concept.
+lexical	E		E	travel	Customs	מכס	word	false		Important travel vocabulary that depends on institutional context.
+lexical	E		E	travel	Luggage	מזוודות	word	true	luggage	A common travel word with clear visual form.
+lexical	E		E	travel	Boarding pass	כרטיס עלייה למטוס	word	true	boarding_pass	Concrete travel document vocabulary with strong practical value.
+lexical	E		E	travel	Delay	עיכוב	word	false		A common travel concept that is not picture-distinct.
+lexical	E		E	travel	Tour guide	מדריך טיולים	word	true	tour_guide	A useful travel/community role with a concrete scene.
+lexical	E		E	travel	Crosswalk	מעבר חציה	word	true	crosswalk	A high-value safety and navigation term.
+lexical	E		E	travel	Intersection	צומת	word	true	intersection	Useful navigation vocabulary that can be shown clearly.
+lexical	E		E	health_safety	Injury	פציעה	word	false		A useful health/safety term broader than one picture can specify.
+lexical	E		E	health_safety	Symptoms	תסמינים	word	false		A practical health word that belongs in later vocabulary.
+lexical	E		E	health_safety	Treatment	טיפול	word	false		A common health concept that is too broad for one image.
+lexical	E		E	health_safety	Appointment	תור	word	false		Useful healthcare and daily-life vocabulary.
+lexical	E		E	health_safety	Diagnosis	אבחנה	word	false		A mature but useful health term for older children.
+lexical	E		E	health_safety	Exercise	פעילות גופנית	word	false		Useful wellness vocabulary with multiple possible referents.
+lexical	E		E	health_safety	Nutrition	תזונה	word	false		A strong health-education term with low image specificity.
+lexical	E		E	health_safety	Hydration	שתייה מספקת	word	false		Useful health advice vocabulary that is not a single object.
+lexical	E		E	health_safety	Sunscreen	קרם הגנה	word	true	sunscreen	A concrete safety product children recognize.
+lexical	E		E	health_safety	Seat belt	חגורת בטיחות	word	true	seat_belt	A central safety item with clear visual identity.
+lexical	E		E	social_concepts	Boundary	גבול אישי	abstract_word	false		Important socio-emotional vocabulary for older children.
+lexical	E		E	social_concepts	Trust	אמון	abstract_word	false		A useful relationship word that resists picture-only teaching.
+lexical	E		E	social_concepts	Apology	התנצלות	abstract_word	false		High-value social vocabulary for conflicts and repair.
+lexical	E		E	social_concepts	Permission	רשות	abstract_word	false		A common school and family concept with low image clarity.
+lexical	E		E	social_concepts	Pressure	לחץ חברתי	abstract_word	false		Useful later-child social vocabulary.
+lexical	E		E	social_concepts	Independence	עצמאות	abstract_word	false		A mature but common concept for adolescence.
+lexical	E		E	social_concepts	Reputation	מוניטין	abstract_word	false		Useful media/social vocabulary for older children.
+lexical	E		E	social_concepts	Citizenship	אזרחות	abstract_word	false		A world-knowledge concept suitable for older learners.
+lexical	E		E	social_concepts	Rule	כלל	abstract_word	false		A high-frequency concept better taught textually than through an isolated picture.
+lexical	E		E	social_concepts	Consequence	תוצאה	abstract_word	false		Supports reasoning, behavior, and cause/effect language.
+lexical	E		E	reasoning	Cause	גורם	abstract_word	false		Essential abstract vocabulary for explanation and science.
+lexical	E		E	reasoning	Effect	השפעה	abstract_word	false		Pairs naturally with cause/effect reasoning work.
+lexical	E		E	reasoning	Contrast	ניגוד	abstract_word	false		Supports richer comparison language in school.
+lexical	E		E	reasoning	Evidence-based	מבוסס ראיות	abstract_word	false		A mature but useful phrase for reasoning and science.
+lexical	E		E	reasoning	Pattern	דפוס	abstract_word	false		Broadly useful across math, science, and social situations.
+lexical	E		E	reasoning	Connection	קשר	abstract_word	false		A common abstract word for ideas and relationships.
+lexical	E		E	reasoning	Alternative	חלופה	abstract_word	false		Useful problem-solving and planning vocabulary.
+lexical	E		E	reasoning	Decision	החלטה	abstract_word	false		A core word for autonomy and planning.
+lexical	E		E	reasoning	Priority	עדיפות	abstract_word	false		Useful for planning, school, and group work.
+lexical	E		E	planning	Deadline	מועד אחרון	abstract_word	false		A high-value study/planning term for older learners.
+lexical	E		E	planning	Reminder	תזכורת	abstract_word	false		Common daily-life vocabulary linked to organization.
+lexical	E		E	planning	Routine	שגרה	abstract_word	false		Useful for health, school, and self-management language.
+lexical	E		E	planning	Balance	איזון	abstract_word	false		A mature but ordinary concept for time and wellbeing.
+lexical	E		E	planning	Budget	תקציב	abstract_word	false		A practical everyday world concept for older children.
+lexical	E		E	planning	Option	אפשרות	abstract_word	false		Supports choice, comparison, and problem-solving.
+lexical	E		E	planning	Checklist	רשימת בדיקה	abstract_word	false		Keep the planning concept lexically, but a text-free image would not uniquely communicate checklist.
+lexical	E		E	planning	Calendar	לוח שנה	abstract_word	true	calendar	A common planning tool with a stable visual referent.
+lexical	E		E	planning	Responsibility chart	טבלת אחריות	abstract_word	false		Useful classroom/home organization vocabulary.
+lexical	E		E	communication	Reply	תגובה	abstract_word	false		A high-frequency communication word for messages and discussions.
+lexical	E		E	communication	Conversation	שיחה	abstract_word	false		Very useful language, but not a single picture concept.
+lexical	E		E	communication	Announcement	הודעה רשמית	abstract_word	false		Common school/community vocabulary with low image specificity.
+lexical	E		E	communication	Warning	אזהרה	abstract_word	false		Important safety and school vocabulary that depends on context.
+lexical	E		E	communication	Discussion	שיחה מעמיקה	abstract_word	false		A useful classroom and friendship term for older learners.
+lexical	E		E	communication	Interview	ראיון	abstract_word	false		Common media/school vocabulary with broad usefulness.
+lexical	E		E	communication	Instruction	הוראה	abstract_word	false		Useful school and technology vocabulary.
+lexical	E		E	communication	Opinion poll	סקר דעות	abstract_word	false		A natural later-child media/civics term.
+lexical	E		E	communication	Headline	כותרת	abstract_word	false		Useful media literacy vocabulary.
+lexical	E		E	communication	Translation	תרגום	abstract_word	false		A practical language-learning word that does not need a picture.
+lexical	E		E	food	Ingredient	מרכיב	word	false		A practical cooking and nutrition word.
+lexical	E		E	food	Recipe	מתכון	word	false		Common home/school vocabulary that is more textual than pictorial.
+lexical	E		E	food	Snack bar	מזנון	word	true	snack_bar	A concrete place/item concept useful in school and travel settings.
+lexical	E		E	food	Takeout	אוכל לקחת	word	false		A common real-world concept with low image specificity.
+lexical	E		E	food	Balanced meal	ארוחה מאוזנת	word	false		A useful health concept that needs explanation more than one picture.
+lexical	E		E	food	Label	תווית	word	true	label	Useful daily-life literacy vocabulary with a concrete visual target.
+lexical	E		E	food	Portion	מנה	word	false		A practical food/health term that is context-dependent.
+lexical	E		E	food	Ingredient list	רשימת מרכיבים	word	false		Useful food-label vocabulary for older learners.
+lexical	E		E	food	Reusable bottle	בקבוק רב פעמי	word	true	reusable_bottle	A concrete environmentally relevant everyday object.
+lexical	E		E	food	Lunchbox	קופסת אוכל	word	true	lunchbox	A clear school/home object with direct practical value.
+lexical	E		E	civics_world	Election	בחירות	word	false		A common world-knowledge term for older children.
+lexical	E		E	civics_world	Law	חוק	word	false		A foundational civic concept that is not picture-distinct.
+lexical	E		E	civics_world	Service	שירות	word	false		Useful civic and daily-life vocabulary with broad abstract use.
+lexical	E		E	civics_world	Museum guide	מדריך במוזיאון	word	true	museum_guide	A concrete civic/culture role that can be shown clearly.
+lexical	E		E	civics_world	Library card	כרטיס ספרייה	word	false		Keep the civic-literacy concept lexically, but a text-free card image would be too ambiguous.
+lexical	E		E	civics_world	Neighborhood	שכונה	word	false		Useful place vocabulary, but too broad for one text-free illustration.
+lexical	E		E	civics_world	Public space	מרחב ציבורי	word	false		A useful social/world concept with low single-image precision.
+lexical	E		E	civics_world	Community center	מרכז קהילתי	word	true	community_center	A common civic place word with recognizable visual cues.
+lexical	E		E	civics_world	Recycling station	תחנת מיחזור	word	true	recycling_station	A concrete environmental civic location.
+lexical	E		E	civics_world	Volunteer shift	משמרת התנדבות	word	false		Useful later-child social participation vocabulary.
+sentence	D	personal_info	D	sentences	How old are you now?	בן כמה אתה עכשיו?	sentence	false		
+sentence	D	personal_info	D	sentences	Where are you from originally?	מאיפה אתה במקור?	sentence	false		
+sentence	D	personal_info	D	sentences	What is your address?	מה הכתובת שלך?	sentence	false		
+sentence	D	personal_info	D	sentences	Can you spell your last name?	אתה יכול לאיית את שם המשפחה שלך?	sentence	false		
+sentence	D	personal_info	D	sentences	Who should we call in an emergency?	למי צריך להתקשר במקרה חירום?	sentence	false		
+sentence	D	personal_info	D	sentences	What grade are you in this year?	באיזו כיתה אתה השנה?	sentence	false		
+sentence	D	personal_info	D	sentences	Do you have your student card with you?	האם כרטיס התלמיד שלך איתך?	sentence	false		
+sentence	D	personal_info	D	sentences	When is your birthday this year?	מתי יום ההולדת שלך השנה?	sentence	false		
+sentence	D	school	D	sentences	Our teacher asked us to finish the summary by tomorrow.	המורה ביקשה מאיתנו לסיים את הסיכום עד מחר.	sentence	false		
+sentence	D	school	D	sentences	Did you bring the materials for the experiment?	הבאת את החומרים לניסוי?	sentence	false		
+sentence	D	school	D	sentences	I need a quiet place to work on my project.	אני צריך מקום שקט לעבוד בו על הפרויקט שלי.	sentence	false		
+sentence	D	school	D	sentences	Why did the class change rooms today?	למה הכיתה החליפה חדר היום?	sentence	false		
+sentence	D	school	D	sentences	Can you explain this paragraph in simpler words?	אתה יכול להסביר את הפסקה הזאת במילים פשוטות יותר?	sentence	false		
+sentence	D	school	D	sentences	We checked our answers before we handed in the assignment.	בדקנו את התשובות שלנו לפני שהגשנו את המטלה.	sentence	false		
+sentence	D	school	D	sentences	The presentation starts right after lunch break.	המצגת מתחילה מיד אחרי הפסקת הצהריים.	sentence	false		
+sentence	D	school	D	sentences	I wrote the main idea at the top of the page.	כתבתי את הרעיון המרכזי בראש העמוד.	sentence	false		
+sentence	D	daily_routine	D	sentences	I usually pack my bag the night before school.	אני בדרך כלל אורז את התיק בלילה שלפני בית הספר.	sentence	false		
+sentence	D	daily_routine	D	sentences	What time does your bus arrive in the morning?	באיזו שעה האוטובוס שלך מגיע בבוקר?	sentence	false		
+sentence	D	daily_routine	D	sentences	My brother feeds the dog before breakfast.	אחי מאכיל את הכלב לפני ארוחת הבוקר.	sentence	false		
+sentence	D	daily_routine	D	sentences	We clean the kitchen together after dinner.	אנחנו מנקים יחד את המטבח אחרי ארוחת הערב.	sentence	false		
+sentence	D	daily_routine	D	sentences	I forgot to charge my tablet last night.	שכחתי להטעין את הטאבלט שלי אתמול בלילה.	sentence	false		
+sentence	D	daily_routine	D	sentences	Do you always check the weather before you leave?	אתה תמיד בודק את מזג האוויר לפני שאתה יוצא?	sentence	false		
+sentence	D	daily_routine	D	sentences	She keeps her homework folder near the door.	היא שומרת את תיקיית שיעורי הבית ליד הדלת.	sentence	false		
+sentence	D	daily_routine	D	sentences	I try to sleep earlier before a big test.	אני מנסה לישון מוקדם יותר לפני מבחן גדול.	sentence	false		
+sentence	D	family_friends	D	sentences	My cousin moved to a new city last month.	בן דוד שלי עבר לעיר חדשה בחודש שעבר.	sentence	false		
+sentence	D	family_friends	D	sentences	Why did your friend miss the meeting yesterday?	למה החבר שלך החמיץ את הפגישה אתמול?	sentence	false		
+sentence	D	family_friends	D	sentences	We promised to help Grandma with her shopping.	הבטחנו לעזור לסבתא בקניות שלה.	sentence	false		
+sentence	D	family_friends	D	sentences	Can your aunt pick us up after practice?	דודה שלך יכולה לאסוף אותנו אחרי האימון?	sentence	false		
+sentence	D	family_friends	D	sentences	I sent my friend a message to check if he was okay.	שלחתי לחבר שלי הודעה כדי לבדוק אם הוא בסדר.	sentence	false		
+sentence	D	family_friends	D	sentences	My sister and I rarely agree about movies.	אחותי ואני כמעט אף פעם לא מסכימים לגבי סרטים.	sentence	false		
+sentence	D	family_friends	D	sentences	Their family invited us for dinner on Friday.	המשפחה שלהם הזמינה אותנו לארוחת ערב ביום שישי.	sentence	false		
+sentence	D	family_friends	D	sentences	Who do you talk to when you feel worried?	עם מי אתה מדבר כשאתה מרגיש מודאג?	sentence	false		
+sentence	D	feelings_opinions	D	sentences	I felt nervous before I spoke in front of the class.	הרגשתי לחוץ לפני שדיברתי מול הכיתה.	sentence	false		
+sentence	D	feelings_opinions	D	sentences	Why are you so proud of this project?	למה אתה כל כך גאה בפרויקט הזה?	sentence	false		
+sentence	D	feelings_opinions	D	sentences	I do not agree with that idea yet.	אני עדיין לא מסכים עם הרעיון הזה.	sentence	false		
+sentence	D	feelings_opinions	D	sentences	She prefers working quietly by herself.	היא מעדיפה לעבוד בשקט לבד.	sentence	false		
+sentence	D	feelings_opinions	D	sentences	Can we talk about what made you upset?	אפשר לדבר על מה שהכעיס אותך?	sentence	false		
+sentence	D	feelings_opinions	D	sentences	My opinion changed after I heard your reason.	הדעה שלי השתנתה אחרי ששמעתי את הסיבה שלך.	sentence	false		
+sentence	D	feelings_opinions	D	sentences	He stayed calm even when the game got tense.	הוא נשאר רגוע גם כשהמשחק נעשה מתוח.	sentence	false		
+sentence	D	feelings_opinions	D	sentences	Do you think this rule is fair to everyone?	אתה חושב שהכלל הזה הוגן כלפי כולם?	sentence	false		
+sentence	D	planning	D	sentences	We need a plan before we start the group task.	אנחנו צריכים תוכנית לפני שנתחיל את המשימה הקבוצתית.	sentence	false		
+sentence	D	planning	D	sentences	What is the first thing on your schedule today?	מה הדבר הראשון בלוח הזמנים שלך היום?	sentence	false		
+sentence	D	planning	D	sentences	I set a reminder so I would not forget the meeting.	קבעתי תזכורת כדי לא לשכוח את הפגישה.	sentence	false		
+sentence	D	planning	D	sentences	Can you prepare the materials before the lesson starts?	אתה יכול להכין את החומרים לפני שהשיעור מתחיל?	sentence	false		
+sentence	D	planning	D	sentences	Our team changed the order of the presentation.	הצוות שלנו שינה את סדר המצגת.	sentence	false		
+sentence	D	planning	D	sentences	Why did we move the trip to next week?	למה דחינו את הטיול לשבוע הבא?	sentence	false		
+sentence	D	planning	D	sentences	I keep a checklist in my notebook when I study.	אני שומר רשימת בדיקה במחברת כשאני לומד.	sentence	false		
+sentence	D	planning	D	sentences	Let us decide which task matters most right now.	בואו נחליט איזו משימה הכי חשובה עכשיו.	sentence	false		
+sentence	D	travel	D	sentences	Where are you supposed to meet the guide?	איפה אתם אמורים לפגוש את המדריך?	sentence	false		
+sentence	D	travel	D	sentences	The train platform was crowded after school.	רציף הרכבת היה צפוף אחרי הלימודים.	sentence	false		
+sentence	D	travel	D	sentences	I almost left my ticket in the car.	כמעט השארתי את הכרטיס שלי במכונית.	sentence	false		
+sentence	D	travel	D	sentences	Can you show me the route on the map app?	אתה יכול להראות לי את המסלול באפליקציית המפות?	sentence	false		
+sentence	D	travel	D	sentences	We crossed the bridge before the rain started.	חצינו את הגשר לפני שהגשם התחיל.	sentence	false		
+sentence	D	travel	D	sentences	Why is the bus delayed again today?	למה האוטובוס שוב מתעכב היום?	sentence	false		
+sentence	D	travel	D	sentences	Please stay close to the group in the station.	בבקשה הישאר קרוב לקבוצה בתחנה.	sentence	false		
+sentence	D	travel	D	sentences	My passport is in the front pocket of my bag.	הדרכון שלי נמצא בכיס הקדמי של התיק.	sentence	false		
+sentence	D	food_shopping	D	sentences	Do we have enough ingredients for dinner?	יש לנו מספיק מרכיבים לארוחת הערב?	sentence	false		
+sentence	D	food_shopping	D	sentences	I read the label before I bought the snack.	קראתי את התווית לפני שקניתי את החטיף.	sentence	false		
+sentence	D	food_shopping	D	sentences	What should we order for the class party?	מה כדאי להזמין למסיבת הכיתה?	sentence	false		
+sentence	D	food_shopping	D	sentences	My lunchbox leaked in my backpack today.	קופסת האוכל שלי נזלה היום בתוך התיק.	sentence	false		
+sentence	D	food_shopping	D	sentences	Can you compare the prices of these two drinks?	אתה יכול להשוות בין המחירים של שני המשקאות האלה?	sentence	false		
+sentence	D	food_shopping	D	sentences	We chose a cheaper option at the supermarket.	בחרנו אפשרות זולה יותר בסופרמרקט.	sentence	false		
+sentence	D	food_shopping	D	sentences	I packed a reusable bottle for the trip.	ארזתי בקבוק רב פעמי לטיול.	sentence	false		
+sentence	D	food_shopping	D	sentences	Why did the restaurant change the menu?	למה המסעדה שינתה את התפריט?	sentence	false		
+sentence	D	health_safety	D	sentences	Where is the nearest first-aid kit?	איפה ערכת העזרה הראשונה הקרובה ביותר?	sentence	false		
+sentence	D	health_safety	D	sentences	He wore a helmet because the road was busy.	הוא חבש קסדה כי הדרך הייתה עמוסה.	sentence	false		
+sentence	D	health_safety	D	sentences	Can you put a bandage on this cut?	אתה יכול לשים תחבושת על החתך הזה?	sentence	false		
+sentence	D	health_safety	D	sentences	The teacher asked if anyone had an allergy.	המורה שאלה אם למישהו יש אלרגיה.	sentence	false		
+sentence	D	health_safety	D	sentences	Why do I need to drink more water today?	למה אני צריך לשתות יותר מים היום?	sentence	false		
+sentence	D	health_safety	D	sentences	Please fasten your seat belt before we leave.	בבקשה תחגור את חגורת הבטיחות לפני שנצא.	sentence	false		
+sentence	D	health_safety	D	sentences	I stayed home because I had a fever.	נשארתי בבית כי היה לי חום.	sentence	false		
+sentence	D	health_safety	D	sentences	What should we do in an emergency?	מה צריך לעשות במקרה חירום?	sentence	false		
+sentence	D	technology_media	D	sentences	I changed my password after the app warned me.	שיניתי את הסיסמה שלי אחרי שהאפליקציה הזהירה אותי.	sentence	false		
+sentence	D	technology_media	D	sentences	Can you send me the website link again?	אתה יכול לשלוח לי שוב את הקישור לאתר?	sentence	false		
+sentence	D	technology_media	D	sentences	The microphone stopped working during the call.	המיקרופון הפסיק לעבוד בזמן השיחה.	sentence	false		
+sentence	D	technology_media	D	sentences	How much screen time do you get on school nights?	כמה זמן מסך מותר לך בערבים שלפני יום לימודים?	sentence	false		
+sentence	D	technology_media	D	sentences	I downloaded the file before the internet went down.	הורדתי את הקובץ לפני שהאינטרנט נפל.	sentence	false		
+sentence	D	technology_media	D	sentences	She uses headphones when the room gets noisy.	היא משתמשת באוזניות כשהחדר נעשה רועש.	sentence	false		
+sentence	D	technology_media	D	sentences	Why did you upload the wrong photo?	למה העלית את התמונה הלא נכונה?	sentence	false		
+sentence	D	technology_media	D	sentences	My message did not reach the group this morning.	ההודעה שלי לא הגיעה לקבוצה הבוקר.	sentence	false		
+sentence	D	science_environment	D	sentences	The planetarium visit made the science lesson easier to understand.	הביקור בפלנטריום הפך את שיעור המדעים לקל יותר להבנה.	sentence	false		
+sentence	D	science_environment	D	sentences	We measured the temperature every hour during the experiment.	מדדנו את הטמפרטורה בכל שעה במהלך הניסוי.	sentence	false		
+sentence	D	science_environment	D	sentences	Why does this material feel lighter than metal?	למה החומר הזה מרגיש קל יותר ממתכת?	sentence	false		
+sentence	D	science_environment	D	sentences	Our teacher explained how gravity affects the moon.	המורה שלנו הסבירה איך הכבידה משפיעה על הירח.	sentence	false		
+sentence	D	science_environment	D	sentences	The recycling project helped the whole class waste less paper.	פרויקט המיחזור עזר לכל הכיתה לבזבז פחות נייר.	sentence	false		
+sentence	D	science_environment	D	sentences	Can you name one energy source that does not pollute the air?	אתה יכול לציין מקור אנרגיה אחד שלא מזהם את האוויר?	sentence	false		
+sentence	D	science_environment	D	sentences	We learned that pollution can harm animals and people.	למדנו שזיהום יכול לפגוע בבעלי חיים ובאנשים.	sentence	false		
+sentence	D	social_communication	D	sentences	Could you repeat that more slowly so everyone can follow?	אתה יכול לחזור על זה לאט יותר כדי שכולם יוכלו לעקוב?	sentence	false		
+sentence	D	social_communication	D	sentences	I did not mean to sound rude in my message.	לא התכוונתי להישמע גס בהודעה שלי.	sentence	false		
+sentence	D	social_communication	D	sentences	Why did the conversation stop so suddenly?	למה השיחה נעצרה כל כך פתאום?	sentence	false		
+sentence	D	social_communication	D	sentences	Please explain your idea before we vote on it.	בבקשה תסביר את הרעיון שלך לפני שנצביע עליו.	sentence	false		
+sentence	D	social_communication	D	sentences	She asked a careful question instead of making an angry comment.	היא שאלה שאלה זהירה במקום להעיר הערה כועסת.	sentence	false		
+sentence	D	social_communication	D	sentences	Can we solve this misunderstanding without blaming anyone?	אפשר לפתור את אי ההבנה הזאת בלי להאשים אף אחד?	sentence	false		
+sentence	D	social_communication	D	sentences	Our group chat became clearer after we set one simple rule.	הצ'אט הקבוצתי שלנו נעשה ברור יותר אחרי שקבענו כלל פשוט אחד.	sentence	false		
+sentence	D	social_communication	D	sentences	He apologized right away when he realized the joke hurt someone.	הוא התנצל מיד כשהבין שהבדיחה פגעה במישהו.	sentence	false		
+sentence	E	school_projects	E	sentences	Our group divided the project into smaller tasks so everyone could contribute.	הקבוצה שלנו חילקה את הפרויקט למשימות קטנות יותר כדי שכולם יוכלו לתרום.	sentence	false		
+sentence	E	school_projects	E	sentences	Why did the teacher ask for another draft before the final report?	למה המורה ביקשה טיוטה נוספת לפני הדוח הסופי?	sentence	false		
+sentence	E	school_projects	E	sentences	I changed my argument after I found a stronger source.	שיניתי את הטיעון שלי אחרי שמצאתי מקור חזק יותר.	sentence	false		
+sentence	E	school_projects	E	sentences	Can you give me feedback on the introduction to my presentation?	אתה יכול לתת לי משוב על הפתיחה של המצגת שלי?	sentence	false		
+sentence	E	school_projects	E	sentences	The conclusion should match the evidence we presented earlier.	המסקנה צריכה להתאים לראיות שהצגנו קודם.	sentence	false		
+sentence	E	school_projects	E	sentences	We spent most of the lesson organizing the data from the survey.	בילינו את רוב השיעור בארגון הנתונים מהסקר.	sentence	false		
+sentence	E	school_projects	E	sentences	Her summary was short, but it included the main point clearly.	הסיכום שלה היה קצר, אבל כלל את הנקודה המרכזית בצורה ברורה.	sentence	false		
+sentence	E	school_projects	E	sentences	Do you know how to cite this article correctly?	אתה יודע איך לצטט את המאמר הזה נכון?	sentence	false		
+sentence	E	school_projects	E	sentences	The teacher reminded us that every paragraph needs one clear focus.	המורה הזכירה לנו שכל פסקה צריכה מוקד ברור אחד.	sentence	false		
+sentence	E	school_projects	E	sentences	I rewrote the topic sentence because it sounded too general.	כתבתי מחדש את משפט הנושא כי הוא נשמע כללי מדי.	sentence	false		
+sentence	E	school_projects	E	sentences	Our presentation went better after we practiced the timing twice.	המצגת שלנו הלכה טוב יותר אחרי שתרגלנו את הזמנים פעמיים.	sentence	false		
+sentence	E	school_projects	E	sentences	Why does this explanation make more sense than the first one?	למה ההסבר הזה הגיוני יותר מההסבר הראשון?	sentence	false		
+sentence	E	school_projects	E	sentences	The assignment looked difficult until we broke it into steps.	המטלה נראתה קשה עד שחילקנו אותה לשלבים.	sentence	false		
+sentence	E	school_projects	E	sentences	I want the report to sound clear, not overly formal.	אני רוצה שהדוח יישמע ברור, לא רשמי מדי.	sentence	false		
+sentence	E	school_projects	E	sentences	Can we compare our notes before we submit the final version?	אפשר להשוות את ההערות שלנו לפני שנגיש את הגרסה הסופית?	sentence	false		
+sentence	E	school_projects	E	sentences	The class discussed whether the source was reliable enough to use.	הכיתה דנה בשאלה אם המקור מספיק אמין כדי להשתמש בו.	sentence	false		
+sentence	E	school_projects	E	sentences	My partner explained the graph while I answered questions from the class.	השותף שלי הסביר את הגרף בזמן שאני עניתי על שאלות מהכיתה.	sentence	false		
+sentence	E	school_projects	E	sentences	We had to shorten the introduction so the presentation would fit the time limit.	היינו צריכים לקצר את הפתיחה כדי שהמצגת תתאים למגבלת הזמן.	sentence	false		
+sentence	E	school_projects	E	sentences	I added one more example because the argument still felt incomplete.	הוספתי עוד דוגמה אחת כי הטיעון עדיין הרגיש לא שלם.	sentence	false		
+sentence	E	school_projects	E	sentences	What part of the project should we finish first this afternoon?	איזה חלק מהפרויקט כדאי לנו לסיים ראשון אחר הצהריים?	sentence	false		
+sentence	E	technology_media	E	sentences	I muted the notifications so I could focus on my homework.	השתקתי את ההתראות כדי שאוכל להתרכז בשיעורי הבית.	sentence	false		
+sentence	E	technology_media	E	sentences	Why did the app ask me to update my settings again?	למה האפליקציה ביקשה ממני לעדכן שוב את ההגדרות?	sentence	false		
+sentence	E	technology_media	E	sentences	My account locked after I entered the wrong password too many times.	החשבון שלי ננעל אחרי שהכנסתי את הסיסמה השגויה יותר מדי פעמים.	sentence	false		
+sentence	E	technology_media	E	sentences	Can you check whether the video call link still works?	אתה יכול לבדוק אם הקישור לשיחת הווידאו עדיין עובד?	sentence	false		
+sentence	E	technology_media	E	sentences	The browser froze right before I submitted the form.	הדפדפן נתקע בדיוק לפני ששלחתי את הטופס.	sentence	false		
+sentence	E	technology_media	E	sentences	I prefer reading long articles on a larger screen.	אני מעדיף לקרוא מאמרים ארוכים על מסך גדול יותר.	sentence	false		
+sentence	E	technology_media	E	sentences	Do you know who can see this comment section?	אתה יודע מי יכול לראות את אזור התגובות הזה?	sentence	false		
+sentence	E	technology_media	E	sentences	Her profile picture changed after the account update.	תמונת הפרופיל שלה השתנתה אחרי עדכון החשבון.	sentence	false		
+sentence	E	technology_media	E	sentences	We searched three websites before we found a clear answer.	חיפשנו בשלושה אתרים לפני שמצאנו תשובה ברורה.	sentence	false		
+sentence	E	technology_media	E	sentences	The podcast episode explained the topic better than the short video did.	פרק הפודקאסט הסביר את הנושא טוב יותר מהסרטון הקצר.	sentence	false		
+sentence	E	technology_media	E	sentences	Why is the network slower when everyone is online at once?	למה הרשת איטית יותר כשכולם מחוברים באותו זמן?	sentence	false		
+sentence	E	technology_media	E	sentences	I saved the link because I knew I would need it later.	שמרתי את הקישור כי ידעתי שאצטרך אותו אחר כך.	sentence	false		
+sentence	E	technology_media	E	sentences	Can you switch your profile to private for now?	אתה יכול להעביר את הפרופיל שלך לפרטי לעכשיו?	sentence	false		
+sentence	E	technology_media	E	sentences	The teacher posted the homework on the class website.	המורה פרסמה את שיעורי הבית באתר הכיתה.	sentence	false		
+sentence	E	technology_media	E	sentences	My headphones stopped connecting after the battery ran low.	האוזניות שלי הפסיקו להתחבר אחרי שהסוללה נחלשה.	sentence	false		
+sentence	E	technology_media	E	sentences	We checked the search results carefully instead of opening the first link.	בדקנו את תוצאות החיפוש בזהירות במקום לפתוח את הקישור הראשון.	sentence	false		
+sentence	E	technology_media	E	sentences	The offline map was helpful when the internet signal disappeared.	המפה הלא מקוונת הייתה מועילה כשהקליטה של האינטרנט נעלמה.	sentence	false		
+sentence	E	technology_media	E	sentences	Why did you reply in the group instead of sending a private message?	למה ענית בקבוצה במקום לשלוח הודעה פרטית?	sentence	false		
+sentence	E	technology_media	E	sentences	I turned off screen time reminders during the school presentation.	כיביתי את תזכורות זמן המסך בזמן המצגת בבית הספר.	sentence	false		
+sentence	E	technology_media	E	sentences	The update fixed one bug but created a different problem.	העדכון תיקן תקלה אחת אבל יצר בעיה אחרת.	sentence	false		
+sentence	E	environment	E	sentences	The city planted more trees because summers have become hotter.	העיר שתלה יותר עצים כי הקיץ נעשה חם יותר.	sentence	false		
+sentence	E	environment	E	sentences	Why does pollution affect some neighborhoods more than others?	למה זיהום משפיע על שכונות מסוימות יותר מאשר על אחרות?	sentence	false		
+sentence	E	environment	E	sentences	We learned that one habitat can support many kinds of animals.	למדנו שבית גידול אחד יכול לתמוך בסוגים רבים של בעלי חיים.	sentence	false		
+sentence	E	environment	E	sentences	The river flooded after two days of heavy rain.	הנהר עלה על גדותיו אחרי יומיים של גשם חזק.	sentence	false		
+sentence	E	environment	E	sentences	Can renewable energy really reduce air pollution in large cities?	האם אנרגיה מתחדשת באמת יכולה להפחית זיהום אוויר בערים גדולות?	sentence	false		
+sentence	E	environment	E	sentences	The science club discussed how drought changes local farming.	מועדון המדעים דן בדרך שבה בצורת משנה את החקלאות המקומית.	sentence	false		
+sentence	E	environment	E	sentences	We separated the waste so more materials could be recycled.	הפרדנו את הפסולת כדי שאפשר יהיה למחזר יותר חומרים.	sentence	false		
+sentence	E	environment	E	sentences	My teacher said climate affects where certain plants can grow.	המורה שלי אמרה שהאקלים משפיע על המקומות שבהם צמחים מסוימים יכולים לגדול.	sentence	false		
+sentence	E	environment	E	sentences	Why should people care about their carbon footprint at all?	למה אנשים בכלל צריכים לדאוג לטביעת הרגל הפחמנית שלהם?	sentence	false		
+sentence	E	environment	E	sentences	The wildfire spread quickly because the ground was so dry.	שרפת היער התפשטה במהירות כי הקרקע הייתה יבשה כל כך.	sentence	false		
+sentence	E	environment	E	sentences	We visited a recycling station to see what happens to old bottles.	ביקרנו בתחנת מיחזור כדי לראות מה קורה לבקבוקים ישנים.	sentence	false		
+sentence	E	environment	E	sentences	The documentary compared two cities with very different climates.	הסרט התיעודי השווה בין שתי ערים עם אקלים שונה מאוד.	sentence	false		
+sentence	E	environment	E	sentences	Can one small choice at home really save resources?	האם בחירה קטנה אחת בבית באמת יכולה לחסוך משאבים?	sentence	false		
+sentence	E	environment	E	sentences	The park rules help protect birds that nest near the lake.	חוקי הפארק עוזרים להגן על ציפורים שמקננות ליד האגם.	sentence	false		
+sentence	E	environment	E	sentences	I did not realize how much food waste our class produced in one week.	לא הבנתי כמה פסולת מזון הכיתה שלנו ייצרה בשבוע אחד.	sentence	false		
+sentence	E	environment	E	sentences	The lesson connected water shortages to changes in climate.	השיעור קישר בין מחסור במים לשינויים באקלים.	sentence	false		
+sentence	E	environment	E	sentences	Why are some endangered animals losing their habitat so quickly?	למה כמה בעלי חיים בסכנת הכחדה מאבדים את בית הגידול שלהם כל כך מהר?	sentence	false		
+sentence	E	environment	E	sentences	The conservation project began with a simple cleanup near the beach.	פרויקט השימור התחיל בניקוי פשוט ליד החוף.	sentence	false		
+sentence	E	environment	E	sentences	We compared the labels on two products to see which one used less plastic.	השווינו את התוויות על שני מוצרים כדי לראות איזה מהם משתמש בפחות פלסטיק.	sentence	false		
+sentence	E	environment	E	sentences	A solar panel can make electricity without burning fuel.	פאנל סולארי יכול לייצר חשמל בלי לשרוף דלק.	sentence	false		
+sentence	E	health_safety	E	sentences	The doctor said the symptoms should improve after a day of rest.	הרופא אמר שהתסמינים אמורים להשתפר אחרי יום מנוחה.	sentence	false		
+sentence	E	health_safety	E	sentences	Why did the nurse ask so many questions before the appointment?	למה האחות שאלה כל כך הרבה שאלות לפני התור?	sentence	false		
+sentence	E	health_safety	E	sentences	I always carry sunscreen when we hike in the summer.	אני תמיד לוקח קרם הגנה כשאנחנו מטיילים בקיץ.	sentence	false		
+sentence	E	health_safety	E	sentences	Can a seat belt really prevent serious injury in a short trip?	האם חגורת בטיחות באמת יכולה למנוע פציעה חמורה גם בנסיעה קצרה?	sentence	false		
+sentence	E	health_safety	E	sentences	The coach reminded us that hydration matters before and after practice.	המאמן הזכיר לנו ששתייה מספקת חשובה לפני האימון ואחריו.	sentence	false		
+sentence	E	health_safety	E	sentences	My dad explained the difference between medicine and vitamins.	אבא שלי הסביר את ההבדל בין תרופה לבין ויטמינים.	sentence	false		
+sentence	E	health_safety	E	sentences	The clinic delayed our appointment by twenty minutes.	המרפאה דחתה את התור שלנו בעשרים דקות.	sentence	false		
+sentence	E	health_safety	E	sentences	Why is good nutrition important even when you feel healthy?	למה תזונה טובה חשובה גם כשמרגישים בריאים?	sentence	false		
+sentence	E	health_safety	E	sentences	The teacher asked whether anyone needed medical help after the fall.	המורה שאלה אם מישהו צריך עזרה רפואית אחרי הנפילה.	sentence	false		
+sentence	E	health_safety	E	sentences	I used a bandage first, but later I needed proper treatment.	שמתי תחבושת בהתחלה, אבל אחר כך הייתי צריך טיפול מתאים.	sentence	false		
+sentence	E	health_safety	E	sentences	Do you know what to do if someone has a severe allergy?	אתה יודע מה לעשות אם למישהו יש אלרגיה חמורה?	sentence	false		
+sentence	E	health_safety	E	sentences	The diagnosis sounded scary until the doctor explained it calmly.	האבחנה נשמעה מפחידה עד שהרופא הסביר אותה ברוגע.	sentence	false		
+sentence	E	health_safety	E	sentences	Regular exercise helps me sleep better during busy weeks.	פעילות גופנית קבועה עוזרת לי לישון טוב יותר בשבועות עמוסים.	sentence	false		
+sentence	E	health_safety	E	sentences	My brother forgot his helmet, so he rode more carefully than usual.	אחי שכח את הקסדה שלו, אז הוא רכב בזהירות רבה מהרגיל.	sentence	false		
+sentence	E	health_safety	E	sentences	Why do some people recover faster from the same injury?	למה אנשים מסוימים מחלימים מהר יותר מאותה פציעה?	sentence	false		
+sentence	E	health_safety	E	sentences	The warning label said not to mix those two medicines.	תווית האזהרה אמרה לא לערבב את שתי התרופות האלה.	sentence	false		
+sentence	E	health_safety	E	sentences	I felt better after I drank water and sat in the shade.	הרגשתי טוב יותר אחרי ששתיתי מים וישבתי בצל.	sentence	false		
+sentence	E	health_safety	E	sentences	Can stress affect your body even when you do not notice it?	האם לחץ יכול להשפיע על הגוף גם כשלא שמים לב אליו?	sentence	false		
+sentence	E	health_safety	E	sentences	The safety rule seemed annoying until we understood the reason behind it.	כלל הבטיחות נראה מעצבן עד שהבנו את הסיבה שמאחוריו.	sentence	false		
+sentence	E	health_safety	E	sentences	The paramedic arrived quickly and spoke to everyone calmly.	הפרמדיק הגיע במהירות ודיבר עם כולם ברוגע.	sentence	false		
+sentence	E	travel	E	sentences	Our flight was delayed, so we changed the plan for the first day.	הטיסה שלנו התעכבה, אז שינינו את התוכנית ליום הראשון.	sentence	false		
+sentence	E	travel	E	sentences	Why do we need to arrive early for international travel?	למה צריך להגיע מוקדם לנסיעה בינלאומית?	sentence	false		
+sentence	E	travel	E	sentences	I kept the boarding pass inside my passport the whole time.	שמרתי את כרטיס העלייה למטוס בתוך הדרכון כל הזמן.	sentence	false		
+sentence	E	travel	E	sentences	The hotel confirmed our reservation by email last night.	המלון אישר את ההזמנה שלנו במייל אתמול בלילה.	sentence	false		
+sentence	E	travel	E	sentences	Can you tell me which platform the train leaves from?	אתה יכול לומר לי מאיזה רציף הרכבת יוצאת?	sentence	false		
+sentence	E	travel	E	sentences	The crosswalk was crowded because school had just ended.	מעבר החצייה היה עמוס כי בית הספר בדיוק הסתיים.	sentence	false		
+sentence	E	travel	E	sentences	We asked the tour guide for a quieter route through the museum.	ביקשנו ממדריך הטיולים מסלול שקט יותר דרך המוזיאון.	sentence	false		
+sentence	E	travel	E	sentences	My luggage was heavier after I bought books at the airport.	המזוודות שלי היו כבדות יותר אחרי שקניתי ספרים בשדה התעופה.	sentence	false		
+sentence	E	travel	E	sentences	Why was the intersection blocked this morning?	למה הצומת היה חסום הבוקר?	sentence	false		
+sentence	E	travel	E	sentences	The customs officer only asked us two short questions.	פקיד המכס שאל אותנו רק שתי שאלות קצרות.	sentence	false		
+sentence	E	travel	E	sentences	I saved the itinerary on my phone in case we lost the paper copy.	שמרתי את מסלול הטיול בטלפון למקרה שנאבד את העותק המודפס.	sentence	false		
+sentence	E	travel	E	sentences	The destination looked closer on the map than it felt in real life.	היעד נראה קרוב יותר במפה מאשר במציאות.	sentence	false		
+sentence	E	travel	E	sentences	Can we make one more stop before we return to the station?	אפשר לעשות עוד עצירה אחת לפני שנחזור לתחנה?	sentence	false		
+sentence	E	travel	E	sentences	The road sign was easy to miss because of the heavy rain.	היה קל לפספס את התמרור בגלל הגשם החזק.	sentence	false		
+sentence	E	travel	E	sentences	Our teacher said every traveler should keep one copy of important documents.	המורה שלנו אמרה שכל מטייל צריך לשמור עותק אחד של מסמכים חשובים.	sentence	false		
+sentence	E	travel	E	sentences	Why did the museum guide speak more slowly for our group?	למה המדריך במוזיאון דיבר לאט יותר בשביל הקבוצה שלנו?	sentence	false		
+sentence	E	travel	E	sentences	We chose a later bus because the earlier one was already full.	בחרנו אוטובוס מאוחר יותר כי הקודם כבר היה מלא.	sentence	false		
+sentence	E	travel	E	sentences	The neighborhood looked different at night than it did in the afternoon.	השכונה נראתה אחרת בלילה מאשר אחר הצהריים.	sentence	false		
+sentence	E	travel	E	sentences	I checked the weather twice before I packed my bag.	בדקתי את מזג האוויר פעמיים לפני שארזתי את התיק.	sentence	false		
+sentence	E	travel	E	sentences	The train announcement was too quiet to hear from the back of the platform.	הכריזה בתחנה הייתה שקטה מדי מכדי לשמוע אותה מהחלק האחורי של הרציף.	sentence	false		
+sentence	E	social_situations	E	sentences	I accepted the apology because it sounded sincere.	קיבלתי את ההתנצלות כי היא נשמעה כנה.	sentence	false		
+sentence	E	social_situations	E	sentences	Why is mutual respect important in a team project?	למה כבוד הדדי חשוב בפרויקט קבוצתי?	sentence	false		
+sentence	E	social_situations	E	sentences	My friend needed space, so I stopped asking questions for a while.	החבר שלי היה צריך מרחב, אז הפסקתי לשאול שאלות לזמן מה.	sentence	false		
+sentence	E	social_situations	E	sentences	Can trust return after someone breaks an important promise?	האם אמון יכול לחזור אחרי שמישהו מפר הבטחה חשובה?	sentence	false		
+sentence	E	social_situations	E	sentences	The group set clear boundaries before they started working together.	הקבוצה קבעה גבולות ברורים לפני שהתחילה לעבוד יחד.	sentence	false		
+sentence	E	social_situations	E	sentences	I asked for permission before I posted the photo online.	ביקשתי רשות לפני שהעליתי את התמונה לאינטרנט.	sentence	false		
+sentence	E	social_situations	E	sentences	Why did the conversation become tense so quickly?	למה השיחה נעשתה מתוחה כל כך מהר?	sentence	false		
+sentence	E	social_situations	E	sentences	Her reputation improved because she always did what she promised.	המוניטין שלה השתפר כי היא תמיד עשתה את מה שהבטיחה.	sentence	false		
+sentence	E	social_situations	E	sentences	We solved the misunderstanding after everyone listened carefully.	פתרנו את אי ההבנה אחרי שכולם הקשיבו בזהירות.	sentence	false		
+sentence	E	social_situations	E	sentences	Can peer pressure make good people act in strange ways?	האם לחץ חברתי יכול לגרום לאנשים טובים להתנהג בצורה מוזרה?	sentence	false		
+sentence	E	social_situations	E	sentences	My cousin values independence, but he still asks for advice.	בן דוד שלי מעריך עצמאות, אבל עדיין מבקש עצה.	sentence	false		
+sentence	E	social_situations	E	sentences	The discussion went better once we stopped interrupting each other.	הדיון התקדם טוב יותר ברגע שהפסקנו לקטוע זה את זה.	sentence	false		
+sentence	E	social_situations	E	sentences	Why did she choose silence instead of another argument?	למה היא בחרה בשתיקה במקום בעוד ויכוח?	sentence	false		
+sentence	E	social_situations	E	sentences	Their friendship grew stronger after they solved the problem together.	החברות שלהם התחזקה אחרי שפתרו את הבעיה יחד.	sentence	false		
+sentence	E	social_situations	E	sentences	I tried to understand his point of view before answering.	ניסיתי להבין את נקודת המבט שלו לפני שעניתי.	sentence	false		
+sentence	E	social_situations	E	sentences	Can one careless comment damage a whole conversation?	האם הערה לא זהירה אחת יכולה לפגוע בשיחה שלמה?	sentence	false		
+sentence	E	social_situations	E	sentences	The class agreed on a rule that protected everyone's privacy.	הכיתה הסכימה על כלל שהגן על הפרטיות של כולם.	sentence	false		
+sentence	E	social_situations	E	sentences	My sister noticed the tension before anyone said a word.	אחותי שמה לב למתח לפני שמישהו אמר מילה.	sentence	false		
+sentence	E	social_situations	E	sentences	Why do some arguments end while others keep growing?	למה ויכוחים מסוימים נגמרים ואחרים רק ממשיכים לגדול?	sentence	false		
+sentence	E	social_situations	E	sentences	We thanked the volunteer who stayed late to help us clean up.	הודינו למתנדב שנשאר מאוחר כדי לעזור לנו לסדר.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	I changed my opinion because your example was more convincing than mine.	שיניתי את דעתי כי הדוגמה שלך הייתה משכנעת יותר משלי.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	Why do you disagree with the final decision?	למה אתה לא מסכים עם ההחלטה הסופית?	sentence	false		
+sentence	E	opinions_reasons	E	sentences	Her reason sounded logical, even if I still preferred another plan.	הסיבה שלה נשמעה הגיונית, גם אם עדיין העדפתי תוכנית אחרת.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	Can two people see the same event in completely different ways?	האם שני אנשים יכולים לראות את אותו אירוע בדרכים שונות לגמרי?	sentence	false		
+sentence	E	opinions_reasons	E	sentences	I respect his opinion, but I do not share it.	אני מכבד את הדעה שלו, אבל לא שותף לה.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	The debate stayed calm because everyone waited for their turn.	הדיון נשאר רגוע כי כולם חיכו לתור שלהם.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	Why is it easier to criticize than to suggest an alternative?	למה קל יותר לבקר מאשר להציע חלופה?	sentence	false		
+sentence	E	opinions_reasons	E	sentences	My brother prefers practical solutions over long discussions.	אחי מעדיף פתרונות מעשיים על פני דיונים ארוכים.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	We compared two arguments and chose the clearer one.	השווינו שני טיעונים ובחרנו את הברור יותר.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	Can a weak reason still lead to a strong feeling?	האם סיבה חלשה עדיין יכולה להוביל לרגש חזק?	sentence	false		
+sentence	E	opinions_reasons	E	sentences	The class vote showed that our opinions were split almost evenly.	ההצבעה בכיתה הראתה שהדעות שלנו התחלקו כמעט שווה בשווה.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	Why did your view change after the second article?	למה נקודת המבט שלך השתנתה אחרי המאמר השני?	sentence	false		
+sentence	E	opinions_reasons	E	sentences	She asked a sharp question that changed the direction of the debate.	היא שאלה שאלה חדה ששינתה את כיוון הדיון.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	I needed more evidence before I could agree with that claim.	הייתי צריך יותר ראיות לפני שיכולתי להסכים עם הטענה הזאת.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	Can one experience shape a person's opinion for years?	האם חוויה אחת יכולה לעצב את הדעה של אדם במשך שנים?	sentence	false		
+sentence	E	opinions_reasons	E	sentences	Our teacher wanted reasons, not just quick answers.	המורה שלנו רצתה נימוקים, לא רק תשובות מהירות.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	He sounded certain, but his explanation was still incomplete.	הוא נשמע בטוח, אבל ההסבר שלו עדיין לא היה שלם.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	Why should we compare several options before deciding?	למה כדאי להשוות כמה אפשרויות לפני שמחליטים?	sentence	false		
+sentence	E	opinions_reasons	E	sentences	The strongest argument was also the simplest to understand.	הטיעון החזק ביותר היה גם הפשוט ביותר להבנה.	sentence	false		
+sentence	E	opinions_reasons	E	sentences	I disagreed at first, but later I saw the connection she meant.	לא הסכמתי בהתחלה, אבל אחר כך הבנתי את הקשר שהיא התכוונה אליו.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	We set a deadline so the project would not drag on forever.	קבענו מועד אחרון כדי שהפרויקט לא יימשך לנצח.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	Why is the first solution not always the best one?	למה הפתרון הראשון הוא לא תמיד הפתרון הטוב ביותר?	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	I made a checklist before I started packing for the trip.	הכנתי רשימת בדיקה לפני שהתחלתי לארוז לטיול.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	Can you think of an alternative if the original plan fails?	אתה יכול לחשוב על חלופה אם התוכנית המקורית תיכשל?	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	Our main priority was finishing the task accurately, not quickly.	העדיפות העיקרית שלנו הייתה לסיים את המשימה בדיוק, לא במהירות.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	The reminder helped me avoid forgetting an important appointment.	התזכורת עזרה לי לא לשכוח תור חשוב.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	Why did the team change strategy halfway through the game?	למה הצוות שינה אסטרטגיה באמצע המשחק?	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	I kept a simple budget so I would not spend everything at once.	שמרתי תקציב פשוט כדי לא להוציא הכול בבת אחת.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	Can a small delay create a much bigger problem later?	האם עיכוב קטן יכול ליצור בעיה גדולה יותר אחר כך?	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	The routine felt boring, but it saved a lot of time.	השגרה הרגישה משעממת, אבל חסכה הרבה זמן.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	We had two options, and neither of them was perfect.	היו לנו שתי אפשרויות, ואף אחת מהן לא הייתה מושלמת.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	Why do people ignore warnings when they are in a hurry?	למה אנשים מתעלמים מאזהרות כשהם ממהרים?	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	Her decision looked risky, but it solved the problem quickly.	ההחלטה שלה נראתה מסוכנת, אבל פתרה את הבעיה במהירות.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	I tried to balance homework, practice, and time with friends.	ניסיתי לאזן בין שיעורי הבית, האימון והזמן עם חברים.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	Can we set one clear goal before the meeting begins?	אפשר לקבוע מטרה ברורה אחת לפני שהפגישה מתחילה?	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	The teacher asked us to explain the process, not just the result.	המורה ביקשה מאיתנו להסביר את התהליך, לא רק את התוצאה.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	Why did that shortcut end up taking longer than the normal route?	למה הקיצור הזה בסוף לקח יותר זמן מהדרך הרגילה?	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	My dad said the best plan is the one people can actually follow.	אבא שלי אמר שהתוכנית הטובה ביותר היא זו שאנשים באמת יכולים לעקוב אחריה.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	We paused for a minute because everyone had a different idea.	עצרנו לדקה כי לכולם היה רעיון שונה.	sentence	false		
+sentence	E	planning_problem_solving	E	sentences	Can working carefully prevent mistakes better than working faster?	האם עבודה זהירה יכולה למנוע טעויות טוב יותר מעבודה מהירה יותר?	sentence	false		
+sentence	E	comparison_preferences	E	sentences	This route is shorter, but the other one feels safer at night.	המסלול הזה קצר יותר, אבל השני מרגיש בטוח יותר בלילה.	sentence	false		
+sentence	E	comparison_preferences	E	sentences	Why do you prefer writing notes by hand instead of typing them?	למה אתה מעדיף לכתוב הערות ביד במקום להקליד אותן?	sentence	false		
+sentence	E	comparison_preferences	E	sentences	The second explanation was clearer, even though it was longer.	ההסבר השני היה ברור יותר, למרות שהוא היה ארוך יותר.	sentence	false		
+sentence	E	comparison_preferences	E	sentences	Can something be simple but still effective?	האם משהו יכול להיות פשוט ועדיין יעיל?	sentence	false		
+sentence	E	comparison_preferences	E	sentences	I liked the first plan better, but yours was more realistic.	אהבתי יותר את התוכנית הראשונה, אבל שלך הייתה מציאותית יותר.	sentence	false		
+sentence	E	comparison_preferences	E	sentences	This book is easier to read, while the other one gives more detail.	הספר הזה קל יותר לקריאה, בעוד שהשני נותן יותר פירוט.	sentence	false		
+sentence	E	comparison_preferences	E	sentences	Why does cold weather feel worse when it is windy?	למה מזג אוויר קר מרגיש גרוע יותר כשיש רוח?	sentence	false		
+sentence	E	comparison_preferences	E	sentences	Her answer was shorter than mine, but it sounded stronger.	התשובה שלה הייתה קצרה משלי, אבל נשמעה חזקה יותר.	sentence	false		
+sentence	E	comparison_preferences	E	sentences	Can a smaller group sometimes make better decisions?	האם קבוצה קטנה יותר יכולה לפעמים לקבל החלטות טובות יותר?	sentence	false		
+sentence	E	comparison_preferences	E	sentences	The blue backpack looked nicer, but the black one held more books.	התיק הכחול נראה יפה יותר, אבל בשחור היה מקום ליותר ספרים.	sentence	false		
+sentence	E	comparison_preferences	E	sentences	Why is online study easier for some students and harder for others?	למה למידה מקוונת קלה יותר לתלמידים מסוימים וקשה יותר לאחרים?	sentence	false		
+sentence	E	comparison_preferences	E	sentences	I would rather wait longer than rush into the wrong choice.	אני מעדיף לחכות יותר מאשר למהר לבחירה שגויה.	sentence	false		
+sentence	E	comparison_preferences	E	sentences	This museum tour was more interesting than the one we took last year.	הסיור במוזיאון הזה היה מעניין יותר מזה שעשינו בשנה שעברה.	sentence	false		
+sentence	E	comparison_preferences	E	sentences	Can a quiet room improve your concentration that much?	האם חדר שקט באמת יכול לשפר את הריכוז שלך כל כך?	sentence	false		
+sentence	E	comparison_preferences	E	sentences	The older phone still worked, but the newer one connected faster.	הטלפון הישן עדיין עבד, אבל החדש התחבר מהר יותר.	sentence	false		
+sentence	E	comparison_preferences	E	sentences	Why do some people value privacy more than convenience?	למה יש אנשים שמעריכים פרטיות יותר מנוחות?	sentence	false		
+sentence	E	comparison_preferences	E	sentences	I prefer a clear rule to a confusing exception.	אני מעדיף כלל ברור על פני יוצא מן הכלל מבלבל.	sentence	false		
+sentence	E	comparison_preferences	E	sentences	This argument sounded reasonable, yet the other one was easier to prove.	הטיעון הזה נשמע סביר, ובכל זאת היה קל יותר להוכיח את השני.	sentence	false		
+sentence	E	comparison_preferences	E	sentences	Can a difficult choice still feel obvious in the end?	האם בחירה קשה עדיין יכולה להרגיש ברורה בסוף?	sentence	false		
+sentence	E	comparison_preferences	E	sentences	The second option cost more money, but it saved much more time.	האפשרות השנייה עלתה יותר כסף, אבל חסכה הרבה יותר זמן.	sentence	false		
+sentence	E	civics_world	E	sentences	The election at school helped us practice listening to different opinions.	הבחירות בבית הספר עזרו לנו לתרגל הקשבה לדעות שונות.	sentence	false		
+sentence	E	civics_world	E	sentences	Why do communities need clear laws even when most people agree?	למה קהילות צריכות חוקים ברורים גם כשרוב האנשים מסכימים?	sentence	false		
+sentence	E	civics_world	E	sentences	I used my library card to borrow a book for the history project.	השתמשתי בכרטיס הספרייה שלי כדי לשאול ספר לפרויקט בהיסטוריה.	sentence	false		
+sentence	E	civics_world	E	sentences	Can a public space feel welcoming to everyone at the same time?	האם מרחב ציבורי יכול להרגיש מזמין לכולם באותו זמן?	sentence	false		
+sentence	E	civics_world	E	sentences	The community center offered a free workshop after school.	המרכז הקהילתי הציע סדנה חינמית אחרי הלימודים.	sentence	false		
+sentence	E	civics_world	E	sentences	Why is citizenship more than just a word in a textbook?	למה אזרחות היא יותר מסתם מילה בספר לימוד?	sentence	false		
+sentence	E	civics_world	E	sentences	Our class discussed what service means in everyday life.	הכיתה שלנו דנה במשמעות של שירות בחיי היומיום.	sentence	false		
+sentence	E	civics_world	E	sentences	The museum guide connected one old object to a modern problem.	המדריך במוזיאון קישר חפץ ישן אחד לבעיה מודרנית.	sentence	false		
+sentence	E	civics_world	E	sentences	Can one neighborhood project improve the whole street?	האם פרויקט שכונתי אחד יכול לשפר את כל הרחוב?	sentence	false		
+sentence	E	civics_world	E	sentences	The city posted a new rule about bicycle safety near schools.	העיר פרסמה כלל חדש לגבי בטיחות באופניים ליד בתי ספר.	sentence	false		
+sentence	E	civics_world	E	sentences	Why do some people volunteer even when nobody asks them to?	למה אנשים מסוימים מתנדבים גם כשאף אחד לא מבקש מהם?	sentence	false		
+sentence	E	civics_world	E	sentences	We met at the community center before walking to the cleanup.	נפגשנו במרכז הקהילתי לפני שהלכנו לניקיון.	sentence	false		
+sentence	E	civics_world	E	sentences	The library card was in my pocket the whole time.	כרטיס הספרייה היה בכיס שלי כל הזמן.	sentence	false		
+sentence	E	civics_world	E	sentences	Can a small local decision affect many families?	האם החלטה מקומית קטנה יכולה להשפיע על משפחות רבות?	sentence	false		
+sentence	E	civics_world	E	sentences	The volunteer shift started earlier than I expected.	משמרת ההתנדבות התחילה מוקדם יותר ממה שציפיתי.	sentence	false		
+sentence	E	civics_world	E	sentences	Why should public spaces stay clean for everyone?	למה מרחבים ציבוריים צריכים להישאר נקיים בשביל כולם?	sentence	false		
+sentence	E	civics_world	E	sentences	The recycling station was busier after the holiday weekend.	תחנת המיחזור הייתה עמוסה יותר אחרי סוף השבוע של החג.	sentence	false		
+sentence	E	civics_world	E	sentences	Can a fair law still feel inconvenient sometimes?	האם חוק הוגן עדיין יכול להרגיש לא נוח לפעמים?	sentence	false		
+sentence	E	civics_world	E	sentences	Our neighborhood became quieter after the road closed to traffic at night.	השכונה שלנו נעשתה שקטה יותר אחרי שהכביש נסגר לתנועה בלילה.	sentence	false		
+sentence	E	civics_world	E	sentences	The service project taught us how small actions can help many people.	פרויקט השירות לימד אותנו איך פעולות קטנות יכולות לעזור להרבה אנשים.	sentence	false		

@@ -1,0 +1,657 @@
+name: Minik
+options:
+  minimumXcodeGenVersion: 2.38.0
+  deploymentTarget:
+    iOS: "17.0"
+
+settings:
+  base:
+    SWIFT_VERSION: 5.9
+    TARGETED_DEVICE_FAMILY: "1,2"
+    CODE_SIGN_STYLE: Automatic
+    MINIK_MARKETING_VERSION: "1.7.9"
+    MINIK_BUILD_NUMBER: "79"
+    MARKETING_VERSION: $(MINIK_MARKETING_VERSION)
+    CURRENT_PROJECT_VERSION: $(MINIK_BUILD_NUMBER)
+    VERSIONING_SYSTEM: apple-generic
+
+packages:
+  AppStoreCommerceKit:
+    path: Packages/AppStoreCommerceKit
+  FirebaseApple:
+    url: https://github.com/firebase/firebase-ios-sdk.git
+    from: 12.14.0
+  GoogleMobileAds:
+    url: https://github.com/googleads/swift-package-manager-google-mobile-ads.git
+    from: 13.9.0
+
+targetTemplates:
+  MinikApplication:
+    type: application
+    platform: iOS
+    settings:
+      base:
+        MINIK_APP_ICON_NAME: ""
+        ASSETCATALOG_COMPILER_APPICON_NAME: $(MINIK_APP_ICON_NAME)
+        MINIK_REMOVE_ADS_PRODUCT_IDENTIFIER: remove_ads
+        MINIK_ADS_ENABLED: NO
+        MINIK_ADS_POLICY_APPROVED: NO
+        # Google's published iOS sample app ID keeps the linked Google Mobile Ads SDK
+        # from rejecting launch while ads are off. MinikAdsConfiguration treats it as
+        # unconfigured, so no ad is requested until a target supplies real IDs.
+        MINIK_ADS_APPLICATION_IDENTIFIER: "ca-app-pub-3940256099942544~1458002511"
+        MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER: ""
+        MINIK_PRIVACY_POLICY_URL: https://miniklearn.com/privacy
+        MINIK_TERMS_OF_USE_URL: https://www.easycallandanswer.com/terms.html
+        MINIK_SUPPORT_URL: https://miniklearn.com/contact
+        MINIK_LEGAL_NOTICE: "© Apps by Bros. All rights reserved."
+    sources:
+      - path: Sources
+      - path: Resources/MinikVisuals.xcassets
+        buildPhase: resources
+    info:
+      path: GeneratedInfoPlists/${target_name}-Info.plist
+      properties:
+        CFBundleDisplayName: ${target_name}
+        # XcodeGen otherwise writes 1.0 (1), ignoring the version build settings.
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        MinikRemoveAdsProductIdentifier: $(MINIK_REMOVE_ADS_PRODUCT_IDENTIFIER)
+        MinikAdsEnabled: $(MINIK_ADS_ENABLED)
+        MinikAdsPolicyApproved: $(MINIK_ADS_POLICY_APPROVED)
+        MinikAdsApplicationIdentifier: $(MINIK_ADS_APPLICATION_IDENTIFIER)
+        GADApplicationIdentifier: $(MINIK_ADS_APPLICATION_IDENTIFIER)
+        MinikInterstitialAdUnitIdentifier: $(MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER)
+        MinikPrivacyPolicyURL: $(MINIK_PRIVACY_POLICY_URL)
+        MinikTermsOfUseURL: $(MINIK_TERMS_OF_USE_URL)
+        MinikSupportURL: $(MINIK_SUPPORT_URL)
+        MinikLegalNotice: $(MINIK_LEGAL_NOTICE)
+        # The apps use only the operating system's standard HTTPS encryption.
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+
+targets:
+  MinikPlus:
+    templates: [MinikApplication]
+    sources:
+      - path: Resources/GameAudio
+        buildPhase: resources
+      - path: Resources/LanguageImages.xcassets
+        buildPhase: resources
+      - path: Resources/LanguageMedia
+        buildPhase: resources
+      - path: Resources/LanguageLetters.xcassets
+        buildPhase: resources
+      - path: Resources/LanguageActivityArt.xcassets
+        buildPhase: resources
+      - path: Resources/Vocabulary/words-normalized.xml
+        buildPhase: resources
+      - path: Resources/Vocabulary/vocabulary-image-manifest.tsv
+        buildPhase: resources
+      - path: Resources/ThirdPartyNotices/VocabularyAssetNotices.txt
+        buildPhase: resources
+      - path: Resources/Localization/All/Localizable.xcstrings
+        buildPhase: resources
+      - path: Resources/Privacy/Language/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    info:
+      properties:
+        CFBundleDisplayName: Minik
+        UIAppFonts: [fredoka_medium.ttf]
+        CFBundleLocalizations: [en, am, ar, de, es, fr, he, nl, pt-BR, pt-PT, ru]
+        # Portrait only, as on Android (sensorPortrait); iPad allows that only as a
+        # full-screen app. :REPLACE stops XcodeGen appending the template's landscape
+        # entries to these arrays.
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:REPLACE:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:REPLACE:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+    settings:
+      base:
+        MINIK_APP_ICON_NAME: MinikPlusAppIcon
+        MINIK_PLUS_BUNDLE_IDENTIFIER: com.appsbybros.minik.plus
+        PRODUCT_BUNDLE_IDENTIFIER: $(MINIK_PLUS_BUNDLE_IDENTIFIER)
+        # App Store product IDs are unique per developer account.
+        MINIK_REMOVE_ADS_PRODUCT_IDENTIFIER: remove_ads_minik
+        CODE_SIGN_ENTITLEMENTS: Resources/Entitlements/MinikLanguage.entitlements
+        MINIK_FIREBASE_PLIST_PATH: "$(SRCROOT)/Config/Firebase/MinikPlus/GoogleService-Info.plist"
+        PRODUCT_NAME: MinikPlus
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) MINIK_PLUS"
+        OTHER_LDFLAGS: "$(inherited) -ObjC"
+        # Release shows child-directed, non-personalized interstitials; Debug keeps
+        # Google's sample app ID, which MinikAdsConfiguration treats as ads off.
+        MINIK_ADS_ENABLED: YES
+        MINIK_ADS_POLICY_APPROVED: YES
+        MINIK_ADS_APPLICATION_IDENTIFIER: "ca-app-pub-6728099379581161~3837875403"
+        MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER: "ca-app-pub-6728099379581161/7520211955"
+      configs:
+        Debug:
+          MINIK_ADS_APPLICATION_IDENTIFIER: "ca-app-pub-3940256099942544~1458002511"
+          MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER: ""
+    preBuildScripts:
+      - name: Copy configured Firebase plist
+        script: |
+          if [ -z "$MINIK_FIREBASE_PLIST_PATH" ]; then
+            exit 0
+          fi
+          if [ ! -f "$MINIK_FIREBASE_PLIST_PATH" ]; then
+            echo "error: MINIK_FIREBASE_PLIST_PATH does not exist: $MINIK_FIREBASE_PLIST_PATH"
+            exit 1
+          fi
+          /usr/bin/plutil -lint "$MINIK_FIREBASE_PLIST_PATH"
+          if ! firebase_bundle_id="$(/usr/libexec/PlistBuddy -c 'Print :BUNDLE_ID' "$MINIK_FIREBASE_PLIST_PATH" 2>/dev/null)"; then
+            echo "error: Firebase plist is missing BUNDLE_ID: $MINIK_FIREBASE_PLIST_PATH"
+            exit 1
+          fi
+          if [ "$firebase_bundle_id" != "$PRODUCT_BUNDLE_IDENTIFIER" ]; then
+            echo "error: Firebase BUNDLE_ID '$firebase_bundle_id' does not match target '$PRODUCT_BUNDLE_IDENTIFIER'"
+            exit 1
+          fi
+          firebase_destination="$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/GoogleService-Info.plist"
+          /bin/mkdir -p "$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH"
+          /bin/cp "$MINIK_FIREBASE_PLIST_PATH" "$firebase_destination"
+    dependencies:
+      - package: AppStoreCommerceKit
+        product: AppStoreCommerceKit
+      - package: FirebaseApple
+        product: FirebaseAuth
+      - package: FirebaseApple
+        product: FirebaseCore
+      - package: FirebaseApple
+        product: FirebaseFirestore
+      - package: FirebaseApple
+        product: FirebaseAppCheck
+      - package: GoogleMobileAds
+        product: GoogleMobileAds
+
+  MinikPlusEnglish:
+    templates: [MinikApplication]
+    sources:
+      - path: Resources/GameAudio
+        buildPhase: resources
+      - path: Resources/LanguageImages.xcassets
+        buildPhase: resources
+      - path: Resources/LanguageMedia
+        buildPhase: resources
+      - path: Resources/LanguageLetters.xcassets
+        buildPhase: resources
+      - path: Resources/LanguageActivityArt.xcassets
+        buildPhase: resources
+      - path: Resources/Vocabulary/words-normalized.xml
+        buildPhase: resources
+      - path: Resources/Vocabulary/vocabulary-image-manifest.tsv
+        buildPhase: resources
+      - path: Resources/ThirdPartyNotices/VocabularyAssetNotices.txt
+        buildPhase: resources
+      - path: Resources/Localization/EnglishOnly/Localizable.xcstrings
+        buildPhase: resources
+      - path: Resources/Privacy/Language/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    info:
+      properties:
+        CFBundleDisplayName: Minik
+        UIAppFonts: [fredoka_medium.ttf]
+        CFBundleLocalizations: [en, am, ar, de, es, fr, nl, pt-BR, pt-PT, ru]
+        # Portrait only, as on Android (sensorPortrait); iPad allows that only as a
+        # full-screen app. :REPLACE stops XcodeGen appending the template's landscape
+        # entries to these arrays.
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:REPLACE:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:REPLACE:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+    settings:
+      base:
+        MINIK_APP_ICON_NAME: MinikPlusAppIcon
+        MINIK_PLUS_ENGLISH_BUNDLE_IDENTIFIER: com.appsbybros.minik.plus.english
+        PRODUCT_BUNDLE_IDENTIFIER: $(MINIK_PLUS_ENGLISH_BUNDLE_IDENTIFIER)
+        # App Store product IDs are unique per developer account.
+        MINIK_REMOVE_ADS_PRODUCT_IDENTIFIER: remove_ads_minik_english
+        CODE_SIGN_ENTITLEMENTS: Resources/Entitlements/MinikLanguage.entitlements
+        MINIK_FIREBASE_PLIST_PATH: "$(SRCROOT)/Config/Firebase/MinikPlusEnglish/GoogleService-Info.plist"
+        PRODUCT_NAME: MinikPlusEnglish
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) MINIK_PLUS_ENGLISH"
+        OTHER_LDFLAGS: "$(inherited) -ObjC"
+        # Release shows child-directed, non-personalized interstitials; Debug keeps
+        # Google's sample app ID, which MinikAdsConfiguration treats as ads off.
+        MINIK_ADS_ENABLED: YES
+        MINIK_ADS_POLICY_APPROVED: YES
+        MINIK_ADS_APPLICATION_IDENTIFIER: "ca-app-pub-6728099379581161~9104756369"
+        MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER: "ca-app-pub-6728099379581161/7791674692"
+      configs:
+        Debug:
+          MINIK_ADS_APPLICATION_IDENTIFIER: "ca-app-pub-3940256099942544~1458002511"
+          MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER: ""
+    preBuildScripts:
+      - name: Copy configured Firebase plist
+        script: |
+          if [ -z "$MINIK_FIREBASE_PLIST_PATH" ]; then
+            exit 0
+          fi
+          if [ ! -f "$MINIK_FIREBASE_PLIST_PATH" ]; then
+            echo "error: MINIK_FIREBASE_PLIST_PATH does not exist: $MINIK_FIREBASE_PLIST_PATH"
+            exit 1
+          fi
+          /usr/bin/plutil -lint "$MINIK_FIREBASE_PLIST_PATH"
+          if ! firebase_bundle_id="$(/usr/libexec/PlistBuddy -c 'Print :BUNDLE_ID' "$MINIK_FIREBASE_PLIST_PATH" 2>/dev/null)"; then
+            echo "error: Firebase plist is missing BUNDLE_ID: $MINIK_FIREBASE_PLIST_PATH"
+            exit 1
+          fi
+          if [ "$firebase_bundle_id" != "$PRODUCT_BUNDLE_IDENTIFIER" ]; then
+            echo "error: Firebase BUNDLE_ID '$firebase_bundle_id' does not match target '$PRODUCT_BUNDLE_IDENTIFIER'"
+            exit 1
+          fi
+          firebase_destination="$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/GoogleService-Info.plist"
+          /bin/mkdir -p "$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH"
+          /bin/cp "$MINIK_FIREBASE_PLIST_PATH" "$firebase_destination"
+    dependencies:
+      - package: AppStoreCommerceKit
+        product: AppStoreCommerceKit
+      - package: FirebaseApple
+        product: FirebaseAuth
+      - package: FirebaseApple
+        product: FirebaseCore
+      - package: FirebaseApple
+        product: FirebaseFirestore
+      - package: FirebaseApple
+        product: FirebaseAppCheck
+      - package: GoogleMobileAds
+        product: GoogleMobileAds
+
+  MinikMath:
+    templates: [MinikApplication]
+    sources:
+      - path: Resources/RetroPong
+        type: folder
+        buildPhase: resources
+      - path: Resources/ModernPongAssets.xcassets
+        buildPhase: resources
+      - path: Resources/ModernPongAudio
+        buildPhase: resources
+      - path: Resources/MathObjects.xcassets
+        buildPhase: resources
+      - path: Resources/MathObjectManifest.json
+        buildPhase: resources
+      - path: Resources/MathVisuals.xcassets
+        buildPhase: resources
+      - path: Resources/PingPongAssets.xcassets
+        buildPhase: resources
+      - path: Resources/Localization/All/Localizable.xcstrings
+        buildPhase: resources
+      - path: Resources/Privacy/LocalOnly/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    info:
+      properties:
+        CFBundleDisplayName: Minik Math
+        CFBundleLocalizations: [en, am, ar, de, es, fr, he, nl, pt-BR, pt-PT, ru]
+    settings:
+      base:
+        MINIK_APP_ICON_NAME: MinikMathAppIcon
+        MINIK_MATH_BUNDLE_IDENTIFIER: com.appsbybros.minik.math
+        PRODUCT_BUNDLE_IDENTIFIER: $(MINIK_MATH_BUNDLE_IDENTIFIER)
+        # App Store product IDs are unique per developer account.
+        MINIK_REMOVE_ADS_PRODUCT_IDENTIFIER: remove_ads_math
+        PRODUCT_NAME: MinikMath
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) MINIK_MATH"
+        OTHER_LDFLAGS: "$(inherited) -ObjC"
+        # Release shows child-directed, non-personalized interstitials; Debug keeps
+        # Google's sample app ID, which MinikAdsConfiguration treats as ads off.
+        MINIK_ADS_ENABLED: YES
+        MINIK_ADS_POLICY_APPROVED: YES
+        MINIK_ADS_APPLICATION_IDENTIFIER: "ca-app-pub-6728099379581161~7244879780"
+        MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER: "ca-app-pub-6728099379581161/4754447817"
+      configs:
+        Debug:
+          MINIK_ADS_APPLICATION_IDENTIFIER: "ca-app-pub-3940256099942544~1458002511"
+          MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER: ""
+    dependencies:
+      - package: AppStoreCommerceKit
+        product: AppStoreCommerceKit
+      - package: GoogleMobileAds
+        product: GoogleMobileAds
+
+  MinikPingPong:
+    templates: [MinikApplication]
+    sources:
+      - path: Resources/ModernPongAssets.xcassets
+        buildPhase: resources
+      - path: Resources/ModernPongAudio
+        buildPhase: resources
+      - path: Config/Firebase/MinikPingPong/GoogleService-Info.plist
+        buildPhase: resources
+      - path: Resources/Localization/All/Localizable.xcstrings
+        buildPhase: resources
+      - path: Resources/Privacy/ModernPong/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    info:
+      properties:
+        CFBundleDisplayName: Minik Ping Pong
+        ModernPongTestAdsEnabled: $(MODERN_PONG_TEST_ADS)
+        CFBundleLocalizations: [en, am, ar, de, es, fr, he, nl, pt-BR, pt-PT, ru]
+    settings:
+      base:
+        # Release shows child-directed, non-personalized interstitials; Debug keeps
+        # Google's sample app ID, which MinikAdsConfiguration treats as ads off.
+        MINIK_ADS_ENABLED: YES
+        MINIK_ADS_POLICY_APPROVED: YES
+        MINIK_ADS_APPLICATION_IDENTIFIER: "ca-app-pub-6728099379581161~2128284471"
+        MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER: "ca-app-pub-6728099379581161/5768146581"
+        MINIK_APP_ICON_NAME: ModernPongAppIcon
+        MODERN_PONG_TEST_ADS: NO
+        MINIK_PING_PONG_BUNDLE_IDENTIFIER: com.appsbybros.minik.pingpong
+        PRODUCT_BUNDLE_IDENTIFIER: $(MINIK_PING_PONG_BUNDLE_IDENTIFIER)
+        # App Store product IDs are unique per developer account.
+        MINIK_REMOVE_ADS_PRODUCT_IDENTIFIER: remove_ads_pingpong
+        PRODUCT_NAME: MinikPingPong
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) MINIK_PING_PONG"
+        OTHER_LDFLAGS: "$(inherited) -ObjC"
+      configs:
+        Debug:
+          MODERN_PONG_TEST_ADS: YES
+          MINIK_ADS_APPLICATION_IDENTIFIER: "ca-app-pub-3940256099942544~1458002511"
+          MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER: ""
+    dependencies:
+      - package: FirebaseApple
+        product: FirebaseCore
+      - package: FirebaseApple
+        product: FirebaseAuth
+      - package: FirebaseApple
+        product: FirebaseDatabase
+      - package: AppStoreCommerceKit
+        product: AppStoreCommerceKit
+      - package: GoogleMobileAds
+        product: GoogleMobileAds
+
+  MinikRetroPingPong:
+    templates: [MinikApplication]
+    sources:
+      - path: Resources/RetroPong
+        type: folder
+        buildPhase: resources
+      - path: Resources/RetroPongIcon.xcassets
+        buildPhase: resources
+      - path: Resources/Localization/All/Localizable.xcstrings
+        buildPhase: resources
+      - path: Resources/Privacy/LocalOnly/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    info:
+      properties:
+        CFBundleDisplayName: Minik Bounce
+        CFBundleLocalizations: [en, he]
+    settings:
+      base:
+        MINIK_APP_ICON_NAME: RetroPongAppIcon
+        PRODUCT_BUNDLE_IDENTIFIER: com.appsbybros.minik.bouncelearn
+        PRODUCT_NAME: MinikRetroPingPong
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) MINIK_RETRO_PING_PONG"
+        OTHER_LDFLAGS: "$(inherited) -ObjC"
+        # Release shows child-directed, non-personalized interstitials; Debug keeps
+        # Google's sample app ID, which MinikAdsConfiguration treats as ads off.
+        MINIK_ADS_ENABLED: YES
+        MINIK_ADS_POLICY_APPROVED: YES
+        MINIK_ADS_APPLICATION_IDENTIFIER: "ca-app-pub-6728099379581161~9515819906"
+        MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER: "ca-app-pub-6728099379581161/9759362488"
+      configs:
+        Debug:
+          MINIK_ADS_APPLICATION_IDENTIFIER: "ca-app-pub-3940256099942544~1458002511"
+          MINIK_INTERSTITIAL_AD_UNIT_IDENTIFIER: ""
+    dependencies:
+      - package: AppStoreCommerceKit
+        product: AppStoreCommerceKit
+      - package: GoogleMobileAds
+        product: GoogleMobileAds
+
+  MinikMultiPingPong:
+    templates: [MinikApplication]
+    # Multi Ping Pong (3/4 players, Android MinikCrossPong) runs its own copy of
+    # Modern Ping Pong in MultiPong/; Sources/ModernPong stays the two-player game.
+    sources:REPLACE:
+      - path: Sources
+        excludes:
+          - "ModernPong/**"
+      - path: MultiPong
+      - path: Resources/MinikVisuals.xcassets
+        buildPhase: resources
+      - path: Resources/MultiPongIcon.xcassets
+        buildPhase: resources
+      # Multi Ping Pong only: Android 828c6fc legs, the body atlases that fade into them, and the purple home icon.
+      - path: Resources/MultiPongAssets.xcassets
+        buildPhase: resources
+      - path: Resources/ModernPongAssets.xcassets
+        buildPhase: resources
+      - path: Resources/ModernPongAudio
+        buildPhase: resources
+      - path: Resources/Localization/All/Localizable.xcstrings
+        buildPhase: resources
+      - path: Resources/Privacy/ModernPong/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    info:
+      properties:
+        CFBundleDisplayName: Multi Ping Pong
+        ModernPongTestAdsEnabled: $(MODERN_PONG_TEST_ADS)
+        CFBundleLocalizations: [en, he, ar, es, hi, nl]
+    settings:
+      base:
+        # Ads and purchases stay off, as in the Android app, until this app has
+        # its own AdMob IDs and App Store products.
+        MINIK_APP_ICON_NAME: MultiPingPongAppIcon
+        MODERN_PONG_TEST_ADS: NO
+        PRODUCT_BUNDLE_IDENTIFIER: com.appsbybros.minik.crosspong
+        MINIK_REMOVE_ADS_PRODUCT_IDENTIFIER: remove_ads_multipingpong
+        PRODUCT_NAME: MinikMultiPingPong
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) MINIK_PING_PONG MINIK_MULTI_PING_PONG"
+        OTHER_LDFLAGS: "$(inherited) -ObjC"
+    dependencies:
+      - package: FirebaseApple
+        product: FirebaseCore
+      - package: FirebaseApple
+        product: FirebaseAuth
+      - package: FirebaseApple
+        product: FirebaseDatabase
+      - package: AppStoreCommerceKit
+        product: AppStoreCommerceKit
+      - package: GoogleMobileAds
+        product: GoogleMobileAds
+
+  MultiPongTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests/MultiPongTests
+    dependencies:
+      - target: MinikMultiPingPong
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.appsbybros.minik.crosspong.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  MinikAmudu:
+    # Standalone port of the Android Spud game (C:/Projects/MinikAmudu); it shares no
+    # code with the Minik apps. Ads and purchases stay off until this app has its
+    # own AdMob IDs and App Store products.
+    type: application
+    platform: iOS
+    sources:
+      - path: Amudu
+      - path: Resources/Privacy/Amudu/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    info:
+      path: GeneratedInfoPlists/MinikAmudu-Info.plist
+      properties:
+        CFBundleDisplayName: Spud
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleLocalizations: [en, he, ar, es, hi, nl]
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        # Portrait only, as on Android; iPad allows that only as a full-screen app.
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.appsbybros.minik.amudu
+        PRODUCT_NAME: MinikAmudu
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MINIK_MARKETING_VERSION: "1.0"
+        MINIK_BUILD_NUMBER: "1"
+        OTHER_LDFLAGS: "$(inherited) -ObjC"
+    dependencies:
+      - package: FirebaseApple
+        product: FirebaseCore
+      - package: FirebaseApple
+        product: FirebaseAuth
+      - package: FirebaseApple
+        product: FirebaseDatabase
+
+  AmuduTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests/AmuduTests
+    dependencies:
+      - target: MinikAmudu
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.appsbybros.minik.amudu.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  MinikSplash:
+    # Standalone port of the Android Minik Splash game (C:/Projects/MinikSplash); it shares no
+    # code with the Minik apps. Ads and purchases stay off until this app has its
+    # own AdMob IDs and App Store products.
+    type: application
+    platform: iOS
+    sources:
+      - path: Splash
+      - path: Resources/Privacy/Splash/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    info:
+      path: GeneratedInfoPlists/MinikSplash-Info.plist
+      properties:
+        CFBundleDisplayName: Minik Splash
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleLocalizations: [en, he, ar, es, hi, nl]
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        # Portrait only, as on Android; iPad allows that only as a full-screen app.
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.appsbybros.minik.splash
+        PRODUCT_NAME: MinikSplash
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MINIK_MARKETING_VERSION: "1.0"
+        MINIK_BUILD_NUMBER: "1"
+        OTHER_LDFLAGS: "$(inherited) -ObjC"
+    dependencies:
+      - package: FirebaseApple
+        product: FirebaseCore
+      - package: FirebaseApple
+        product: FirebaseAuth
+      - package: FirebaseApple
+        product: FirebaseDatabase
+
+  SplashTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests/SplashTests
+    dependencies:
+      - target: MinikSplash
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.appsbybros.minik.splash.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  ProductConfigurationTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests/ProductConfigurationTests
+    dependencies:
+      - target: MinikPlus
+      - package: AppStoreCommerceKit
+        product: AppStoreCommerceKit
+    settings:
+      base:
+        MINIK_TESTS_BUNDLE_IDENTIFIER: com.appsbybros.minik.tests
+        PRODUCT_BUNDLE_IDENTIFIER: $(MINIK_TESTS_BUNDLE_IDENTIFIER)
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  MinikPlus:
+    build:
+      targets:
+        MinikPlus: all
+        ProductConfigurationTests: [test]
+    test:
+      targets:
+        - ProductConfigurationTests
+  MinikPlusEnglish:
+    build:
+      targets:
+        MinikPlusEnglish: all
+  MinikMath:
+    build:
+      targets:
+        MinikMath: all
+  MinikPingPong:
+    build:
+      targets:
+        MinikPingPong: all
+
+  MinikRetroPingPong:
+    build:
+      targets:
+        MinikRetroPingPong: all
+    run:
+      config: Debug
+
+  MinikMultiPingPong:
+    build:
+      targets:
+        MinikMultiPingPong: all
+        MultiPongTests: [test]
+    test:
+      targets:
+        - MultiPongTests
+
+  MinikAmudu:
+    build:
+      targets:
+        MinikAmudu: all
+        AmuduTests: [test]
+    test:
+      targets:
+        - AmuduTests
+
+  MinikSplash:
+    build:
+      targets:
+        MinikSplash: all
+        SplashTests: [test]
+    test:
+      targets:
+        - SplashTests

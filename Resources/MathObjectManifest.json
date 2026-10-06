@@ -1,0 +1,663 @@
+﻿{
+    "version":  1,
+    "objects":  [
+                    {
+                        "id":  "math_object_microscope",
+                        "assetName":  "math_object_microscope",
+                        "category":  "science-space",
+                        "accessibilityLabel":  "Microscope"
+                    },
+                    {
+                        "id":  "math_object_planet",
+                        "assetName":  "math_object_planet",
+                        "category":  "science-space",
+                        "accessibilityLabel":  "Planet"
+                    },
+                    {
+                        "id":  "math_object_rocket",
+                        "assetName":  "math_object_rocket",
+                        "category":  "science-space",
+                        "accessibilityLabel":  "Rocket"
+                    },
+                    {
+                        "id":  "math_object_gear",
+                        "assetName":  "math_object_gear",
+                        "category":  "science-space",
+                        "accessibilityLabel":  "Gear"
+                    },
+                    {
+                        "id":  "math_object_horseshoe_magnet",
+                        "assetName":  "math_object_horseshoe_magnet",
+                        "category":  "science-space",
+                        "accessibilityLabel":  "Horseshoe Magnet"
+                    },
+                    {
+                        "id":  "math_object_light_bulb",
+                        "assetName":  "math_object_light_bulb",
+                        "category":  "science-space",
+                        "accessibilityLabel":  "Light Bulb"
+                    },
+                    {
+                        "id":  "math_object_puzzle_piece",
+                        "assetName":  "math_object_puzzle_piece",
+                        "category":  "toys",
+                        "accessibilityLabel":  "Puzzle Piece"
+                    },
+                    {
+                        "id":  "math_object_rubber_duck",
+                        "assetName":  "math_object_rubber_duck",
+                        "category":  "toys",
+                        "accessibilityLabel":  "Rubber Duck"
+                    },
+                    {
+                        "id":  "math_object_spinning_top",
+                        "assetName":  "math_object_spinning_top",
+                        "category":  "toys",
+                        "accessibilityLabel":  "Spinning Top"
+                    },
+                    {
+                        "id":  "math_object_telescope",
+                        "assetName":  "math_object_telescope",
+                        "category":  "science-space",
+                        "accessibilityLabel":  "Telescope"
+                    },
+                    {
+                        "id":  "math_object_ball",
+                        "assetName":  "math_object_ball",
+                        "category":  "toys",
+                        "accessibilityLabel":  "Ball"
+                    },
+                    {
+                        "id":  "math_object_building_block",
+                        "assetName":  "math_object_building_block",
+                        "category":  "toys",
+                        "accessibilityLabel":  "Building Block"
+                    },
+                    {
+                        "id":  "math_object_compass",
+                        "assetName":  "math_object_compass",
+                        "category":  "science-space",
+                        "accessibilityLabel":  "Compass"
+                    },
+                    {
+                        "id":  "math_object_eraser",
+                        "assetName":  "math_object_eraser",
+                        "category":  "school",
+                        "accessibilityLabel":  "Eraser"
+                    },
+                    {
+                        "id":  "math_object_glue_stick",
+                        "assetName":  "math_object_glue_stick",
+                        "category":  "school",
+                        "accessibilityLabel":  "Glue Stick"
+                    },
+                    {
+                        "id":  "math_object_notebook",
+                        "assetName":  "math_object_notebook",
+                        "category":  "school",
+                        "accessibilityLabel":  "Notebook"
+                    },
+                    {
+                        "id":  "math_object_backpack",
+                        "assetName":  "math_object_backpack",
+                        "category":  "school",
+                        "accessibilityLabel":  "Backpack"
+                    },
+                    {
+                        "id":  "math_object_closed_book",
+                        "assetName":  "math_object_closed_book",
+                        "category":  "school",
+                        "accessibilityLabel":  "Closed Book"
+                    },
+                    {
+                        "id":  "math_object_crayon",
+                        "assetName":  "math_object_crayon",
+                        "category":  "school",
+                        "accessibilityLabel":  "Crayon"
+                    },
+                    {
+                        "id":  "math_object_scissors",
+                        "assetName":  "math_object_scissors",
+                        "category":  "school",
+                        "accessibilityLabel":  "Scissors"
+                    },
+                    {
+                        "id":  "math_object_astronaut_helmet",
+                        "assetName":  "math_object_astronaut_helmet",
+                        "category":  "science-space",
+                        "accessibilityLabel":  "Astronaut Helmet"
+                    },
+                    {
+                        "id":  "math_object_beaker",
+                        "assetName":  "math_object_beaker",
+                        "category":  "science-space",
+                        "accessibilityLabel":  "Beaker"
+                    },
+                    {
+                        "id":  "math_object_paintbrush",
+                        "assetName":  "math_object_paintbrush",
+                        "category":  "school",
+                        "accessibilityLabel":  "Paintbrush"
+                    },
+                    {
+                        "id":  "math_object_pencil",
+                        "assetName":  "math_object_pencil",
+                        "category":  "school",
+                        "accessibilityLabel":  "Pencil"
+                    },
+                    {
+                        "id":  "math_object_ruler",
+                        "assetName":  "math_object_ruler",
+                        "category":  "school",
+                        "accessibilityLabel":  "Ruler"
+                    },
+                    {
+                        "id":  "math_object_chocolate_bar",
+                        "assetName":  "math_object_chocolate_bar",
+                        "category":  "treats",
+                        "accessibilityLabel":  "Chocolate Bar"
+                    },
+                    {
+                        "id":  "math_object_cupcake",
+                        "assetName":  "math_object_cupcake",
+                        "category":  "treats",
+                        "accessibilityLabel":  "Cupcake"
+                    },
+                    {
+                        "id":  "math_object_donut",
+                        "assetName":  "math_object_donut",
+                        "category":  "treats",
+                        "accessibilityLabel":  "Donut"
+                    },
+                    {
+                        "id":  "math_object_heart_token",
+                        "assetName":  "math_object_heart_token",
+                        "category":  "treasures",
+                        "accessibilityLabel":  "Heart Token"
+                    },
+                    {
+                        "id":  "math_object_marble",
+                        "assetName":  "math_object_marble",
+                        "category":  "treasures",
+                        "accessibilityLabel":  "Marble"
+                    },
+                    {
+                        "id":  "math_object_cake_slice",
+                        "assetName":  "math_object_cake_slice",
+                        "category":  "treats",
+                        "accessibilityLabel":  "Cake Slice"
+                    },
+                    {
+                        "id":  "math_object_marshmallow",
+                        "assetName":  "math_object_marshmallow",
+                        "category":  "treats",
+                        "accessibilityLabel":  "Marshmallow"
+                    },
+                    {
+                        "id":  "math_object_round_cookie",
+                        "assetName":  "math_object_round_cookie",
+                        "category":  "treats",
+                        "accessibilityLabel":  "Round Cookie"
+                    },
+                    {
+                        "id":  "math_object_wrapped_candy",
+                        "assetName":  "math_object_wrapped_candy",
+                        "category":  "treats",
+                        "accessibilityLabel":  "Wrapped Candy"
+                    },
+                    {
+                        "id":  "math_object_ice_cream_cone",
+                        "assetName":  "math_object_ice_cream_cone",
+                        "category":  "treats",
+                        "accessibilityLabel":  "Ice Cream Cone"
+                    },
+                    {
+                        "id":  "math_object_lollipop",
+                        "assetName":  "math_object_lollipop",
+                        "category":  "treats",
+                        "accessibilityLabel":  "Lollipop"
+                    },
+                    {
+                        "id":  "math_object_macaron",
+                        "assetName":  "math_object_macaron",
+                        "category":  "treats",
+                        "accessibilityLabel":  "Macaron"
+                    },
+                    {
+                        "id":  "math_object_gold_coin",
+                        "assetName":  "math_object_gold_coin",
+                        "category":  "treasures",
+                        "accessibilityLabel":  "Gold Coin"
+                    },
+                    {
+                        "id":  "math_object_toy_rocket",
+                        "assetName":  "math_object_toy_rocket",
+                        "category":  "toys",
+                        "accessibilityLabel":  "Toy Rocket"
+                    },
+                    {
+                        "id":  "math_object_yo_yo",
+                        "assetName":  "math_object_yo_yo",
+                        "category":  "toys",
+                        "accessibilityLabel":  "Yo Yo"
+                    },
+                    {
+                        "id":  "math_object_balloon",
+                        "assetName":  "math_object_balloon",
+                        "category":  "treasures",
+                        "accessibilityLabel":  "Balloon"
+                    },
+                    {
+                        "id":  "math_object_teddy_bear",
+                        "assetName":  "math_object_teddy_bear",
+                        "category":  "toys",
+                        "accessibilityLabel":  "Teddy Bear"
+                    },
+                    {
+                        "id":  "math_object_toy_car",
+                        "assetName":  "math_object_toy_car",
+                        "category":  "toys",
+                        "accessibilityLabel":  "Toy Car"
+                    },
+                    {
+                        "id":  "math_object_toy_drum",
+                        "assetName":  "math_object_toy_drum",
+                        "category":  "toys",
+                        "accessibilityLabel":  "Toy Drum"
+                    },
+                    {
+                        "id":  "math_object_crown",
+                        "assetName":  "math_object_crown",
+                        "category":  "treasures",
+                        "accessibilityLabel":  "Crown"
+                    },
+                    {
+                        "id":  "math_object_gemstone",
+                        "assetName":  "math_object_gemstone",
+                        "category":  "treasures",
+                        "accessibilityLabel":  "Gemstone"
+                    },
+                    {
+                        "id":  "math_object_gift_box",
+                        "assetName":  "math_object_gift_box",
+                        "category":  "treasures",
+                        "accessibilityLabel":  "Gift Box"
+                    },
+                    {
+                        "id":  "math_object_bell",
+                        "assetName":  "math_object_bell",
+                        "category":  "treasures",
+                        "accessibilityLabel":  "Bell"
+                    },
+                    {
+                        "id":  "math_object_button",
+                        "assetName":  "math_object_button",
+                        "category":  "treasures",
+                        "accessibilityLabel":  "Button"
+                    },
+                    {
+                        "id":  "math_object_crescent_moon",
+                        "assetName":  "math_object_crescent_moon",
+                        "category":  "treasures",
+                        "accessibilityLabel":  "Crescent Moon"
+                    },
+                    {
+                        "id":  "math_object_sock",
+                        "assetName":  "math_object_sock",
+                        "category":  "everyday",
+                        "accessibilityLabel":  "Sock"
+                    },
+                    {
+                        "id":  "math_object_spoon",
+                        "assetName":  "math_object_spoon",
+                        "category":  "everyday",
+                        "accessibilityLabel":  "Spoon"
+                    },
+                    {
+                        "id":  "math_object_table_lamp",
+                        "assetName":  "math_object_table_lamp",
+                        "category":  "everyday",
+                        "accessibilityLabel":  "Table Lamp"
+                    },
+                    {
+                        "id":  "math_object_cup",
+                        "assetName":  "math_object_cup",
+                        "category":  "everyday",
+                        "accessibilityLabel":  "Cup"
+                    },
+                    {
+                        "id":  "math_object_key",
+                        "assetName":  "math_object_key",
+                        "category":  "everyday",
+                        "accessibilityLabel":  "Key"
+                    },
+                    {
+                        "id":  "math_object_plate",
+                        "assetName":  "math_object_plate",
+                        "category":  "everyday",
+                        "accessibilityLabel":  "Plate"
+                    },
+                    {
+                        "id":  "math_object_cheese_wedge",
+                        "assetName":  "math_object_cheese_wedge",
+                        "category":  "food",
+                        "accessibilityLabel":  "Cheese Wedge"
+                    },
+                    {
+                        "id":  "math_object_corn_cob",
+                        "assetName":  "math_object_corn_cob",
+                        "category":  "food",
+                        "accessibilityLabel":  "Corn Cob"
+                    },
+                    {
+                        "id":  "math_object_cucumber",
+                        "assetName":  "math_object_cucumber",
+                        "category":  "food",
+                        "accessibilityLabel":  "Cucumber"
+                    },
+                    {
+                        "id":  "math_object_toothbrush",
+                        "assetName":  "math_object_toothbrush",
+                        "category":  "everyday",
+                        "accessibilityLabel":  "Toothbrush"
+                    },
+                    {
+                        "id":  "math_object_bread_roll",
+                        "assetName":  "math_object_bread_roll",
+                        "category":  "food",
+                        "accessibilityLabel":  "Bread Roll"
+                    },
+                    {
+                        "id":  "math_object_carrot",
+                        "assetName":  "math_object_carrot",
+                        "category":  "food",
+                        "accessibilityLabel":  "Carrot"
+                    },
+                    {
+                        "id":  "math_object_comb",
+                        "assetName":  "math_object_comb",
+                        "category":  "everyday",
+                        "accessibilityLabel":  "Comb"
+                    },
+                    {
+                        "id":  "math_object_turtle",
+                        "assetName":  "math_object_turtle",
+                        "category":  "animals",
+                        "accessibilityLabel":  "Turtle"
+                    },
+                    {
+                        "id":  "math_object_frog",
+                        "assetName":  "math_object_frog",
+                        "category":  "animals",
+                        "accessibilityLabel":  "Frog"
+                    },
+                    {
+                        "id":  "math_object_bluebird",
+                        "assetName":  "math_object_bluebird",
+                        "category":  "animals",
+                        "accessibilityLabel":  "Bluebird"
+                    },
+                    {
+                        "id":  "math_object_ladybug",
+                        "assetName":  "math_object_ladybug",
+                        "category":  "animals",
+                        "accessibilityLabel":  "Ladybug"
+                    },
+                    {
+                        "id":  "math_object_butterfly",
+                        "assetName":  "math_object_butterfly",
+                        "category":  "animals",
+                        "accessibilityLabel":  "Butterfly"
+                    },
+                    {
+                        "id":  "math_object_clownfish",
+                        "assetName":  "math_object_clownfish",
+                        "category":  "animals",
+                        "accessibilityLabel":  "Clownfish"
+                    },
+                    {
+                        "id":  "math_object_kitten",
+                        "assetName":  "math_object_kitten",
+                        "category":  "animals",
+                        "accessibilityLabel":  "Kitten"
+                    },
+                    {
+                        "id":  "math_object_alarm_clock",
+                        "assetName":  "math_object_alarm_clock",
+                        "category":  "everyday",
+                        "accessibilityLabel":  "Alarm Clock"
+                    },
+                    {
+                        "id":  "math_object_cap",
+                        "assetName":  "math_object_cap",
+                        "category":  "everyday",
+                        "accessibilityLabel":  "Cap"
+                    },
+                    {
+                        "id":  "math_object_bee",
+                        "assetName":  "math_object_bee",
+                        "category":  "animals",
+                        "accessibilityLabel":  "Bee"
+                    },
+                    {
+                        "id":  "math_object_snail",
+                        "assetName":  "math_object_snail",
+                        "category":  "animals",
+                        "accessibilityLabel":  "Snail"
+                    },
+                    {
+                        "id":  "math_object_rabbit",
+                        "assetName":  "math_object_rabbit",
+                        "category":  "animals",
+                        "accessibilityLabel":  "Rabbit"
+                    },
+                    {
+                        "id":  "math_object_feather",
+                        "assetName":  "math_object_feather",
+                        "category":  "nature",
+                        "accessibilityLabel":  "Feather"
+                    },
+                    {
+                        "id":  "math_object_flower",
+                        "assetName":  "math_object_flower",
+                        "category":  "nature",
+                        "accessibilityLabel":  "Flower"
+                    },
+                    {
+                        "id":  "math_object_leaf",
+                        "assetName":  "math_object_leaf",
+                        "category":  "nature",
+                        "accessibilityLabel":  "Leaf"
+                    },
+                    {
+                        "id":  "math_object_pomegranate",
+                        "assetName":  "math_object_pomegranate",
+                        "category":  "fruits",
+                        "accessibilityLabel":  "Pomegranate"
+                    },
+                    {
+                        "id":  "math_object_strawberry",
+                        "assetName":  "math_object_strawberry",
+                        "category":  "fruits",
+                        "accessibilityLabel":  "Strawberry"
+                    },
+                    {
+                        "id":  "math_object_acorn",
+                        "assetName":  "math_object_acorn",
+                        "category":  "nature",
+                        "accessibilityLabel":  "Acorn"
+                    },
+                    {
+                        "id":  "math_object_seashell",
+                        "assetName":  "math_object_seashell",
+                        "category":  "nature",
+                        "accessibilityLabel":  "Seashell"
+                    },
+                    {
+                        "id":  "math_object_snowflake",
+                        "assetName":  "math_object_snowflake",
+                        "category":  "nature",
+                        "accessibilityLabel":  "Snowflake"
+                    },
+                    {
+                        "id":  "math_object_star_token",
+                        "assetName":  "math_object_star_token",
+                        "category":  "nature",
+                        "accessibilityLabel":  "Star Token"
+                    },
+                    {
+                        "id":  "math_object_mushroom",
+                        "assetName":  "math_object_mushroom",
+                        "category":  "nature",
+                        "accessibilityLabel":  "Mushroom"
+                    },
+                    {
+                        "id":  "math_object_pebble",
+                        "assetName":  "math_object_pebble",
+                        "category":  "nature",
+                        "accessibilityLabel":  "Pebble"
+                    },
+                    {
+                        "id":  "math_object_pinecone",
+                        "assetName":  "math_object_pinecone",
+                        "category":  "nature",
+                        "accessibilityLabel":  "Pinecone"
+                    },
+                    {
+                        "id":  "math_object_plum",
+                        "assetName":  "math_object_plum",
+                        "category":  "fruits",
+                        "accessibilityLabel":  "Plum"
+                    },
+                    {
+                        "id":  "math_object_pretzel",
+                        "assetName":  "math_object_pretzel",
+                        "category":  "food",
+                        "accessibilityLabel":  "Pretzel"
+                    },
+                    {
+                        "id":  "math_object_tomato",
+                        "assetName":  "math_object_tomato",
+                        "category":  "food",
+                        "accessibilityLabel":  "Tomato"
+                    },
+                    {
+                        "id":  "math_object_apple",
+                        "assetName":  "math_object_apple",
+                        "category":  "fruits",
+                        "accessibilityLabel":  "Apple"
+                    },
+                    {
+                        "id":  "math_object_egg",
+                        "assetName":  "math_object_egg",
+                        "category":  "food",
+                        "accessibilityLabel":  "Egg"
+                    },
+                    {
+                        "id":  "math_object_pancake",
+                        "assetName":  "math_object_pancake",
+                        "category":  "food",
+                        "accessibilityLabel":  "Pancake"
+                    },
+                    {
+                        "id":  "math_object_pizza_slice",
+                        "assetName":  "math_object_pizza_slice",
+                        "category":  "food",
+                        "accessibilityLabel":  "Pizza Slice"
+                    },
+                    {
+                        "id":  "math_object_orange",
+                        "assetName":  "math_object_orange",
+                        "category":  "fruits",
+                        "accessibilityLabel":  "Orange"
+                    },
+                    {
+                        "id":  "math_object_peach",
+                        "assetName":  "math_object_peach",
+                        "category":  "fruits",
+                        "accessibilityLabel":  "Peach"
+                    },
+                    {
+                        "id":  "math_object_pear",
+                        "assetName":  "math_object_pear",
+                        "category":  "fruits",
+                        "accessibilityLabel":  "Pear"
+                    },
+                    {
+                        "id":  "math_object_banana",
+                        "assetName":  "math_object_banana",
+                        "category":  "fruits",
+                        "accessibilityLabel":  "Banana"
+                    },
+                    {
+                        "id":  "math_object_lemon",
+                        "assetName":  "math_object_lemon",
+                        "category":  "fruits",
+                        "accessibilityLabel":  "Lemon"
+                    },
+                    {
+                        "id":  "math_object_mango",
+                        "assetName":  "math_object_mango",
+                        "category":  "fruits",
+                        "accessibilityLabel":  "Mango"
+                    }
+                ],
+    "zeroStates":  [
+                       {
+                           "id":  "math_zero_tray",
+                           "assetName":  "math_zero_tray",
+                           "category":  "zero-states",
+                           "accessibilityLabel":  "Empty Tray"
+                       },
+                       {
+                           "id":  "math_zero_plate",
+                           "assetName":  "math_zero_plate",
+                           "category":  "zero-states",
+                           "accessibilityLabel":  "Empty Plate"
+                       },
+                       {
+                           "id":  "math_zero_basket",
+                           "assetName":  "math_zero_basket",
+                           "category":  "zero-states",
+                           "accessibilityLabel":  "Empty Basket"
+                       }
+                   ],
+    "groupingSupport":  [
+                            {
+                                "id":  "math_sorting_ring",
+                                "assetName":  "math_sorting_ring",
+                                "category":  "grouping-support",
+                                "accessibilityLabel":  "Sorting Ring"
+                            },
+                            {
+                                "id":  "math_ten_frame",
+                                "assetName":  "math_ten_frame",
+                                "category":  "grouping-support",
+                                "accessibilityLabel":  "Ten Frame"
+                            },
+                            {
+                                "id":  "math_two_compartment_tray",
+                                "assetName":  "math_two_compartment_tray",
+                                "category":  "grouping-support",
+                                "accessibilityLabel":  "Two Compartment Tray"
+                            },
+                            {
+                                "id":  "math_grouping_basket",
+                                "assetName":  "math_grouping_basket",
+                                "category":  "grouping-support",
+                                "accessibilityLabel":  "Grouping Basket"
+                            },
+                            {
+                                "id":  "math_grouping_tray",
+                                "assetName":  "math_grouping_tray",
+                                "category":  "grouping-support",
+                                "accessibilityLabel":  "Grouping Tray"
+                            },
+                            {
+                                "id":  "math_place_value_organizer",
+                                "assetName":  "math_place_value_organizer",
+                                "category":  "grouping-support",
+                                "accessibilityLabel":  "Place Value Organizer"
+                            }
+                        ]
+}

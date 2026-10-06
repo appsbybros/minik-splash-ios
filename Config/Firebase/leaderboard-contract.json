@@ -1,0 +1,66 @@
+{
+  "contractVersion": 2,
+  "androidSource": "subscriptionlib/src/main/java/com/minik/subscription/RecordsDetails.kt",
+  "appId": "3",
+  "topRecordsLimit": 20,
+  "documentKey": "v2_ plus a persisted per-product/per-profile UUID player_id",
+  "ownership": {
+    "collection": "leaderboard_owners",
+    "documentKey": "player_id",
+    "fields": ["owner_uid"],
+    "clientReadable": false,
+    "oneOwnerMayOwnMultiplePlayers": true,
+    "legacyIDsClaimable": false
+  },
+  "queries": [
+    {
+      "product": "MinikPlus",
+      "collection": "score_records",
+      "filter": { "field": "app_id", "equals": "3" },
+      "orderBy": "score",
+      "descending": true,
+      "limit": 20
+    },
+    {
+      "product": "MinikPlusEnglish",
+      "collection": "score_records_english_only",
+      "filter": { "field": "app_id", "equals": "3" },
+      "orderBy": "score",
+      "descending": true,
+      "limit": 20
+    },
+    {
+      "product": "both-language-products",
+      "collection": "correct_answers_in_row",
+      "filter": { "field": "app_id", "equals": "3" },
+      "orderBy": "correct_answers_in_row",
+      "descending": true,
+      "limit": 20
+    }
+  ],
+  "scoreFields": [
+    "app_id",
+    "player_id",
+    "score",
+    "correct_answers_in_row",
+    "date_achived",
+    "user_name"
+  ],
+  "streakFields": [
+    "app_id",
+    "player_id",
+    "correct_answers_in_row",
+    "date_achived",
+    "user_name"
+  ],
+  "iosSafeExtensionFields": ["avatar_id"],
+  "timestamp": "Firebase server timestamp in legacy date_achived field",
+  "qualification": {
+    "positiveValuesOnly": true,
+    "fullTableRequiresStrictlyGreaterThanLast": true,
+    "tiesShareRank": true,
+    "equalOrBetterExistingParticipantValueIsNotReplaced": true,
+    "scoreAndStreakBatchWhenBothQualify": true,
+    "top20QualificationAndWriteIsTransactional": false
+  }
+}

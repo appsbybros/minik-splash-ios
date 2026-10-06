@@ -1,0 +1,81 @@
+name: Retro Pong Simulator Verification
+
+# Manual only: the owner pushes and starts Apple validation when ready.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify imported game and host contracts
+        run: |
+          python3 Scripts/audit-retro-pong.py
+          node --test Tests/RetroPong/host.test.cjs
+          node Tests/RetroPong/engine.test.cjs
+      - name: Generate project
+        run: |
+          if ! command -v xcodegen >/dev/null; then brew install xcodegen; fi
+          xcodegen generate
+          xcodebuild -version
+      - name: Choose and boot iPhone simulator
+        id: simulator
+        run: |
+          mkdir -p build/retro-evidence
+          xcrun simctl list devices available -j > build/retro-evidence/devices.json
+          DEVICE=$(python3 -c 'import json; d=json.load(open("build/retro-evidence/devices.json")); print(next(v["udid"] for k,vs in d["devices"].items() if "iOS" in k for v in vs if "iPhone" in v["name"]))')
+          echo "udid=$DEVICE" >> "$GITHUB_OUTPUT"
+          xcrun simctl boot "$DEVICE" || true
+          xcrun simctl bootstatus "$DEVICE" -b
+      - name: Build standalone and Math host
+        env:
+          DEVICE: ${{ steps.simulator.outputs.udid }}
+        run: |
+          set -euo pipefail
+          for SCHEME in MinikRetroPingPong MinikMath; do
+            xcodebuild build -project Minik.xcodeproj -scheme "$SCHEME" -configuration Debug \
+              -destination "platform=iOS Simulator,id=$DEVICE" -derivedDataPath build/RetroDerived \
+              CODE_SIGNING_ALLOWED=NO 2>&1 | tee "build/retro-evidence/$SCHEME-build.log"
+          done
+      - name: Run native regression tests
+        env:
+          DEVICE: ${{ steps.simulator.outputs.udid }}
+        run: |
+          set -euo pipefail
+          xcodebuild test -project Minik.xcodeproj -scheme MinikPlus -configuration Debug \
+            -destination "platform=iOS Simulator,id=$DEVICE" -derivedDataPath build/RetroDerived \
+            -resultBundlePath build/retro-evidence/ProductConfigurationTests.xcresult \
+            CODE_SIGNING_ALLOWED=NO 2>&1 | tee build/retro-evidence/tests.log
+      - name: Launch standalone in English and Hebrew
+        env:
+          DEVICE: ${{ steps.simulator.outputs.udid }}
+        run: |
+          set -euo pipefail
+          APP=build/RetroDerived/Build/Products/Debug-iphonesimulator/MinikRetroPingPong.app
+          test -f "$APP/RetroPong/index.html"
+          test -f "$APP/RetroPong/assets/audio/game_start.mp3"
+          xcrun simctl install "$DEVICE" "$APP"
+          for LANGUAGE in en he; do
+            xcrun simctl launch "$DEVICE" com.appsbybros.minik.bouncelearn -AppleLanguages "($LANGUAGE)" -AppleLocale "$LANGUAGE" | tee "build/retro-evidence/launch-$LANGUAGE.log"
+            sleep 5
+            xcrun simctl io "$DEVICE" screenshot "build/retro-evidence/setup-$LANGUAGE.png"
+            xcrun simctl terminate "$DEVICE" com.appsbybros.minik.bouncelearn
+          done
+          ditto -c -k --sequesterRsrc --keepParent "$APP" build/retro-evidence/MinikRetroPingPong-simulator.zip
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Retro-Pong-Apple-verification
+          path: build/retro-evidence
+          retention-days: 7
+      - name: Release simulator
+        if: ${{ always() && steps.simulator.outputs.udid != '' }}
+        run: xcrun simctl shutdown '${{ steps.simulator.outputs.udid }}' || true
