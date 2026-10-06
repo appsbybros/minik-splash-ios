@@ -3,6 +3,6 @@ import XCTest
 
 final class AmuduAppTests: XCTestCase {
     func testHostIsTheAmuduApp() {
-        XCTAssertEqual(Bundle.main.bundleIdentifier, "com.appsbybros.minik.amudu")
+        XCTAssertEqual(Bundle.main.bundleIdentifier, "com.appsbybros.minik.spud")
     }
 }

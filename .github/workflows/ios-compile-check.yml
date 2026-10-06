@@ -43,8 +43,10 @@ jobs:
                   CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
                   ARCHS=arm64 ONLY_ACTIVE_ARCH=NO)
           status=0
-          # MinikPlus compiles nearly all shared code. If it passes, the tests and the other
-          # apps are compiled too; a test failure does not stop the apps from being checked.
+          # MinikPlus compiles nearly all shared code. In a private repository (paid macOS
+          # minutes) a failing app stops the run; in a public one (free minutes) every app is
+          # compiled, so one run lists all errors. A test failure never stops the apps.
+          STOP_AT_FIRST_FAILURE="${{ github.event.repository.private }}"
           for SCHEME in MinikPlus MinikPingPong MinikRetroPingPong MinikMath MinikPlusEnglish MinikMultiPingPong MinikAmudu MinikSplash; do
             echo "Compiling $SCHEME"
             xcodebuild build -scheme "$SCHEME" "${COMMON[@]}" > "build/logs/$SCHEME.log" 2>&1
@@ -52,7 +54,10 @@ jobs:
             if (( scheme_status != 0 )); then
               echo "::error::Compile failed for $SCHEME"
               status=$scheme_status
-              break
+              if [ "$STOP_AT_FIRST_FAILURE" = "true" ]; then
+                break
+              fi
+              continue
             fi
             # Each app with a test target also compiles its tests.
             TESTS=""

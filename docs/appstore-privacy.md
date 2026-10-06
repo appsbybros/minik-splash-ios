@@ -17,7 +17,7 @@ appsbybros.dev@gmail.com. Hebrew and Arabic pages use `dir="rtl"`.
 | `MinikPingPong/` | Minik Ping Pong | `MinikPingPong` | `com.appsbybros.minik.pingpong` | English, Hebrew |
 | `MinikBounce/` | Minik Bounce | `MinikRetroPingPong` | `com.appsbybros.minik.bouncelearn` | English, Hebrew |
 | `MultiPingPong/` | Multi Ping Pong | `MinikMultiPingPong` | `com.appsbybros.minik.crosspong` | English, Hebrew, Arabic, Spanish, Hindi, Dutch |
-| `Spud/` | Spud (localized names from `Amudu/*.lproj/InfoPlist.strings`) | `MinikAmudu` | `com.appsbybros.minik.amudu` | same six |
+| `Spud/` | Spud (localized names from `Amudu/*.lproj/InfoPlist.strings`) | `MinikAmudu` | `com.appsbybros.minik.spud` | same six |
 | `MinikSplash/` | Minik Splash | `MinikSplash` | `com.appsbybros.minik.splash` | same six |
 
 Each page is `appstore/privacy/<App>/<Language>/privacy.html`. `appstore/privacy/index.html` links all 28 pages.

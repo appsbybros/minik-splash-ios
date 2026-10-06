@@ -579,7 +579,9 @@ private struct BuildBoardMetrics {
         let spaceWidth = letterWidth * 0.5
         var lines = 0
         var lineWidth: CGFloat = 0
-        for word in text.split(whereSeparator: { $0.isWhitespace }) {
+        // Typed, so the compiler picks Collection's split (Substring) over Sequence's.
+        let words: [Substring] = text.split(whereSeparator: { $0.isWhitespace })
+        for word in words {
             let wordWidth = CGFloat(word.count) * letterWidth
             if lines > 0 && lineWidth + spaceWidth + wordWidth <= available {
                 lineWidth += spaceWidth + wordWidth

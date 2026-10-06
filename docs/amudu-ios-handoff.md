@@ -2,7 +2,7 @@
 
 Source: Android project `C:/Projects/MinikAmudu` (read-only; state of 2026-10-04, delivery
 `delivery/revision-sdk-branding-2026-10-04`). Target: XcodeGen app `MinikAmudu` (`Amudu/**`, bundle
-`com.appsbybros.minik.amudu`, display name per language) and test target `AmuduTests`. Nothing in `project.yml`,
+`com.appsbybros.minik.spud`, display name per language) and test target `AmuduTests`. Nothing in `project.yml`,
 `Sources/**`, `MultiPong/**` or `Splash/**` was changed. Nothing was committed, built in CI, deployed or pushed.
 
 ## Status
@@ -12,7 +12,7 @@ Source: Android project `C:/Projects/MinikAmudu` (read-only; state of 2026-10-04
 - The Swift has **not been compiled** (no Swift toolchain on the Windows machine). It was written against the iOS 17 SDK
   and Swift 5.9 and re-read line by line; see "Least-sure compile spots" before the first macOS build.
 - Ads, purchases and code redemption are off (no AdMob, UMP or StoreKit); Android's "Ads & purchases" button is hidden.
-- Online rooms activate only when this app's `GoogleService-Info.plist` (bundle `com.appsbybros.minik.amudu`, with a
+- Online rooms activate only when this app's `GoogleService-Info.plist` (bundle `com.appsbybros.minik.spud`, with a
   `DATABASE_URL`) is bundled. Without it, "Join by code" and "Open private room" show Android's
   "Online activation is pending." and everything else runs offline.
 

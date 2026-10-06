@@ -518,7 +518,7 @@ targets:
           - UIInterfaceOrientationPortraitUpsideDown
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.appsbybros.minik.amudu
+        PRODUCT_BUNDLE_IDENTIFIER: com.appsbybros.minik.spud
         PRODUCT_NAME: MinikAmudu
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         MINIK_MARKETING_VERSION: "1.0"
@@ -541,7 +541,7 @@ targets:
       - target: MinikAmudu
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.appsbybros.minik.amudu.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.appsbybros.minik.spud.tests
         GENERATE_INFOPLIST_FILE: YES
 
   MinikSplash:

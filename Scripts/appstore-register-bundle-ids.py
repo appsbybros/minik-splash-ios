@@ -27,7 +27,7 @@ APPS = [
     ("com.appsbybros.minik.pingpong", "Minik Ping Pong", False),
     ("com.appsbybros.minik.bouncelearn", "Minik Bounce", False),
     ("com.appsbybros.minik.crosspong", "Multi Ping Pong", False),
-    ("com.appsbybros.minik.amudu", "Minik Spud", False),
+    ("com.appsbybros.minik.spud", "Minik Spud", False),
     ("com.appsbybros.minik.splash", "Minik Splash", False),
 ]
 # The App Store Connect API has no App Attest capability type: it can neither read
@@ -137,7 +137,7 @@ SCHEME_BUNDLES = {
     "MinikPingPong": "com.appsbybros.minik.pingpong",
     "MinikRetroPingPong": "com.appsbybros.minik.bouncelearn",
     "MinikMultiPingPong": "com.appsbybros.minik.crosspong",
-    "MinikAmudu": "com.appsbybros.minik.amudu",
+    "MinikAmudu": "com.appsbybros.minik.spud",
     "MinikSplash": "com.appsbybros.minik.splash",
 }
 

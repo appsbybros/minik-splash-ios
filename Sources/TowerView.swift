@@ -440,9 +440,10 @@ struct TowerView: View {
     /// renderTitleBlocks: one chip per letter and a new line for every word (with a
     /// wrap when a word is wider than the card); the colours start again each word.
     private func languageTowerTitleRows(chipsPerRow: Int) -> [LanguageTowerTitleRow] {
-        let words = interfaceLocaleID.text("Letter Tower")
+        // Typed, so the compiler picks Collection's split (Substring) over Sequence's.
+        let titleWords: [Substring] = interfaceLocaleID.text("Letter Tower")
             .split(whereSeparator: { $0.isWhitespace })
-            .map { Array($0) }
+        let words = titleWords.map { Array($0) }
         let perRow = max(1, chipsPerRow)
         var rows: [LanguageTowerTitleRow] = []
         var chipID = 0
@@ -759,9 +760,10 @@ struct TowerView: View {
         plan: LanguageTowerPromptPlan,
         panel: LanguageTowerPanelLayout
     ) -> LanguageTowerMetrics {
-        let titleWordLengths = interfaceLocaleID.text("Letter Tower")
+        // Typed, so the compiler picks Collection's split (Substring) over Sequence's.
+        let titleWords: [Substring] = interfaceLocaleID.text("Letter Tower")
             .split(whereSeparator: { $0.isWhitespace })
-            .map { $0.count }
+        let titleWordLengths = titleWords.map { $0.count }
         let instructionLength = interfaceLocaleID.text("Drag the letters in the correct order").count
         return LanguageTowerMetrics(
             panelWidth: panel.width,
