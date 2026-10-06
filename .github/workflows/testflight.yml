@@ -17,11 +17,14 @@ jobs:
     # so a setup problem stops the run before any macOS minutes are used.
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    outputs:
+      build_number: ${{ steps.setup.outputs.build_number }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Check App Store Connect setup
+        id: setup
         shell: bash
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
@@ -39,6 +42,13 @@ jobs:
           export ASC_ISSUER_ID="$(printf '%s' "$ASC_ISSUER_ID" | tr -d '[:space:]')"
           python3 -m pip install --quiet "pyjwt[crypto]"
           python3 Scripts/appstore-register-bundle-ids.py --check $PRODUCTS
+          # Each run gets a higher build number than every earlier upload, also when this
+          # repository's run count starts again (a new copy of the code).
+          floor=$((1000 + GITHUB_RUN_NUMBER * 10 + GITHUB_RUN_ATTEMPT))
+          next="$(python3 Scripts/appstore-register-bundle-ids.py --next-build $PRODUCTS | tail -1)"
+          build=$(( next > floor ? next : floor ))
+          echo "Build number: $build"
+          echo "build_number=$build" >> "$GITHUB_OUTPUT"
 
   upload:
     needs: preflight
@@ -96,8 +106,8 @@ jobs:
         run: |
           set -uo pipefail
           mkdir -p build/logs build/archives build/export
-          # Each run gets a higher build number than every earlier upload.
-          BUILD_NUMBER=$((1000 + GITHUB_RUN_NUMBER * 10 + GITHUB_RUN_ATTEMPT))
+          # Picked by the pre-flight: above every build App Store Connect already has.
+          BUILD_NUMBER="${{ needs.preflight.outputs.build_number }}"
           echo "Build number: $BUILD_NUMBER"
 
           cat > build/ExportOptions.plist <<PLIST

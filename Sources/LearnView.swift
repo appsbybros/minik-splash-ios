@@ -58,6 +58,10 @@ struct LearnView: View {
 
             MinikPracticeSurface(compact: compact) {
                 VStack(spacing: compact ? 18 : 24) {
+                    if presentation == .standard {
+                        stepByStepHeader(compact: compact)
+                    }
+
                     if hasSpeech {
                         HStack {
                             Spacer()
@@ -92,6 +96,23 @@ struct LearnView: View {
                 }
             }
         }
+    }
+
+    /// Learn Math teaches one fact at a time with its picture; the Facts Table
+    /// (MathCardsView) shows them all at once. The header says which this is.
+    private func stepByStepHeader(compact: Bool) -> some View {
+        VStack(spacing: 6) {
+            Text(String(localized: "Learn step by step"))
+                .font(.system(size: compact ? 22 : 27, weight: .bold, design: .rounded))
+                .foregroundStyle(MathInk.navy)
+            Text(String(localized: "Look, listen and say it out loud. Then tap Next."))
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(MathInk.softInk)
+        }
+        .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
     }
 
     @ViewBuilder

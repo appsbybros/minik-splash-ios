@@ -13,10 +13,12 @@ enum LanguagePanelInsets {
     static func vertical(wide: Bool) -> CGFloat { wide ? 12 : 8 }
 }
 
-/// Android draws two Language panels. Letter Pairs' white card (16 dp corners, 18 dp
-/// from the screen's edges) is the default. WriteScreen's practice screens use
-/// bg_white_rounded: #F9F9F9 with 20 dp corners, 20 dp from the sides and 22 dp from
-/// the top and bottom (30 dp and 32 dp on tablets).
+/// Android draws two Language panels, both in the rainbow-sky design's frosted
+/// glass over the sky (pretty_glass_strong and bg_glass_panel_strong: white with a
+/// 2 dp white rim). Letter Pairs' card (28 dp corners, 36 dp on tablets, 18 dp from
+/// the screen's edges) is the default. WriteScreen's practice screens keep their
+/// 20 dp side and 22 dp top and bottom margins (30 dp and 32 dp on tablets) with
+/// the glass panel's 28 dp corners.
 enum LanguagePanelStyle {
     case card
     case rounded
@@ -35,37 +37,33 @@ enum LanguagePanelStyle {
         }
     }
 
-    var cornerRadius: CGFloat {
+    func cornerRadius(wide: Bool) -> CGFloat {
         switch self {
-        case .card: return 16
-        case .rounded: return 20
-        }
-    }
-
-    var fill: Color {
-        switch self {
-        case .card: return .white
-        case .rounded: return Color(red: 0.976, green: 0.976, blue: 0.976)
+        case .card: return wide ? 36 : 28
+        case .rounded: return 28
         }
     }
 }
 
-/// Android's framed Language activity surface. The board is laid out for the
-/// space the panel really has; whenever it is still taller (accessibility text,
-/// small viewports) the panel scrolls, and it neither scrolls nor bounces when
-/// it fits. Only accessibility text sizes (AX1-AX5) select accessibility layouts.
+/// Android's framed Language activity surface in the rainbow-sky design: the sky
+/// around a frosted glass panel. The board is laid out for the space the panel
+/// really has; whenever it is still taller (accessibility text, small viewports)
+/// the panel scrolls, and it neither scrolls nor bounces when it fits. Only
+/// accessibility text sizes (AX1-AX5) select accessibility layouts. A game's panel
+/// (`washed`, Android's applyGameBackgrounds) lays the light sky-to-lavender wash
+/// under its board where the old artwork was.
 struct LanguageActivityScreen<Content: View>: View {
-    private let sceneAsset: String?
+    private let washed: Bool
     private let panelStyle: LanguagePanelStyle
     private let minimumContentHeight: (CGFloat, Bool) -> CGFloat
     private let content: (LanguageActivityLayout) -> Content
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    init(sceneAsset: String? = nil,
+    init(washed: Bool = false,
          panelStyle: LanguagePanelStyle = .card,
          minimumContentHeight: @escaping (CGFloat, Bool) -> CGFloat = { _, _ in 0 },
          @ViewBuilder content: @escaping (LanguageActivityLayout) -> Content) {
-        self.sceneAsset = sceneAsset
+        self.washed = washed
         self.panelStyle = panelStyle
         self.minimumContentHeight = minimumContentHeight
         self.content = content
@@ -90,37 +88,150 @@ struct LanguageActivityScreen<Content: View>: View {
                 height: max(minimumContentHeight(contentWidth, wide), boardHeight),
                 wide: wide, accessibility: dynamicTypeSize.isAccessibilitySize
             )
-            ScrollView {
-                content(layout)
-                    .frame(width: contentWidth)
-                    .frame(minHeight: viewportHeight)
-                    .padding(.horizontal, horizontalInset)
-                    .padding(.vertical, verticalInset)
-            }
-            .scrollBounceBehavior(.basedOnSize)
-            .frame(width: panelWidth, height: panelHeight)
-            .background {
-                panelStyle.fill
-                if let sceneAsset {
-                    MinikArtworkImage(name: sceneAsset, contentMode: .fill)
+            LanguageSkyPanel(
+                width: panelWidth,
+                height: panelHeight,
+                cornerRadius: panelStyle.cornerRadius(wide: wide),
+                washed: washed
+            ) {
+                ScrollView {
+                    content(layout)
+                        .frame(width: contentWidth)
+                        .frame(minHeight: viewportHeight)
+                        .padding(.horizontal, horizontalInset)
+                        .padding(.vertical, verticalInset)
                 }
+                .scrollBounceBehavior(.basedOnSize)
             }
-            .clipShape(RoundedRectangle(cornerRadius: panelStyle.cornerRadius))
             .frame(width: geometry.size.width, height: geometry.size.height)
         }
-        // The fill artwork stays a background so it never sizes the layout. As a
-        // ZStack sibling its portrait aspect made the stack taller than the screen,
-        // and GeometryReader pinned that stack at the top: the panel slid down,
-        // in landscape completely off-screen.
-        // Android's practice screens show the tie-dye artwork as it is (WriteScreen's
-        // minik_background_frame, minik_background elsewhere), without the white veil
-        // MinikArtworkBackground lays over it.
+        // The sky stays a background so it never sizes the layout. As a ZStack
+        // sibling a portrait artwork made the stack taller than the screen, and
+        // GeometryReader pinned that stack at the top: the panel slid down, in
+        // landscape completely off-screen.
         .background {
-            MinikArtworkImage(name: MinikVisualAsset.background, contentMode: .fill)
-                .ignoresSafeArea()
-                .clipped()
-                .ignoresSafeArea()
+            MinikSkyBackground()
         }
+    }
+}
+
+// MARK: - The rainbow-sky design on the activity screens
+
+/// Colours the Language activity screens add to MinikPretty's (Android's
+/// bg_pretty_* drawables). Text on these light surfaces is always dark.
+enum LanguageSkyPalette {
+    /// bg_pretty_inner_panel: #E6F5FF at the top, white in the middle, #F3ECFF at the bottom.
+    static let washTop = Color(red: 230 / 255, green: 245 / 255, blue: 255 / 255)
+    static let washBottom = Color(red: 243 / 255, green: 236 / 255, blue: 255 / 255)
+    /// bg_pretty_speaker: #F4F1FF with a 2 dp #9D86F5 ring.
+    static let speakerFill = Color(red: 244 / 255, green: 241 / 255, blue: 255 / 255)
+    static let speakerRing = Color(red: 157 / 255, green: 134 / 255, blue: 245 / 255)
+    /// #CDBDFB: the lavender rim of the white tiles and fields (bg_pretty_field).
+    static let tileRim = Color(red: 205 / 255, green: 189 / 255, blue: 251 / 255)
+    /// bg_pretty_ttt_cell: the #C9B6FF rim, the #D9CCFF lip and the #F4EFFF foot.
+    static let cellRim = Color(red: 201 / 255, green: 182 / 255, blue: 255 / 255)
+    static let cellLip = Color(red: 217 / 255, green: 204 / 255, blue: 255 / 255)
+    static let cellFoot = Color(red: 244 / 255, green: 239 / 255, blue: 255 / 255)
+    /// bg_pretty_option_frame and bg_memory_card_face_pretty: #A086F7 to #62C6FA.
+    static let frameStart = Color(red: 160 / 255, green: 134 / 255, blue: 247 / 255)
+    static let frameEnd = Color(red: 98 / 255, green: 198 / 255, blue: 250 / 255)
+    /// A chosen answer: a light tint, a strong rim and dark text, never white text.
+    static let correctFill = Color(red: 214 / 255, green: 245 / 255, blue: 226 / 255)
+    static let correctRim = Color(red: 34 / 255, green: 160 / 255, blue: 107 / 255)
+    static let correctInk = Color(red: 17 / 255, green: 102 / 255, blue: 63 / 255)
+    static let incorrectFill = Color(red: 255 / 255, green: 222 / 255, blue: 228 / 255)
+    static let incorrectRim = Color(red: 229 / 255, green: 72 / 255, blue: 77 / 255)
+    static let incorrectInk = Color(red: 163 / 255, green: 19 / 255, blue: 47 / 255)
+}
+
+/// bg_pretty_inner_panel: the soft sky-to-lavender wash inside the game panels,
+/// light enough that every text and board stays clearly readable.
+struct LanguageSkyWash: View {
+    var body: some View {
+        LinearGradient(
+            colors: [LanguageSkyPalette.washTop, Color.white, LanguageSkyPalette.washBottom],
+            startPoint: UnitPoint.top,
+            endPoint: UnitPoint.bottom
+        )
+        .accessibilityHidden(true)
+    }
+}
+
+/// MinikGlassPanel at a fixed size, its content clipped to the rounded corners. A
+/// `washed` panel (the games) has the light wash under its content.
+struct LanguageSkyPanel<Content: View>: View {
+    private let width: CGFloat
+    private let height: CGFloat
+    private let cornerRadius: CGFloat
+    private let washed: Bool
+    private let content: Content
+
+    init(
+        width: CGFloat,
+        height: CGFloat,
+        cornerRadius: CGFloat,
+        washed: Bool = false,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.width = width
+        self.height = height
+        self.cornerRadius = cornerRadius
+        self.washed = washed
+        self.content = content()
+    }
+
+    var body: some View {
+        MinikGlassPanel(padding: 0, cornerRadius: cornerRadius) {
+            content
+                .frame(width: width, height: height)
+                .background {
+                    if washed {
+                        LanguageSkyWash()
+                    }
+                }
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+        }
+        // MinikGlassPanel fills the width it is offered: this keeps it the panel's.
+        .frame(width: width, height: height)
+    }
+}
+
+/// bg_pretty_speaker: a pale lavender circle with a lavender ring and the speaker
+/// in the design's purple, on a soft shadow.
+struct LanguageSkySpeakerFace: View {
+    let diameter: CGFloat
+    /// The glyph's share of the circle.
+    var glyphRatio: CGFloat = 0.54
+
+    var body: some View {
+        Image(systemName: "speaker.wave.1.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: diameter * glyphRatio, height: diameter * glyphRatio)
+            .foregroundStyle(MinikPretty.purple)
+            // Android's speaker icon is not mirrored in right-to-left layouts.
+            .environment(\.layoutDirection, .leftToRight)
+            .frame(width: diameter, height: diameter)
+            .background {
+                Circle()
+                    .fill(LanguageSkyPalette.speakerFill)
+                    .shadow(color: MinikPretty.navy.opacity(0.14), radius: 4, x: 0, y: 2)
+            }
+            .overlay {
+                Circle()
+                    .strokeBorder(LanguageSkyPalette.speakerRing, lineWidth: 2)
+            }
+    }
+}
+
+/// Round buttons and tiles of the design shrink a little while they are pressed.
+struct LanguageSkyPressStyle: ButtonStyle {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.95 : 1)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }
 
@@ -238,12 +349,11 @@ struct LanguagePanelNavigation: View {
     }
 }
 
-/// Android's speaker button (bg_icon_button_outline_circle around
-/// ic_lock_silent_mode_off tinted #3F4FAD): a 2 dp #3F4FAD ring on a pale
-/// #3F4FAD fill (alpha 0x20) with the speaker glyph inside. Android's glyph is a
-/// tall cone with short waves, about half the circle wide and a little more than
-/// half tall, so the one-wave symbol fills a square of about half the circle; the
-/// two-wave symbol came out wider and flatter.
+/// Android's speaker button in the rainbow-sky design (bg_pretty_speaker around
+/// ic_lock_silent_mode_off): the lavender circle with the speaker inside. Android's
+/// glyph is a tall cone with short waves, about half the circle wide and a little
+/// more than half tall, so the one-wave symbol fills a square of about half the
+/// circle; the two-wave symbol came out wider and flatter.
 struct LanguageSpeakerButton: View {
     let diameter: CGFloat
     var label: LocalizedStringKey = "Replay current word"
@@ -251,19 +361,10 @@ struct LanguageSpeakerButton: View {
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "speaker.wave.1.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: diameter * 0.54, height: diameter * 0.54)
-                .foregroundStyle(LanguagePracticePalette.ink)
-                // Android's speaker icon is not mirrored in right-to-left layouts.
-                .environment(\.layoutDirection, .leftToRight)
-                .frame(width: diameter, height: diameter)
-                .background(LanguagePracticePalette.ink.opacity(0.125), in: Circle())
-                .overlay { Circle().strokeBorder(LanguagePracticePalette.ink, lineWidth: 2) }
+            LanguageSkySpeakerFace(diameter: diameter)
                 .contentShape(Circle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(LanguageSkyPressStyle())
         .accessibilityLabel(label)
     }
 }
@@ -303,31 +404,16 @@ struct LanguagePointsBadge: View {
     }
 }
 
+/// Letter Pairs' picture tile in the rainbow-sky design: the white answer tile with
+/// its lavender rim (MinikChoiceTileStyle). The chosen picture takes the purple rim
+/// and the lavender fill and grows a little, as Android's chosen tile does.
 struct LanguagePairTileStyle: ButtonStyle {
     let selected: Bool
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .padding(6)
-            .background(.white, in: RoundedRectangle(cornerRadius: 10))
-            .overlay {
-                RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(selected ? Color(red: 1, green: 0.70, blue: 0) : .clear, lineWidth: 3)
-            }
-            .padding(EdgeInsets(top: 2, leading: 5, bottom: 5, trailing: 2))
-            .background {
-                // item_letter_pair_image mirrors its 5 dp start padding, but its
-                // bg_minik_gradient_rounded is not mirrored: purple on the physical left
-                // in Hebrew as well.
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(LinearGradient(colors: [
-                        Color(red: 0.52, green: 0.31, blue: 0.71),
-                        Color(red: 0.94, green: 0.70, blue: 0.72),
-                        Color(red: 0.24, green: 0.79, blue: 0.84)
-                    ], startPoint: UnitPoint(x: 0, y: 0.5), endPoint: UnitPoint(x: 1, y: 0.5)))
-                    .environment(\.layoutDirection, .leftToRight)
-            }
+            .minikChoiceTile(selected: selected)
             .scaleEffect(selected && !reduceMotion ? 1.045 : 1)
             .animation(reduceMotion ? nil : .easeOut(duration: 0.11), value: selected)
             .opacity(configuration.isPressed ? 0.9 : 1)

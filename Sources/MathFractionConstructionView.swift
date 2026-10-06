@@ -43,6 +43,13 @@ struct MathFractionConstructionView: View {
             Text("Build this quantity")
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(Color(red: 0.17, green: 0.45, blue: 0.57))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+            Text(String(localized: "Color the parts of the bar with Add and Undo."))
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(MathInk.softInk)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
             HStack(spacing: 14) {
                 RepresentationView(representation: session.currentRound.prompt, context: .buildPrompt)
                 Button(action: speakPrompt) {
@@ -89,6 +96,9 @@ struct MathFractionConstructionView: View {
                 MinikFeedbackBadge(isCorrect: false)
                 Text("Change the amount and check again.")
                     .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(MathInk.warning)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             HStack(spacing: 22) {
                 Button(action: { session.removePart() }) {

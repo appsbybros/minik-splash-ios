@@ -1,10 +1,14 @@
 import SwiftUI
 
-/// Android LevelsDifficultyDialogFragment / dialog_levels_difficulty.xml: a white
-/// card with a 1 dp outline, 14 dp narrower on each side than the Parent Area
-/// dialog, shown over it with its own dim. Word, Soccer and Tic-Tac-Toe levels sit
-/// in outlined rows with an Android spinner (or the Auto level chip) at the end.
+/// Android LevelsDifficultyDialogFragment / dialog_levels_difficulty.xml in the
+/// rainbow-sky design: a white card with 28 dp corners and a 2 dp #E6DEFF rim, 14 dp
+/// narrower on each side than the Parent Area dialog, shown over it with its own
+/// dim, under a navy Fredoka title. Word, Soccer and Tic-Tac-Toe levels sit in
+/// outlined rows with an Android spinner (or the Auto level chip) at the end.
 struct LanguageParentLevelsView: View {
+    /// dialog_levels_difficulty's #E6DEFF rim.
+    private static let cardRim = Color(red: 230 / 255, green: 222 / 255, blue: 255 / 255)
+
     @Binding var settings: LanguageParentLevelSettings
     let onClose: () -> Void
 
@@ -59,13 +63,13 @@ struct LanguageParentLevelsView: View {
             .scrollBounceBehavior(.basedOnSize)
         }
         .frame(width: max(1, metrics.dialogWidth - 28))
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 22))
+        .background(Color.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 22)
-                .strokeBorder(LanguageParentPalette.outline, lineWidth: 1)
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .strokeBorder(Self.cardRim, lineWidth: 2)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 22))
-        .shadow(color: Color.black.opacity(0.2), radius: 12, y: 6)
+        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .shadow(color: MinikPretty.navy.opacity(0.2), radius: 12, y: 6)
         .overlay(alignment: .topTrailing) {
             // Android: a 34 dp image with 6 dp padding at the padded top end.
             Button(action: onClose) {
@@ -86,8 +90,8 @@ struct LanguageParentLevelsView: View {
     private func levelsContent(metrics: LanguageParentDialogMetrics) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Levels")
-                .font(.system(size: metrics.titleSize, weight: .bold))
-                .foregroundStyle(LanguageParentPalette.title)
+                .font(MinikPretty.titleFont(metrics.titleSize))
+                .foregroundStyle(MinikPretty.navy)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, 30)
@@ -160,8 +164,8 @@ struct LanguageParentLevelsView: View {
         metrics: LanguageParentDialogMetrics
     ) -> some View {
         Text(title)
-            .font(.system(size: metrics.subtitleSize, weight: .bold))
-            .foregroundStyle(Color.black)
+            .font(MinikPretty.titleFont(metrics.subtitleSize))
+            .foregroundStyle(MinikPretty.navy)
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity)

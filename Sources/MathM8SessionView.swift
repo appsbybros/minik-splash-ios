@@ -7,8 +7,31 @@ struct MathM8SessionView: View {
     let onComplete: () -> Void
     let onExit: () -> Void
 
-    @ViewBuilder
     var body: some View {
+        activityContent
+            .mathActivityChrome(howTo: howToTopic)
+    }
+
+    /// Mixed practice has none of its own: each activity inside it explains itself.
+    private var howToTopic: MathHowToTopic? {
+        switch session {
+        case .learn: return .learnMath
+        case .pairs: return .mathPairs
+        case .buildNumber: return .buildNumber
+        case .buildQuantity: return .buildQuantityFraction
+        case .visualToAnswer: return .visualToAnswer
+        case .answerToRepresentation: return .answerToRepresentation
+        case .buildMath: return .buildMath
+        case .mixed: return nil
+        case .cards: return .mathCards
+        case .soccer: return .mathSoccer
+        case .tower: return .mathTowerBlocks
+        case .memory: return .mathMemory
+        }
+    }
+
+    @ViewBuilder
+    private var activityContent: some View {
         switch session {
         case .learn(let value):
             LearnView(session: value, onComplete: onComplete, onExit: onExit)

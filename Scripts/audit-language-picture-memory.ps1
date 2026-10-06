@@ -4,11 +4,11 @@ $repoRoot = Split-Path -Parent $PSScriptRoot
 $checks = @(
     @{ File = 'Sources/ActivityCatalog.swift'; Pattern = 'id: "games"[\s\S]*activities: \[\.soccer, \.tower, \.wordMemory, \.ticTacToe\]'; Label = 'Picture Memory remains in the Games section' },
     @{ File = 'Sources/MinikActivityHubView.swift'; Pattern = 'case \.wordMemory:[\s\S]*makeWordMemorySession[\s\S]*presentation: \.languagePicture[\s\S]*makeNextSession:'; Label = 'Production Picture Memory uses its dedicated continuous presentation' },
-    @{ File = 'Sources/MemoryView.swift'; Pattern = 'LanguageActivityScreen\([\s\S]*sceneAsset: MinikVisualAsset\.memoryScene'; Label = 'Language Picture Memory uses the Android pastel scene' },
+    @{ File = 'Sources/MemoryView.swift'; Pattern = 'LanguageActivityScreen\(\s*washed: true'; Label = 'Language Picture Memory uses the glass panel with the light wash over the sky' },
     @{ File = 'Sources/MemoryView.swift'; Pattern = 'languageMemoryBoard[\s\S]*count: 3[\s\S]*ForEach\(session\.presentedCards'; Label = 'Language board is a fixed three-column grid' },
     @{ File = 'Sources/MemoryView.swift'; Pattern = '\.aspectRatio\(1, contentMode: \.fit\)'; Label = 'All twelve physical board positions use square cards' },
     @{ File = 'Sources/MemoryView.swift'; Pattern = '\.environment\(\\\.layoutDirection, \.leftToRight\)'; Label = 'RTL interfaces preserve the physical board order' },
-    @{ File = 'Sources/MemoryView.swift'; Pattern = 'struct LanguageMemoryCardStyle[\s\S]*guard state == \.faceDown[\s\S]*Color\(red: 0\.914[\s\S]*Color\(red: 0\.012[\s\S]*Color\(red: 1\.0, green: 0\.722'; Label = 'All three Android card-back palettes are represented' },
+    @{ File = 'Sources/MemoryView.swift'; Pattern = 'struct LanguageMemoryCardStyle[\s\S]*guard state == \.faceDown[\s\S]*static func backColors\(variant: Int\)[\s\S]*case 1:[\s\S]*case 2:[\s\S]*static func backStar\(variant: Int\)'; Label = 'All three pretty card-back styles are represented' },
     @{ File = 'Sources/MemoryView.swift'; Pattern = 'case \.faceDown:[\s\S]*Color\.clear'; Label = 'Face-down cards contain no unintended symbol or text' },
     @{ File = 'Sources/MemoryView.swift'; Pattern = 'if case \.imageAsset\(let asset\) = card\.representation[\s\S]*Image\(asset\.rawValue\)[\s\S]*scaledToFit'; Label = 'Revealed Language cards show the original vocabulary image directly' },
     @{ File = 'Sources/MemoryView.swift'; Pattern = 'languageMemoryBoard\(metrics\)\s*\.padding\(\.top, metrics\.boardTopGap\)\s*\.padding\(\.bottom, metrics\.boardBottomGap\)\s*\}\s*\.frame\(maxWidth: \.infinity, minHeight: layout\.height, alignment: \.top\)'; Label = 'Picture Memory ends with the board and keeps the lower panel free, as Android hides the Minik boy in single-player Plus' },

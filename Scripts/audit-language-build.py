@@ -14,7 +14,7 @@ def validate(sources):
             "hadIncorrectLetter: session.hasIncorrectAttempt", "makeNextSession?()"],
         "LanguageBuildPage.swift": ["LanguageActivityScreen(panelStyle: .rounded, minimumContentHeight: minimumHeight)",
             "let order = session.tokenPresentationOrder", ".opacity(selected ? 0 : 1)",
-            ".accessibilityHidden(selected)", "session.builtDisplayText", "Circle().strokeBorder",
+            ".accessibilityHidden(selected)", "session.builtDisplayText", ".strokeBorder(LanguageSkyPalette.tileRim, lineWidth: 2)",
             "LanguagePracticeReaction(", ".allowsHitTesting(false)", "LanguagePracticeStats(",
             "Tap the letters in the right order to form the word"],
         "LanguageWordBuildPresentation.swift": ["content.contentItemID", "item: item",

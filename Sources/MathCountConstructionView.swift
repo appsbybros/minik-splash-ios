@@ -49,7 +49,7 @@ struct MathCountConstructionView: View {
             MinikPracticeSurface(compact: metrics.compact) {
                 VStack(spacing: metrics.compact ? 16 : 22) {
                     prompt
-                    constructionTarget(compact: metrics.compact)
+                    targetSection(compact: metrics.compact)
                     availableTokens(compact: metrics.compact)
                     controls
                 }
@@ -66,12 +66,28 @@ struct MathCountConstructionView: View {
                 : String(localized: "Build this quantity"))
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(Color(red: 0.17, green: 0.45, blue: 0.57))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
 
             HStack(spacing: 14) {
+                // The target is always on screen, in dark ink on a lavender card, so a
+                // child with the sound off still sees the number (it was spoken only:
+                // the system text colour drew it white in Dark Mode).
                 RepresentationView(
                     representation: session.currentRound.prompt,
                     context: .towerPrompt
                 )
+                .padding(.horizontal, 22)
+                .padding(.vertical, 8)
+                .frame(minWidth: 96, minHeight: 84)
+                .background(
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .fill(MathInk.lavender)
+                )
+                .overlay {
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .strokeBorder(MathInk.rim, lineWidth: 2)
+                }
                 Button(action: speakPrompt) {
                     MinikArtworkImage(name: MinikVisualAsset.speaker)
                         .frame(width: 42, height: 42)
@@ -81,6 +97,29 @@ struct MathCountConstructionView: View {
             }
         }
         .frame(maxWidth: .infinity)
+    }
+
+    private func targetSection(compact: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(presentation == .tower
+                ? String(localized: "Your tower")
+                : String(localized: "Your group"))
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(Color(red: 0.18, green: 0.43, blue: 0.54))
+                .fixedSize(horizontal: false, vertical: true)
+
+            constructionTarget(compact: compact)
+
+            if !session.selectedTokenIDs.isEmpty && session.answerResult != .correct {
+                Text(presentation == .tower
+                    ? String(localized: "Tap a block in your tower to take it off.")
+                    : String(localized: "Tap an item in your group to take it out."))
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(MathInk.softInk)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func constructionTarget(compact: Bool) -> some View {
@@ -134,11 +173,13 @@ struct MathCountConstructionView: View {
 
     private func availableTokens(compact: Bool) -> some View {
         VStack(alignment: .leading, spacing: 10) {
+            // "Available objects" did not tell a child what to do with them.
             Text(presentation == .tower
-                ? String(localized: "Available blocks")
-                : String(localized: "Available objects"))
+                ? String(localized: "Tap a block to add it")
+                : String(localized: "Tap an item to add it"))
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(Color(red: 0.18, green: 0.43, blue: 0.54))
+                .fixedSize(horizontal: false, vertical: true)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 58, maximum: 78))], spacing: 10) {
                 ForEach(session.availableTokenIDs, id: \.self) { tokenID in
                     availableToken(tokenID, compact: compact)
@@ -162,7 +203,9 @@ struct MathCountConstructionView: View {
                 MinikFeedbackBadge(isCorrect: false)
                 Text("Change the amount and check again.")
                     .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(MathInk.warning)
                     .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             HStack(spacing: 22) {
                 Button(action: { session.undo() }) {

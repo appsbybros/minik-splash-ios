@@ -1,6 +1,7 @@
 """Registers the MINIK App IDs in the Apple Developer account through the
 App Store Connect API and reports which App Store Connect app records exist.
---check <schemes> is the TestFlight pre-flight; --upload <ipa> sends a build.
+--check <schemes> is the TestFlight pre-flight; --upload <ipa> sends a build;
+--next-build <schemes> prints a build number above every build already uploaded.
 
 Needs ASC_KEY_ID, ASC_ISSUER_ID and ASC_PRIVATE_KEY (the .p8 text) in the
 environment and the PyJWT package with cryptography. Prints no secret values.
@@ -152,6 +153,53 @@ def find_app(identifier):
     return status, (ids[0] if ids else None)
 
 
+def store_versions(app_id):
+    """The app's iOS App Store versions as "1.7.9 READY_FOR_SALE" texts, for the pre-flight report."""
+    query = urllib.parse.urlencode({"filter[platform]": "IOS", "limit": 10})
+    status, payload = call("GET", f"/apps/{app_id}/appStoreVersions?{query}")
+    if status != 200:
+        return [f"(could not read versions: HTTP {status})"]
+    texts = []
+    for item in payload.get("data", []):
+        attributes = item.get("attributes", {})
+        state = attributes.get("appVersionState") or attributes.get("appStoreState") or "?"
+        texts.append(f"{attributes.get('versionString')} {state}")
+    return texts
+
+
+def highest_build(app_id):
+    """The highest numeric build number App Store Connect has for the app (0 if none), or None if unreadable."""
+    query = urllib.parse.urlencode({"filter[app]": app_id, "sort": "-uploadedDate", "limit": 200,
+                                    "fields[builds]": "version"})
+    status, payload = call("GET", f"/builds?{query}")
+    if status != 200:
+        return None
+    numbers = [int(item["attributes"]["version"]) for item in payload.get("data", [])
+               if str(item.get("attributes", {}).get("version", "")).isdigit()]
+    return max(numbers, default=0)
+
+
+def next_build(schemes):
+    """Prints one build number above every build App Store Connect already has for these apps.
+    A repository that starts counting runs again (a new copy) cannot reuse a number this way.
+    Only the number goes to stdout; notes go to stderr."""
+    highest = 0
+    for scheme in schemes:
+        identifier = SCHEME_BUNDLES.get(scheme)
+        status, app_id = find_app(identifier) if identifier else (0, None)
+        if status != 200 or not app_id:
+            print(f"{scheme}: no app record, so no earlier builds", file=sys.stderr)
+            continue
+        number = highest_build(app_id)
+        if number is None:
+            print(f"{scheme}: could not read earlier builds", file=sys.stderr)
+            continue
+        print(f"{scheme}: highest uploaded build {number}", file=sys.stderr)
+        highest = max(highest, number)
+    print(highest + 1)
+    return 0
+
+
 def check_app_id(identifier, team_id, needs_app_attest, problems):
     """The App ID must exist under the team that APPLE_TEAM_ID names."""
     query = urllib.parse.urlencode({"filter[identifier]": identifier})
@@ -208,6 +256,8 @@ def check(schemes):
         status, app_id = find_app(identifier)
         if status == 200 and app_id:
             print(f"{scheme}: App Store Connect record exists ({identifier}).")
+            # An upload must carry a higher version than the last approved one (ITMS-90062).
+            print(f"{scheme}: App Store versions: " + (", ".join(store_versions(app_id)) or "none yet"))
             check_app_id(identifier, team_id, scheme in ("MinikPlus", "MinikPlusEnglish"), problems)
         elif status == 200:
             problems.append(f"{scheme}: create the App Store Connect app record for {identifier}.")
@@ -330,6 +380,8 @@ def upload(ipa_path):
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "--check":
         sys.exit(check(sys.argv[2:]))
+    if len(sys.argv) > 1 and sys.argv[1] == "--next-build":
+        sys.exit(next_build(sys.argv[2:]))
     if len(sys.argv) == 3 and sys.argv[1] == "--upload":
         sys.exit(upload(sys.argv[2]))
     sys.exit(main())

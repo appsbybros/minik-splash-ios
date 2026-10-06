@@ -1,9 +1,10 @@
 import Foundation
 import SwiftUI
 
-/// Android TicTacToeFragment (fragment_tic_tac_toe_plus): a rounded card over the
-/// Minik background with the gradient title, the red close X, the X / O choice
-/// chips, the status line, the 3x3 board and Minik holding a board underneath.
+/// Android TicTacToeFragment (fragment_tic_tac_toe_plus) in the rainbow-sky design
+/// (applyPrettyStyle): a glass card with the light wash over the sky, the navy
+/// Fredoka title, the red close X, the lavender X / O pills, the status line, the
+/// 3x3 board of white tiles with lavender rims and Minik holding a board underneath.
 /// The card keeps the Android phone's proportions everywhere: iPhones use the
 /// Android dp sizes as they are, and larger screens scale the whole card by one
 /// factor, so an iPad shows the same composition centred instead of stretched.
@@ -75,77 +76,60 @@ struct TicTacToeView: View {
             .scrollClipDisabled()
             .scrollIndicators(.hidden)
         }
-        // Android's root background, minik_background. As a background its
-        // aspect ratio can never size the layout.
+        // The rainbow sky (PrettyDesign.applyGameBackgrounds). As a background it
+        // can never size the layout.
         .background {
-            MinikPracticeBackground()
-                .ignoresSafeArea()
+            MinikSkyBackground()
         }
         .onAppear(perform: beginIntroductionIfNeeded)
         .onDisappear(perform: cancelActivityWork)
     }
 
+    /// The glass card with the light wash inside it (bg_pretty_inner_panel) in place
+    /// of plus_background, its white rim in place of the dark outline.
     private func gameCard(_ layout: TicTacToeLayout) -> some View {
         let unit = layout.scale
-        let cardShape = RoundedRectangle(cornerRadius: 20 * unit, style: .continuous)
 
-        return VStack(spacing: 0) {
-            titleText(layout)
-                .padding(.top, 22 * unit)
-            markSelector(layout)
-                .padding(.top, 8 * unit)
-            statusLabel(layout)
-                .padding(.top, 8 * unit)
-            boardView(layout)
-                .padding(.top, 16 * unit)
-            mascot(layout)
-                .padding(.top, 6 * unit)
-            Spacer(minLength: 0)
-        }
-        .frame(width: layout.cardWidth, height: layout.cardHeight)
-        .background {
-            // Android's plus_background fills the card. As a background it never
-            // sizes the card, and a scrolling card is never stretched by it.
-            ZStack {
-                Color.white
-                MinikArtworkImage(name: MinikVisualAsset.ticTacToeScene, contentMode: .fill)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .clipped()
+        return LanguageSkyPanel(
+            width: layout.cardWidth,
+            height: layout.cardHeight,
+            cornerRadius: 28 * unit,
+            washed: true
+        ) {
+            VStack(spacing: 0) {
+                titleText(layout)
+                    .padding(.top, 22 * unit)
+                markSelector(layout)
+                    .padding(.top, 8 * unit)
+                statusLabel(layout)
+                    .padding(.top, 8 * unit)
+                boardView(layout)
+                    .padding(.top, 16 * unit)
+                mascot(layout)
+                    .padding(.top, 6 * unit)
+                Spacer(minLength: 0)
             }
-            .allowsHitTesting(false)
-        }
-        .overlay(alignment: .topTrailing) {
-            closeButton(layout)
-        }
-        .overlay {
-            // Android's confetti view is the card's top layer, clipped to the card.
-            if confettiIsVisible {
-                TicTacToeConfettiView(reduceMotion: reduceMotion, scale: unit)
-                    .allowsHitTesting(false)
-                    .accessibilityHidden(true)
-                    .transition(.opacity)
+            .frame(width: layout.cardWidth, height: layout.cardHeight)
+            .overlay(alignment: .topTrailing) {
+                closeButton(layout)
+            }
+            .overlay {
+                // Android's confetti view is the card's top layer, clipped to the card.
+                if confettiIsVisible {
+                    TicTacToeConfettiView(reduceMotion: reduceMotion, scale: unit)
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                        .transition(.opacity)
+                }
             }
         }
-        .clipShape(cardShape)
-        .shadow(color: Color.black.opacity(0.3), radius: 10 * unit, y: 6 * unit)
     }
 
+    /// applyPrettyStyle: the navy Fredoka title, without the old gradient.
     private func titleText(_ layout: TicTacToeLayout) -> some View {
         Text(TicTacToeFeedbackCopy.title)
-            .font(.system(size: layout.titleFontSize, weight: .bold))
-            // Android shades the title across the text from blue at the left to
-            // green at the right, in both reading directions.
-            .foregroundStyle(
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.09, green: 0.47, blue: 0.95),
-                        Color(red: 0.00, green: 0.75, blue: 0.85),
-                        Color(red: 0.09, green: 0.65, blue: 0.42)
-                    ],
-                    startPoint: UnitPoint(x: 0, y: 0.5),
-                    endPoint: UnitPoint(x: 1, y: 0.5)
-                )
-            )
+            .font(MinikPretty.titleFont(layout.titleFontSize))
+            .foregroundStyle(MinikPretty.navy)
             .lineLimit(1)
             .minimumScaleFactor(0.6)
             .frame(width: layout.titleWidth, height: layout.titleHeight)
@@ -231,8 +215,8 @@ struct TicTacToeView: View {
 
     private func statusLabel(_ layout: TicTacToeLayout) -> some View {
         Text(statusText)
-            .font(.system(size: layout.statusFontSize))
-            .foregroundStyle(TicTacToePalette.status)
+            .font(MinikPretty.bodyFont(layout.statusFontSize))
+            .foregroundStyle(MinikPretty.navy)
             .multilineTextAlignment(.center)
             .lineLimit(layout.statusLineLimit)
             .minimumScaleFactor(0.6)
@@ -266,20 +250,28 @@ struct TicTacToeView: View {
         let mark = session.mark(at: position)
         let isWinningCell = session.winningLine.contains(position)
         let unit = layout.scale
-        let insets = cellInsets(unit: unit, emphasized: isWinningCell)
+        // bg_pretty_ttt_cell: 20 dp corners and a 4 dp lip under the tile.
+        let lip = 4 * unit
+        let cornerRadius = min(20 * unit, layout.cellSide * 0.3)
+        let tileInsets = EdgeInsets(top: 0, leading: 0, bottom: lip, trailing: 0)
 
         return Button {
             play(at: position)
         } label: {
             ZStack {
-                tileBackground(unit: unit, insets: insets)
+                TicTacToeCellFace(
+                    winning: isWinningCell,
+                    lip: lip,
+                    cornerRadius: cornerRadius,
+                    rimWidth: (isWinningCell ? 3.5 : 2.5) * unit
+                )
 
                 if let mark {
                     Text(displayText(for: mark))
                         .font(.system(size: layout.markFontSize))
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
-                        .padding(insets)
+                        .padding(tileInsets)
                         .transition(
                             reduceMotion
                                 ? AnyTransition.opacity
@@ -288,58 +280,18 @@ struct TicTacToeView: View {
                 }
             }
             .frame(width: layout.cellSide, height: layout.cellSide)
-            .contentShape(RoundedRectangle(cornerRadius: 12 * unit, style: .continuous))
+            .contentShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
             .opacity(boardAwaitsIntroduction ? 0.55 : 1)
         }
         .buttonStyle(TicTacToeCellButtonStyle(
             reduceMotion: reduceMotion,
-            pressedInsets: insets,
-            pressedCornerRadius: 10 * unit
+            pressedInsets: tileInsets,
+            pressedCornerRadius: cornerRadius
         ))
         .disabled(!inputIsEnabled || session.isRoundComplete || mark != nil)
         .accessibilityLabel(cellAccessibilityLabel(position: position, mark: mark))
         .accessibilityValue(isWinningCell ? String(localized: "Winning line") : "")
         .accessibilityHint(cellAccessibilityHint(mark: mark))
-    }
-
-    /// Android's tile: a 12 dp rounded frame shaded left to right purple, pink and
-    /// teal around a white 10 dp rounded card.
-    private func tileBackground(unit: CGFloat, insets: EdgeInsets) -> some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 12 * unit, style: .continuous)
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            Color(red: 0.52, green: 0.31, blue: 0.71),
-                            Color(red: 0.94, green: 0.70, blue: 0.72),
-                            Color(red: 0.24, green: 0.79, blue: 0.84)
-                        ],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-            RoundedRectangle(cornerRadius: 10 * unit, style: .continuous)
-                .fill(Color.white)
-                .padding(insets)
-        }
-    }
-
-    /// Android insets the white card 2 dp at the top and the end and 5 dp at the
-    /// start and the bottom; the start is the right side in Hebrew. A tile of the
-    /// winning line shows a slightly wider frame.
-    private func cellInsets(unit: CGFloat, emphasized: Bool) -> EdgeInsets {
-        let extra: CGFloat = emphasized ? 2 * unit : 0
-        let thin = 2 * unit + extra
-        let thick = 5 * unit + extra
-        // The board is laid out left to right, so the reading direction of the
-        // screen picks the thick side.
-        let thickOnRight = layoutDirection == .rightToLeft
-        return EdgeInsets(
-            top: thin,
-            leading: thickOnRight ? thin : thick,
-            bottom: thick,
-            trailing: thickOnRight ? thick : thin
-        )
     }
 
     private var statusText: String {
@@ -630,11 +582,47 @@ private struct TicTacToeLayout {
 }
 
 private enum TicTacToePalette {
-    // Android chip_bg_minik_plus_colors and chip_text_teal, and the status #333333.
-    static let chipSelected = Color(red: 0.137, green: 0.447, blue: 0.506)
-    static let chipUnselected = Color(red: 0.824, green: 0.820, blue: 0.902)
-    static let chipText = Color(red: 0.420, green: 0.227, blue: 0.071)
-    static let status = Color(red: 0.2, green: 0.2, blue: 0.2)
+    /// The chosen X / O pill: applyPrettyStyle's #7C5CF2 as a soft top-to-bottom
+    /// gradient, deep enough for its white text.
+    static let chipSelectedTop = Color(red: 142 / 255, green: 108 / 255, blue: 246 / 255)
+    static let chipSelectedBottom = Color(red: 106 / 255, green: 74 / 255, blue: 219 / 255)
+}
+
+/// bg_pretty_ttt_cell: a white tile fading to pale lavender with a lavender rim, over
+/// a soft lavender lip. A square of the winning line turns lavender with the design's
+/// purple rim.
+private struct TicTacToeCellFace: View {
+    let winning: Bool
+    let lip: CGFloat
+    let cornerRadius: CGFloat
+    let rimWidth: CGFloat
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(winning ? MinikPretty.purple.opacity(0.45) : LanguageSkyPalette.cellLip)
+                .padding(.top, lip)
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: winning
+                            ? [MinikPretty.lavender, LanguageSkyPalette.cellLip]
+                            : [Color.white, LanguageSkyPalette.cellFoot],
+                        startPoint: UnitPoint.top,
+                        endPoint: UnitPoint.bottom
+                    )
+                )
+                .overlay {
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .strokeBorder(
+                            winning ? MinikPretty.purple : LanguageSkyPalette.cellRim,
+                            lineWidth: rimWidth
+                        )
+                }
+                .padding(.bottom, lip)
+        }
+        .allowsHitTesting(false)
+    }
 }
 
 /// Sizes of Android's Material choice chips, handed to the chip labels.
@@ -656,8 +644,10 @@ private extension EnvironmentValues {
     }
 }
 
-/// Android's Material choice chip: 32 tall inside a 48 touch row, 12 at each side,
-/// #237281 with white text when chosen and #D2D1E6 with brown text otherwise.
+/// applyPrettyStyle's X / O pills: 32 tall inside a 48 touch row, 12 at each side,
+/// in Fredoka. The open pill is the design's lavender (white to #F1ECFF) with a
+/// lavender rim and navy text; the chosen one is purple with a white rim and white
+/// text.
 private struct TicTacToeChoiceChip: View {
     let text: String
     let selected: Bool
@@ -665,16 +655,39 @@ private struct TicTacToeChoiceChip: View {
 
     var body: some View {
         Text(text)
-            .font(.system(size: metrics.fontSize))
+            .font(MinikPretty.titleFont(metrics.fontSize))
             .lineLimit(1)
             .minimumScaleFactor(0.6)
-            .foregroundStyle(selected ? Color.white : TicTacToePalette.chipText)
+            .foregroundStyle(selected ? Color.white : MinikPretty.navy)
             .padding(.horizontal, metrics.horizontalPadding)
             .frame(height: metrics.height)
-            .background(
-                selected ? TicTacToePalette.chipSelected : TicTacToePalette.chipUnselected,
-                in: Capsule()
-            )
+            .background {
+                if selected {
+                    Capsule(style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [TicTacToePalette.chipSelectedTop, TicTacToePalette.chipSelectedBottom],
+                                startPoint: UnitPoint.top,
+                                endPoint: UnitPoint.bottom
+                            )
+                        )
+                        .shadow(color: MinikPretty.purple.opacity(0.35), radius: 4, x: 0, y: 2)
+                } else {
+                    Capsule(style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.white, MinikPretty.lavender],
+                                startPoint: UnitPoint.top,
+                                endPoint: UnitPoint.bottom
+                            )
+                        )
+                        .shadow(color: MinikPretty.navy.opacity(0.12), radius: 3, x: 0, y: 2)
+                }
+            }
+            .overlay {
+                Capsule(style: .continuous)
+                    .strokeBorder(selected ? Color.white : LanguageSkyPalette.tileRim, lineWidth: 2)
+            }
             .frame(height: metrics.touchHeight)
             .contentShape(Rectangle())
     }
@@ -692,7 +705,7 @@ private struct TicTacToeChipButtonStyle: ButtonStyle {
     }
 }
 
-/// Android's tile ripple: a light shade over the white card while it is pressed.
+/// Android's tile ripple: a light navy shade over the white tile while it is pressed.
 private struct TicTacToeCellButtonStyle: ButtonStyle {
     let reduceMotion: Bool
     let pressedInsets: EdgeInsets
@@ -702,7 +715,7 @@ private struct TicTacToeCellButtonStyle: ButtonStyle {
         configuration.label
             .overlay {
                 RoundedRectangle(cornerRadius: pressedCornerRadius, style: .continuous)
-                    .fill(Color.black.opacity(configuration.isPressed ? 0.09 : 0))
+                    .fill(MinikPretty.navy.opacity(configuration.isPressed ? 0.08 : 0))
                     .padding(pressedInsets)
                     .allowsHitTesting(false)
             }

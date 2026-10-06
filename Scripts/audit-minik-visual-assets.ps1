@@ -82,9 +82,43 @@ foreach ($asset in $expectedAssets) {
     }
 }
 
+# The rainbow-sky design's art (minik_pretty_*) is converted from the current Android Minik Plus and Minik Math
+# Plus apps; its own manifest names each source. Phones and iPads get the sky as JPEG, the rest is PNG.
+$prettyManifestPath = Join-Path $repoRoot 'docs/minik-pretty-asset-provenance.tsv'
+$prettyAssets = @()
+if (-not (Test-Path -LiteralPath $prettyManifestPath -PathType Leaf)) {
+    $errors.Add("Missing pretty-design provenance manifest: $prettyManifestPath")
+} else {
+    $prettyRows = @(Import-Csv -LiteralPath $prettyManifestPath -Delimiter "`t")
+    $prettyAssets = @($prettyRows | ForEach-Object { $_.ios_asset })
+    foreach ($row in $prettyRows) {
+        $asset = $row.ios_asset
+        $contentsPath = Join-Path (Join-Path $catalog "$asset.imageset") 'Contents.json'
+        $imagePath = Join-Path (Join-Path $catalog "$asset.imageset") $row.ios_file
+        if ($asset -notlike 'minik_pretty_*' -or $row.ios_file -notmatch "^$([regex]::Escape($asset))\.(png|jpg)$") {
+            $errors.Add("Pretty-design asset must be minik_pretty_* with a .png or .jpg of the same name: $asset")
+            continue
+        }
+        if (-not (Test-Path -LiteralPath $contentsPath -PathType Leaf) -or -not (Test-Path -LiteralPath $imagePath -PathType Leaf)) {
+            $errors.Add("Missing pretty-design imageset or image: $asset")
+            continue
+        }
+        if ((Get-Item -LiteralPath $imagePath).Length -le 0) {
+            $errors.Add("Empty image: $imagePath")
+        }
+        $contents = Get-Content -LiteralPath $contentsPath -Raw | ConvertFrom-Json
+        if ($contents.images.Count -ne 1 -or $contents.images[0].filename -ne $row.ios_file) {
+            $errors.Add("Unexpected image reference: $contentsPath")
+        }
+        if (-not (Test-Path -LiteralPath (Join-Path $repoRoot $row.source_path) -PathType Leaf)) {
+            $errors.Add("Missing Android provenance source for ${asset}: $($row.source_path)")
+        }
+    }
+}
+
 $unexpected = Get-ChildItem -LiteralPath $catalog -Directory -Filter '*.imageset' |
     ForEach-Object { $_.Name -replace '\.imageset$', '' } |
-    Where-Object { $_ -notin $expectedAssets }
+    Where-Object { $_ -notin $expectedAssets -and $_ -notin $prettyAssets }
 foreach ($asset in $unexpected) {
     $errors.Add("Unexpected shared visual asset: $asset")
 }
@@ -100,6 +134,7 @@ if ($projectText -notmatch '(?m)^\s*- path: Resources/MinikVisuals\.xcassets\s*$
 }
 
 Write-Output "MINIK_VISUAL_ASSETS_EXPECTED=$($expectedAssets.Count)"
+Write-Output "MINIK_PRETTY_DESIGN_ASSETS=$($prettyAssets.Count)"
 Write-Output "MINIK_VISUAL_ASSET_ERRORS=$($errors.Count)"
 if ($errors.Count -gt 0) {
     $errors | ForEach-Object { Write-Error $_ }

@@ -26,7 +26,7 @@ foreach ($row in $record) {
 
 $checks = @(
     @{ File = 'Sources/ProductConfiguration.swift'; Pattern = 'case \.minikMath:[\s\S]*contentDomain: \.math[\s\S]*allowedLearnedLanguages: \[\][\s\S]*fixedLearnedLanguage: nil[\s\S]*isLearningLanguageSelectionAvailable: false'; Label = 'Math has no learned-language state' },
-    @{ File = 'Sources/MinikPracticeVisuals.swift'; Pattern = 'if visualIdentity == \.math \{[\s\S]*Image\("math_frame_background"\)'; Label = 'Math uses its dedicated clean Minik frame background' },
+    @{ File = 'Sources/MinikPracticeVisuals.swift'; Pattern = 'if visualIdentity == \.math \{[\s\S]*?MinikSkyBackground\(\)[\s\S]*?\} else \{[\s\S]*?MinikArtworkBackground\(\)'; Label = 'Math practice uses the rainbow-sky background of the new design' },
     @{ File = 'Sources/MinikPracticeVisuals.swift'; Pattern = 'struct MinikPracticeSurface[\s\S]*\.fill\(\.white\.opacity\(0\.94\)\)'; Label = 'Practice content uses the shared light/white surface' },
     @{ File = 'Sources/MinikPracticeVisuals.swift'; Pattern = 'struct MinikPracticeHeader[\s\S]*MinikVisualAsset\.close'; Label = 'Practice screens share the branded close control' },
     @{ File = 'Sources/MinikPracticeVisuals.swift'; Pattern = 'name: isCorrect \? MinikVisualAsset\.success : MinikVisualAsset\.tryAgain'; Label = 'Practice feedback shares real Minik success/failure art' },

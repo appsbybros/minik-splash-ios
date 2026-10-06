@@ -30,7 +30,7 @@ def validate(sources):
             "LanguagePracticeReaction(", ".allowsHitTesting(false)",
             "interfaceLocaleID.text(presentation.instructionKey)",
             "LanguagePracticePalette.ink", "LanguageAnswerStyle(state: feedback, colorDuration: pictures ? 0.3 : 0.5)",
-            "Fredoka-Medium", "LanguagePalette.border",
+            "Fredoka-Medium", "LanguageSkyPalette.tileRim",
         ],
         "LearningSpeech.swift": [
             "AVSpeechSynthesizerDelegate", "await withCheckedContinuation",
@@ -103,7 +103,7 @@ def main():
         if original != actual or hashlib.sha256(actual).hexdigest() != row["sha256"]:
             errors.append("Original Fredoka font differs")
     project = (ROOT / "project.yml").read_text(encoding="utf-8")
-    if project.count("UIAppFonts: [fredoka_medium.ttf]") != 2 or project.count("path: Resources/LanguageActivityArt.xcassets") != 2:
+    if project.count("UIAppFonts: [fredoka_medium.ttf, fredoka_bold.ttf]") != 2 or project.count("path: Resources/LanguageActivityArt.xcassets") != 2:
         errors.append("Both Language targets must bundle/register their original artwork and font")
     if args.self_test:
         mutations = [

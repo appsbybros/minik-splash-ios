@@ -1,9 +1,10 @@
 import SwiftUI
 
-/// Android WriteScreen's word-building page (fragment_drag in Plus): the red close
-/// X and the outlined speaker, the instruction, the clue word, the yellow answer
-/// frame, the letter circles, Next after a wrong letter and the statistics at the
-/// bottom, with Android's sizes and gaps (BuildBoardMetrics). Below the accessibility
+/// Android WriteScreen's word-building page (fragment_drag in Plus) in the rainbow-sky
+/// design: the red close X and the lavender speaker, the navy instruction, the clue
+/// word, the white answer field, the lavender letter circles, the sunny Next pill
+/// after a wrong letter and the statistics at the bottom of the glass panel, with
+/// Android's sizes and gaps (BuildBoardMetrics). Below the accessibility
 /// text sizes every row has a budgeted height, so the board fits the panel (a tight
 /// variant halves the gaps first). When it is still taller, LanguageActivityScreen
 /// scrolls it.
@@ -34,7 +35,7 @@ struct LanguageBuildPage: View {
     @ScaledMetric(relativeTo: .body) private var statsPercent: CGFloat = 100
 
     var body: some View {
-        // fragment_drag's card is bg_white_rounded, like the other WriteScreen pages.
+        // fragment_drag's card is bg_glass_panel_strong, like the other WriteScreen pages.
         LanguageActivityScreen(panelStyle: .rounded, minimumContentHeight: minimumHeight) { layout in
             let roomy = metrics(width: layout.width, wide: layout.wide, tight: false)
             let sizes = roomy.accessible || roomy.height + 8 <= layout.height
@@ -120,9 +121,9 @@ struct LanguageBuildPage: View {
         )
     }
 
-    /// Android's top row: the red X at the top end and the outlined speaker
-    /// (#3F4FAD ring and icon on a 12.5% #3F4FAD fill). The speaker's start margin,
-    /// left over from the home button Plus hides, moves it towards the X.
+    /// Android's top row: the red X at the top end and the speaker (bg_pretty_speaker).
+    /// The speaker's start margin, left over from the home button Plus hides, moves it
+    /// towards the X.
     private func topBar(_ sizes: BuildBoardMetrics) -> some View {
         ZStack(alignment: .top) {
             // fragment_drag's speaker is the choice pages' button (57 dp, 100 dp on
@@ -150,8 +151,9 @@ struct LanguageBuildPage: View {
 
     @ViewBuilder
     private func instruction(_ sizes: BuildBoardMetrics) -> some View {
+        // The design's navy Fredoka title.
         let label = Text("Tap the letters in the right order to form the word")
-            .font(.system(size: sizes.instructionFontSize, weight: .bold))
+            .font(MinikPretty.titleFont(sizes.instructionFontSize))
             .foregroundStyle(LanguagePracticePalette.ink)
             .multilineTextAlignment(.center)
         if sizes.accessible {
@@ -184,11 +186,12 @@ struct LanguageBuildPage: View {
             .frame(height: sizes.clueHeight)
     }
 
-    /// Android's yellow answer frame (2 dp #F7EA50, 12 dp corners) keeps one height,
-    /// so adding letters never moves the board. As on Android the text rests on the
-    /// frame's 8 dp bottom padding and has none at the top.
+    /// The answer frame as the design's white field (bg_pretty_field: a lavender rim
+    /// on white) keeps one height, so adding letters never moves the board. As on
+    /// Android the text rests on the frame's 8 dp bottom padding and has none at the top.
     private func builtWord(_ sizes: BuildBoardMetrics) -> some View {
-        Text(session.builtDisplayText ?? "")
+        let field = RoundedRectangle(cornerRadius: 18, style: .continuous)
+        return Text(session.builtDisplayText ?? "")
             .font(Self.displayFont(size: sizes.wordFontSize))
             .foregroundStyle(LanguagePracticePalette.ink)
             .buildWordFakeBold(LanguagePracticePalette.ink, spread: sizes.wordBoldSpread)
@@ -198,9 +201,14 @@ struct LanguageBuildPage: View {
             .padding(.horizontal, 12)
             .padding(.bottom, 8)
             .frame(width: sizes.wordBoxWidth, height: sizes.wordBoxHeight)
+            .background {
+                field
+                    .fill(Color.white)
+                    .shadow(color: MinikPretty.navy.opacity(0.08), radius: 4, x: 0, y: 2)
+            }
             .overlay {
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(Color(red: 0.969, green: 0.918, blue: 0.314), lineWidth: 2)
+                field
+                    .strokeBorder(LanguageSkyPalette.tileRim, lineWidth: 2)
             }
             .environment(\.layoutDirection, learnedDirection)
             .accessibilityLabel("Your word")
@@ -239,25 +247,19 @@ struct LanguageBuildPage: View {
         .environment(\.layoutDirection, learnedDirection)
     }
 
-    /// Android's yellow Next link (#FDE000, 12 dp corners, bold #3F51B5 text) appears
-    /// after a wrong letter. Its row is always reserved, so the board does not move
-    /// when it appears.
+    /// Android's sunny Next pill (bg_next_link) as the design's glossy yellow button
+    /// with its navy label appears after a wrong letter. Its row is always reserved,
+    /// so the board does not move when it appears.
     private func nextSlot(_ sizes: BuildBoardMetrics) -> some View {
         ZStack {
             if canSkip {
                 Button(action: onSkip) {
                     Text("Next")
-                        .font(.system(size: sizes.nextFontSize, weight: .bold))
-                        .foregroundStyle(Color(red: 0.247, green: 0.318, blue: 0.71))
+                        .font(MinikPretty.titleFont(sizes.nextFontSize))
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 3)
-                        .background(Color(red: 0.992, green: 0.878, blue: 0), in: RoundedRectangle(cornerRadius: 12))
-                        .frame(minWidth: 44, minHeight: 44)
-                        .contentShape(Rectangle())
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(MinikPrettyButtonStyle(.yellow))
             }
         }
         .frame(maxWidth: .infinity)
@@ -283,16 +285,32 @@ struct LanguageBuildPage: View {
         Font.custom("Fredoka-Medium", fixedSize: size)
     }
 
+    /// A letter circle in the design's lavender: white to lavender with a lavender rim
+    /// and a navy letter, lifted by a soft shadow.
     private func letter(_ token: BuildToken, sizes: BuildBoardMetrics) -> some View {
         let selected = session.selectedTokenIDs.contains(token.id)
         return Button { onSelect(token.id) } label: {
             tileFace(token.representation, sizes: sizes)
                 .foregroundStyle(LanguagePracticePalette.ink)
                 .frame(width: sizes.diameter, height: sizes.diameter)
-                .overlay { Circle().strokeBorder(LanguagePracticePalette.ink, lineWidth: 2) }
+                .background {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.white, MinikPretty.lavender],
+                                startPoint: UnitPoint.top,
+                                endPoint: UnitPoint.bottom
+                            )
+                        )
+                        .shadow(color: MinikPretty.navy.opacity(0.14), radius: 3, x: 0, y: 2)
+                }
+                .overlay {
+                    Circle()
+                        .strokeBorder(LanguageSkyPalette.tileRim, lineWidth: 2)
+                }
                 .contentShape(Circle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(LanguageSkyPressStyle())
         .draggable(token.id.rawValue)
         .disabled(selected || session.answerResult != nil)
         .opacity(selected ? 0 : 1)
@@ -303,14 +321,14 @@ struct LanguageBuildPage: View {
         .accessibilityHint("Double tap to choose")
     }
 
-    /// Android draws the letters in the regular system face (24 sp, 55 sp on iPad).
-    /// A letter stays on one line inside its circle at every text size.
+    /// Android's 24 sp letters (55 sp on iPad) in the design's rounded Fredoka. A
+    /// letter stays on one line inside its circle at every text size.
     @ViewBuilder
     private func tileFace(_ representation: Representation, sizes: BuildBoardMetrics) -> some View {
         switch representation {
         case .learningText(let value):
             Text(value.text)
-                .font(.system(size: sizes.letterFontSize))
+                .font(MinikPretty.titleFont(sizes.letterFontSize))
                 .lineLimit(1)
                 .minimumScaleFactor(0.4)
                 .padding(4)
@@ -466,11 +484,11 @@ private struct BuildBoardMetrics {
         let perRow = fitting
         let tilesHeight = CGFloat(rowCount) * diameter + CGFloat(rowCount - 1) * rowSpacing
 
-        // Next: bold 18 sp (40 sp on iPad) with 14 x 3 dp padding, 38 dp (43 dp) under
-        // the circles; its row is at least 44 points tall so it is easy to tap.
+        // Next: 18 sp (40 sp on iPad), 38 dp (43 dp) under the circles, on the design's
+        // glossy pill: 9 points above the label and 12 below it, at least 52 points tall.
         let nextGrowth: CGFloat = min(max(1, growth.next), accessible ? 2 : 1.35)
         let nextFontSize: CGFloat = (wide ? 40 * scale : 18) * nextGrowth
-        let pillHeight: CGFloat = nextFontSize * 1.2 + 6
+        let pillHeight: CGFloat = max(52, (nextFontSize * 1.3).rounded(.up) + 21)
         let nextSlotHeight: CGFloat = max(44, pillHeight)
         let nextDistance: CGFloat = (wide ? 43 : 38) * gapScale
         let nextGap: CGFloat = max(0, nextDistance - (nextSlotHeight - pillHeight) / 2)

@@ -16,7 +16,7 @@ $checks = @(
     @{ File = 'Sources/LanguageSoccerShotPhysics.swift'; Pattern = '\(3\.0, 2\.0, 1\.0\)[\s\S]*\(1\.1, 0\.5, 0\.6\)[\s\S]*\(0\.8, 0\.4, 0\.4\)'; Label = 'Android A/B/C sweep timing is encoded' },
     @{ File = 'Sources/LanguageSoccerView.swift'; Pattern = 'MinikVisualAsset\.soccerField[\s\S]*MinikVisualAsset\.soccerGoal[\s\S]*MinikVisualAsset\.soccerGoalie'; Label = 'Original field, goal, and keeper are composed' },
     @{ File = 'Sources/LanguageSoccerView.swift'; Pattern = 'MinikVisualAsset\.soccerBall'; Label = 'Launched letter uses original football art' },
-    @{ File = 'Sources/LanguageSoccerView.swift'; Pattern = 'MinikVisualAsset\.soccerIntroScene'; Label = 'Introduction uses the Android Plus pastel scene' },
+    @{ File = 'Sources/LanguageSoccerView.swift'; Pattern = 'func introductionBackdrop[\s\S]*MinikSkyBackground\(\)'; Label = 'Introduction uses the sky of the new design' },
     @{ File = 'Sources/LanguageSoccerView.swift'; Pattern = 'frame\(minWidth: 56, minHeight: 56\)'; Label = 'Letter controls retain accessible hit targets' },
     @{ File = 'Sources/LanguageSoccerView.swift'; Pattern = 'accessibilityAction[\s\S]*beginAccessibleShot'; Label = 'Non-primary accessibility launch fallback exists' },
     @{ File = 'Sources/LanguageSoccerView.swift'; Pattern = 'attemptTracker\.makeAttempt\([\s\S]*activityFamily: \.soccer'; Label = 'Specialized semantic token attempts are emitted' },

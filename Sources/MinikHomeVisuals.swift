@@ -25,9 +25,9 @@ struct MinikHomeScreen<Content: View>: View {
         // ZStack sibling its portrait aspect made the stack taller than the screen,
         // and GeometryReader pinned that stack at the top: the scroll view slid
         // down, cutting off its end (in landscape it left the screen entirely).
+        // The rainbow sky of the hubs, so Progress and Records match them.
         .background {
-            MinikArtworkBackground()
-                .ignoresSafeArea()
+            MinikSkyBackground()
         }
     }
 }
@@ -75,20 +75,23 @@ struct MinikHomeSectionCard<Content: View>: View {
         self.content = content
     }
 
+    /// The pretty design's glass card (bg_pretty_dialog): near-opaque white, a soft
+    /// lavender rim and a soft lavender shadow under the card only.
     var body: some View {
         VStack(alignment: .leading, spacing: compact ? 16 : 20) {
             content()
         }
         .padding(compact ? 18 : 24)
-        .background(
+        .background {
             RoundedRectangle(cornerRadius: compact ? 28 : 34, style: .continuous)
-                .fill(.white.opacity(0.96))
-        )
+                .fill(MinikPretty.panelFill)
+                .shadow(color: MinikPretty.shadowInk.opacity(0.14), radius: 18, x: 0, y: 8)
+        }
         .overlay {
             RoundedRectangle(cornerRadius: compact ? 28 : 34, style: .continuous)
-                .strokeBorder(Color(red: 0.45, green: 0.82, blue: 0.92).opacity(0.34), lineWidth: 1.2)
+                .strokeBorder(MinikPretty.color(0xE6DEFF), lineWidth: 2)
+                .allowsHitTesting(false)
         }
-        .shadow(color: Color(red: 0.11, green: 0.42, blue: 0.58).opacity(0.12), radius: 24, y: 12)
     }
 }
 

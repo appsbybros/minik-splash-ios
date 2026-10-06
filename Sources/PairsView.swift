@@ -196,13 +196,14 @@ struct PairsView: View {
         .padding(.trailing, metrics.closeTrailing - outset)
     }
 
+    /// The design's navy Fredoka title, as on the other Language screens.
     private func languagePairsTitle(_ layout: LanguageActivityLayout, metrics: LanguagePairsMetrics) -> some View {
         // Beside the logo and the X the title keeps clear of both on one line.
         let underLogo = LanguagePairsMetrics.titleUnderLogo(layout)
         let width = underLogo ? layout.width : max(1, layout.width - 2 * metrics.titleClearance)
         return Text("Pairs")
-            .font(.system(size: layout.wide ? wideTitleSize : compactTitleSize, weight: .bold))
-            .foregroundStyle(Color(red: 0.067, green: 0.067, blue: 0.067))
+            .font(MinikPretty.titleFont(layout.wide ? wideTitleSize : compactTitleSize))
+            .foregroundStyle(MinikPretty.navy)
             .multilineTextAlignment(.center)
             .lineLimit(underLogo ? nil : 1)
             .minimumScaleFactor(underLogo ? 1 : 0.5)
@@ -211,10 +212,11 @@ struct PairsView: View {
             .accessibilityAddTraits(.isHeader)
     }
 
+    /// The navy Fredoka instruction of the design's game screens (Tower, Picture Memory).
     private func languagePairsInstruction(_ layout: LanguageActivityLayout) -> some View {
         Text("Choose 2 pictures that start with the same letter")
-            .font(.system(size: layout.wide ? wideInstructionSize : compactInstructionSize))
-            .foregroundStyle(Color(red: 0.188, green: 0.188, blue: 0.188))
+            .font(MinikPretty.bodyFont(layout.wide ? wideInstructionSize : compactInstructionSize))
+            .foregroundStyle(MinikPretty.navy)
             .multilineTextAlignment(.center)
             // Android shows two lines at most; accessibility sizes wrap freely
             // and the panel scrolls when it has to.
@@ -393,11 +395,20 @@ struct PairsView: View {
             Text("Match the pairs")
                 .font(.title3.weight(.bold))
                 .foregroundStyle(Color(red: 0.15, green: 0.42, blue: 0.54))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
 
             Text(headerInstruction)
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(Color(red: 0.28, green: 0.49, blue: 0.58))
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text(String(localized: "Tap a selected card again to unselect it."))
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(Color(red: 0.36, green: 0.31, blue: 0.45))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity)
     }
@@ -413,17 +424,20 @@ struct PairsView: View {
 
     @ViewBuilder
     private func boardSection(compact: Bool, availableWidth: CGFloat) -> some View {
+        // Each column is named by what it holds. The old "Left side" and "Right
+        // side" were never translated and were mirrored in right-to-left layouts.
+        let titles = columnTitles
         if session.selectionStyle == .anyTwoTiles {
             mixedBoard(compact: compact, availableWidth: availableWidth)
         } else if shouldStackColumns(for: availableWidth) {
             VStack(spacing: compact ? 14 : 18) {
                 boardColumn(
-                    title: "Left side",
+                    title: titles.left,
                     items: session.activeLeftItems,
                     compact: compact
                 )
                 boardColumn(
-                    title: "Right side",
+                    title: titles.right,
                     items: session.activeRightItems,
                     compact: compact
                 )
@@ -431,17 +445,37 @@ struct PairsView: View {
         } else {
             HStack(alignment: .top, spacing: compact ? 14 : 18) {
                 boardColumn(
-                    title: "Left side",
+                    title: titles.left,
                     items: session.activeLeftItems,
                     compact: compact
                 )
                 boardColumn(
-                    title: "Right side",
+                    title: titles.right,
                     items: session.activeRightItems,
                     compact: compact
                 )
             }
         }
+    }
+
+    /// "Numbers", "Pictures" or "Exercises" for each column, from all of its cards
+    /// (matched ones too, so a title never changes mid-round). When a column mixes
+    /// kinds, neither column gets a title rather than a wrong one.
+    private var columnTitles: (left: String?, right: String?) {
+        guard let left = Self.columnTitle(for: session.leftItems),
+              let right = Self.columnTitle(for: session.rightItems) else {
+            return (left: nil, right: nil)
+        }
+        return (left: left, right: right)
+    }
+
+    private static func columnTitle(for items: [PairsItem]) -> String? {
+        guard let first = items.first,
+              let kind = PairsColumnKind(first.representation),
+              items.allSatisfy({ PairsColumnKind($0.representation) == kind }) else {
+            return nil
+        }
+        return kind.title
     }
 
     private func mixedBoard(compact: Bool, availableWidth: CGFloat) -> some View {
@@ -476,14 +510,16 @@ struct PairsView: View {
     }
 
     private func boardColumn(
-        title: String,
+        title: String?,
         items: [PairsItem],
         compact: Bool
     ) -> some View {
         VStack(alignment: .leading, spacing: compact ? 12 : 14) {
-            Text(title)
-                .font(.headline.weight(.semibold))
-                .foregroundStyle(Color(red: 0.18, green: 0.43, blue: 0.54))
+            if let title {
+                Text(title)
+                    .font(.headline.weight(.semibold))
+                    .foregroundStyle(Color(red: 0.18, green: 0.43, blue: 0.54))
+            }
 
             ForEach(items, id: \.id) { item in
                 pairTile(item: item, compact: compact)
@@ -628,6 +664,17 @@ struct PairsView: View {
     }
 
     private func selectItem(_ itemID: PairsItemID) {
+        // Two columns: a tap on another card of a side that already has a choice
+        // moves the choice there. A tap on the chosen card itself unselects it
+        // (PairsSession.selectItem).
+        if session.selectionStyle == .opposingColumns, session.attemptResult == nil {
+            let chosenOnSide = itemID.side == .left
+                ? session.selectedLeftItemID
+                : session.selectedRightItemID
+            if let chosenOnSide, chosenOnSide != itemID {
+                session.selectItem(chosenOnSide)
+            }
+        }
         let previousResult = session.attemptResult
         if let utterance = session.selectItem(itemID) {
             speechPlayer.speak(utterance)
@@ -681,6 +728,43 @@ struct PairsView: View {
         pendingLanguagePair = nil
         stopPairAudio()
         onExit()
+    }
+}
+
+/// What a two-column Pairs board column holds, for its title.
+private enum PairsColumnKind: Equatable {
+    case numbers
+    case pictures
+    case exercises
+
+    init?(_ representation: Representation) {
+        switch representation {
+        case .imageAsset, .visualQuantity:
+            self = .pictures
+        case .mathExpression:
+            self = .exercises
+        case .math(let math):
+            switch math {
+            case .numeral, .decimal:
+                self = .numbers
+            case .quantity, .groupedQuantity, .equalGroups, .placeValue:
+                self = .pictures
+            case .arithmeticExpression, .missingValueExpression:
+                self = .exercises
+            default:
+                return nil
+            }
+        default:
+            return nil
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .numbers: return String(localized: "Numbers")
+        case .pictures: return String(localized: "Pictures")
+        case .exercises: return String(localized: "Exercises")
+        }
     }
 }
 
@@ -745,7 +829,8 @@ private struct LanguagePairsMetrics {
         pointsLeading = wide ? 20 : 10
         pointsWidth = wide ? 155 : 85
         pointsHeight = wide ? 100 : 52
-        pointsStroke = wide ? 3 : 1
+        // The choice screens' score tiles (LanguagePracticeStats) keep a 1.5-point rim.
+        pointsStroke = 1.5
     }
 
     /// The minik_plus_logo artwork is 121 x 131 pixels.
@@ -772,7 +857,9 @@ private struct LanguagePairsMetrics {
 }
 
 /// Android's totalScoreCard: "Points" over the running total in a pale violet
-/// card, 85 x 52 dp on phones and 155 x 100 dp with a 3 dp border on tablets.
+/// card, 85 x 52 dp on phones and 155 x 100 dp on tablets, in the style of the
+/// choice screens' score tiles (LanguagePracticeStats): Fredoka text and a soft
+/// shadow that lifts it off the glass panel.
 private struct LanguagePairsPointsCard: View {
     let titleSize: CGFloat
     let valueSize: CGFloat
@@ -782,12 +869,13 @@ private struct LanguagePairsPointsCard: View {
     @Environment(\.languageRewardState) private var rewards
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 1) {
             Text("Points")
-                .font(.system(size: titleSize, weight: .bold))
+                .font(MinikPretty.titleFont(titleSize))
                 .foregroundStyle(Color(red: 0.384, green: 0.325, blue: 0.773))
             Text(rewards.points, format: .number)
-                .font(.system(size: valueSize, weight: .bold))
+                .font(MinikPretty.titleFont(valueSize))
+                .monospacedDigit()
                 .foregroundStyle(Color(red: 0.286, green: 0.220, blue: 0.710))
         }
         // A fixed width as on Android: larger text shrinks onto one line.
@@ -797,9 +885,13 @@ private struct LanguagePairsPointsCard: View {
         .padding(.vertical, 3)
         .frame(width: width)
         .frame(minHeight: minimumHeight)
-        .background(Color(red: 0.969, green: 0.961, blue: 1), in: RoundedRectangle(cornerRadius: 18))
+        .background {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(Color(red: 0.969, green: 0.961, blue: 1))
+                .shadow(color: MinikPretty.navy.opacity(0.08), radius: 3, x: 0, y: 2)
+        }
         .overlay {
-            RoundedRectangle(cornerRadius: 18)
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .strokeBorder(Color(red: 0.545, green: 0.486, blue: 0.965), lineWidth: strokeWidth)
         }
         .accessibilityElement(children: .combine)

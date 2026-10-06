@@ -40,9 +40,16 @@ struct MathNumberLinePlacementView: View {
 
     private var prompt: some View {
         VStack(spacing: 10) {
-            Text("Build this quantity")
+            Text(String(localized: "Put this number on the number line"))
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(Color(red: 0.17, green: 0.45, blue: 0.57))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+            Text(String(localized: "Move the red dot with the arrow buttons."))
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(MathInk.softInk)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
             HStack(spacing: 14) {
                 RepresentationView(representation: session.currentRound.prompt, context: .buildPrompt)
                 Button(action: speakPrompt) {
@@ -78,6 +85,7 @@ struct MathNumberLinePlacementView: View {
             Text(verbatim: String(session.selectedValue))
                 .font(.system(size: 44, weight: .bold, design: .rounded).monospacedDigit())
         }
+        .foregroundStyle(MathInk.navy)
         .environment(\.layoutDirection, .leftToRight)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(String(session.selectedValue))

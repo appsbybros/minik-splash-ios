@@ -40,6 +40,11 @@ struct MemoryView: View {
     // from sw800dp, with their line heights.
     @ScaledMetric(relativeTo: .largeTitle) private var wideTitleFontSize: CGFloat = 38
     @ScaledMetric(relativeTo: .title) private var wideStatusFontSize: CGFloat = 28
+    // The phone sizes of the title, status and pairs rows (the title, title 3 and
+    // callout styles), for the design's Fredoka faces.
+    @ScaledMetric(relativeTo: .title) private var compactTitleFontSize: CGFloat = 28
+    @ScaledMetric(relativeTo: .title3) private var compactStatusFontSize: CGFloat = 20
+    @ScaledMetric(relativeTo: .callout) private var compactPairsFontSize: CGFloat = 16
     @ScaledMetric(relativeTo: .title) private var compactTitleLineHeight: CGFloat = 34
     @ScaledMetric(relativeTo: .largeTitle) private var wideTitleLineHeight: CGFloat = 46
     @ScaledMetric(relativeTo: .title3) private var compactStatusLineHeight: CGFloat = 25
@@ -150,18 +155,17 @@ struct MemoryView: View {
         }
     }
 
-    // Android Picture Memory (MemoryGameFragment, single player in Plus): the
-    // close X in the top end corner, the gradient title, the "flip two cards"
-    // status, the pairs count and a 3 x 4 board of square cards pinned under
-    // them. The lower part of the panel stays free as on Android, which hides
-    // the Minik boy in this mode. Larger text shrinks the cards a little
-    // instead of pushing the board off the panel; at accessibility sizes the
-    // panel scrolls once the cards would get too small. The panel is the
-    // rounded style: the Android card's 20 dp corners around the #F9F9F9
-    // inner panel that plus_background covers.
+    // Android Picture Memory (MemoryGameFragment, single player in Plus) in the
+    // rainbow-sky design: the close X in the top end corner, the navy title, the
+    // "flip two cards" status, the pairs count and a 3 x 4 board of square cards
+    // pinned under them. The lower part of the panel stays free as on Android,
+    // which hides the Minik boy in this mode. Larger text shrinks the cards a
+    // little instead of pushing the board off the panel; at accessibility sizes
+    // the panel scrolls once the cards would get too small. The panel is the glass
+    // panel over the sky with the light wash inside it (applyGameBackgrounds).
     private var languagePictureBody: some View {
         LanguageActivityScreen(
-            sceneAsset: MinikVisualAsset.memoryScene,
+            washed: true,
             panelStyle: .rounded,
             minimumContentHeight: { _, wide in wide ? 600 : 540 }
         ) { layout in
@@ -198,38 +202,27 @@ struct MemoryView: View {
         }
     }
 
+    /// The design's navy Fredoka title in place of Android's old gradient one.
     private func languagePictureTitle(_ metrics: LanguageMemoryBoardMetrics) -> some View {
         Text(verbatim: languageTitleText)
-            .font(
-                metrics.wide
-                    ? Font.system(size: wideTitleFontSize * metrics.titleScale, weight: .bold)
-                    : Font.title.bold()
-            )
-            .foregroundStyle(
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.09, green: 0.47, blue: 0.95),
-                        Color(red: 0.0, green: 0.75, blue: 0.85),
-                        Color(red: 0.09, green: 0.65, blue: 0.42)
-                    ],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-            )
+            .font(MinikPretty.titleFont(
+                metrics.wide ? wideTitleFontSize * metrics.titleScale : compactTitleFontSize
+            ))
+            .foregroundStyle(MinikPretty.navy)
             .multilineTextAlignment(.center)
             .lineLimit(metrics.accessibilityText ? 2 : 1)
             .minimumScaleFactor(0.5)
-            // Android paints #1877F2 -> #00BFD8 -> #16A66A from left to right
-            // in both reading directions.
-            .environment(\.layoutDirection, .leftToRight)
             .frame(maxWidth: metrics.titleMaxWidth)
+            .accessibilityAddTraits(.isHeader)
     }
 
     @ViewBuilder
     private func languagePictureStatus(_ metrics: LanguageMemoryBoardMetrics) -> some View {
         let status = Text(verbatim: languageStatusText)
-            .font(metrics.wide ? Font.system(size: wideStatusFontSize * metrics.statusScale) : .title3)
-            .foregroundStyle(Color(red: 0.2, green: 0.2, blue: 0.2))
+            .font(MinikPretty.bodyFont(
+                metrics.wide ? wideStatusFontSize * metrics.statusScale : compactStatusFontSize
+            ))
+            .foregroundStyle(MinikPretty.navy)
             .multilineTextAlignment(.center)
         if metrics.accessibilityText {
             languageBlinking(status)
@@ -261,8 +254,10 @@ struct MemoryView: View {
     @ViewBuilder
     private func languagePicturePairs(_ metrics: LanguageMemoryBoardMetrics) -> some View {
         let pairs = Text(verbatim: languagePairsText)
-            .font(metrics.wide ? Font.system(size: wideStatusFontSize * metrics.statusScale) : .callout)
-            .foregroundStyle(Color(red: 0.2, green: 0.2, blue: 0.2))
+            .font(MinikPretty.bodyFont(
+                metrics.wide ? wideStatusFontSize * metrics.statusScale : compactPairsFontSize
+            ))
+            .foregroundStyle(MinikPretty.softInk)
             .multilineTextAlignment(.center)
         if metrics.accessibilityText {
             pairs.fixedSize(horizontal: false, vertical: true)
@@ -832,7 +827,7 @@ private struct LanguageMemoryCardStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .contentShape(RoundedRectangle(cornerRadius: 12, style: .circular))
+            .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
             .scaleEffect(configuration.isPressed && !reduceMotion ? pressedScale : 1)
             .animation(
                 reduceMotion ? nil : .easeOut(duration: 0.1),
@@ -889,43 +884,64 @@ private struct LanguageMemoryCardFaces<Front: View>: View {
         )
     }
 
-    // bg_minik_gradient_rounded: left-to-right gradient, 12 dp corners, no
-    // border.
+    // bg_memory_card_face_pretty: the picture on a white card (15 dp corners)
+    // inside a lavender-to-sky rim, 3 dp at the top and sides and 4 dp at the
+    // bottom (18 dp corners).
     private var frontFace: some View {
         front
-            .background(
-                LinearGradient(
-                    colors: LanguageMemoryCardPalette.frontColors,
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ),
-                in: RoundedRectangle(cornerRadius: 12, style: .circular)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .circular))
+            .background {
+                RoundedRectangle(cornerRadius: 15, style: .continuous)
+                    .fill(Color.white)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+            .padding(EdgeInsets(top: 3, leading: 3, bottom: 4, trailing: 3))
+            .background {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [LanguageSkyPalette.frameStart, LanguageSkyPalette.frameEnd],
+                            startPoint: UnitPoint.leading,
+                            endPoint: UnitPoint.trailing
+                        )
+                    )
+                    .shadow(color: MinikPretty.navy.opacity(0.12), radius: 4, x: 0, y: 3)
+            }
     }
 
-    // bg_card_front_kids3/4/5: 45-degree gradient, a faint dashed inner line
-    // and a 2 dp white border, all with 12 dp corners.
+    // The pretty card back (Android's memory_card_back_pretty, a pastel card
+    // with Minik peeking up): a pastel card with a white rim, a soft dashed
+    // stitch and a smiling star in the middle.
     private var backFace: some View {
-        RoundedRectangle(cornerRadius: 12, style: .circular)
+        let card = RoundedRectangle(cornerRadius: 18, style: .continuous)
+        return card
             .fill(
                 LinearGradient(
                     colors: LanguageMemoryCardPalette.backColors(variant: backVariant),
-                    startPoint: .bottomLeading,
-                    endPoint: .topTrailing
+                    startPoint: UnitPoint.topLeading,
+                    endPoint: UnitPoint.bottomTrailing
                 )
             )
             .overlay {
-                RoundedRectangle(cornerRadius: 10, style: .circular)
-                    .strokeBorder(
-                        Color.white.opacity(0.125),
-                        style: StrokeStyle(lineWidth: 1, dash: [4, 3])
-                    )
-                    .padding(2)
+                MinikArtworkImage(name: LanguageMemoryCardPalette.backStar(variant: backVariant))
+                    .scaleEffect(0.56)
+                    .shadow(color: MinikPretty.navy.opacity(0.18), radius: 3, x: 0, y: 2)
             }
             .overlay {
-                RoundedRectangle(cornerRadius: 12, style: .circular)
-                    .strokeBorder(Color.white, lineWidth: 2)
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .strokeBorder(
+                        Color.white.opacity(0.7),
+                        style: StrokeStyle(lineWidth: 1.5, dash: [5, 4])
+                    )
+                    .padding(6)
+            }
+            .overlay {
+                card
+                    .strokeBorder(Color.white, lineWidth: 2.5)
+            }
+            .background {
+                card
+                    .fill(Color.white)
+                    .shadow(color: MinikPretty.navy.opacity(0.14), radius: 4, x: 0, y: 3)
             }
     }
 }
@@ -938,35 +954,38 @@ private struct LanguageMemoryCardTurn: ViewModifier {
     }
 }
 
-/// The revealed-card gradient and the three Android card backs
-/// (bg_card_front_kids4, kids5 and kids3).
+/// The three pastel card backs, one chosen per visit as Android chooses its card
+/// back: lavender with a yellow star, pink with a purple star and sky blue with a
+/// pink star.
 private enum LanguageMemoryCardPalette {
-    static let frontColors: [Color] = [
-        Color(red: 0.522, green: 0.314, blue: 0.706),
-        Color(red: 0.941, green: 0.698, blue: 0.722),
-        Color(red: 0.235, green: 0.792, blue: 0.835)
-    ]
-
     static func backColors(variant: Int) -> [Color] {
         switch variant {
         case 1:
             return [
-                Color(red: 0.914, green: 0.118, blue: 0.388),
-                Color(red: 0.247, green: 0.318, blue: 0.710),
-                Color(red: 0.0, green: 0.588, blue: 0.533)
+                Color(red: 255 / 255, green: 230 / 255, blue: 242 / 255),
+                Color(red: 251 / 255, green: 207 / 255, blue: 228 / 255)
             ]
         case 2:
             return [
-                Color(red: 0.012, green: 0.663, blue: 0.957),
-                Color(red: 0.247, green: 0.318, blue: 0.710),
-                Color(red: 0.0, green: 0.588, blue: 0.533)
+                Color(red: 227 / 255, green: 244 / 255, blue: 255 / 255),
+                Color(red: 195 / 255, green: 227 / 255, blue: 251 / 255)
             ]
         default:
             return [
-                Color(red: 0.0, green: 0.588, blue: 0.533),
-                Color(red: 0.247, green: 0.318, blue: 0.710),
-                Color(red: 1.0, green: 0.722, blue: 0.361)
+                Color(red: 241 / 255, green: 232 / 255, blue: 255 / 255),
+                Color(red: 220 / 255, green: 203 / 255, blue: 255 / 255)
             ]
+        }
+    }
+
+    static func backStar(variant: Int) -> String {
+        switch variant {
+        case 1:
+            return LanguagePracticeArtwork.starFacePrefix + "1"
+        case 2:
+            return LanguagePracticeArtwork.starFacePrefix + "5"
+        default:
+            return LanguagePracticeArtwork.starFacePrefix + "6"
         }
     }
 }

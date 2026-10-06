@@ -44,7 +44,8 @@ enum MathProductionActivityID: String, CaseIterable, Hashable, Identifiable, Sen
         case .answerToRepresentation: return String(localized: "Answer → Representation")
         case .buildMath: return String(localized: "Build Math")
         case .mathMixed: return String(localized: "Math Mixed")
-        case .mathCards: return String(localized: "Math Cards / Facts Table")
+        // Learn Math teaches one fact per screen; this one is the whole table.
+        case .mathCards: return String(localized: "Facts Table")
         case .mathSoccer: return String(localized: "Math Soccer")
         case .mathTower: return String(localized: "Math Tower")
         case .mathMemory: return String(localized: "Math Memory")
@@ -54,7 +55,7 @@ enum MathProductionActivityID: String, CaseIterable, Hashable, Identifiable, Sen
 
     var subtitle: String {
         switch self {
-        case .learnMath: return String(localized: "Explore the current math idea")
+        case .learnMath: return String(localized: "Step by step: one fact at a time, with pictures")
         case .mathPairs: return String(localized: "Match equal math representations")
         case .buildNumber: return String(localized: "Construct the matching number")
         case .buildQuantity: return String(localized: "Construct the requested quantity")
@@ -62,7 +63,7 @@ enum MathProductionActivityID: String, CaseIterable, Hashable, Identifiable, Sen
         case .answerToRepresentation: return String(localized: "Choose an equivalent representation")
         case .buildMath: return String(localized: "Build an answer or expression in order")
         case .mathMixed: return String(localized: "Practice approved modes for this level")
-        case .mathCards: return String(localized: "Review facts and relationships")
+        case .mathCards: return String(localized: "All of this level's facts in one table, to review")
         case .mathSoccer: return String(localized: "Kick the correct math answer")
         case .mathTower: return String(localized: "Build the target value")
         case .mathMemory: return String(localized: "Find equivalent math pairs")
@@ -80,7 +81,7 @@ enum MathProductionActivityID: String, CaseIterable, Hashable, Identifiable, Sen
         case .answerToRepresentation: return "rectangle.grid.2x2"
         case .buildMath: return "square.and.pencil"
         case .mathMixed: return "shuffle"
-        case .mathCards: return "rectangle.stack"
+        case .mathCards: return "tablecells"
         case .mathSoccer: return "soccerball"
         case .mathTower: return "building.columns"
         case .mathMemory: return "rectangle.on.rectangle"
@@ -148,10 +149,11 @@ enum MathProductionActivityID: String, CaseIterable, Hashable, Identifiable, Sen
     }
 
     static let sections: [ActivitySection<MathProductionActivityID>] = [
+        // "Learn" alone was translated for the Language apps ("learning the letters").
         ActivitySection(
             id: "math-learn",
-            title: String(localized: "Learn"),
-            subtitle: String(localized: "Meet the current math idea."),
+            title: String(localized: "Learn and review"),
+            subtitle: String(localized: "Learn this level's facts step by step, then review them in a table."),
             activities: [.learnMath, .mathCards]
         ),
         ActivitySection(

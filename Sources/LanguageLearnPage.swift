@@ -1,11 +1,13 @@
 import SwiftUI
 
-/// Android fragment_learn: the outlined capital and small letter above the dashed
-/// divider, the example picture and its word below it, the yellow Next pill at the
-/// bottom. Phones follow layout/fragment_learn.xml; iPads follow
+/// Android fragment_learn in the Plus rainbow-sky design: on a frosted glass panel
+/// over the sky (prettySkyBackground and prettyPanel, 12 dp from the screen's edges,
+/// 32 dp on tablets), the outlined capital and small letter above the dashed
+/// divider, the example picture and its navy word below it, the sunny Next pill at
+/// the bottom. Phones follow layout/fragment_learn.xml; iPads follow
 /// layout-sw600dp/fragment_learn.xml with the values-sw700dp and values-sw800dp
 /// sizes and keep the phone reference's divider. At every text size the page keeps
-/// this composition, fills the screen and scrolls only when a screen is too short
+/// this composition, fills the panel and scrolls only when a screen is too short
 /// for it; only a phone at an accessibility size too large for it gets one column.
 struct LanguageLearnPage: View {
     let card: LanguageLearnCardPresentation
@@ -20,28 +22,39 @@ struct LanguageLearnPage: View {
     // Android sizes the word and the Next label in sp, so both follow the text size.
     @ScaledMetric(relativeTo: .title) private var textScalePercent: CGFloat = 100
 
-    /// Android bottomLetterText #252526.
-    fileprivate static let wordColor = Color(red: 0.145, green: 0.145, blue: 0.149)
+    /// The word under the picture: the design's navy.
+    fileprivate static let wordColor = MinikPretty.navy
 
     var body: some View {
         GeometryReader { geometry in
+            let tablet = geometry.size.width >= 700
+            // pretty_panel_margin: 12 dp, 32 dp on tablets.
+            let margin: CGFloat = tablet ? 32 : 12
+            let panelWidth = max(1, geometry.size.width - 2 * margin)
+            let panelHeight = max(1, geometry.size.height - 2 * margin)
             let metrics = LearnLayoutMetrics(
-                width: geometry.size.width,
+                width: panelWidth,
+                screenWidth: geometry.size.width,
                 textScale: textScalePercent / 100
             )
             let minimumHeight = minimumPageHeight(metrics)
-            ScrollView {
-                if usesAccessibleColumn(metrics, minimumHeight: minimumHeight, screenHeight: geometry.size.height) {
-                    accessiblePage(metrics)
-                        .frame(minHeight: geometry.size.height, alignment: .top)
-                } else {
-                    page(metrics, height: max(geometry.size.height, minimumHeight))
+            LanguageSkyPanel(width: panelWidth, height: panelHeight, cornerRadius: tablet ? 36 : 28) {
+                ScrollView {
+                    if usesAccessibleColumn(metrics, minimumHeight: minimumHeight, screenHeight: panelHeight) {
+                        accessiblePage(metrics)
+                            .frame(minHeight: panelHeight, alignment: .top)
+                    } else {
+                        page(metrics, height: max(panelHeight, minimumHeight))
+                    }
                 }
+                .scrollBounceBehavior(.basedOnSize)
             }
-            .scrollBounceBehavior(.basedOnSize)
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
-        // A background, so the white never sizes the page.
-        .background { Color.white.ignoresSafeArea() }
+        // A background, so the sky never sizes the page.
+        .background {
+            MinikSkyBackground()
+        }
     }
 
     private var nextTitleKey: String.LocalizationValue {
@@ -158,7 +171,7 @@ struct LanguageLearnPage: View {
             MinikArtworkImage(name: MinikVisualAsset.home)
                 .frame(width: metrics.homeSide, height: metrics.homeSide)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(LanguageSkyPressStyle())
         .accessibilityLabel("Home")
         .accessibilityHint("Returns to the activity menu")
     }
@@ -178,14 +191,16 @@ struct LanguageLearnPage: View {
         .accessibilityLabel(card.letter.text)
     }
 
-    /// minik_divider_line across the full width at its own 1180x4 proportion,
-    /// as Android's fitCenter draws it. Android's layout-sw600dp has only an
-    /// invisible 45% Guideline here; iPads keep the binding phone reference's
-    /// line as an intentional adaptation.
+    /// minik_divider_line across the panel at its own 1180x4 proportion, as
+    /// Android's fitCenter draws it, 12 points in from the panel's sides (the pretty
+    /// design's 24 dp from the screen's edges). Android's layout-sw600dp has only an
+    /// invisible 45% Guideline here; iPads keep the binding phone reference's line as
+    /// an intentional adaptation.
     private func dividerLine(_ metrics: LearnLayoutMetrics) -> some View {
         Image("language_learn_divider")
             .resizable()
             .frame(height: metrics.dividerThickness)
+            .padding(.horizontal, 12)
             .accessibilityHidden(true)
     }
 
@@ -202,7 +217,7 @@ struct LanguageLearnPage: View {
     // beside Play on a 375-point phone; the lower floor keeps a margin there.
     private func wordText(_ metrics: LearnLayoutMetrics) -> some View {
         Text(card.word.text)
-            .font(.system(size: metrics.wordSize, weight: .bold))
+            .font(MinikPretty.titleFont(metrics.wordSize))
             .foregroundStyle(Self.wordColor)
             .multilineTextAlignment(.center)
             .lineLimit(1)
@@ -232,17 +247,19 @@ struct LanguageLearnPage: View {
         .environment(\.layoutDirection, wordLayoutDirection)
     }
 
+    /// The sunny Next pill (bg_next_link): the design's glossy yellow button with a
+    /// navy label, faded while there is no next card.
     private func nextButton(_ metrics: LearnLayoutMetrics, maxLines: Int = 1) -> some View {
         Button(action: onNext) {
             Text(interfaceLocaleID.text(nextTitleKey))
-                .font(.system(size: metrics.nextSize, weight: .bold))
+                .font(MinikPretty.titleFont(metrics.nextSize))
                 .multilineTextAlignment(.center)
                 .lineLimit(maxLines)
                 .minimumScaleFactor(0.6)
-                // With the 24-point side padding: Android's 88-point minimum width.
-                .frame(minWidth: 40)
+                // With the pill's 22-point side padding: Android's 88-point minimum width.
+                .frame(minWidth: 44)
         }
-        .buttonStyle(LearnNextButtonStyle())
+        .buttonStyle(MinikPrettyButtonStyle(.yellow))
         .disabled(isComplete)
     }
 
@@ -259,7 +276,8 @@ struct LanguageLearnPage: View {
     /// Height the lower region needs besides the picture at the current text size.
     private func lowerFixedHeight(_ metrics: LearnLayoutMetrics) -> CGFloat {
         let nextLine = (metrics.nextSize * 1.25).rounded(.up)
-        let nextHeight = nextLine + LearnNextButtonStyle.verticalPadding * 2
+        // The glossy pill: 9 points above the label and 12 below it, at least 52 tall.
+        let nextHeight = max(52, nextLine + 21)
         let pictureGaps = metrics.imageTop + metrics.imageToWord
         let controls = wordRowHeight(metrics) + metrics.wordToNext + nextHeight + metrics.nextBottom
         return pictureGaps + controls
@@ -284,9 +302,10 @@ struct LanguageLearnPage: View {
     }
 }
 
-/// Android fragment_learn sizes in points (1 dp = 1 pt) for the page width:
+/// Android fragment_learn sizes in points (1 dp = 1 pt) for the panel width:
 /// layout/ on phones; on iPads layout-sw600dp with values-sw700dp, or
-/// values-sw800dp from 800 points.
+/// values-sw800dp from 800 points. The screen's width picks the layout, as
+/// Android's resource qualifiers do; the panel inside it is a little narrower.
 private struct LearnLayoutMetrics {
     let width: CGFloat
     let isTablet: Bool
@@ -313,9 +332,9 @@ private struct LearnLayoutMetrics {
     let nextSize: CGFloat
     let playGlyph: CGFloat
 
-    init(width: CGFloat, textScale: CGFloat) {
-        let tablet = width >= 700
-        let large = width >= 800
+    init(width: CGFloat, screenWidth: CGFloat, textScale: CGFloat) {
+        let tablet = screenWidth >= 700
+        let large = screenWidth >= 800
         self.width = width
         isTablet = tablet
         // fitCenter draws the 1180x4 divider artwork at the full width.
@@ -364,39 +383,6 @@ private struct LearnLayoutMetrics {
     var homeBottom: CGFloat { homeTop + homeSide }
 
     var playFrame: CGSize { LanguageReplayButton.hitArea(glyphSize: playGlyph) }
-}
-
-/// Android's Material 3 Next button (next_word_bg_tint, next_word_text_tint): a
-/// #FDE000 pill with a #F9F9FA bold label, 24 dp side and 6 dp vertical padding
-/// and no elevation; disabled at 30% and 50% alpha.
-private struct LearnNextButtonStyle: ButtonStyle {
-    static let verticalPadding: CGFloat = 8
-    private static let pillColor = Color(red: 0.992, green: 0.878, blue: 0.0)
-    private static let labelColor = Color(red: 0.976, green: 0.976, blue: 0.980)
-
-    @Environment(\.isEnabled) private var isEnabled
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundStyle(foreground.opacity(isEnabled ? 1 : 0.5))
-            .padding(.horizontal, 24)
-            .padding(.vertical, Self.verticalPadding)
-            .background(
-                Capsule()
-                    .fill(Self.pillColor.opacity(isEnabled ? 1 : 0.3))
-            )
-            .contentShape(Capsule())
-            .opacity(configuration.isPressed ? 0.85 : 1)
-            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.97 : 1)
-            .animation(reduceMotion ? nil : .easeOut(duration: 0.14), value: configuration.isPressed)
-    }
-
-    /// Increase Contrast swaps Android's white label for the dark word colour.
-    private var foreground: Color {
-        colorSchemeContrast == .increased ? LanguageLearnPage.wordColor : Self.labelColor
-    }
 }
 
 struct LanguageReplayButton: View {

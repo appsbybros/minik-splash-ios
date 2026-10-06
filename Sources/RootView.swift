@@ -63,7 +63,10 @@ struct RootView: View {
                 )
             }
         }
-        .preferredColorScheme(configuration.contentDomain == .language ? .light : nil)
+        // The language and Math apps are drawn in the light rainbow-sky design with
+        // dark text on light surfaces; in Dark Mode the system's default text turned
+        // white on Math's white answer tiles. The standalone Ping Pong keeps the system's.
+        .preferredColorScheme(configuration.launchExperience == .pingPong ? nil : .light)
         .onAppear { Task { @MainActor in StoreScreenshotScene.applyOrientation() } }
         .environment(\.minikVisualIdentity, configuration.visualIdentity)
         .environment(\.interfaceLocaleID, effectiveInterfaceLocale)

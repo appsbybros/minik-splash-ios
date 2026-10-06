@@ -81,8 +81,8 @@ struct SoccerView: View {
     @State private var showsIntroduction = false
     @StateObject private var speechPlayer: LearningSpeechPlayer
     @StateObject private var interfaceSpeechPlayer: InterfaceSpeechPlayer
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.interfaceLocaleID) private var interfaceLocaleID
     private let onComplete: () -> Void
@@ -138,20 +138,33 @@ struct SoccerView: View {
             onExit: exitActivity
         ) { metrics in
             let compact = metrics.compact
+            let board = SoccerBoardLayout(
+                metrics: metrics,
+                ballCount: session.round.answerBalls.count
+            )
 
             MinikPracticeSurface(compact: compact) {
-                VStack(spacing: compact ? 18 : 24) {
-                    scoreboardSection(compact: compact)
+                VStack(spacing: board.spacing) {
+                    scoreboardSection(compact: compact, showsTitle: board.showsTitle)
 
-                    fieldSection(compact: compact)
+                    if board.sideBySide {
+                        HStack(alignment: .center, spacing: board.spacing) {
+                            fieldSection(compact: compact, board: board)
 
-                    answerSection(
-                        compact: compact,
-                        availableWidth: metrics.containerWidth
-                    )
+                            answerSection(compact: compact, board: board)
+                                .frame(width: board.answerColumnWidth)
+                        }
+                    } else {
+                        fieldSection(compact: compact, board: board)
 
-                    actionSection(compact: compact)
+                        answerSection(compact: compact, board: board)
+                    }
+
+                    if session.orderedTokenContent != nil {
+                        actionSection(compact: compact)
+                    }
                 }
+                .frame(minHeight: board.fillHeight)
             }
         }
         .overlay {
@@ -169,19 +182,22 @@ struct SoccerView: View {
         .onDisappear(perform: stopActivityAudioAndMotion)
     }
 
-    private func scoreboardSection(compact: Bool) -> some View {
-        VStack(spacing: compact ? 12 : 14) {
-            Text(session.orderedTokenContent == nil
-                ? String(localized: "Soccer challenge")
-                : String(localized: "Build the word"))
-                .font(.title3.weight(.bold))
-                .foregroundStyle(Color(red: 0.14, green: 0.42, blue: 0.54))
+    private func scoreboardSection(compact: Bool, showsTitle: Bool) -> some View {
+        VStack(spacing: compact ? 8 : 12) {
+            if showsTitle {
+                Text(session.orderedTokenContent == nil
+                    ? String(localized: "Soccer challenge")
+                    : String(localized: "Build the word"))
+                    .font(.title3.weight(.bold))
+                    .foregroundStyle(Color(red: 0.14, green: 0.42, blue: 0.54))
+            }
 
             HStack(spacing: compact ? 12 : 16) {
                 scorePill(
-                    title: "You",
+                    title: String(localized: "You"),
                     value: session.childScore,
-                    tint: Color(red: 0.17, green: 0.58, blue: 0.82)
+                    tint: Color(red: 0.17, green: 0.58, blue: 0.82),
+                    compact: compact
                 )
 
                 Text("vs")
@@ -194,7 +210,8 @@ struct SoccerView: View {
                 scorePill(
                     title: keeperTitle,
                     value: session.keeperScore,
-                    tint: Color(red: 0.98, green: 0.67, blue: 0.24)
+                    tint: Color(red: 0.98, green: 0.67, blue: 0.24),
+                    compact: compact
                 )
             }
             .accessibilityElement(children: .ignore)
@@ -208,7 +225,7 @@ struct SoccerView: View {
         .frame(maxWidth: .infinity)
     }
 
-    private func scorePill(title: String, value: Int, tint: Color) -> some View {
+    private func scorePill(title: String, value: Int, tint: Color, compact: Bool) -> some View {
         VStack(spacing: 4) {
             Text(title)
                 .font(.caption.weight(.semibold))
@@ -219,7 +236,7 @@ struct SoccerView: View {
                 .foregroundStyle(.white)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 12)
+        .padding(.vertical, compact ? 8 : 12)
         .background(
             RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .fill(
@@ -232,9 +249,9 @@ struct SoccerView: View {
         )
     }
 
-    private func fieldSection(compact: Bool) -> some View {
-        VStack(spacing: compact ? 16 : 20) {
-            VStack(spacing: compact ? 10 : 12) {
+    private func fieldSection(compact: Bool, board: SoccerBoardLayout) -> some View {
+        VStack(spacing: board.fieldSpacing) {
+            VStack(spacing: compact ? 8 : 10) {
                 if session.orderedTokenContent != nil {
                     HStack {
                         Spacer()
@@ -252,11 +269,13 @@ struct SoccerView: View {
                     }
                 }
 
+                // In Math the tap on a ball is the kick (report 1 #4).
                 Text(session.orderedTokenContent == nil
-                    ? String(localized: "Pick the matching ball")
+                    ? String(localized: "Kick the right answer")
                     : String(localized: "Kick the next letter"))
                     .font(.headline.weight(.semibold))
                     .foregroundStyle(.white.opacity(0.94))
+                    .multilineTextAlignment(.center)
 
                 ForEach(
                     Array(session.promptRepresentations.enumerated()),
@@ -276,18 +295,20 @@ struct SoccerView: View {
                 constructedWordSection(compact: compact)
             }
 
-            soccerScene(compact: compact)
-
-            if session.orderedTokenContent == nil,
-               session.gameOutcome == nil,
-               session.selectedBallID != nil {
-                Label("Selected ball is ready to kick", systemImage: "figure.soccer")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Color.white.opacity(0.94))
-                    .accessibilityHint("Kick is now available")
-            }
+            soccerScene(compact: compact, board: board)
+                .overlay(alignment: .bottom) {
+                    // The shot's result shows on the field, where the ball went.
+                    if session.orderedTokenContent == nil,
+                       let outcome = session.gameOutcome {
+                        outcomeBanner(for: outcome)
+                            .frame(maxWidth: 360)
+                            .padding(.horizontal, 8)
+                            .padding(.bottom, 6)
+                            .transition(.opacity)
+                    }
+                }
         }
-        .padding(compact ? 18 : 24)
+        .padding(board.fieldPadding)
         .background(fieldBackground)
         .overlay {
             RoundedRectangle(cornerRadius: compact ? 30 : 36, style: .continuous)
@@ -296,27 +317,29 @@ struct SoccerView: View {
         .clipShape(RoundedRectangle(cornerRadius: compact ? 30 : 36, style: .continuous))
     }
 
-    private func soccerScene(compact: Bool) -> some View {
+    private func soccerScene(compact: Bool, board: SoccerBoardLayout) -> some View {
         GeometryReader { geometry in
             let size = geometry.size
-            let ballSize = compact ? 60.0 : 68.0
+            // The field takes the height the screen has left, so the goal, the keeper
+            // and the ball shrink with a short field instead of spilling out of it.
+            let scale = min(1, max(0.62, size.height / 260))
+            let ballSize = (compact ? 60 : 68) * scale
             let restingY = size.height * 0.28
             let targetOffset = shotOffset(in: size)
 
             ZStack {
-                goalView(width: min(size.width * 0.54, compact ? 240 : 300))
+                goalView(width: min(size.width * 0.54, (compact ? 240 : 300) * scale))
                     .offset(y: -size.height * 0.22)
 
-                keeperView
+                keeperView(scale: scale)
                     .offset(y: -size.height * 0.1)
                     .offset(x: session.gameOutcome == .saved ? size.width * 0.14 : 0)
 
                 if let selectedBall = selectedBall {
                     soccerBallFace(
                         for: selectedBall,
-                        compact: compact,
-                        selected: true,
-                        sceneMode: true
+                        diameter: ballSize,
+                        selected: true
                     )
                     .frame(width: ballSize, height: ballSize)
                     .offset(
@@ -329,7 +352,11 @@ struct SoccerView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(height: compact ? 220 : 260)
+        .frame(
+            minHeight: board.sceneMinHeight,
+            idealHeight: board.sceneMinHeight,
+            maxHeight: board.sceneMaxHeight
+        )
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(sceneAccessibilityLabel)
     }
@@ -344,10 +371,10 @@ struct SoccerView: View {
             .frame(width: width, height: width * 0.42)
     }
 
-    private var keeperView: some View {
-        VStack(spacing: 6) {
+    private func keeperView(scale: CGFloat) -> some View {
+        VStack(spacing: 6 * scale) {
             MinikArtworkImage(name: MinikVisualAsset.soccerGoalie)
-                .frame(width: 86, height: 98)
+                .frame(width: 86 * scale, height: 98 * scale)
 
             Text(keeperTitle)
                 .font(.caption.weight(.bold))
@@ -355,68 +382,119 @@ struct SoccerView: View {
         }
     }
 
-    private func answerSection(compact: Bool, availableWidth: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: compact ? 12 : 16) {
-            Text(session.orderedTokenContent == nil
-                ? String(localized: "Choose your ball")
-                : String(localized: "Available letters"))
-                .font(.headline.weight(.semibold))
-                .foregroundStyle(Color(red: 0.16, green: 0.43, blue: 0.55))
+    private func answerSection(compact: Bool, board: SoccerBoardLayout) -> some View {
+        VStack(alignment: .leading, spacing: compact ? 10 : 14) {
+            if session.orderedTokenContent != nil {
+                Text(String(localized: "Available letters"))
+                    .font(.headline.weight(.semibold))
+                    .foregroundStyle(Color(red: 0.16, green: 0.43, blue: 0.55))
+            }
 
-            LazyVGrid(
-                columns: answerColumns(for: availableWidth, compact: compact),
-                spacing: compact ? 16 : 18
-            ) {
-                ForEach(session.availableBalls, id: \.id) { ball in
-                    Button {
-                        selectOrKick(ball.id)
-                    } label: {
-                        VStack(spacing: 10) {
-                            answerChoiceFace(
-                                for: ball,
-                                compact: compact,
-                                selected: session.selectedBallID == ball.id
-                            )
-                            .frame(width: compact ? 72 : 82, height: compact ? 72 : 82)
+            ZStack {
+                ballGrid(board: board)
+                    .opacity(showsShotResult ? 0 : 1)
+                    .allowsHitTesting(!showsShotResult)
+                    .accessibilityHidden(showsShotResult)
 
-                            if session.selectedBallID == ball.id {
-                                Label(
-                                    session.orderedTokenContent == nil
-                                        ? String(localized: "Ready to kick")
-                                        : String(localized: "Shot in progress"),
-                                    systemImage: "checkmark.circle.fill"
-                                )
-                                    .font(.footnote.weight(.semibold))
-                                    .foregroundStyle(Color(red: 0.19, green: 0.57, blue: 0.79))
-                            } else {
-                                Text(" ")
-                                    .font(.footnote.weight(.semibold))
-                                    .hidden()
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .aspectRatio(1, contentMode: .fit)
-                        .contentShape(Circle())
+                if showsShotResult, let isCorrect = session.educationalIsCorrect {
+                    shotResultPanel(isCorrect: isCorrect, compact: compact)
+                        .transition(.opacity)
+                }
+            }
+            // Math keeps room for the result, so it takes the balls' place without
+            // moving the field.
+            .frame(
+                maxWidth: .infinity,
+                minHeight: session.orderedTokenContent == nil ? board.resultMinHeight : nil
+            )
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: showsShotResult)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// Math: once the shot lands, its result takes the balls' place.
+    private var showsShotResult: Bool {
+        session.orderedTokenContent == nil && session.gameOutcome != nil
+    }
+
+    /// Every ball in rows of the layout's column count, each sized for the screen.
+    private func ballGrid(board: SoccerBoardLayout) -> some View {
+        VStack(spacing: board.ballSpacing) {
+            ForEach(
+                Array(ballRows(columns: board.columns).enumerated()),
+                id: \.offset
+            ) { _, row in
+                HStack(spacing: board.ballSpacing) {
+                    ForEach(row, id: \.id) { ball in
+                        answerBallButton(ball, board: board)
                     }
-                    .buttonStyle(
-                        MinikSoccerBallStyle(
-                            state: session.selectedBallID == ball.id ? .selected : .idle,
-                            compact: compact
-                        )
-                    )
-                    .disabled(session.selectedBallID != nil || session.gameOutcome != nil)
-                    .accessibilityLabel(ballAccessibilityLabel(for: ball))
-                    .accessibilityHint(answerBallHint(for: ball))
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity)
+    }
+
+    private func ballRows(columns: Int) -> [[SoccerAnswerBall]] {
+        let balls = session.availableBalls
+        let rowLength = max(1, columns)
+        return stride(from: 0, to: balls.count, by: rowLength).map { start in
+            Array(balls[start ..< min(start + rowLength, balls.count)])
+        }
+    }
+
+    private func answerBallButton(_ ball: SoccerAnswerBall, board: SoccerBoardLayout) -> some View {
+        let selected = session.selectedBallID == ball.id
+
+        return Button {
+            selectOrKick(ball.id)
+        } label: {
+            answerChoiceFace(
+                for: ball,
+                diameter: board.ballFaceDiameter,
+                selected: selected
+            )
+            .frame(width: board.ballFaceDiameter, height: board.ballFaceDiameter)
+            .frame(width: board.ballDiameter, height: board.ballDiameter)
+            .contentShape(Circle())
+        }
+        .buttonStyle(
+            MinikSoccerBallStyle(
+                state: selected ? .selected : .idle,
+                compact: board.compact
+            )
+        )
+        .disabled(session.selectedBallID != nil || session.gameOutcome != nil)
+        .accessibilityLabel(ballAccessibilityLabel(for: ball))
+        .accessibilityHint(answerBallHint(for: ball))
+    }
+
+    /// Math's result in the balls' place: the feedback, and for VoiceOver a Continue
+    /// button (without VoiceOver the next challenge follows by itself).
+    private func shotResultPanel(isCorrect: Bool, compact: Bool) -> some View {
+        VStack(spacing: compact ? 10 : 14) {
+            MinikFeedbackBadge(isCorrect: isCorrect)
+                .accessibilityLabel(feedbackAccessibilityLabel(isCorrect: isCorrect))
+
+            if voiceOverEnabled {
+                Button(action: continueAfterShot) {
+                    Label(
+                        session.currentTargetIndex == session.targetCount - 1
+                            ? String(localized: "Done")
+                            : String(localized: "Continue"),
+                        systemImage: "arrow.forward"
+                    )
+                }
+                .buttonStyle(MinikPrimaryActionStyle())
+                .accessibilityHint("Moves to the next soccer challenge")
+            }
+        }
+        .frame(maxWidth: .infinity)
     }
 
     @ViewBuilder
     private func answerChoiceFace(
         for ball: SoccerAnswerBall,
-        compact: Bool,
+        diameter: CGFloat,
         selected: Bool
     ) -> some View {
         if session.orderedTokenContent != nil {
@@ -428,14 +506,13 @@ struct SoccerView: View {
                             .strokeBorder(.white.opacity(0.9), lineWidth: selected ? 4 : 2)
                     }
 
-                ballRepresentation(for: ball, compact: compact, sceneMode: false)
+                ballRepresentation(for: ball, diameter: diameter)
             }
         } else {
             soccerBallFace(
                 for: ball,
-                compact: compact,
-                selected: selected,
-                sceneMode: false
+                diameter: diameter,
+                selected: selected
             )
         }
     }
@@ -503,6 +580,7 @@ struct SoccerView: View {
     }
 
     private func handleAppearance() {
+        resumeInterruptedKick()
         guard !didEvaluateIntroduction else { return }
         didEvaluateIntroduction = true
 
@@ -524,23 +602,8 @@ struct SoccerView: View {
         speakRoundCue()
     }
 
-    private func answerColumns(for availableWidth: CGFloat, compact: Bool) -> [GridItem] {
-        if dynamicTypeSize >= .accessibility1 {
-            return [GridItem(.flexible(minimum: 0, maximum: 260), spacing: compact ? 16 : 18)]
-        }
-
-        let minimumWidth: CGFloat
-        if availableWidth < 420 {
-            minimumWidth = 118
-        } else if compact {
-            minimumWidth = 132
-        } else {
-            minimumWidth = 150
-        }
-
-        return [GridItem(.adaptive(minimum: minimumWidth, maximum: 188), spacing: compact ? 16 : 18)]
-    }
-
+    /// The letter game's feedback under the board. Math shows its result in the
+    /// balls' place instead (shotResultPanel).
     @ViewBuilder
     private func actionSection(compact: Bool) -> some View {
         if let educationalIsCorrect = session.educationalIsCorrect,
@@ -551,45 +614,20 @@ struct SoccerView: View {
 
                 outcomeBanner(for: gameOutcome)
 
-                if session.orderedTokenContent != nil {
-                    if session.isComplete {
-                        roundResultBanner
-                    } else {
-                        Text(educationalIsCorrect
-                            ? String(localized: "Great kick! Get ready for the next letter.")
-                            : String(localized: "That letter stays in play. Try again after the field resets."))
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(Color(red: 0.25, green: 0.46, blue: 0.55))
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity)
-                    }
+                if session.isComplete {
+                    roundResultBanner
                 } else {
-                    Button(action: continueAfterShot) {
-                        Label(
-                            session.currentTargetIndex == session.targetCount - 1
-                                ? "Finish"
-                                : "Continue",
-                            systemImage: "arrow.forward"
-                        )
-                    }
-                    .buttonStyle(MinikPrimaryActionStyle())
-                    .accessibilityHint("Moves to the next soccer challenge")
+                    Text(educationalIsCorrect
+                        ? String(localized: "Great kick! Get ready for the next letter.")
+                        : String(localized: "That letter stays in play. Try again after the field resets."))
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Color(red: 0.25, green: 0.46, blue: 0.55))
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
                 }
-            }
-        } else if session.orderedTokenContent == nil, session.selectedBallID != nil {
-            VStack(spacing: compact ? 14 : 16) {
-                Button {
-                    activityState.resolveShot(outcome: simulatedOutcome())
-                } label: {
-                    Label("Kick", systemImage: "figure.soccer")
-                }
-                .buttonStyle(MinikPrimaryActionStyle())
-                .accessibilityHint("Resolves this shot")
             }
         } else {
-            Text(session.orderedTokenContent == nil
-                ? String(localized: "Choose one ball before you kick.")
-                : String(localized: "Tap the next letter to kick it toward the goal."))
+            Text(String(localized: "Tap the next letter to kick it toward the goal."))
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(Color(red: 0.31, green: 0.49, blue: 0.58))
                 .frame(maxWidth: .infinity)
@@ -667,9 +705,8 @@ struct SoccerView: View {
 
     private func soccerBallFace(
         for ball: SoccerAnswerBall,
-        compact: Bool,
-        selected: Bool,
-        sceneMode: Bool
+        diameter: CGFloat,
+        selected: Bool
     ) -> some View {
         ZStack {
             MinikArtworkImage(name: MinikVisualAsset.soccerBall)
@@ -677,12 +714,9 @@ struct SoccerView: View {
 
             Circle()
                 .fill(Color.white.opacity(0.94))
-                .frame(
-                    width: sceneMode ? (compact ? 38 : 42) : (compact ? 46 : 52),
-                    height: sceneMode ? (compact ? 38 : 42) : (compact ? 46 : 52)
-                )
+                .frame(width: diameter * 0.62, height: diameter * 0.62)
 
-            ballRepresentation(for: ball, compact: compact, sceneMode: sceneMode)
+            ballRepresentation(for: ball, diameter: diameter)
                 .zIndex(2)
         }
     }
@@ -690,27 +724,51 @@ struct SoccerView: View {
     @ViewBuilder
     private func ballRepresentation(
         for ball: SoccerAnswerBall,
-        compact: Bool,
-        sceneMode: Bool
+        diameter: CGFloat
     ) -> some View {
         if let token = ball.orderedToken,
            let displayText = ball.orderedTokenDisplayText {
             Text(verbatim: displayText)
-                .font(.system(
-                    size: sceneMode ? (compact ? 24 : 27) : (compact ? 29 : 33),
-                    weight: .black,
-                    design: .rounded
-                ))
+                .font(.system(size: diameter * 0.4, weight: .black, design: .rounded))
                 .foregroundStyle(Color(red: 0.07, green: 0.16, blue: 0.20))
                 .minimumScaleFactor(0.68)
                 .lineLimit(1)
                 .environment(\.layoutDirection, layoutDirection(for: token.direction))
+        } else if let answerText = ballAnswerText(for: ball) {
+            Text(verbatim: answerText)
+                .font(.system(size: diameter * 0.34, weight: .bold, design: .rounded))
+                .foregroundStyle(MathInk.navy)
+                .lineLimit(1)
+                .minimumScaleFactor(0.45)
+                .allowsTightening(true)
+                .frame(width: diameter * 0.56)
+                .environment(\.layoutDirection, .leftToRight)
         } else {
             RepresentationView(
                 representation: ball.representation,
                 context: .soccerBall
             )
-            .padding(sceneMode ? 13 : 16)
+            .padding(diameter * 0.2)
+        }
+    }
+
+    /// The answer a Math ball prints as dark text inside its white circle, as Android
+    /// Minik Math Plus does: it shrinks to stay inside a ball of any size, where a
+    /// fraction or percent bar was wider than the ball. Pictures keep
+    /// RepresentationView.
+    private func ballAnswerText(for ball: SoccerAnswerBall) -> String? {
+        switch ball.representation {
+        case .mathExpression(let expression):
+            return expression.expression
+        case .math(let math):
+            switch math {
+            case .numeral, .decimal, .fraction, .percent, .ratio:
+                return math.displayText
+            default:
+                return nil
+            }
+        default:
+            return nil
         }
     }
 
@@ -726,19 +784,17 @@ struct SoccerView: View {
 
     private func answerBallHint(for ball: SoccerAnswerBall) -> String {
         if session.selectedBallID == ball.id {
-            return session.orderedTokenContent == nil
-                ? String(localized: "Selected ball")
-                : String(localized: "Shot in progress")
+            return String(localized: "Shot in progress")
         }
 
-        if session.selectedBallID != nil {
+        if session.selectedBallID != nil || session.gameOutcome != nil {
             return session.orderedTokenContent == nil
                 ? String(localized: "Unavailable until you continue")
                 : String(localized: "Unavailable while the shot finishes")
         }
 
         return session.orderedTokenContent == nil
-            ? String(localized: "Double tap to choose this ball")
+            ? String(localized: "Double tap to kick this ball")
             : String(localized: "Double tap to kick this letter")
     }
 
@@ -771,9 +827,7 @@ struct SoccerView: View {
         }
 
         if session.selectedBallID != nil {
-            return session.orderedTokenContent == nil
-                ? String(localized: "Soccer field. Ball selected and ready to kick.")
-                : String(localized: "Soccer field. Shot in progress.")
+            return String(localized: "Soccer field. Shot in progress.")
         }
 
         return String(localized: "Soccer field.")
@@ -825,6 +879,9 @@ struct SoccerView: View {
 
     private func continueAfterShot() {
         let wasComplete = session.isComplete
+        // The next challenge starts in silence (Math Soccer itself does not speak).
+        speechPlayer.stop()
+        interfaceSpeechPlayer.stop()
         activityState.nextAnswerChoiceTarget()
         targetStartedAt = Date()
 
@@ -840,6 +897,12 @@ struct SoccerView: View {
     }
 
     private func selectOrKick(_ ballID: SoccerBallID) {
+        // One kick at a time: the balls wait while a shot flies or its result shows.
+        guard session.selectedBallID == nil,
+              session.gameOutcome == nil,
+              !session.isComplete else {
+            return
+        }
         let target = session.orderedTokenContent == nil ? session.currentTarget.challenge : nil
         let languageContentItemID = session.orderedTokenContent?.contentItemID
         let languageTokenIndex = session.progressCount
@@ -873,8 +936,13 @@ struct SoccerView: View {
            ) {
             onAttempt(attempt)
         }
-        guard session.orderedTokenContent != nil,
-              session.selectedBallID == ballID else {
+        guard session.selectedBallID == ballID else {
+            return
+        }
+
+        guard session.orderedTokenContent != nil else {
+            // Math: the tap is the kick, as in Android Minik Math Plus (report 1 #4).
+            kickAnswerBall(ballID)
             return
         }
 
@@ -912,6 +980,63 @@ struct SoccerView: View {
                 activityState.prepareNextOrderedKick()
                 targetStartedAt = Date()
             }
+        }
+    }
+
+    /// The chosen Math ball rests on the spot for a moment and flies at the goal; its
+    /// result then takes the balls' place. Without VoiceOver the next challenge
+    /// follows by itself, as in Android Minik Math Plus.
+    private func kickAnswerBall(_ ballID: SoccerBallID) {
+        let outcome = simulatedOutcome()
+        let continuesAutomatically = !voiceOverEnabled
+        shotTask?.cancel()
+        shotTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: reduceMotion ? 20_000_000 : 180_000_000)
+            guard !Task.isCancelled,
+                  session.selectedBallID == ballID,
+                  session.gameOutcome == nil else {
+                return
+            }
+            activityState.resolveShot(outcome: outcome)
+
+            guard continuesAutomatically else {
+                return
+            }
+            await continueAfterShownResult()
+        }
+    }
+
+    /// Moves on once the shot's result has shown for a moment, unless something
+    /// already did (Continue, or the screen closing).
+    @MainActor
+    private func continueAfterShownResult() async {
+        let shownTargetIndex = session.currentTargetIndex
+        try? await Task.sleep(nanoseconds: 1_800_000_000)
+        guard !Task.isCancelled,
+              session.gameOutcome != nil,
+              session.currentTargetIndex == shownTargetIndex else {
+            return
+        }
+        continueAfterShot()
+    }
+
+    /// A Math kick whose task was cancelled when the screen went away still lands when
+    /// the screen comes back, so the balls never stay locked on a chosen ball.
+    private func resumeInterruptedKick() {
+        guard session.orderedTokenContent == nil,
+              !session.isComplete,
+              session.selectedBallID != nil else {
+            return
+        }
+        if session.gameOutcome == nil {
+            activityState.resolveShot(outcome: simulatedOutcome())
+        }
+        guard !voiceOverEnabled else {
+            return
+        }
+        shotTask?.cancel()
+        shotTask = Task { @MainActor in
+            await continueAfterShownResult()
         }
     }
 
@@ -994,5 +1119,113 @@ struct SoccerView: View {
 
     private func localizedFormat(_ key: String.LocalizationValue, _ arguments: CVarArg...) -> String {
         String(format: String(localized: key), arguments: arguments)
+    }
+}
+
+/// How Soccer fits the screen MinikPracticeScreen gives it (report 1 #4). The balls
+/// and the field are sized for that space, so the score, the field and every ball
+/// show together without scrolling on iPhone and iPad in both orientations; a phone
+/// in landscape, or very large text, still scrolls the whole page. A wide, short
+/// screen puts the balls beside the field.
+private struct SoccerBoardLayout {
+    let compact: Bool
+    let tablet: Bool
+    let sideBySide: Bool
+    let showsTitle: Bool
+    let columns: Int
+    let ballDiameter: CGFloat
+    let spacing: CGFloat
+    let ballSpacing: CGFloat
+    let fieldPadding: CGFloat
+    let fieldSpacing: CGFloat
+    let sceneMinHeight: CGFloat
+    let sceneMaxHeight: CGFloat
+    let answerColumnWidth: CGFloat
+    /// A phone's board fills the screen's height, so the field takes the spare room
+    /// (MinikPracticeScreen already does that on iPad). nil without a known height.
+    let fillHeight: CGFloat?
+
+    /// The ball inside its white plate.
+    var ballFaceDiameter: CGFloat {
+        (ballDiameter * 0.84).rounded(.down)
+    }
+
+    /// MinikFeedbackBadge, which takes the balls' place after a Math kick.
+    var resultMinHeight: CGFloat {
+        tablet ? 126 : 106
+    }
+
+    init(metrics: MinikPracticeLayoutMetrics, ballCount: Int) {
+        let tablet = metrics.isTablet
+        let compact = metrics.compact
+        // MinikPracticeScreen's padding and header, and MinikPracticeSurface's padding.
+        let surfacePadding: CGFloat = tablet ? 36 : (compact ? 18 : 28)
+        let headerHeight: CGFloat = tablet ? 60 : 44
+        let panelWidth = min(
+            metrics.contentMaxWidth,
+            metrics.containerWidth - metrics.horizontalPadding * 2
+        )
+        let innerWidth = max(240, panelWidth - surfacePadding * 2)
+        let knowsHeight = metrics.containerHeight > 0
+        let chromeHeight = metrics.verticalPadding * 2 + headerHeight + metrics.stackSpacing + surfacePadding * 2
+        let innerHeight: CGFloat = knowsHeight ? metrics.containerHeight - chromeHeight : 2_000
+
+        let spacing: CGFloat = tablet ? 20 : (compact ? 12 : 16)
+        let ballSpacing: CGFloat = tablet ? 16 : 10
+        let fieldPadding: CGFloat = tablet ? 20 : (compact ? 12 : 16)
+        let fieldSpacing: CGFloat = tablet ? 14 : (compact ? 8 : 12)
+        let sceneMinHeight: CGFloat = tablet ? 190 : 118
+        let showsTitle = innerHeight >= 540
+        let sideBySide = innerWidth >= 540 && innerWidth > innerHeight
+
+        // The score pills (and the title over them), and the field without its scene:
+        // the instruction and a prompt picture of up to 96 points.
+        let pillsHeight: CGFloat = compact ? 70 : 78
+        let titleHeight: CGFloat = showsTitle ? (compact ? 33 : 37) : 0
+        let scoreboardHeight = pillsHeight + titleHeight
+        let instructionHeight: CGFloat = compact ? 30 : 32
+        let fieldFixedHeight = fieldPadding * 2 + instructionHeight + 96 + fieldSpacing
+
+        let count = max(1, ballCount)
+        let columns: Int
+        if count <= 3 {
+            columns = count
+        } else if sideBySide {
+            columns = count == 4 ? 2 : 3
+        } else {
+            columns = count == 4 ? 4 : 3
+        }
+        let rows = (count + columns - 1) / columns
+
+        let answerColumnWidth = ((innerWidth - spacing) * 0.42).rounded(.down)
+        let gridWidth = sideBySide ? answerColumnWidth : innerWidth
+        let widthLimit = (gridWidth - ballSpacing * CGFloat(columns - 1)) / CGFloat(columns)
+        let gridRoom: CGFloat
+        if sideBySide {
+            gridRoom = innerHeight - scoreboardHeight - spacing
+        } else {
+            gridRoom = innerHeight - scoreboardHeight - fieldFixedHeight - sceneMinHeight - spacing * 2
+        }
+        let heightLimit = (gridRoom - ballSpacing * CGFloat(rows - 1)) / CGFloat(rows)
+        let largest: CGFloat = tablet ? 150 : 112
+        let smallest: CGFloat = tablet ? 84 : 64
+        // Never wider than a row allows; otherwise as big as the height allows.
+        let diameter = min(widthLimit, max(smallest, min(heightLimit, largest)))
+
+        self.compact = compact
+        self.tablet = tablet
+        self.sideBySide = sideBySide
+        self.showsTitle = showsTitle
+        self.columns = columns
+        self.ballDiameter = max(44, diameter.rounded(.down))
+        self.spacing = spacing
+        self.ballSpacing = ballSpacing
+        self.fieldPadding = fieldPadding
+        self.fieldSpacing = fieldSpacing
+        self.sceneMinHeight = sceneMinHeight
+        self.sceneMaxHeight = tablet ? 320 : 250
+        self.answerColumnWidth = answerColumnWidth
+        // One point short of the screen, so rounding never makes the page scroll.
+        self.fillHeight = knowsHeight && !tablet ? max(0, innerHeight - 1) : nil
     }
 }

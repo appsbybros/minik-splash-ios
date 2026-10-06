@@ -20,6 +20,9 @@ final class MPScene: SKScene {
     private let frontCrop = SKCropNode(), frontMask = SKShapeNode(), armCrop = SKCropNode(), armMask = SKShapeNode(), armNode = SKSpriteNode()
     private let ballNode = SKShapeNode(circleOfRadius: 1), shadowNode = SKShapeNode(ellipseOf: CGSize(width: 2, height: 1))
     private let bounceNode = SKShapeNode(), guideNode = SKShapeNode(), iconNode = SKLabelNode()
+    /// Owner report 2026-10: red rings where a short or double bounce landed, and around a ball that hit the
+    /// net (Android ModernCourt), so the reason for a point is visible on the table.
+    private let faultNode = SKShapeNode(), netNode = SKShapeNode()
     private var textures: [String: SKTexture] = [:]
     init(engine: MPEngine) {
         self.engine = engine
@@ -33,13 +36,16 @@ final class MPScene: SKScene {
         shadowNode.fillColor = .black; shadowNode.strokeColor = .clear; shadowNode.alpha = 0.22
         bounceNode.fillColor = .clear; bounceNode.strokeColor = .white; bounceNode.lineWidth = 2
         guideNode.fillColor = .clear; guideNode.strokeColor = .yellow; guideNode.lineWidth = 4
+        let faultRed = UIColor(red: 1, green: 84 / 255, blue: 84 / 255, alpha: 1)
+        faultNode.fillColor = .clear; faultNode.strokeColor = faultRed; faultNode.lineWidth = 4; faultNode.zPosition = 2.5; faultNode.isHidden = true
+        netNode.fillColor = .clear; netNode.strokeColor = faultRed; netNode.lineWidth = 3; netNode.zPosition = 5.5; netNode.isHidden = true
         iconNode.fontSize = 38
         actorCrop.maskNode = actorMask; actorCrop.addChild(recoveryNode); actorCrop.addChild(actorNode); actorCrop.zPosition = 1
         recoveryNode.zPosition = 0.9; recoveryNode.isHidden = true
         bodyCrop.maskNode = bodyMask; bodyCrop.addChild(bodyNode); bodyCrop.zPosition = 0.8
         frontCrop.maskNode = frontMask; frontCrop.addChild(armCrop); armCrop.maskNode = armMask; armCrop.addChild(armNode); frontCrop.zPosition = 1.2
         [actorMask, bodyMask, frontMask, armMask].forEach { $0.fillColor = .white; $0.strokeColor = .clear; $0.lineWidth = 0 }
-        let nodes: [SKNode] = [backdropNode, floorNode, bodyCrop, actorCrop, frontCrop, bounceNode, shadowNode, paddleNode, ballNode, guideNode, iconNode]
+        let nodes: [SKNode] = [backdropNode, floorNode, bodyCrop, actorCrop, frontCrop, bounceNode, faultNode, shadowNode, paddleNode, ballNode, netNode, guideNode, iconNode]
         nodes.forEach(addChild)
     }
     required init?(coder: NSCoder) { return nil }
@@ -78,7 +84,7 @@ final class MPScene: SKScene {
         onFrame?(engine.drainEvents()); render()
     }
     private func render() {
-        let p = engine.renderedBall, height = max(0, engine.flight?.height ?? 0.055)
+        let p = engine.renderedBall, height = engine.renderedHeight
         let radius = MPProjection.tableWidth * worldScale * 0.017 * (1 + min(height, 0.4) * 0.55)
         ballNode.position = screen(p, height: height); ballNode.setScale(radius)
         shadowNode.position = screen(p); shadowNode.xScale = radius * (0.85 + min(height / 0.5, 1) * 0.6); shadowNode.yScale = radius * 0.6
@@ -89,6 +95,17 @@ final class MPScene: SKScene {
             bounceNode.path = CGPath(ellipseIn: CGRect(x: -r, y: -r / 2, width: 2 * r, height: r), transform: nil)
             bounceNode.alpha = 1 - engine.bounceAge / 0.38
         } else { bounceNode.isHidden = true }
+        if let mark = engine.faultMark, engine.faultAge < 3 {
+            faultNode.isHidden = false; faultNode.position = screen(mark)
+            let r = MPProjection.tableWidth * worldScale * (0.045 + 0.012 * sin(engine.faultAge * 8))
+            faultNode.path = CGPath(ellipseIn: CGRect(x: -r, y: -r / 2, width: 2 * r, height: r), transform: nil)
+        } else { faultNode.isHidden = true }
+        if engine.netAge < 0.5 {
+            netNode.isHidden = false; netNode.position = ballNode.position
+            let r = radius * (1.5 + engine.netAge * 4)
+            netNode.path = CGPath(ellipseIn: CGRect(x: -r, y: -r, width: 2 * r, height: 2 * r), transform: nil)
+            netNode.alpha = 1 - engine.netAge / 0.5
+        } else { netNode.isHidden = true }
         let stroke = engine.childStroke
         let resting = engine.paddle ?? engine.restingPaddle
         // Android ModernCourt: the drawn paddle follows the player's position except for a brief impact frame.

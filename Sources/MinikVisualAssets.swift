@@ -2,7 +2,18 @@ import SwiftUI
 
 enum MinikVisualAsset {
     static let background = "minik_background"
-    static let logo = "minik_logo"
+    /// The product's logo inside the app (Parent Area, Remove Ads): the new MINIK+plus
+    /// logo in the language apps and the new Minik Math logo in Math, as Android's
+    /// pretty design shows them; the pencil mascot in the other apps.
+    static let logo: String = {
+        #if MINIK_MATH
+        return MinikPretty.Art.mathLogo
+        #elseif MINIK_PLUS || MINIK_PLUS_ENGLISH
+        return MinikPretty.Art.plusLogo
+        #else
+        return "minik_logo"
+        #endif
+    }()
     static let home = "minik_home"
     static let trophy = "minik_trophy"
     static let close = "minik_close"

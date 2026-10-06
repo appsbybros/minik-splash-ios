@@ -89,6 +89,8 @@ struct LanguageSoccerView: View {
     @State private var hasKicked = false
     @State private var goalStarsStartedAt: Date?
     @State private var roundCelebration: LanguageSoccerRoundCelebration?
+    /// When "Goal" was last said (goalSpeechAllowed).
+    @State private var lastGoalSpeechAt: Date?
     @StateObject private var speechPlayer = LearningSpeechPlayer()
     @StateObject private var interfaceSpeechPlayer = InterfaceSpeechPlayer()
     @StateObject private var soundPlayer = LanguageSoccerSoundPlayer()
@@ -179,11 +181,10 @@ struct LanguageSoccerView: View {
 
             if showsIntroduction { introductionOverlay }
         }
-        // The fill artwork stays a background so its aspect ratio never sizes
-        // the stack that holds the field.
+        // The rainbow sky stays a background so it never sizes the stack that
+        // holds the field.
         .background {
-            MinikArtworkBackground()
-                .ignoresSafeArea()
+            MinikSkyBackground()
         }
         .onAppear(perform: handleAppearance)
         .onChange(of: scenePhase) { _, phase in
@@ -337,38 +338,33 @@ struct LanguageSoccerView: View {
         return max(singleRow, packedRows)
     }
 
+    /// The card in the rainbow-sky design (applyGameBackgrounds): the glass card with
+    /// its white rim and the light wash inside it; the green pitch stays as it was.
     private func board(metrics: SoccerBoardMetrics) -> some View {
-        ZStack(alignment: .topLeading) {
-            boardBackdrop(metrics: metrics)
-            TimelineView(.animation(minimumInterval: 1 / 30)) { context in
-                soccerScene(metrics: metrics, date: context.date)
+        LanguageSkyPanel(
+            width: metrics.size.width,
+            height: metrics.size.height,
+            cornerRadius: 28 * metrics.unit,
+            washed: true
+        ) {
+            ZStack(alignment: .topLeading) {
+                boardBackdrop(metrics: metrics)
+                TimelineView(.animation(minimumInterval: 1 / 30)) { context in
+                    soccerScene(metrics: metrics, date: context.date)
+                }
             }
-        }
-        .frame(width: metrics.size.width, height: metrics.size.height)
-        // Named on the card itself, so drag locations and positions share one origin.
-        .coordinateSpace(name: "languageSoccerGame")
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .strokeBorder(Self.cardOutline, lineWidth: 1)
-                .allowsHitTesting(false)
-        }
-        .background {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color.white)
-                .shadow(color: Color.black.opacity(0.22), radius: 8, y: 4)
+            .frame(width: metrics.size.width, height: metrics.size.height)
+            // Named on the card itself, so drag locations and positions share one origin.
+            .coordinateSpace(name: "languageSoccerGame")
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel(sceneAccessibilityLabel)
     }
 
-    /// The card's plus_background, the pitch and the dashed release line, which
-    /// Android keeps visible.
+    /// The pitch and the dashed release line, which Android keeps visible, on the
+    /// card's light wash.
     private func boardBackdrop(metrics: SoccerBoardMetrics) -> some View {
         ZStack(alignment: .topLeading) {
-            MinikArtworkImage(name: MinikVisualAsset.soccerIntroScene, contentMode: .fill)
-                .frame(width: metrics.size.width, height: metrics.size.height)
-                .clipped()
             MinikArtworkImage(name: MinikVisualAsset.soccerField)
                 .frame(width: metrics.fieldFrame.width, height: metrics.fieldFrame.height)
                 .position(x: metrics.fieldFrame.midX, y: metrics.fieldFrame.midY)
@@ -426,12 +422,11 @@ struct LanguageSoccerView: View {
 
     @ViewBuilder
     private func goalArea(metrics: SoccerBoardMetrics, keeperMinX: Double, date: Date) -> some View {
-        // Stretched to the physical goal rectangle, as Android draws it, so the
-        // drawn posts and crossbar match the collision posts and the keeper's
+        // The design's glossy candy goal (mink_gate_pretty) in place of the black
+        // one, drawn to the physical goal rectangle, as Android stretches its goal,
+        // so the drawn posts and crossbar match the collision posts and the keeper's
         // sweep never leaves the visible goal.
-        Image(MinikVisualAsset.soccerGoal)
-            .resizable()
-            .accessibilityHidden(true)
+        LanguageSoccerCandyGoal()
             .frame(width: CGFloat(metrics.goal.width), height: CGFloat(metrics.goal.height))
             .position(
                 x: CGFloat(metrics.goal.minX + metrics.goal.width / 2),
@@ -519,7 +514,7 @@ struct LanguageSoccerView: View {
             .allowsHitTesting(false)
     }
 
-    /// Fredoka Medium, bold, 50 sp, #29BA74.
+    /// Fredoka Medium, bold, 50 sp, in the score green.
     private func scoreDigits(_ value: Int, metrics: SoccerBoardMetrics) -> some View {
         let fontSize = 50 * metrics.unit
         return Text(verbatim: String(value))
@@ -532,7 +527,7 @@ struct LanguageSoccerView: View {
 
     /// endOfGameScore: the final score in two halves at the card's bottom, the
     /// player at the start, the keeper at the end and a colon between them. The
-    /// winner is green, the loser pink and a tie black; the digits blink.
+    /// winner is green, the loser pink and a tie the design's navy; the digits blink.
     private func finalScore(
         _ celebration: LanguageSoccerRoundCelebration,
         metrics: SoccerBoardMetrics,
@@ -556,7 +551,7 @@ struct LanguageSoccerView: View {
                 .position(x: startX, y: labelCenterY)
             Text(verbatim: ":")
                 .font(.system(size: 50 * unit, weight: .bold))
-                .foregroundStyle(Color.black)
+                .foregroundStyle(MinikPretty.navy)
                 .position(x: metrics.size.width / 2, y: digitCenterY)
             finalScoreDigit(celebration.keeperScore, color: keeperColor, unit: unit)
                 .opacity(digitOpacity)
@@ -599,7 +594,7 @@ struct LanguageSoccerView: View {
         if celebration.keeperWon {
             return child ? Self.scorePink : Self.scoreGreen
         }
-        return Color.black
+        return MinikPretty.navy
     }
 
     /// soccerExplainText: 22 sp bold black, 40 dp in from the pitch-wide content's
@@ -752,7 +747,7 @@ struct LanguageSoccerView: View {
     }
 
     /// CircleLetterView: a flat circle in the shuffled letter's palette colour
-    /// with a white bold 24 sp letter. The touch target never drops below
+    /// with a bold 24 sp letter, white or navy (letterInk). The touch target never drops below
     /// Android's 56 dp letter view, even where the circle is drawn smaller.
     private func letterBall(_ ball: SoccerAnswerBall, metrics: SoccerBoardMetrics) -> some View {
         ZStack {
@@ -773,7 +768,7 @@ struct LanguageSoccerView: View {
         if let token = ball.orderedToken, let text = ball.orderedTokenDisplayText {
             Text(verbatim: text)
                 .font(.system(size: size, weight: .bold))
-                .foregroundStyle(Color.white)
+                .foregroundStyle(letterInk(for: ball))
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
                 .environment(\.layoutDirection, token.direction == .rightToLeft ? .rightToLeft : .leftToRight)
@@ -783,6 +778,14 @@ struct LanguageSoccerView: View {
     private func letterColor(for ball: SoccerAnswerBall) -> Color {
         let index = session.round.answerBalls.firstIndex(where: { $0.id == ball.id }) ?? 0
         return Self.letterPalette[index % Self.letterPalette.count]
+    }
+
+    /// White on the deep circles; the design's navy on the light ones, where a
+    /// white letter was hard to read.
+    private func letterInk(for ball: SoccerAnswerBall) -> Color {
+        let index = session.round.answerBalls.firstIndex(where: { $0.id == ball.id }) ?? 0
+        let light = Self.letterPaletteIsLight[index % Self.letterPaletteIsLight.count]
+        return light ? MinikPretty.navy : Color.white
     }
 
     /// The kicked ball: minik_soccer_ball_new (36 dp) with the letter in black
@@ -1130,6 +1133,8 @@ struct LanguageSoccerView: View {
             let completedRound = session.isComplete
             updateKeeperAfterShot(currentX: keeperXAtImpact, gameContinues: !completedRound)
             let feedbackDuration: Double
+            // When the speech still running is cut during the feedback (a won match).
+            var speechCutoff: Double?
             if completedRound {
                 let celebration = LanguageSoccerRoundCelebration(
                     startedAt: Date(),
@@ -1141,8 +1146,13 @@ struct LanguageSoccerView: View {
                 speakCompletedRoundResult()
                 // Android keeps a won match on screen for 6.5 s in Plus, others for 4 s.
                 feedbackDuration = celebration.childWon ? Self.winCelebrationSeconds : Self.otherCelebrationSeconds
+                // No speech over Minik's victory celebration: Android stops all speech
+                // when its victory video starts, two seconds after the end.
+                if celebration.childWon {
+                    speechCutoff = Self.winningMinikDelay
+                }
             } else {
-                if correctGoal {
+                if correctGoal, goalSpeechAllowed() {
                     speechPlayer.enqueueInterfaceSpeech(
                         interfaceLocaleID.text("Goal"),
                         interfaceLocale: interfaceLocaleID
@@ -1150,7 +1160,12 @@ struct LanguageSoccerView: View {
                 }
                 feedbackDuration = reduceMotion ? 0.12 : 0.4
             }
-            try? await Task.sleep(for: .seconds(feedbackDuration))
+            if let speechCutoff {
+                try? await Task.sleep(for: .seconds(speechCutoff))
+                guard !Task.isCancelled else { return }
+                stopSpeech()
+            }
+            try? await Task.sleep(for: .seconds(feedbackDuration - (speechCutoff ?? 0)))
             guard !Task.isCancelled else { return }
             settleFinalizedShot(shotID: shotID, speakNextRound: true)
         }
@@ -1341,23 +1356,31 @@ struct LanguageSoccerView: View {
         .background { introductionBackdrop(metrics: metrics) }
         .overlay { introductionStar(metrics: metrics) }
         .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-        .shadow(color: Color.black.opacity(0.25), radius: 10, y: 5)
+        // The design's white rim in place of the card's dark outline.
+        .overlay {
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .strokeBorder(Color.white, lineWidth: 2)
+                .allowsHitTesting(false)
+        }
+        .shadow(color: MinikPretty.navy.opacity(0.25), radius: 10, y: 5)
     }
 
     private func introductionCardContent(metrics: LanguageSoccerIntroMetrics) -> some View {
         VStack(spacing: 0) {
+            // The design's navy Fredoka title.
             Text(interfaceLocaleID.text("Soccer"))
-                .font(.system(size: min(introTitleFontBase, 56) * metrics.titleScale, weight: .bold))
-                .foregroundStyle(Self.introTitleBlue)
+                .font(MinikPretty.titleFont(min(introTitleFontBase, 56) * metrics.titleScale))
+                .foregroundStyle(MinikPretty.navy)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .minimumScaleFactor(0.6)
                 .padding(.horizontal, metrics.titleSidePadding)
                 .padding(.top, metrics.titleTop)
-            // explainText: bold #02103C from the reading start, not centred.
+                .accessibilityAddTraits(.isHeader)
+            // explainText: bold navy from the reading start, not centred.
             Text(soccerIntroductionText)
                 .font(.system(size: introTextFontBase * metrics.textScale, weight: .bold))
-                .foregroundStyle(Self.introTextNavy)
+                .foregroundStyle(MinikPretty.navy)
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -1370,8 +1393,8 @@ struct LanguageSoccerView: View {
     }
 
     /// Minik in goalkeeper gloves at the bottom left, the faded yellow ball at the
-    /// bottom right (both physical sides, as Android anchors them) and the yellow
-    /// Start button with its countdown centred between them.
+    /// bottom right (both physical sides, as Android anchors them) and the design's
+    /// sunny Start pill with its countdown centred between them.
     private func introductionBottomRow(metrics: LanguageSoccerIntroMetrics) -> some View {
         ZStack(alignment: .bottom) {
             HStack(alignment: .bottom, spacing: 0) {
@@ -1393,47 +1416,30 @@ struct LanguageSoccerView: View {
 
             Button(action: dismissIntroduction) {
                 Text(introductionStartLabel)
-                    .font(.system(size: min(introButtonFontBase, 34) * metrics.buttonScale, weight: .bold))
-                    .foregroundStyle(Self.introButtonInk)
+                    .font(MinikPretty.titleFont(min(introButtonFontBase, 34) * metrics.buttonScale))
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 8)
-                    .frame(minHeight: metrics.buttonMinHeight)
-                    .background(Self.introButtonYellow, in: Capsule(style: .continuous))
-                    .shadow(color: Color.black.opacity(0.18), radius: 2, y: 1)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(MinikPrettyButtonStyle(.yellow))
             .accessibilityLabel(interfaceLocaleID.text("Start"))
             .padding(.bottom, metrics.buttonBottom)
         }
         .frame(maxWidth: .infinity)
     }
 
-    /// The card: plus_background, the yellow wash Android stretches over the
-    /// content (minik_splash, not bundled on iOS, is drawn as a soft yellow
-    /// gradient) and the outlined card's thin frame line.
+    /// The card in the rainbow-sky design: the sky inside the card's rounded corners
+    /// and a frosted panel 14 points in from its edges (bg_pretty_inset_panel: white
+    /// at 91% with a white rim and 24 dp corners), in place of plus_background and
+    /// the yellow splash.
     private func introductionBackdrop(metrics: LanguageSoccerIntroMetrics) -> some View {
         ZStack {
-            MinikArtworkImage(name: MinikVisualAsset.soccerIntroScene, contentMode: .fill)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .clipped()
-            Rectangle()
-                .fill(EllipticalGradient(
-                    gradient: Gradient(stops: [
-                        Gradient.Stop(color: Self.introSplashYellow.opacity(0.9), location: 0),
-                        Gradient.Stop(color: Self.introSplashYellow.opacity(0.7), location: 0.55),
-                        Gradient.Stop(color: Self.introSplashYellow.opacity(0), location: 1)
-                    ]),
-                    center: UnitPoint(x: 0.55, y: 0.5),
-                    startRadiusFraction: 0,
-                    endRadiusFraction: 0.5
-                ))
-                .blur(radius: 8)
-                .padding(.horizontal, metrics.frameInsetX + 6)
-                .padding(.vertical, metrics.frameInsetY + 30)
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .strokeBorder(Self.cardOutline, lineWidth: 1)
+            MinikSkyBackground()
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .fill(Color.white.opacity(0.91))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .strokeBorder(Color.white, lineWidth: 2)
+                }
                 .padding(.horizontal, metrics.frameInsetX)
                 .padding(.vertical, metrics.frameInsetY)
         }
@@ -1528,7 +1534,10 @@ struct LanguageSoccerView: View {
         speechPlayer.speak(practice.currentSpeechCue)
     }
 
+    /// The match is over: whatever the last kicks left queued ("Goal") is cut first,
+    /// then only the word and the result are said, as on Android.
     private func speakCompletedRoundResult() {
+        stopSpeech()
         speechPlayer.speak(practice.currentSpeechCue)
         let result: String.LocalizationValue
         if session.childScore > session.keeperScore {
@@ -1542,6 +1551,23 @@ struct LanguageSoccerView: View {
             interfaceLocaleID.text(result),
             interfaceLocale: interfaceLocaleID
         )
+    }
+
+    /// Goals kicked one right after another say "Goal" at most once every 2.5 s
+    /// (Android goalSpeechAllowed), so the cheers never pile up.
+    private func goalSpeechAllowed() -> Bool {
+        let now = Date()
+        if let lastGoalSpeechAt, now.timeIntervalSince(lastGoalSpeechAt) < Self.goalSpeechInterval {
+            return false
+        }
+        lastGoalSpeechAt = now
+        return true
+    }
+
+    /// Stops the speech only; the game's sounds play on.
+    private func stopSpeech() {
+        speechPlayer.stop()
+        interfaceSpeechPlayer.stop()
     }
 
     private func exitActivity() {
@@ -1619,20 +1645,19 @@ struct LanguageSoccerView: View {
 
     private static let winCelebrationSeconds = 6.5
     private static let otherCelebrationSeconds = 4.0
-    /// #29BA74 and #E91E63, the score colours.
-    private static let scoreGreen = Color(red: 0.161, green: 0.729, blue: 0.455)
+    /// winningMinik fades Minik in two seconds after a won match ends; the speech
+    /// stops then.
+    private static let winningMinikDelay = 2.0
+    /// Android's goalSpeechAllowed: "Goal" at most once every 2.5 s.
+    private static let goalSpeechInterval = 2.5
+    /// The score colours: Android's #E91E63, and its #29BA74 a shade deeper (#189F5D)
+    /// so the digits stay readable on the card's light wash.
+    private static let scoreGreen = Color(red: 0.094, green: 0.624, blue: 0.365)
     private static let scorePink = Color(red: 0.914, green: 0.118, blue: 0.388)
     /// release_line_dash: #3F4FAD at half opacity.
     private static let releaseLineInk = Color(red: 0.247, green: 0.31, blue: 0.678).opacity(0.5)
-    /// The outlined Material 3 card's thin frame line.
-    private static let cardOutline = Color(red: 0.792, green: 0.769, blue: 0.816)
-    /// colorPrimary #1E88E5, #02103C, the Start button's #FDE000 and #000009.
-    private static let introTitleBlue = Color(red: 0.118, green: 0.533, blue: 0.898)
-    private static let introTextNavy = Color(red: 0.008, green: 0.063, blue: 0.235)
-    private static let introButtonYellow = Color(red: 0.992, green: 0.878, blue: 0)
-    private static let introButtonInk = Color(red: 0, green: 0, blue: 0.035)
+    /// The introduction's ball tint and the star's string.
     private static let introBallYellow = Color(red: 0.98, green: 0.78, blue: 0.08)
-    private static let introSplashYellow = Color(red: 1, green: 0.94, blue: 0.2)
     private static let introStarYellow = Color(red: 0.98, green: 0.84, blue: 0.15)
     /// buildWordLetters' palette, by the shuffled letter's position.
     private static let letterPalette: [Color] = [
@@ -1646,6 +1671,11 @@ struct LanguageSoccerView: View {
         Color(red: 1.000, green: 0.655, blue: 0.149),
         Color(red: 0.553, green: 0.431, blue: 0.388),
         Color(red: 0.471, green: 0.565, blue: 0.612)
+    ]
+    /// Which letterPalette colours are light (light blue, teal, green, amber, orange
+    /// and blue grey) and take a navy letter.
+    private static let letterPaletteIsLight: [Bool] = [
+        false, false, false, true, true, true, true, true, false, true
     ]
     /// soccerStar1, 2, 3, 33, 11, 4, 5, 6 and 7 with their start delays.
     private static let goalStarLayout: [LanguageSoccerGoalStar] = [
@@ -1667,6 +1697,142 @@ private struct LanguageSoccerDashedLine: Shape {
         var path = Path()
         path.move(to: CGPoint(x: rect.minX, y: rect.midY))
         path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+        return path
+    }
+}
+
+/// mink_gate_pretty, the rainbow-sky design's glossy candy goal, drawn to the goal
+/// rectangle: the pale net, the slanting back frame and, in front, the posts and
+/// the crossbar as a pink-to-purple-to-blue tube with a soft shadow under it and a
+/// shine along it. The front tube's outer edges lie on the rectangle, where the
+/// collision posts are.
+private struct LanguageSoccerCandyGoal: View {
+    private static let pink = Color(red: 242 / 255, green: 92 / 255, blue: 162 / 255)
+    private static let purple = Color(red: 164 / 255, green: 108 / 255, blue: 240 / 255)
+    private static let blue = Color(red: 76 / 255, green: 155 / 255, blue: 234 / 255)
+    private static let backPink = Color(red: 246 / 255, green: 168 / 255, blue: 207 / 255)
+    private static let backPurple = Color(red: 201 / 255, green: 172 / 255, blue: 246 / 255)
+    private static let backBlue = Color(red: 158 / 255, green: 202 / 255, blue: 242 / 255)
+    private static let netInk = Color(red: 204 / 255, green: 194 / 255, blue: 240 / 255)
+
+    var body: some View {
+        GeometryReader { proxy in
+            let tube = max(3, proxy.size.width * 0.05)
+            let tubeStyle = StrokeStyle(lineWidth: tube, lineCap: .round, lineJoin: .round)
+            ZStack {
+                LanguageSoccerGoalNet(tube: tube)
+                    .stroke(Self.netInk, lineWidth: max(1, tube * 0.14))
+                    .clipShape(LanguageSoccerGoalNetArea(tube: tube))
+                LanguageSoccerGoalBackFrame(tube: tube)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Self.backPink, Self.backPurple, Self.backBlue],
+                            startPoint: UnitPoint.leading,
+                            endPoint: UnitPoint.trailing
+                        ),
+                        style: StrokeStyle(lineWidth: tube * 0.7, lineCap: .round, lineJoin: .round)
+                    )
+                LanguageSoccerGoalFrontFrame(tube: tube)
+                    .stroke(MinikPretty.navy.opacity(0.22), style: tubeStyle)
+                    .offset(y: tube * 0.2)
+                LanguageSoccerGoalFrontFrame(tube: tube)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Self.pink, Self.purple, Self.blue],
+                            startPoint: UnitPoint.leading,
+                            endPoint: UnitPoint.trailing
+                        ),
+                        style: tubeStyle
+                    )
+                LanguageSoccerGoalFrontFrame(tube: tube)
+                    .stroke(
+                        Color.white.opacity(0.5),
+                        style: StrokeStyle(lineWidth: tube * 0.26, lineCap: .round, lineJoin: .round)
+                    )
+                    .offset(x: -tube * 0.14, y: -tube * 0.16)
+            }
+            .frame(width: proxy.size.width, height: proxy.size.height)
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+/// The goal's front: the two posts and the crossbar, their outer edges on the rectangle.
+private struct LanguageSoccerGoalFrontFrame: Shape {
+    let tube: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let half = tube / 2
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX + half, y: rect.maxY - half))
+        path.addLine(to: CGPoint(x: rect.minX + half, y: rect.minY + half))
+        path.addLine(to: CGPoint(x: rect.maxX - half, y: rect.minY + half))
+        path.addLine(to: CGPoint(x: rect.maxX - half, y: rect.maxY - half))
+        return path
+    }
+}
+
+/// The goal's back: the back posts slanting in from under the crossbar to the back
+/// bar, and the ground braces from its ends out to the front posts' feet.
+private struct LanguageSoccerGoalBackFrame: Shape {
+    let tube: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let half = tube / 2
+        let backY = rect.minY + rect.height * 0.66
+        let backLeft = rect.minX + rect.width * 0.17
+        let backRight = rect.maxX - rect.width * 0.17
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX + rect.width * 0.1, y: rect.minY + tube))
+        path.addLine(to: CGPoint(x: backLeft, y: backY))
+        path.addLine(to: CGPoint(x: backRight, y: backY))
+        path.addLine(to: CGPoint(x: rect.maxX - rect.width * 0.1, y: rect.minY + tube))
+        path.move(to: CGPoint(x: backLeft, y: backY))
+        path.addLine(to: CGPoint(x: rect.minX + half, y: rect.maxY - half))
+        path.move(to: CGPoint(x: backRight, y: backY))
+        path.addLine(to: CGPoint(x: rect.maxX - half, y: rect.maxY - half))
+        return path
+    }
+}
+
+/// The net's mesh: twelve columns and six rows across the goal.
+private struct LanguageSoccerGoalNet: Shape {
+    let tube: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let columns = 12
+        let rows = 6
+        var path = Path()
+        for column in 1 ..< columns {
+            let x = rect.minX + rect.width * CGFloat(column) / CGFloat(columns)
+            path.move(to: CGPoint(x: x, y: rect.minY + tube))
+            path.addLine(to: CGPoint(x: x, y: rect.maxY))
+        }
+        for row in 1 ..< rows {
+            let y = rect.minY + tube + (rect.height - tube) * CGFloat(row) / CGFloat(rows)
+            path.move(to: CGPoint(x: rect.minX, y: y))
+            path.addLine(to: CGPoint(x: rect.maxX, y: y))
+        }
+        return path
+    }
+}
+
+/// Where the net hangs: inside the front frame and down to the back bar, with the
+/// side nets reaching the front posts' feet.
+private struct LanguageSoccerGoalNetArea: Shape {
+    let tube: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let backY = rect.minY + rect.height * 0.66
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX + tube, y: rect.minY + tube))
+        path.addLine(to: CGPoint(x: rect.maxX - tube, y: rect.minY + tube))
+        path.addLine(to: CGPoint(x: rect.maxX - tube, y: rect.maxY - tube))
+        path.addLine(to: CGPoint(x: rect.maxX - rect.width * 0.17, y: backY))
+        path.addLine(to: CGPoint(x: rect.minX + rect.width * 0.17, y: backY))
+        path.addLine(to: CGPoint(x: rect.minX + tube, y: rect.maxY - tube))
+        path.closeSubpath()
         return path
     }
 }

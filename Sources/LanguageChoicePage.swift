@@ -1,9 +1,10 @@
 import SwiftUI
 
-/// Android WriteScreen's four choice compositions (fragment_choose_right_image with the
-/// Plus option frames): the speaker and close header, the instruction, the prompt, the
-/// answers, the yellow Next link and the statistics, at Android's sizes (its sw600dp
-/// tablet layout on iPad). They share mechanics, not an adaptive tile grid. Below the
+/// Android WriteScreen's four choice compositions (fragment_choose_right_image in the
+/// Plus rainbow-sky design): the speaker and close header, the navy instruction, the
+/// prompt, the white answer tiles, the sunny Next pill and the statistics on the glass
+/// panel, at Android's sizes (its sw600dp tablet layout on iPad). They share
+/// mechanics, not an adaptive tile grid. Below the
 /// accessibility text sizes every row is sized from the panel, so the whole board fits
 /// and labels shrink instead of wrapping. Accessibility sizes keep their preferred text
 /// sizes, let rows grow, and LanguageActivityScreen scrolls the board.
@@ -149,9 +150,10 @@ struct LanguageChoicePage: View {
         return min(full, max(sizes.boardScale, reach))
     }
 
+    /// The design's navy Fredoka title.
     private func instructionText(_ instruction: String, sizes: LanguageChoiceMetrics) -> some View {
         Text(instruction)
-            .font(.system(size: sizes.instructionFontSize, weight: .bold))
+            .font(MinikPretty.titleFont(sizes.instructionFontSize))
             .foregroundStyle(LanguagePracticePalette.ink)
             .multilineTextAlignment(.center)
             .lineLimit(sizes.accessible ? nil : sizes.instructionLines)
@@ -221,15 +223,15 @@ struct LanguageChoicePage: View {
         }
     }
 
-    /// Android's yellow Next link (bg_next_link), shown after a wrong attempt without
+    /// Android's sunny Next pill (bg_next_link), shown after a wrong attempt without
     /// changing the target on retry. The slot is always reserved, so the answers never
-    /// move when Next appears; a clear band above and below makes it 44 points tall. The
-    /// slot only holds an invisible copy of the pill and publishes its bounds:
-    /// reactionLayer draws the button there, above Minik's reaction.
+    /// move when Next appears. The slot only holds an invisible copy of the pill and
+    /// publishes its bounds: reactionLayer draws the button there, above Minik's
+    /// reaction.
     private func nextSlot(_ sizes: LanguageChoiceMetrics) -> some View {
         ZStack(alignment: .top) {
             if canSkip {
-                nextPillLabel(sizes)
+                nextPill(sizes, action: {})
                     .opacity(0)
                     .allowsHitTesting(false)
                     .accessibilityHidden(true)
@@ -241,26 +243,20 @@ struct LanguageChoicePage: View {
         .frame(height: sizes.nextSlotHeight, alignment: .top)
     }
 
-    /// The Next pill: bold #3F51B5 text on bg_next_link's #FDE000 with 14 x 3 dp padding
-    /// and 12 dp corners, in a clear band that makes it at least 44 points tall.
-    private func nextPillLabel(_ sizes: LanguageChoiceMetrics) -> some View {
-        Text("Next")
-            .font(.system(size: sizes.nextFontSize, weight: .bold))
-            .lineLimit(1)
-            .minimumScaleFactor(0.7)
-            .foregroundStyle(LanguagePracticePalette.nextInk)
-            .padding(.horizontal, 14)
-            .padding(.vertical, 3)
-            .background(LanguagePracticePalette.nextFill, in: RoundedRectangle(cornerRadius: 12))
-            .padding(.vertical, sizes.nextHitPadding)
-            .contentShape(Rectangle())
+    /// The design's glossy yellow pill with its navy Fredoka label, at least 52 points
+    /// tall (LanguageChoiceMetrics budgets for it).
+    private func nextPill(_ sizes: LanguageChoiceMetrics, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text("Next")
+                .font(MinikPretty.titleFont(sizes.nextFontSize))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
+        .buttonStyle(MinikPrettyButtonStyle(.yellow))
     }
 
     private func nextButton(_ sizes: LanguageChoiceMetrics) -> some View {
-        Button(action: onSkip) {
-            nextPillLabel(sizes)
-        }
-        .buttonStyle(.plain)
+        nextPill(sizes, action: onSkip)
     }
 
     private func choiceButton(_ choice: Choice, sizes: LanguageChoiceMetrics) -> some View {
@@ -290,8 +286,8 @@ struct LanguageChoicePage: View {
         case .imageAsset(let asset):
             Image(asset.rawValue).resizable().scaledToFit()
         case .learningText(let value):
-            // Android's text options use the bold system font, not Fredoka.
-            LanguageChoiceText(value: value, font: .system(size: sizes.answerFontSize, weight: .bold),
+            // The design's Fredoka Bold, navy on the white tile.
+            LanguageChoiceText(value: value, font: MinikPretty.titleFont(sizes.answerFontSize),
                                grows: sizes.accessible)
         default:
             LanguagePracticeRepresentation(representation: representation, fontSize: sizes.answerFontSize)
@@ -455,12 +451,12 @@ private struct LanguageChoiceMetrics {
             comfortableAnswer = max(smallestAnswer, min(preferredAnswer, scaledRow - 10))
         }
 
-        // Next: bold 18 sp (40 sp on tablets) with 3 dp above and below, up to 35 dp under
-        // the answers; a clear band keeps its tap target at least 44 points tall.
+        // Next: 18 sp (40 sp on tablets), up to 35 dp under the answers, on the design's
+        // glossy pill: 9 points above the label and 12 below it, at least 52 points tall.
         let nextBase: CGFloat = (wide ? 40 : 18) * boardScale
         let nextLimit: CGFloat = accessible ? 2 : 1.3
         let nextFontSize = nextBase * min(LanguageTypeRamp.scale(.body, typeSize), nextLimit)
-        let pillHeight = LanguageTypeRamp.lineHeight(nextFontSize) + 6
+        let pillHeight = max(52, LanguageTypeRamp.lineHeight(nextFontSize) + 21)
         let nextHitPadding = max(0, (44 - pillHeight) / 2)
         let nextGapFloor: CGFloat = (wide ? 10 : 6) * boardScale
         let nextGapSmallest = max(nextGapFloor, nextHitPadding)
@@ -596,13 +592,8 @@ private extension View {
 }
 
 enum LanguagePracticePalette {
-    static let ink = Color(red: 0.247, green: 0.31, blue: 0.678)
-    static let option = Color(red: 0.259, green: 0.714, blue: 1)
-    static let correct = Color(red: 0.149, green: 0.651, blue: 0.604)
-    static let incorrect = Color(red: 0.898, green: 0.451, blue: 0.451)
-    /// bg_next_link's #FDE000 and the Next label's #3F51B5.
-    static let nextFill = Color(red: 0.992, green: 0.878, blue: 0)
-    static let nextInk = Color(red: 0.247, green: 0.318, blue: 0.71)
+    /// The rainbow-sky design's navy: the instructions, prompts, letters and answers.
+    static let ink = MinikPretty.navy
 }
 
 struct LanguagePracticeRepresentation: View {
@@ -628,8 +619,10 @@ struct LanguagePracticeRepresentation: View {
     }
 }
 
-/// WriteScreen's Plus option: a white card (8 dp corners) inside the purple-pink-teal
-/// gradient frame (12 dp corners), which turns green or red when chosen.
+/// WriteScreen's Plus option in the rainbow-sky design: the white answer tile with a
+/// lavender rim and navy text (MinikChoiceTileStyle's look). The chosen option turns
+/// mint with a green rim when it is right and pink with a red rim when it is wrong;
+/// its text stays dark on the light tint.
 struct LanguageAnswerStyle: ButtonStyle {
     enum State: Hashable {
         case idle, correct, incorrect
@@ -642,42 +635,56 @@ struct LanguageAnswerStyle: ButtonStyle {
         }
     }
     let state: State
-    /// How long the chosen option takes to turn green or red: animateCardColor's 300 ms for
+    /// How long the chosen option takes to change colour: animateCardColor's 300 ms for
     /// pictures, animateBackgroundColor's 500 ms for words and letters.
     var colorDuration: Double = 0.3
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.layoutDirection) private var layoutDirection
 
     func makeBody(configuration: Configuration) -> some View {
-        // wrapOptionInGradientFrame pads the frame 5 dp on the physical left and bottom
-        // and 2 dp on the top and right, in Hebrew as well.
-        let leftToRight = layoutDirection == .leftToRight
-        let frameInsets = EdgeInsets(top: 2, leading: leftToRight ? 5 : 2, bottom: 5, trailing: leftToRight ? 2 : 5)
         // Android eases the chosen option into its colour and resets it at once.
         let colorChange: Animation? = reduceMotion || state == .idle
             ? nil : Animation.easeInOut(duration: colorDuration)
+        let tile = RoundedRectangle(cornerRadius: 18, style: .continuous)
         return configuration.label
-            .foregroundStyle(state == .idle ? LanguagePracticePalette.option : .white)
-            .background(background, in: RoundedRectangle(cornerRadius: 8))
-            // Android fades only the chosen card (alpha 0.82), not its frame.
-            .opacity(state == .incorrect ? 0.82 : 1)
-            .padding(frameInsets)
+            .foregroundStyle(inkColor)
+            // The tile stays 7 points larger than the label on each axis, as the
+            // gradient frame was (LanguageChoicePage sizes the label for it).
+            .padding(3.5)
             .background {
-                // bg_minik_gradient_rounded is not mirrored: purple on the physical left and
-                // teal on the right in Hebrew as well.
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(LanguagePalette.border)
-                    .environment(\.layoutDirection, .leftToRight)
+                tile
+                    .fill(fillColor)
+                    .shadow(color: MinikPretty.navy.opacity(0.10), radius: 5, x: 0, y: 3)
             }
-            .opacity(configuration.isPressed ? 0.9 : 1)
+            .overlay {
+                tile
+                    .strokeBorder(rimColor, lineWidth: state == .idle ? 2 : 3.5)
+            }
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.97 : 1)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.12), value: configuration.isPressed)
             .animation(colorChange, value: state)
     }
 
-    private var background: Color {
+    private var fillColor: Color {
         switch state {
-        case .idle: .white
-        case .correct: LanguagePracticePalette.correct
-        case .incorrect: LanguagePracticePalette.incorrect
+        case .idle: return Color.white
+        case .correct: return LanguageSkyPalette.correctFill
+        case .incorrect: return LanguageSkyPalette.incorrectFill
+        }
+    }
+
+    private var rimColor: Color {
+        switch state {
+        case .idle: return LanguageSkyPalette.tileRim
+        case .correct: return LanguageSkyPalette.correctRim
+        case .incorrect: return LanguageSkyPalette.incorrectRim
+        }
+    }
+
+    private var inkColor: Color {
+        switch state {
+        case .idle: return MinikPretty.navy
+        case .correct: return LanguageSkyPalette.correctInk
+        case .incorrect: return LanguageSkyPalette.incorrectInk
         }
     }
 }
@@ -731,7 +738,7 @@ struct LanguagePracticeStats: View {
             HStack(spacing: 2) {
                 if let symbol { MinikArtworkImage(name: symbol).frame(width: iconSide, height: iconSide) }
                 Text(title)
-                    .font(.system(size: fonts.title, weight: .bold))
+                    .font(MinikPretty.titleFont(fonts.title))
                     .foregroundStyle(colors.title)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
@@ -739,7 +746,7 @@ struct LanguagePracticeStats: View {
                     .fixedSize(horizontal: false, vertical: grows)
             }
             Text(value, format: .number)
-                .font(.system(size: fonts.value, weight: .bold))
+                .font(MinikPretty.titleFont(fonts.value))
                 .monospacedDigit()
                 .foregroundStyle(colors.value)
                 .lineLimit(1)
@@ -747,8 +754,17 @@ struct LanguagePracticeStats: View {
         }
         .padding(.horizontal, 4).padding(.vertical, 3)
         .frame(maxWidth: .infinity, minHeight: badgeHeight, maxHeight: grows ? .infinity : badgeHeight)
-        .background(colors.fill, in: RoundedRectangle(cornerRadius: 18))
-        .overlay { RoundedRectangle(cornerRadius: 18).strokeBorder(colors.stroke, lineWidth: 1) }
+        // The design's score tiles: Android's pastel cards with Fredoka text, lifted
+        // off the glass panel by a soft shadow.
+        .background {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(colors.fill)
+                .shadow(color: MinikPretty.navy.opacity(0.08), radius: 3, x: 0, y: 2)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .strokeBorder(colors.stroke, lineWidth: 1.5)
+        }
         .accessibilityElement(children: .combine)
     }
 }

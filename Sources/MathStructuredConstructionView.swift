@@ -44,6 +44,8 @@ struct MathStructuredConstructionView: View {
             Text("Build this quantity")
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(Color(red: 0.17, green: 0.45, blue: 0.57))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
             HStack(spacing: 14) {
                 RepresentationView(representation: session.currentRound.prompt, context: .buildPrompt)
                 Button(action: speakPrompt) {
@@ -63,9 +65,11 @@ struct MathStructuredConstructionView: View {
         compact: Bool
     ) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(isBuild ? String(localized: "Your build") : String(localized: "Available objects"))
+            // "Available objects" did not tell a child what to do with the pieces.
+            Text(isBuild ? String(localized: "Your build") : String(localized: "Tap a piece to add it"))
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(Color(red: 0.18, green: 0.43, blue: 0.54))
+                .fixedSize(horizontal: false, vertical: true)
             LazyVGrid(
                 columns: [GridItem(.adaptive(minimum: 82, maximum: 124), spacing: 10)],
                 spacing: 10
@@ -149,6 +153,9 @@ struct MathStructuredConstructionView: View {
                 MinikFeedbackBadge(isCorrect: false)
                 Text("Change the amount and check again.")
                     .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(MathInk.warning)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             HStack(spacing: 22) {
                 Button(action: { session.undo() }) {

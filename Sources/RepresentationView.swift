@@ -23,6 +23,7 @@ struct RepresentationView: View {
 
     let representation: Representation
     let context: Context
+    @Environment(\.minikVisualIdentity) private var visualIdentity
 
     init(
         representation: Representation,
@@ -32,8 +33,21 @@ struct RepresentationView: View {
         self.context = context
     }
 
-    @ViewBuilder
     var body: some View {
+        representationContent
+            .modifier(MathInkModifier(ink: mathInk))
+    }
+
+    /// Math answers, digits and cards always sit on light tiles, so they get dark
+    /// ink instead of the system text colour (white in Dark Mode). The soccer
+    /// prompt is drawn white on the field by SoccerView and keeps that colour.
+    private var mathInk: Color? {
+        guard visualIdentity == .math, context != .soccerPrompt else { return nil }
+        return MathInk.navy
+    }
+
+    @ViewBuilder
+    private var representationContent: some View {
         switch representation {
         case .learningText(let text):
             learningText(text)
@@ -162,7 +176,7 @@ struct RepresentationView: View {
                 )
             )
         } else {
-            label.foregroundStyle(Color.primary.opacity(0.92))
+            label.foregroundStyle(mathInk ?? Color.primary.opacity(0.92))
         }
     }
 
@@ -357,6 +371,21 @@ struct RepresentationView: View {
         case .learnHero, .languageLearnHero: return 46
         case .learnSupporting: return 30
         default: return 34
+        }
+    }
+}
+
+/// Sets the representation's text colour only when one is given, so a caller's
+/// own colour (and every non-Math screen) stays as it was.
+private struct MathInkModifier: ViewModifier {
+    let ink: Color?
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if let ink {
+            content.foregroundStyle(ink)
+        } else {
+            content
         }
     }
 }

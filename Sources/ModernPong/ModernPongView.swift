@@ -3,7 +3,8 @@ import SpriteKit
 import StoreKit
 
 /// Reusable Modern entry point. Simple never initializes Firebase or exposes its menus/help.
-/// Hosts dismiss their presentation in onClose; a completed Simple match calls it once.
+/// Simple reports each completed match once with onClose(result), then shows its result screen; leaving the
+/// game calls onClose(nil), and only then does the host dismiss its presentation.
 @MainActor struct ModernPongView: View {
     @Environment(\.locale) private var locale
     @Environment(\.scenePhase) private var phase
@@ -125,7 +126,11 @@ import StoreKit
                     roomSection(.tournament)
                     if model.online {
                         if model.connecting { ProgressView(t("Connecting…", "מתחברים…")) }
-                        else if !model.connected { Button(t("Retry online connection", "נסו להתחבר שוב")) { Task { await model.retryOnline(removeAds: commerce.isRemoveAdsActive) } }.font(.headline).padding(12) }
+                        else if !model.connected {
+                            // Starting offline shows this note instead of a dialog (owner report 2026-10).
+                            Text(t("Online play isn't available right now. You can still play with the house players.", "המשחק המקוון אינו זמין כרגע. אפשר לשחק עם שחקני הבית.")).font(.callout).multilineTextAlignment(.center)
+                            Button(t("Retry online connection", "נסו להתחבר שוב")) { Task { await model.retryOnline(removeAds: commerce.isRemoveAdsActive) } }.font(.headline).padding(12)
+                        }
                         HStack {
                             TextField(t("Enter code", "הזינו קוד"), text: $joinCode).textInputAutocapitalization(.characters).autocorrectionDisabled().font(.title3.bold()).textFieldStyle(.roundedBorder).environment(\.layoutDirection, .leftToRight)
                             Button(t("Join", "הצטרפו")) { Task { await model.join(joinCode) } }.font(.headline).padding(14).background(MPStyle.blue, in: RoundedRectangle(cornerRadius: 14)).disabled(!model.connected || model.busy)
@@ -135,7 +140,7 @@ import StoreKit
                 } else {
                     controls
                     carousel
-                    action(t("Start", "מתחילים"), color: MPStyle.blue) { model.startSingle() }
+                    action(t("Start", "התחלת משחק"), color: MPStyle.blue) { model.startSingle() }
                 }
                 if model.busy { ProgressView().accessibilityLabel(t("Loading", "טוען")) }
             }.frame(maxWidth: 560).padding(.horizontal, 20).padding(.bottom, 28).frame(maxWidth: .infinity)
@@ -152,11 +157,13 @@ import StoreKit
     private var controls: some View {
         VStack(spacing: 14) {
             Text(t("Control difficulty", "רמת השליטה")).font(.headline)
-            Picker(t("Control difficulty", "רמת השליטה"), selection: $model.level) {
-                Text(t("Beginner", "מתחילים")).tag(MPLevel.beginner)
-                Text(t("Standard", "רגילה")).tag(MPLevel.easy)
-                Text(t("Pro", "מקצוענים")).tag(MPLevel.superHard)
-            }.pickerStyle(.segmented).onChange(of: model.level) { _, _ in model.saveControls() }
+            // Owner report 2026-10: the system segmented picker showed no selection on iPad.
+            MPChoiceBar(title: t("Control difficulty", "רמת השליטה"),
+                        options: [(value: MPLevel.beginner, label: t("Beginner", "מתחילים")),
+                                  (value: MPLevel.easy, label: t("Standard", "רגילה")),
+                                  (value: MPLevel.superHard, label: t("Pro", "מקצוענים"))],
+                        selection: $model.level)
+                .onChange(of: model.level) { _, _ in model.saveControls() }
             Text(controlHint).font(.callout).multilineTextAlignment(.center)
             HStack { Text(t("Points to win", "נקודות לניצחון")).font(.headline); Spacer(); Picker(t("Points", "נקודות"), selection: $model.target) { ForEach(model.level.targets, id: \.self) { Text(String($0)).tag($0) } }.pickerStyle(.menu).font(.title3.bold()) }
         }
@@ -187,7 +194,7 @@ import StoreKit
     private var friendlyForm: some View {
         card {
             controls; carousel
-            action(t("Start", "מתחילים")) { Task { await model.create(.friendly, house: model.selectedPlayer) } }
+            action(t("Start", "התחלת משחק")) { Task { await model.create(.friendly, house: model.selectedPlayer) } }
             if model.online { action(t("Invite a friend by code", "הזמינו חבר באמצעות קוד"), color: MPStyle.lilac) { Task { await model.create(.friendly, house: nil) } }.disabled(!model.connected) }
         }
     }
@@ -195,15 +202,18 @@ import StoreKit
         card {
             // Android PlayActivity "Tournament format": round robin, or a knockout redrawn each round (2…9 players).
             Text(t("Tournament format", "שיטת הטורניר")).font(.headline)
-            Picker(t("Tournament format", "שיטת הטורניר"), selection: $tournamentFormat) {
-                ForEach(MPTournamentFormat.allCases, id: \.self) { Text($0.title(he)).tag($0) }
-            }.pickerStyle(.segmented).onChange(of: tournamentFormat) { _, value in model.preferences.knockoutFormat = value == .knockout }
+            MPChoiceBar(title: t("Tournament format", "שיטת הטורניר"),
+                        options: MPTournamentFormat.allCases.map { (value: $0, label: $0.title(he)) },
+                        selection: $tournamentFormat)
+                .onChange(of: tournamentFormat) { _, value in model.preferences.knockoutFormat = value == .knockout }
             if tournamentFormat == .knockout {
                 Stepper(t("Players: \(knockoutCapacity)", "שחקנים: \(knockoutCapacity)"), value: $knockoutCapacity, in: 2...MPKnockout.maxPlayers).font(.headline)
                 Text(t("Pairs are drawn again each round. With an odd number of players, one randomly chosen player advances without playing. Win to stay in!", "בכל סיבוב מוגרלים זוגות מחדש. כשמספר השחקנים אי־זוגי, שחקן אחד נבחר באקראי ועולה בלי לשחק. מנצחים וממשיכים!")).font(.callout).multilineTextAlignment(.center)
             } else {
                 Stepper(t("Players: \(capacity)", "שחקנים: \(capacity)"), value: $capacity, in: 2...8).font(.headline)
-                Picker(t("Rounds", "סבבים"), selection: $legs) { Text(t("One round", "סבב אחד")).tag(1); Text(t("Two rounds", "שני סבבים")).tag(2) }.pickerStyle(.segmented)
+                MPChoiceBar(title: t("Rounds", "סבבים"),
+                            options: [(value: 1, label: t("One round", "סבב אחד")), (value: 2, label: t("Two rounds", "שני סבבים"))],
+                            selection: $legs)
                 Stepper(t("Standings points per win: \(winPoints)", "נקודות בטבלה לכל ניצחון: \(winPoints)"), value: $winPoints, in: 1...5).font(.headline)
             }
             controls
@@ -397,7 +407,15 @@ import StoreKit
     }
     private var game: some View {
         VStack(spacing: 0) {
-            HStack { Text(model.identity?.name ?? t("You", "אתם")).lineLimit(1); Spacer(); Text("\(model.childScore) : \(model.opponentScore)").font(.title.bold()).monospacedDigit().environment(\.layoutDirection, .leftToRight); Spacer(); Text(opponentName).lineLimit(1) }.font(.headline).padding(.horizontal, 18).padding(.vertical, 8)
+            HStack {
+                Text(model.identity?.name ?? t("You", "אתם")).lineLimit(1)
+                Spacer()
+                // Each score sits beside its own name. The digits are always laid out left to right, so in Hebrew
+                // (your name on the right) the opponent's score comes first (owner report 2026-10).
+                Text(he ? "\(model.opponentScore) : \(model.childScore)" : "\(model.childScore) : \(model.opponentScore)").font(.title.bold()).monospacedDigit().environment(\.layoutDirection, .leftToRight)
+                Spacer()
+                Text(opponentName).lineLimit(1)
+            }.font(.headline).padding(.horizontal, 18).padding(.vertical, 8)
             if model.session == nil {
                 Button { if !model.paused { model.togglePause() }; showGameSettings = true } label: { Label(t("Settings", "הגדרות"), systemImage: "gearshape.fill").font(.headline).padding(10) }
             }
@@ -409,24 +427,40 @@ import StoreKit
     }
     /// Android PrivateMatchActivity status: a room match is prefixed with the knockout stage and its control level.
     private var gameStatus: String {
+        // A connection problem is a status line, never a dialog over the court (owner report 2026-10).
+        if let warning = model.gameWarning, !model.paused { return warning }
         let text = gameStatusText
         guard let s = model.session, !model.paused else { return text }
         return (s.knockout ? MPKnockout.stage(s, hebrew: he) + " · " : "") + MPControlChoice.title(s.difficulty, hebrew: he) + " · " + text
     }
+    /// A room match against a house player waits only for the internet, never for "the other player".
+    private var opponentIsHouse: Bool {
+        guard let s = model.session, let m = model.fixture else { return true }
+        return s.participants[m.a == model.userID ? m.b : m.a]?.bot != nil
+    }
     private var gameStatusText: String {
         if model.paused { return t("Paused", "המשחק מושהה") }
+        let text: String
         switch model.status {
-        case "WAITING": return t("Waiting for the other player to return…", "ממתינים לחזרת השחקן השני…")
+        case "WAITING": return opponentIsHouse ? t("Waiting for the internet connection…", "ממתינים לחיבור לאינטרנט…") : t("Waiting for the other player to return…", "ממתינים לחזרת השחקן השני…")
         case "TAP_SERVE": return t("Tap a point on the table to aim your serve", "געו בנקודה בשולחן כדי לכוון את ההגשה")
         case "SWIPE_SERVE": return t("Swipe forward through the ball to serve", "החליקו קדימה דרך הכדור כדי להגיש")
         case "RETURN_BALL": return t("Return the ball", "החזירו את הכדור")
         case "AUTO_HINT": return t("Move your paddle to the ball on your side. It hits automatically!", "הזיזו את המחבט אל הכדור בצד שלכם. החבטה אוטומטית!")
-        case "NET_FAULT": return t("The ball hit the net", "הכדור פגע ברשת")
-        case "OUT_FAULT": return t("The ball landed outside", "הכדור נחת בחוץ")
-        case "SECOND_BOUNCE": return t("Two bounces — point", "שתי קפיצות — נקודה")
-        case "INVALID_SERVE": return t("The serve must bounce on both sides", "ההגשה חייבת לקפוץ בשני הצדדים")
+        case "CHILD_WIN", "MINIK_WIN":
+            if model.session != nil { return t("Saving the result…", "שומרים את התוצאה…") }
+            return model.status == "CHILD_WIN" ? t("You won the match!", "ניצחתם במשחק!") : t("Match over. Well played!", "המשחק הסתיים. שיחקתם יפה!")
+        // Owner report 2026-10: say what really happened, and who won the point.
+        case "NET_FAULT": text = t("The ball hit the net", "הכדור פגע ברשת")
+        case "OUT_FAULT": text = t("The ball flew off the table", "הכדור עף אל מחוץ לשולחן")
+        case "SHORT_FAULT": text = t("The ball didn’t cross the net", "הכדור לא עבר את הרשת")
+        case "SECOND_BOUNCE": text = t("The ball bounced twice", "הכדור קפץ פעמיים")
+        case "BALL_IN": text = t("The ball wasn’t returned", "הכדור לא הוחזר")
+        case "INVALID_SERVE": text = t("The serve must bounce on both sides", "ההגשה חייבת לקפוץ בשני הצדדים")
         default: return t("Tap to return · Swipe diagonally to aim", "נגיעה להחזרה · החלקה באלכסון לכיוון")
         }
+        guard let winner = model.pointWinner else { return text }
+        return text + " · " + (winner == .child ? t("Your point!", "נקודה לכם!") : t("Point to \(opponentName)", "נקודה ל־\(opponentName)"))
     }
     private var gameSettings: some View {
         NavigationStack { ScrollView { VStack(spacing: 18) {
@@ -490,11 +524,27 @@ import StoreKit
                     action(close, color: MPStyle.mint) { model.closeResult() }
                 } else {
                     Text(result.won ? t("You won!", "ניצחתם!") : t("Good game!", "משחק טוב!")).font(.largeTitle.bold())
-                    Text("\(result.playerPoints) – \(result.opponentPoints)").font(.system(size: 46, weight: .bold, design: .rounded)).environment(\.layoutDirection, .leftToRight)
+                    resultScore(result)
+                    // Owner report 2026-10: the match no longer ends by leaving the game; the child chooses.
+                    action(t("Play again", "עוד משחק"), color: MPStyle.blue) { model.playAgain() }
                     action(t("Back", "חזרה"), color: MPStyle.mint) { model.back() }
                 }
             }
         }.frame(maxWidth: 540).padding(24).frame(maxWidth: .infinity) }
+    }
+    /// "You 7 – 1 Minik": each score under its own name; the row follows the reading direction.
+    private func resultScore(_ result: ModernPongResult) -> some View {
+        HStack(alignment: .top, spacing: 18) {
+            VStack(spacing: 4) {
+                Text(String(result.playerPoints)).font(.system(size: 46, weight: .bold, design: .rounded)).monospacedDigit()
+                Text(model.identity?.name ?? t("You", "אתם")).font(.headline).lineLimit(1).minimumScaleFactor(0.7)
+            }.frame(maxWidth: .infinity)
+            Text("–").font(.system(size: 46, weight: .bold, design: .rounded))
+            VStack(spacing: 4) {
+                Text(String(result.opponentPoints)).font(.system(size: 46, weight: .bold, design: .rounded)).monospacedDigit()
+                Text(opponentName).font(.headline).lineLimit(1).minimumScaleFactor(0.7)
+            }.frame(maxWidth: .infinity)
+        }
     }
     /// Android PrivateMatchActivity: the completed room's headline, a knockout advancement, or the match result.
     private func resultTitle(_ s: MPSession, _ m: MPFixture) -> String {
@@ -532,6 +582,40 @@ import StoreKit
         }.padding(24) }.navigationTitle(t("Remove ads", "הסרת פרסומות")).navigationBarTitleDisplayMode(.inline).toolbar { ToolbarItem(placement: .topBarLeading) { backButton { showCommerce = false } } } }
         // The grown-up gate uses a medium sheet; the unlocked options use the full height.
         .presentationDetents([.large])
+    }
+}
+
+/// A row of large choice buttons whose chosen option is unmistakable: filled pink, bold white text and a check
+/// mark. It replaces the system segmented picker, whose selection could not be seen on iPad (owner report 2026-10).
+struct MPChoiceBar<Value: Hashable>: View {
+    let title: String
+    let options: [(value: Value, label: String)]
+    @Binding var selection: Value
+    var body: some View {
+        HStack(spacing: 8) {
+            ForEach(options.indices, id: \.self) { index in
+                let option = options[index]
+                let chosen = option.value == selection
+                Button { selection = option.value } label: {
+                    HStack(spacing: 6) {
+                        if chosen { Image(systemName: "checkmark.circle.fill") }
+                        Text(option.label).lineLimit(1).minimumScaleFactor(0.6)
+                    }
+                    .font(.system(.callout, design: .rounded, weight: .bold))
+                    .foregroundStyle(chosen ? Color.white : MPStyle.ink)
+                    .padding(.horizontal, 8)
+                    .frame(maxWidth: .infinity, minHeight: 50)
+                    .background(chosen ? MPStyle.pink : Color.white, in: Capsule())
+                    .overlay { Capsule().strokeBorder(chosen ? MPStyle.pink : MPStyle.ink.opacity(0.25), lineWidth: 2) }
+                    .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(chosen ? .isSelected : [])
+            }
+        }
+        .animation(.easeInOut(duration: 0.15), value: selection)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(title)
     }
 }
 

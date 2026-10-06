@@ -202,9 +202,11 @@ struct MultipleChoiceView: View {
                 }
             }
 
-            Text(presentation.instruction)
+            Text(mathActivityFamily == nil ? presentation.instruction : mathChoiceInstruction)
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(Color(red: 0.17, green: 0.45, blue: 0.57))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
                 .accessibilityHidden(true)
 
             ForEach(
@@ -271,6 +273,48 @@ struct MultipleChoiceView: View {
 
         let minimumWidth: CGFloat = compact ? 132 : 190
         return [GridItem(.adaptive(minimum: minimumWidth, maximum: 320), spacing: compact ? 14 : 18)]
+    }
+
+    /// The Math question in words, from what the challenge shows: a picture to
+    /// count, a number to match with a picture, or an exercise to solve. A plain
+    /// "Choose the answer" did not say what to look for.
+    private var mathChoiceInstruction: String {
+        let challenge = session.currentChallenge
+        let choicesArePictures = !challenge.choices.isEmpty
+            && challenge.choices.allSatisfy { Self.isPictureLike($0.representation) }
+        if choicesArePictures {
+            return String(localized: "Which picture shows the same amount? Tap it.")
+        }
+        if challenge.prompt.representations.contains(where: { Self.isPictureLike($0) }) {
+            return String(localized: "How many are there? Tap the right number.")
+        }
+        if challenge.prompt.representations.allSatisfy({ Self.isNumeral($0) }) {
+            return String(localized: "Which card is worth the same as this number? Tap it.")
+        }
+        return String(localized: "Solve it, then tap the right answer.")
+    }
+
+    private static func isPictureLike(_ representation: Representation) -> Bool {
+        switch representation {
+        case .imageAsset, .visualQuantity:
+            return true
+        case .math(let math):
+            switch math {
+            case .quantity, .groupedQuantity, .equalGroups, .placeValue:
+                return true
+            default:
+                return false
+            }
+        default:
+            return false
+        }
+    }
+
+    private static func isNumeral(_ representation: Representation) -> Bool {
+        if case .math(let math) = representation, case .numeral = math {
+            return true
+        }
+        return false
     }
 
     private func choiceFeedbackState(_ choice: Choice) -> MinikChoiceButtonStyle.FeedbackState {

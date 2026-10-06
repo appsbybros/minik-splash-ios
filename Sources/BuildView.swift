@@ -254,6 +254,15 @@ struct BuildView: View {
                 .foregroundStyle(Color(red: 0.17, green: 0.45, blue: 0.57))
                 .accessibilityHidden(true)
 
+            if let mathInstruction {
+                Text(mathInstruction)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(MathInk.softInk)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity)
+            }
+
             ForEach(
                 Array(session.currentChallenge.prompt.representations.enumerated()),
                 id: \.offset
@@ -272,11 +281,14 @@ struct BuildView: View {
 
     private func constructedSequenceSection(compact: Bool) -> some View {
         VStack(alignment: .leading, spacing: compact ? 12 : 14) {
-            Text(presentation == .word
+            Text(isMath
+                ? String(localized: "Your answer")
+                : presentation == .word
                 ? String(localized: "Your word")
                 : String(localized: "Your build"))
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(Color(red: 0.18, green: 0.43, blue: 0.54))
+                .fixedSize(horizontal: false, vertical: true)
 
             if presentation == .word,
                let builtDisplayText = session.builtDisplayText,
@@ -289,16 +301,37 @@ struct BuildView: View {
                     .accessibilityHidden(true)
             }
 
-            LazyVGrid(columns: tokenColumns, alignment: .center, spacing: 12) {
-                if selectedTokens.isEmpty {
-                    placeholderToken(compact: compact)
+            VStack(spacing: 0) {
+                if isMath && selectedTokens.isEmpty {
+                    // A full-width, wrapping hint; inside a grid cell it was cut off after a word.
+                    mathAnswerPlaceholder(compact: compact)
                 } else {
-                    ForEach(selectedTokens, id: \.id) { token in
-                        tokenChip(token, context: .buildConstructedToken, compact: compact)
+                    LazyVGrid(columns: tokenColumns, alignment: .center, spacing: 12) {
+                        if selectedTokens.isEmpty {
+                            placeholderToken(compact: compact)
+                        } else {
+                            ForEach(selectedTokens, id: \.id) { token in
+                                if isMath {
+                                    // Not disabled after the check, so the answer keeps full
+                                    // contrast; removeConstructedToken ignores taps then.
+                                    Button {
+                                        removeConstructedToken(token.id)
+                                    } label: {
+                                        tokenChip(token, context: .buildConstructedToken, compact: compact)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityHint(session.answerResult == nil
+                                        ? String(localized: "Takes this piece back out of your answer")
+                                        : String(localized: "Unavailable after answer is checked"))
+                                } else {
+                                    tokenChip(token, context: .buildConstructedToken, compact: compact)
+                                }
+                            }
+                        }
                     }
+                    .environment(\.layoutDirection, tokenLayoutDirection)
                 }
             }
-            .environment(\.layoutDirection, tokenLayoutDirection)
             .frame(maxWidth: .infinity, minHeight: compact ? 78 : 92, alignment: .topLeading)
             .padding(compact ? 14 : 18)
             .background(
@@ -328,52 +361,31 @@ struct BuildView: View {
 
     private func availableTokenSection(compact: Bool) -> some View {
         VStack(alignment: .leading, spacing: compact ? 12 : 14) {
-            Text(presentation == .answerTokenTower
-                ? String(localized: "Available blocks")
-                : mathActivityFamily == .buildNumber
-                ? String(localized: "Drag a digit")
-                : session.currentChallenge.validationMode == .submitSequence
-                    ? String(localized: "Pick tokens")
-                    : String(localized: "Tap the next token"))
+            Text(availableTokensTitle)
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(Color(red: 0.18, green: 0.43, blue: 0.54))
+                .fixedSize(horizontal: false, vertical: true)
 
             LazyVGrid(columns: tokenColumns, spacing: 12) {
                 ForEach(remainingTokens, id: \.id) { token in
-                    if mathActivityFamily == .buildNumber {
+                    // Every piece is a visible card that a tap adds and that can also
+                    // be dragged into the answer box. Build Number's digits used to be
+                    // drag-only text without a tile, which Dark Mode turned invisible.
+                    Button {
+                        selectToken(token)
+                    } label: {
                         RepresentationView(
                             representation: token.representation,
                             context: .buildToken
                         )
                         .frame(maxWidth: .infinity, minHeight: compact ? 40 : 44)
-                        .contentShape(RoundedRectangle(cornerRadius: compact ? 16 : 19))
-                        .draggable(token.id.rawValue)
-                        .disabled(session.answerResult != nil)
-                        .accessibilityAddTraits(.isButton)
-                        .accessibilityHint(session.answerResult == nil
-                            ? String(localized: "Drag this digit into the answer. VoiceOver users can use the Add action.")
-                            : String(localized: "Unavailable after answer is checked"))
-                        .accessibilityAction(named: Text("Add")) {
-                            guard session.answerResult == nil else { return }
-                            selectToken(token)
-                        }
-                    } else {
-                        Button {
-                            selectToken(token)
-                        } label: {
-                            RepresentationView(
-                                representation: token.representation,
-                                context: .buildToken
-                            )
-                            .frame(maxWidth: .infinity, minHeight: compact ? 40 : 44)
-                        }
-                        .buttonStyle(MinikTokenButtonStyle(compact: compact))
-                        .draggable(token.id.rawValue)
-                        .disabled(session.answerResult != nil)
-                        .accessibilityHint(session.answerResult == nil
-                            ? String(localized: "Adds this token to the answer")
-                            : String(localized: "Unavailable after answer is checked"))
                     }
+                    .buttonStyle(MinikTokenButtonStyle(compact: compact))
+                    .draggable(token.id.rawValue)
+                    .disabled(session.answerResult != nil)
+                    .accessibilityHint(session.answerResult == nil
+                        ? String(localized: "Adds this token to the answer")
+                        : String(localized: "Unavailable after answer is checked"))
                 }
             }
             .environment(\.layoutDirection, tokenLayoutDirection)
@@ -405,6 +417,17 @@ struct BuildView: View {
                 .accessibilityHint("Moves to the next challenge")
             }
         } else if session.currentChallenge.validationMode == .submitSequence {
+            if isMath && hasTooManyPieces {
+                // Check only appears when the answer has as many pieces as it needs,
+                // so a child who added one too many is told how to fix it.
+                Text(String(localized: "That's too many. Tap one in your answer to take it back."))
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(MathInk.warning)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity)
+            }
+
             HStack(spacing: 12) {
                 Button(action: { session.undoLastToken() }) {
                     Label("Undo", systemImage: "arrow.uturn.backward")
@@ -418,7 +441,10 @@ struct BuildView: View {
                         MathSubmitBuzzer(action: submit)
                     } else {
                         Button(action: submit) {
-                            Label("Submit", systemImage: "checkmark")
+                            Label(
+                                isMath ? String(localized: "Check answer") : String(localized: "Submit"),
+                                systemImage: "checkmark"
+                            )
                         }
                         .buttonStyle(MinikPrimaryActionStyle())
                         .accessibilityHint("Checks the answer you built")
@@ -473,6 +499,93 @@ struct BuildView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 16)
             }
+    }
+
+    private var isMath: Bool {
+        mathActivityFamily != nil
+    }
+
+    private var hasTooManyPieces: Bool {
+        session.selectedTokenIDs.count > session.currentChallenge.expectedTokenSequence.count
+    }
+
+    /// The always-visible "what to do" line of the Math build screens.
+    private var mathInstruction: String? {
+        guard let family = mathActivityFamily else { return nil }
+        if presentation == .answerTokenTower {
+            return String(localized: "Tap the blocks in order to build the answer.")
+        }
+        switch family {
+        case .buildNumber:
+            if mathLevelID == .m1 {
+                return String(localized: "Count the pictures, then tap or drag the matching number into the answer box.")
+            }
+            if mathLevelID == .m2 {
+                return String(localized: "Solve the exercise, then tap or drag the answer into the answer box.")
+            }
+            return String(localized: "Find the answer, then tap or drag its digits into the answer box, in order.")
+        case .buildMath:
+            if mathLevelID == .m1 {
+                return String(localized: "Count the pictures: tap the numbers in order, 1, 2, 3…, until every picture is counted.")
+            }
+            return String(localized: "Build the whole exercise: tap the pieces in the right order. One piece is extra.")
+        default:
+            return nil
+        }
+    }
+
+    private var availableTokensTitle: String {
+        if presentation == .answerTokenTower {
+            return isMath ? String(localized: "Blocks to use") : String(localized: "Available blocks")
+        }
+        if mathActivityFamily == .buildNumber {
+            return String(localized: "Tap or drag a number")
+        }
+        if mathActivityFamily == .buildMath {
+            return mathLevelID == .m1
+                ? String(localized: "Tap the numbers in order")
+                : String(localized: "Tap the pieces in order")
+        }
+        return session.currentChallenge.validationMode == .submitSequence
+            ? String(localized: "Pick tokens")
+            : String(localized: "Tap the next token")
+    }
+
+    private func mathAnswerPlaceholder(compact: Bool) -> some View {
+        Text(mathActivityFamily == .buildNumber
+            ? String(localized: "Put the number here")
+            : String(localized: "Your answer will appear here"))
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(MathInk.softInk)
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .frame(maxWidth: .infinity, minHeight: compact ? 60 : 72)
+            .background(
+                RoundedRectangle(cornerRadius: compact ? 20 : 24, style: .continuous)
+                    .fill(Color.white.opacity(0.7))
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: compact ? 20 : 24, style: .continuous)
+                    .strokeBorder(MathInk.rim, style: StrokeStyle(lineWidth: 2, dash: [7, 6]))
+            }
+    }
+
+    /// Takes one piece back out of a Math answer and keeps the pieces after it in
+    /// order. BuildSession can only undo the last piece, so the later pieces are
+    /// undone and then added again.
+    private func removeConstructedToken(_ tokenID: BuildTokenID) {
+        guard session.answerResult == nil,
+              session.currentChallenge.validationMode == .submitSequence,
+              let index = session.selectedTokenIDs.firstIndex(of: tokenID) else { return }
+        let laterTokenIDs = Array(session.selectedTokenIDs.suffix(from: index + 1))
+        for _ in index..<session.selectedTokenIDs.count {
+            session.undoLastToken()
+        }
+        for laterTokenID in laterTokenIDs {
+            session.selectToken(laterTokenID)
+        }
     }
 
     private func advance() {

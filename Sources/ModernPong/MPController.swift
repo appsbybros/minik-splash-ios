@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import os
 
 struct ModernPongResult: Codable, Equatable { var playerPoints: Int; var opponentPoints: Int; var won: Bool }
 enum MPRoute { case menu, lobby, game, guide, result }
@@ -34,6 +35,16 @@ enum MPRoute { case menu, lobby, game, guide, result }
     @Published var paused = false
     @Published var practice = false
     @Published var practiceLevel: MPLevel
+    /// Owner report 2026-10: a problem while a match is on screen is a short status line (Android
+    /// PrivateMatchActivity), never a dialog over the court.
+    @Published var gameWarning: String?
+    /// Who won the point that just ended (local or authoritative matches), for the status line.
+    @Published var pointWinner: MPSide?
+    private static let log = Logger(subsystem: "com.appsbybros.minik.pingpong", category: "ModernPong")
+    /// Only a connection attempt the player asked for ("Retry online connection") reports a failure in a dialog.
+    private var announceConnectionFailure = false
+    /// When the in-match warning was last raised; it fades from the status line once problems stop.
+    private var warningAt: Int64 = 0
     private var repo: any MPRepository, subscriptions: [MPSubscription] = [], link: MPMatchLink?
     private var presenceSubscription: MPSubscription?
     private var foreground = true, started = false, handlingReady = false, handlingStart = false, observedRoster = Set<String>(), observedReady = Set<String>()
@@ -77,14 +88,33 @@ enum MPRoute { case menu, lobby, game, guide, result }
                 preferences.identity = identity
             }
             connected = true; try await refreshRooms()
-        } catch { show(error) }
+        } catch {
+            // Starting without internet is normal: house players stay playable and the menu offers a retry
+            // (owner report 2026-10: no connection dialog while playing locally).
+            Self.log.error("Modern Pong online start failed: \(String(describing: error), privacy: .public)")
+            if announceConnectionFailure { show(error) }
+        }
+        announceConnectionFailure = false
     }
-    func retryOnline(removeAds: Bool) async { guard !connecting else { return }; started = false; await start(hebrew: hebrew, removeAds: removeAds) }
+    func retryOnline(removeAds: Bool) async {
+        guard !connecting else { return }; started = false; announceConnectionFailure = true
+        await start(hebrew: hebrew, removeAds: removeAds)
+    }
     func perform(_ operation: @escaping () async throws -> Void) async {
         guard !busy else { return }; busy = true; defer { busy = false }
         do { try await operation() } catch { show(error) }
     }
     private func show(_ issue: Error) {
+        Self.log.error("Modern Pong issue: \(String(describing: issue), privacy: .public)")
+        if route == .game {
+            // Owner report 2026-10: never interrupt a match with a dialog. The status line explains it and the
+            // match link keeps retrying (Android PrivateMatchActivity shows the same kind of line).
+            gameWarning = issue as? MPError == .configuration
+                ? text("This match needs the same app version on both devices.", "המשחק הזה דורש את אותה גרסת אפליקציה בשני המכשירים.")
+                : text("Connection problem. Trying again…", "יש בעיה בחיבור. מנסים שוב…")
+            warningAt = MPClock.now
+            return
+        }
         if let e = issue as? MPError {
             switch e {
             case .code: error = text(e.rawValue, "הזינו קוד בן שישה תווים.")
@@ -95,7 +125,7 @@ enum MPRoute { case menu, lobby, game, guide, result }
             case .roster: error = text(e.rawValue, "מלאו את רשימת השחקנים לפני ההתחלה.")
             default: error = text(e.rawValue, "לא ניתן להשלים את הפעולה כרגע. נסו שוב.")
             }
-        } else { error = text("Connection interrupted. Try again; your saved games are kept.", "החיבור נקטע. נסו שוב; המשחקים השמורים נשמרו.") }
+        } else { error = text("Online play is not available right now. Check the internet connection and try again.", "המשחק המקוון אינו זמין כרגע. בדקו את החיבור לאינטרנט ונסו שוב.") }
     }
     func saveControls() { preferences.control = level; target = level.target(target); preferences.target = target }
     func profile(index: Int, avatar: Int, character: String) async {
@@ -107,7 +137,10 @@ enum MPRoute { case menu, lobby, game, guide, result }
     func create(_ kind: MPSessionKind, capacity: Int = 2, legs: Int = 1, winPoints: Int = 3, format: MPTournamentFormat = .roundRobin, house: MPHousePlayer?) async {
         saveControls()
         if experience == .simple { startSingle(); return }
-        if !connected, house != nil, kind == .friendly { startSingle(); return }
+        // Owner report 2026-10: a friendly game against a house player is local play. With Firebase it no
+        // longer opens an online room, so it never waits for, or reports, the internet. Builds without Firebase
+        // keep their local room ("Your games").
+        if house != nil, kind == .friendly, online || !connected { startSingle(); return }
         await perform {
             guard let identity = self.identity else { throw MPError.configuration }
             var s = MPSession(code: MPRules.code(), kind: kind, host: identity, capacity: capacity, legs: legs, winPoints: winPoints, difficulty: self.level.rawValue, target: self.target, format: format)
@@ -236,7 +269,7 @@ enum MPRoute { case menu, lobby, game, guide, result }
         closeObservers(); scene = nil; session = nil; fixture = nil; route = .menu
     }
     private func launch(_ s: MPSession, _ match: MPFixture) {
-        link?.close(); practice = false; paused = false; pausedMatchID = ""; fixture = match; liveID = match.id; celebration = nil; route = .game; acquirePresence(s)
+        link?.close(); practice = false; paused = false; pausedMatchID = ""; fixture = match; liveID = match.id; celebration = nil; gameWarning = nil; pointWinner = nil; route = .game; acquirePresence(s)
         let opponent = s.participants[match.a == repo.uid ? match.b : match.a], networked = opponent?.bot == nil
         // Android `ControlChoice.difficulty`: older intermediate room levels (1, 2) play with Standard input.
         let engine = MPEngine(level: MPLevel.control(s.difficulty), target: s.target, bot: opponent?.bot, networked: networked,
@@ -252,7 +285,7 @@ enum MPRoute { case menu, lobby, game, guide, result }
             guideOffered = true; guide(); resumeAfterGuide = practice; return
         }
         audio.stop(); saveControls(); closeObservers(); session = nil; fixture = nil; result = nil; celebration = nil; liveID = UUID().uuidString
-        self.practice = practice; paused = false
+        self.practice = practice; paused = false; gameWarning = nil; pointWinner = nil
         preferences.defaults.set(practiceLevel.rawValue, forKey: MPController.practiceLevelKey)
         install(MPEngine(level: practice ? practiceLevel : level, target: target, bot: selectedPlayer.profile, houseControls: !practice)); route = .game
     }
@@ -268,18 +301,28 @@ enum MPRoute { case menu, lobby, game, guide, result }
         if route == .guide { tutorialFrame(); return }
         if now - renderAt >= 100 {
             renderAt = now; childScore = engine.score.child; opponentScore = engine.score.minik
-            // Display-only hint; the engine's wire status stays one of Android's GameStatus names.
-            status = link != nil && link?.ready != true ? "WAITING" : engine.automaticContact && engine.childReturnOpen ? "AUTO_HINT" : engine.status
+            // Display-only hints; the engine's wire status stays one of Android's GameStatus names.
+            // "SHORT_FAULT": the ball bounced on its hitter's own side. It used to read "landed outside" while
+            // the ball was visibly on the table (owner report 2026-10).
+            if link != nil && link?.ready != true { status = "WAITING" }
+            else if engine.automaticContact && engine.childReturnOpen { status = "AUTO_HINT" }
+            else if engine.status == "OUT_FAULT" && engine.lastResolution?.fault == .firstBounceOut { status = "SHORT_FAULT" }
+            else { status = engine.status }
+            pointWinner = engine.lastResolution?.winner
+            if gameWarning != nil && now - warningAt > 6000 { gameWarning = nil }
         }
         if route == .game && foreground && !engine.paused && now - activityAt >= 1000 { ads.active(now - activityAt); activityAt = now }
-        if link == nil, let winner = engine.score.winner, route == .game { finish(id: liveID, value: .init(playerPoints: engine.score.child, opponentPoints: engine.score.minik, won: winner == .child)) }
+        // The final point stays on the table for a moment (its reason and "You won the match!") before the result.
+        if link == nil, let winner = engine.score.winner, route == .game, engine.winnerAge >= 1.2 { finish(id: liveID, value: .init(playerPoints: engine.score.child, opponentPoints: engine.score.minik, won: winner == .child)) }
     }
     private func finish(id: String, value: ModernPongResult) {
         guard handledResults.insert(id).inserted else { return }; scene?.setActive(false); link?.close(); link = nil; result = value
         // Android ModernActivity no longer saves a completed result to a history without an explicit choice.
         ads.completed(id) { [weak self] in
             guard let self else { return }
-            if self.experience.closesAfterMatch { self.closeObservers(); self.completion(value); return }
+            // Simple hosts (Math) count the finished match now, but the child first sees the result screen and
+            // leaves it with Back or Play again. Closing at once felt like a crash (owner report 2026-10).
+            if self.experience.closesAfterMatch { self.completion(value) }
             self.route = .result
             // Android VictoryConfetti after the ad: every won match; a completed room celebrates its winner once.
             let celebrate: Bool
@@ -291,6 +334,8 @@ enum MPRoute { case menu, lobby, game, guide, result }
     func back() {
         audio.stop(); scene?.setActive(false)
         if route == .result && session != nil { closeResult(); return }
+        // A local match's result returns to the Ping Pong menu; a Simple host is left from there.
+        if route == .result { celebration = nil; scene = nil; result = nil; gameWarning = nil; pointWinner = nil; route = .menu; return }
         if route == .lobby, let s = session, s.complete { dismissCompleted(); return }
         if route == .game && session != nil { pausedMatchID = fixture?.id ?? ""; link?.close(); link = nil; route = .lobby; presenceSubscription?.close(); presenceSubscription = nil; return }
         if route == .guide {
@@ -302,6 +347,8 @@ enum MPRoute { case menu, lobby, game, guide, result }
         celebration = nil; closeObservers(); scene = nil; session = nil; fixture = nil; route = .menu
         if experience.closesAfterMatch { completion(nil) }
     }
+    /// Result screen "Play again" after a local match: the same opponent, controls and points to win.
+    func playAgain() { celebration = nil; startSingle(practice: practice) }
     func close() { foreground = false; audio.stop(); scene?.setActive(false); closeObservers() }
     func lifecycle(active: Bool) {
         guard foreground != active else { return }; foreground = active

@@ -172,13 +172,24 @@ struct PairsSession: Sendable {
             return item.details.speechUtterance
         }
 
+        // A second tap on the chosen card of a side unselects it, as on the
+        // any-two board. Another card of a side that already has a choice is
+        // ignored here; PairsView first unselects the old one to move the choice.
         switch item.id.side {
         case .left:
+            if selectedLeftItemID == item.id {
+                selectedLeftItemID = nil
+                return nil
+            }
             guard selectedLeftItemID == nil else {
                 return nil
             }
             selectedLeftItemID = item.id
         case .right:
+            if selectedRightItemID == item.id {
+                selectedRightItemID = nil
+                return nil
+            }
             guard selectedRightItemID == nil else {
                 return nil
             }

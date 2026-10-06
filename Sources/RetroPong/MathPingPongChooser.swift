@@ -12,7 +12,9 @@ struct MathPingPongChooser: View {
     var body: some View {
         Group {
             switch selected {
-            case .modern: ModernPongView(experience: .simple, commerce: commerce) { result in if result != nil { onCompletedMatch() }; onExit() }
+            // A finished match is counted as soon as it ends (a result); the child then sees the result screen and
+            // leaves with Back (nil). It used to leave Ping Pong at once, which looked like a crash (owner report 2026-10).
+            case .modern: ModernPongView(experience: .simple, commerce: commerce) { result in if result != nil { onCompletedMatch() } else { onExit() } }
             case .retro: RetroPongView(onExit: onExit, onMatchFinished: { done in onCompletedMatch(); done() })
             case nil:
                 VStack(spacing: 24) {

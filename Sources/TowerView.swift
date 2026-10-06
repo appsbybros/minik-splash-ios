@@ -272,15 +272,15 @@ struct TowerView: View {
 
     // MARK: - Language Tower (Android LettersTowerFragment)
 
-    /// Android's Letter Tower card (fragment_letters_tower): the speaker and the red
-    /// X, the title in coloured letter chips, the instruction, the word as it is
-    /// built, the loose letter blocks, and the tower on the sand between Minik and
-    /// the sand pile. LanguageTowerMetrics holds Android's sizes and positions.
+    /// Android's Letter Tower card (fragment_letters_tower) in the rainbow-sky design:
+    /// the speaker and the red X, the title in coloured letter chips, the navy
+    /// instruction, the word as it is built, the loose letter blocks, and the tower on
+    /// the sand between Minik and the sand pile, on the glass card over the sky.
+    /// LanguageTowerMetrics holds Android's sizes and positions.
     @ViewBuilder
     private var languageTowerBody: some View {
         if let content = session.orderedTokenContent {
             LanguageTowerPanel(
-                sceneAsset: MinikVisualAsset.towerScene,
                 scrolls: dynamicTypeSize.isAccessibilitySize
             ) { panel in
                 let plan = languageTowerPromptPlan(content)
@@ -370,8 +370,8 @@ struct TowerView: View {
                 .padding(.top, metrics.titleTop)
 
             Text("Drag the letters in the correct order")
-                .font(.system(size: metrics.instructionFontSize))
-                .foregroundStyle(Color(red: 0.2, green: 0.2, blue: 0.2))
+                .font(MinikPretty.bodyFont(metrics.instructionFontSize))
+                .foregroundStyle(MinikPretty.navy)
                 .multilineTextAlignment(.center)
                 .lineLimit(fixedStatusHeight == nil ? nil : 2)
                 .minimumScaleFactor(0.7)
@@ -510,30 +510,20 @@ struct TowerView: View {
             .accessibilityHidden(true)
     }
 
-    /// The speaker (bg_icon_button_outline_circle around a #3F4FAD speaker) at the
-    /// top start and the red X at the top end, each with a full-size tap target.
+    /// The speaker (the design's bg_pretty_speaker) at the top start and the red X at
+    /// the top end, each with a full-size tap target.
     private func languageTowerNavigation(_ metrics: LanguageTowerMetrics) -> some View {
-        let ink = LanguageTowerColors.ink
         let speakerTarget = max(44, metrics.speakerSize)
         let closeTarget = max(44, metrics.closeSize)
         return ZStack(alignment: .topLeading) {
             Button(action: speakRoundCue) {
                 // Android's padded ic_lock_silent_mode_off, drawn as on the choice pages:
                 // the one-wave glyph in a square of 45% of this 40 dp (60 dp) circle.
-                Image(systemName: "speaker.wave.1.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: metrics.speakerSize * 0.45, height: metrics.speakerSize * 0.45)
-                    .foregroundStyle(ink)
-                    .frame(width: metrics.speakerSize, height: metrics.speakerSize)
-                    .background(ink.opacity(0.125), in: Circle())
-                    .overlay {
-                        Circle().strokeBorder(ink, lineWidth: 2)
-                    }
+                LanguageSkySpeakerFace(diameter: metrics.speakerSize, glyphRatio: 0.45)
                     .frame(width: speakerTarget, height: speakerTarget)
                     .contentShape(Rectangle())
             }
-            .buttonStyle(.plain)
+            .buttonStyle(LanguageSkyPressStyle())
             .accessibilityLabel("Hear the target word")
             .position(metrics.speakerCenter)
 
@@ -1892,23 +1882,20 @@ private struct LanguageTowerConfettiView: View {
     }
 }
 
-/// LettersTowerFragment's card: a MaterialCardView with 20 dp corners and 8 dp of
-/// elevation, inset by the root's padding and the card's compatibility padding
-/// (18 dp at the sides and 22 dp above and below; 20 dp and 24 dp on tablets) and
-/// filled with plus_background over minik_background. The board fills the card
+/// LettersTowerFragment's card in the rainbow-sky design (applyGameBackgrounds): the
+/// glass card with a white rim and the light wash inside it, over the sky, inset by
+/// the root's padding and the card's compatibility padding (18 dp at the sides and
+/// 22 dp above and below; 20 dp and 24 dp on tablets). The board fills the card
 /// edge to edge; it scrolls only at accessibility text sizes, where it can be
 /// taller than the card.
 private struct LanguageTowerPanel<Content: View>: View {
-    private let sceneAsset: String
     private let scrolls: Bool
     private let content: (LanguageTowerPanelLayout) -> Content
 
     init(
-        sceneAsset: String,
         scrolls: Bool,
         @ViewBuilder content: @escaping (LanguageTowerPanelLayout) -> Content
     ) {
-        self.sceneAsset = sceneAsset
         self.scrolls = scrolls
         self.content = content
     }
@@ -1923,33 +1910,29 @@ private struct LanguageTowerPanel<Content: View>: View {
                 height: panelHeight,
                 wide: wide
             )
-            Group {
-                if scrolls {
-                    ScrollView {
+            LanguageSkyPanel(
+                width: panelWidth,
+                height: panelHeight,
+                cornerRadius: wide ? 36 : 28,
+                washed: true
+            ) {
+                Group {
+                    if scrolls {
+                        ScrollView {
+                            content(layout)
+                        }
+                        .scrollBounceBehavior(.basedOnSize)
+                    } else {
                         content(layout)
                     }
-                    .scrollBounceBehavior(.basedOnSize)
-                } else {
-                    content(layout)
                 }
-            }
-            .frame(width: panelWidth, height: panelHeight, alignment: .top)
-            .background {
-                Color.white
-                MinikArtworkImage(name: sceneAsset, contentMode: .fill)
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 20, style: .circular))
-            .background {
-                RoundedRectangle(cornerRadius: 20, style: .circular)
-                    .fill(Color.white)
-                    .shadow(color: Color.black.opacity(0.22), radius: 7, x: 0, y: 4)
+                .frame(width: panelWidth, height: panelHeight, alignment: .top)
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
         }
-        // The fill artwork stays a background so it never sizes the layout.
+        // The sky stays a background so it never sizes the layout.
         .background {
-            MinikArtworkBackground()
-                .ignoresSafeArea()
+            MinikSkyBackground()
         }
     }
 }
@@ -2390,9 +2373,6 @@ private enum LanguageTowerCatalog {
 }
 
 private enum LanguageTowerColors {
-    /// #3F4FAD: the speaker's ring, glyph and 12.5% fill.
-    static let ink = Color(red: 0.247, green: 0.310, blue: 0.678)
-
     /// titlePalette: pink, yellow, purple, blue, mint and orange.
     static let title: [Color] = [
         Color(red: 1.00, green: 0.059, blue: 0.529),
@@ -2403,29 +2383,29 @@ private enum LanguageTowerColors {
         Color(red: 1.00, green: 0.541, blue: 0.00)
     ]
 
-    /// initRound's Plus colours for the word being built (#FF9800 to #9C27B0).
+    /// initRound's Plus colours for the word being built in the rainbow-sky design:
+    /// strong tones only (#E65100, #D81B60, #7B1FA2, #00796B, #E91E63, #3F51B5 and
+    /// #9C27B0), since the old light orange, pink and lavender were hard to see on
+    /// the light panel.
     static let runtime: [Color] = [
-        Color(red: 1.00, green: 0.596, blue: 0.00),
-        Color(red: 0.878, green: 0.525, blue: 0.616),
-        Color(red: 0.776, green: 0.753, blue: 0.886),
-        Color(red: 0.00, green: 0.588, blue: 0.533),
+        Color(red: 0.902, green: 0.318, blue: 0.00),
+        Color(red: 0.847, green: 0.106, blue: 0.376),
+        Color(red: 0.482, green: 0.122, blue: 0.635),
+        Color(red: 0.00, green: 0.475, blue: 0.420),
         Color(red: 0.914, green: 0.118, blue: 0.388),
         Color(red: 0.247, green: 0.318, blue: 0.710),
         Color(red: 0.612, green: 0.153, blue: 0.690)
     ]
 
-    /// kidColorIds, kid_red to kid_orange, for the hosting word.
+    /// pickKidColor's Plus colours for the hosting word (plusReadableColorIds:
+    /// kid_red, kid_pink, kid_purple, kid_deep_purple, kid_indigo and kid_blue),
+    /// readable on the light panel.
     static let kid: [Color] = [
         Color(red: 1.00, green: 0.090, blue: 0.267),
         Color(red: 0.961, green: 0.00, blue: 0.341),
         Color(red: 0.835, green: 0.00, blue: 0.976),
         Color(red: 0.396, green: 0.122, blue: 1.00),
         Color(red: 0.239, green: 0.353, blue: 0.996),
-        Color(red: 0.161, green: 0.475, blue: 1.00),
-        Color(red: 0.00, green: 0.690, blue: 1.00),
-        Color(red: 0.114, green: 0.914, blue: 0.714),
-        Color(red: 0.00, green: 0.902, blue: 0.463),
-        Color(red: 0.020, green: 0.780, blue: 0.235),
-        Color(red: 1.00, green: 0.569, blue: 0.00)
+        Color(red: 0.161, green: 0.475, blue: 1.00)
     ]
 }

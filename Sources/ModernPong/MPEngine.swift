@@ -182,6 +182,14 @@ final class MPEngine {
     private(set) var minikStroke = MPStroke(contactAt: 0.20, windowEnd: 0.27, followEnd: 0.44, total: 0.68)
     private(set) var motion = MPMotion(), trainingResult: Bool?, trainingTime = 0.0
     private(set) var bouncePoint: MPPoint?, bounceAge = 1.0, netAge = 1.0
+    /// Display only (Android `lastResolution`): how the last point ended and who won it, until the next rally.
+    private(set) var lastResolution: MPResolution?
+    /// Display only, never networked: a ball that left the table keeps flying for a moment so the child sees it
+    /// go out, and a ball that bounced on its hitter's own side (or twice) is ringed where it landed.
+    private(set) var outBall: MPPoint?, outHeight = 0.0, faultMark: MPPoint?, faultAge = 1.0
+    private var outVelocity = MPPoint.zero, outLift = 0.0, outAge = 0.0
+    /// Seconds of play since the match was won, so the last point can be seen before the result screen.
+    private(set) var winnerAge = 0.0
     private var events: [MPEvent] = [], serial = 0, random: MPRandom
     private var velocity = MPPoint.zero, attemptedTap = false, minikDelay: Double?, plan: MPIntercept?
     private var serveDelay: Double?, pointDelay: Double?, pendingServe: MPServe?, pendingTap: MPPoint?
@@ -193,7 +201,9 @@ final class MPEngine {
     /// Android `tapVelocity`: the fastest finger movement of a Standard tap gesture, converted into pace.
     private var tapVelocity = MPPoint.zero
     var ball: MPPoint { flight?.position ?? (awaitingServe || pendingServe != nil ? .init(0.5, 0.87) : .init(0.5, 0.13)) }
-    var renderedBall: MPPoint { .init(ball.x + correction.x * correctionAge / 0.12, ball.y + correction.y * correctionAge / 0.12) }
+    var renderedBall: MPPoint { outBall ?? MPPoint(ball.x + correction.x * correctionAge / 0.12, ball.y + correction.y * correctionAge / 0.12) }
+    /// Height of the drawn ball: the live flight's, or the out ball's while it falls beside the table.
+    var renderedHeight: Double { outBall != nil ? outHeight : max(0, flight?.height ?? 0.055) }
     init(level: MPLevel = .easy, target: Int = 7, bot: MPBot? = nil, houseControls: Bool = true,
          networked: Bool = false, first: MPSide = .child, exercise: MPExercise? = nil, seed: UInt64 = UInt64.random(in: 1...UInt64.max)) {
         self.level = level; self.target = level.target(target); self.bot = bot; self.networked = networked
@@ -216,6 +226,7 @@ final class MPEngine {
         minikDelay = nil; plan = nil; pointDelay = nil; serveDelay = nil; pendingServe = nil; pendingTap = nil
         previousX = nil; responses = 0; userServed = score.server == .child; returnSpeeds = [nil, nil]; strategy.reset()
         rallyVariation.reset(); tapVelocity = .zero
+        lastResolution = nil; outBall = nil; faultMark = nil
         awaitingServe = exercise.map(\.serve) ?? (score.server == .child)
         if awaitingServe { status = level.pro ? "SWIPE_SERVE" : "TAP_SERVE" }
         else {
@@ -273,7 +284,16 @@ final class MPEngine {
         childStroke.advance(delta); minikStroke.advance(delta); motion.advance(delta)
         if gestureStart == nil && !childStroke.active { paddle = nil; velocity = .zero }
         if (pointDelay != nil || awaitingServe) && plan == nil && serveDelay == nil && !minikStroke.active { motion.settle() }
-        bounceAge += delta; netAge += delta
+        bounceAge += delta; netAge += delta; faultAge += delta
+        if score.winner != nil { winnerAge += delta }
+        if var out = outBall, outAge < 0.9 {
+            // The point is already decided; this only carries the drawn ball past the table edge.
+            outAge += delta
+            out.x += outVelocity.x * delta; out.y += outVelocity.y * delta
+            outHeight += outLift * delta - 0.5 * tuning.gravity * delta * delta; outLift -= tuning.gravity * delta
+            if outHeight < 0 { outHeight = 0; outLift = abs(outLift) * 0.45 }
+            outBall = out
+        }
         guard score.winner == nil, trainingResult == nil else { return }
         if let delay = pointDelay { pointDelay = delay - delta; if delay <= delta { startRally() }; return }
         if let delay = serveDelay {
@@ -357,6 +377,14 @@ final class MPEngine {
         if networked && !authoritative { childReturnOpen = false; awaitingServe = false; return }
         if exercise != nil { trainingResult = false; childReturnOpen = false; awaitingServe = false; minikDelay = nil; plan = nil; serveDelay = nil; pendingServe = nil; pendingTap = nil; return }
         guard pointDelay == nil, score.award(result.winner, level: level, target: target, first: first) else { return }
+        lastResolution = result
+        if let f = flight {
+            // Owner report 2026-10: "out" must be visible. An out ball keeps flying off the table; a short or
+            // double bounce is ringed on the table where it landed.
+            if !networked && (result.fault == .leftTable || result.fault == .unreturned) {
+                outBall = f.position; outHeight = max(0, f.height); outVelocity = f.velocity; outLift = f.lift; outAge = 0
+            } else if result.fault == .firstBounceOut || result.fault == .secondBounce { faultMark = f.position; faultAge = 0 }
+        }
         childReturnOpen = false; awaitingServe = false; release(); minikDelay = nil; plan = nil; serveDelay = nil; pendingServe = nil; pendingTap = nil
         events.append(.point(result, striker, score.streak)); if let winner = score.winner { events.append(.victory(winner)) }
         let faultStatus: String
@@ -466,6 +494,7 @@ final class MPEngine {
         let remoteStrike = preserveInput && s.flight?.striker == .minik && s.flight?.resolved == false && (s.rally != rally || flight?.striker != .minik || s.score.rallies != score.rallies)
         if !samePoint { release(); childStroke.cancel(); pendingServe = nil; pendingTap = nil; rallyVariation.reset() }
         if !preserveInput || !samePoint { minikStroke.cancel() }
+        lastResolution = nil; outBall = nil; faultMark = nil
         plan = nil; minikDelay = nil; score = s.score; flight = s.flight; rally = s.rally; pointDelay = s.pointDelay
         pendingFault = s.pendingFault; faultTime = s.faultTime; serveDelay = networked ? nil : s.serveDelay
         awaitingServe = flight == nil && pointDelay == nil && serveDelay == nil && score.server == .child && score.winner == nil

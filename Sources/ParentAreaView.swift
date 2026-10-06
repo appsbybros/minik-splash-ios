@@ -182,8 +182,9 @@ struct ParentAreaView: View {
         .accessibilityAddTraits(.isModal)
     }
 
-    /// bg_dialog_rounded with the red X at the top end. The card is as tall as its
-    /// content and scrolls only when the content is taller than the screen.
+    /// bg_pretty_dialog (the rainbow-sky design's dialog card, as in the Levels
+    /// dialog) with the red X at the top end. The card is as tall as its content
+    /// and scrolls only when the content is taller than the screen.
     private func languageDialogCard<Content: View>(
         width: CGFloat,
         closeLabel: LocalizedStringKey,
@@ -202,8 +203,15 @@ struct ParentAreaView: View {
             .scrollBounceBehavior(.basedOnSize)
         }
         .frame(width: width)
+        // The content is clipped to the card; the card's white face and its shadow
+        // are drawn under it, and the lavender rim over it.
+        .clipShape(RoundedRectangle(cornerRadius: LanguageParentDialogBackground.cornerRadius, style: .continuous))
         .background { LanguageParentDialogBackground() }
-        .clipShape(RoundedRectangle(cornerRadius: 22))
+        .overlay {
+            RoundedRectangle(cornerRadius: LanguageParentDialogBackground.cornerRadius, style: .continuous)
+                .strokeBorder(LanguageParentPalette.dialogStroke, lineWidth: 2)
+                .allowsHitTesting(false)
+        }
         .overlay(alignment: .topTrailing) {
             // Android: a 34 dp image with 6 dp padding at the padded top end, so
             // the 22 dp X sits 22 dp from the card edges; the hit area is 44 pt.
@@ -264,13 +272,14 @@ struct ParentAreaView: View {
         .padding(.bottom, metrics.bottomPadding)
     }
 
+    /// The design's navy Fredoka title.
     private func languageDialogTitle(
         _ title: LocalizedStringKey,
         metrics: LanguageParentDialogMetrics
     ) -> some View {
         Text(title)
-            .font(.system(size: metrics.titleSize, weight: .bold))
-            .foregroundStyle(LanguageParentPalette.title)
+            .font(MinikPretty.titleFont(metrics.titleSize))
+            .foregroundStyle(MinikPretty.navy)
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
             // Kept clear of the X, so larger text wraps instead of running under it.
@@ -279,7 +288,8 @@ struct ParentAreaView: View {
             .accessibilityAddTraits(.isHeader)
     }
 
-    /// A bold caption above its field, as in the Android dialog.
+    /// A caption above its field, as in the Android dialog, in the design's navy
+    /// Fredoka.
     private func languageField<Field: View>(
         caption: String,
         metrics: LanguageParentDialogMetrics,
@@ -287,8 +297,8 @@ struct ParentAreaView: View {
     ) -> some View {
         VStack(alignment: .leading, spacing: metrics.captionToField) {
             Text(verbatim: caption)
-                .font(.system(size: metrics.captionSize, weight: .bold))
-                .foregroundStyle(LanguageParentPalette.onSurface)
+                .font(MinikPretty.titleFont(metrics.captionSize))
+                .foregroundStyle(MinikPretty.navy)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 // The field below reads the caption as its own label.
@@ -397,19 +407,21 @@ struct ParentAreaView: View {
         )) {
             VStack(alignment: .leading, spacing: metrics.switchTitleToHint) {
                 Text("Encouraging messages")
-                    .font(.system(size: metrics.captionSize, weight: .bold))
+                    .font(MinikPretty.titleFont(metrics.captionSize))
+                    .foregroundStyle(MinikPretty.navy)
                 Text("Play an encouraging message at the end of each exercise.")
                     .font(.system(size: metrics.hintSize))
+                    .foregroundStyle(MinikPretty.softInk)
             }
-            .foregroundStyle(LanguageParentPalette.onSurface)
             .fixedSize(horizontal: false, vertical: true)
         }
         .toggleStyle(LanguageParentSwitchStyle())
         .accessibilityHint("Controls encouraging practice messages")
     }
 
-    /// Android: two equal blue pills 25 dp apart, as tall as the two-line
-    /// "Learning progress" label. Accessibility text sizes stack them.
+    /// Android: two equal glossy pills 25 dp apart, Levels purple and Learning
+    /// progress blue, as tall as the two-line "Learning progress" label.
+    /// Accessibility text sizes stack them.
     @ViewBuilder
     private func languageActionButtons(metrics: LanguageParentDialogMetrics) -> some View {
         if metrics.usesAccessibilityLayout {
@@ -436,7 +448,8 @@ struct ParentAreaView: View {
         }
         .buttonStyle(LanguageParentActionButtonStyle(
             fontSize: metrics.buttonTextSize,
-            minHeight: metrics.buttonMinHeight
+            minHeight: metrics.buttonMinHeight,
+            look: MinikPretty.PillLook.purple
         ))
     }
 
@@ -447,7 +460,8 @@ struct ParentAreaView: View {
         }
         .buttonStyle(LanguageParentActionButtonStyle(
             fontSize: metrics.buttonTextSize,
-            minHeight: metrics.buttonMinHeight
+            minHeight: metrics.buttonMinHeight,
+            look: MinikPretty.PillLook.blue
         ))
         .accessibilityLabel(Text("Progress & Statistics"))
         .accessibilityHint("Opens locally stored educational progress")
@@ -467,29 +481,32 @@ struct ParentAreaView: View {
     /// iOS-only grown-up pages. Android's dialog has none: Android keeps Remove
     /// Ads and its two footer links (links_container) on the Intro, while the App
     /// Store keeps purchases and outside links in the Parent Area. So they sit
-    /// where Android's footer links are, 28/40 pt from the sides, in its bold
-    /// #222222 link style: a menu of the other pages where Android has "I have a
-    /// code" and "Privacy Policy" where Android has it.
+    /// where Android's footer links are, 28/40 pt from the sides, as its pretty
+    /// footer pills: a menu of the other pages where Android has "I have a code"
+    /// and "Privacy Policy" where Android has it.
     private func languageFooter(metrics: LanguageParentDialogMetrics) -> some View {
         languageExtraLinks(metrics: metrics)
             .frame(maxWidth: metrics.footerMaxWidth)
             .padding(.horizontal, metrics.footerSideMargin)
     }
 
-    /// Two equal columns kept in left-to-right order in every language, as in
-    /// Android's links_container; stacked inside the card at accessibility sizes.
+    /// The two pills centred together and kept in left-to-right order in every
+    /// language, as in Android's links_container; stacked inside the card at
+    /// accessibility sizes.
     @ViewBuilder
     private func languageExtraLinks(metrics: LanguageParentDialogMetrics) -> some View {
         if metrics.usesAccessibilityLayout {
-            VStack(spacing: 0) {
+            VStack(spacing: 10) {
                 extraPagesMenuLink(metrics: metrics)
                 privacyFooterLink(metrics: metrics)
             }
+            .frame(maxWidth: .infinity)
         } else {
-            HStack(spacing: 0) {
+            HStack(spacing: metrics.footerPillGap) {
                 extraPagesMenuLink(metrics: metrics)
                 privacyFooterLink(metrics: metrics)
             }
+            .frame(maxWidth: .infinity)
             .environment(\.layoutDirection, .leftToRight)
         }
     }
@@ -505,7 +522,7 @@ struct ParentAreaView: View {
                 }
             }
         } label: {
-            languageFooterLinkLabel(interfaceLocale.text("Menu"), metrics: metrics)
+            languageFooterLinkLabel(interfaceLocale.text("Menu"), pill: .lavender, metrics: metrics)
         }
         .menuOrder(.fixed)
         // The menu lists its pages in the interface direction.
@@ -518,28 +535,48 @@ struct ParentAreaView: View {
         } label: {
             languageFooterLinkLabel(
                 interfaceLocaleController.selectedLocale.text("Privacy Policy"),
+                pill: .sky,
                 metrics: metrics
             )
         }
         .buttonStyle(.plain)
     }
 
-    /// Android's footer link: bold #222222 text centred in its column, at most
-    /// two lines.
+    /// Android's pretty footer pill (bg_bottom_pill_lavender / _sky): a pale pill
+    /// with a white rim over a soft drop, its bold Fredoka text in the pill's purple
+    /// or blue, centred and at most two lines.
     private func languageFooterLinkLabel(
         _ title: String,
+        pill: LanguageParentFooterPill,
         metrics: LanguageParentDialogMetrics
     ) -> some View {
         let maximumLines: Int? = metrics.usesAccessibilityLayout ? nil : 2
+        let shape = RoundedRectangle(cornerRadius: 24, style: .continuous)
         return Text(verbatim: title)
-            .font(.system(size: metrics.footerLinkSize, weight: .bold))
-            .foregroundStyle(LanguageParentPalette.footerLink)
+            .font(MinikPretty.titleFont(metrics.footerLinkSize))
+            .foregroundStyle(pill.ink)
             .multilineTextAlignment(.center)
             .lineLimit(maximumLines)
             .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal, metrics.footerLinkPadding)
-            .frame(maxWidth: .infinity, minHeight: metrics.footerHeight)
-            .contentShape(Rectangle())
+            .padding(.horizontal, 18)
+            .padding(.top, 4)
+            .padding(.bottom, 7)
+            .frame(minHeight: metrics.footerHeight)
+            .background {
+                // The drop shows as a 3-point band under the pill's face.
+                ZStack {
+                    shape
+                        .fill(LanguageParentFooterPill.drop)
+                        .padding(.top, 3)
+                    shape
+                        .fill(pill.fill)
+                        .overlay {
+                            shape.strokeBorder(Color.white, lineWidth: 2)
+                        }
+                        .padding(.bottom, 3)
+                }
+            }
+            .contentShape(shape)
     }
 
     /// A page title in the interface language, for the native menu.
@@ -656,16 +693,21 @@ struct ParentAreaView: View {
             }
             .scrollIndicators(.hidden)
             .scrollBounceBehavior(.basedOnSize)
-            .background(Color(red: 0.91, green: 0.97, blue: 0.99).opacity(0.96))
+        }
+        // The rainbow sky of the hubs behind the glass card; a background never
+        // sizes the layout (see MinikHomeScreen).
+        .background {
+            MinikSkyBackground()
         }
     }
 
+    /// The design's navy Fredoka title with the close button and the logo.
     private func header(compact: Bool) -> some View {
         VStack(spacing: 8) {
             ZStack {
                 Text("Parent Area")
-                    .font(compact ? .title.bold() : .largeTitle.bold())
-                    .foregroundStyle(Color(red: 0.10, green: 0.25, blue: 0.67))
+                    .font(MinikPretty.titleFont((compact ? 28 : 34) * titleTextScale / 100))
+                    .foregroundStyle(MinikPretty.navy)
                     .multilineTextAlignment(.center)
                     // Kept clear of the close button and the logo, so larger
                     // text wraps instead of running underneath them.
@@ -689,7 +731,7 @@ struct ParentAreaView: View {
 
             Text("Manage learning settings and review local progress.")
                 .font(.subheadline.weight(.medium))
-                .foregroundStyle(Color(red: 0.31, green: 0.49, blue: 0.57))
+                .foregroundStyle(MinikPretty.softInk)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
         }
@@ -919,7 +961,7 @@ struct ParentAreaView: View {
                     rerollPublicAliasChoices()
                     showsPublicAliasChoices = true
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(ParentAreaActionButtonStyle(look: MinikPretty.PillLook.white))
                 .disabled(publicLeaderboardController.isWorking)
 
                 if showsPublicAliasChoices {
@@ -939,7 +981,7 @@ struct ParentAreaView: View {
                                 }
                                 .frame(maxWidth: .infinity, minHeight: 44)
                             }
-                            .buttonStyle(.bordered)
+                            .buttonStyle(ParentAreaActionButtonStyle(look: MinikPretty.PillLook.white))
                             .accessibilityLabel(Text(choice.publicAlias))
                         }
 
@@ -963,7 +1005,7 @@ struct ParentAreaView: View {
                 Button("Delete public leaderboard records") {
                     gatedParentAction = .deletePublicRecords
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(ParentAreaActionButtonStyle(look: MinikPretty.PillLook.white))
                 .disabled(publicLeaderboardController.isWorking)
                 .accessibilityHint("Deletes this participant’s public leaderboard records")
             }
@@ -1037,7 +1079,7 @@ struct ParentAreaView: View {
                 Button("Restore Purchases") {
                     gatedParentAction = .restore
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(ParentAreaActionButtonStyle(look: MinikPretty.PillLook.white))
                 .disabled(commerceController.isBusy)
                 .accessibilityHint("Opens a grown-up check before restoring App Store purchases")
             }
@@ -1089,7 +1131,7 @@ struct ParentAreaView: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(ParentAreaActionButtonStyle(look: MinikPretty.PillLook.white))
                 .disabled(releaseInformation.url(for: destination) == nil)
                 .accessibilityHint(
                     releaseInformation.url(for: destination) == nil
@@ -1180,6 +1222,8 @@ struct ParentAreaView: View {
         .accessibilityHint("Opens locally stored streak records")
     }
 
+    /// A section of the glass card in the design's lavender: a pale lavender
+    /// fill with a lavender rim.
     private func settingsCard<Content: View>(
         compact: Bool,
         framed: Bool = true,
@@ -1191,21 +1235,22 @@ struct ParentAreaView: View {
         .padding(framed ? (compact ? 14 : 16) : 0)
         .background(
             RoundedRectangle(cornerRadius: compact ? 18 : 22, style: .continuous)
-                .fill(framed ? Color(red: 0.96, green: 0.99, blue: 1.0) : Color.clear)
+                .fill(framed ? MinikPretty.color(0xF8F5FF) : Color.clear)
         )
         .overlay {
             RoundedRectangle(cornerRadius: compact ? 18 : 22, style: .continuous)
                 .strokeBorder(
-                    Color(red: 0.45, green: 0.79, blue: 0.88).opacity(framed ? 0.45 : 0),
-                    lineWidth: 1
+                    LanguageParentPalette.dialogStroke.opacity(framed ? 1 : 0),
+                    lineWidth: 1.5
                 )
         }
     }
 
+    /// A section's header in the design's navy Fredoka.
     private func settingsHeading(_ title: LocalizedStringKey) -> some View {
         Text(title)
-            .font(.headline.weight(.bold))
-            .foregroundStyle(Color(red: 0.10, green: 0.25, blue: 0.67))
+            .font(MinikPretty.titleFont(17 * bodyTextScale / 100))
+            .foregroundStyle(MinikPretty.navy)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -1253,63 +1298,108 @@ private enum LanguageParentExtra: String, CaseIterable, Hashable, Identifiable {
     static let footerMenuPages: [LanguageParentExtra] = [.records, .reminders, .purchases, .leaderboard]
 }
 
+/// The design's glossy pill (MinikPretty.PillBackground) with Fredoka text that
+/// follows Dynamic Type: blue for the main actions, white for the others.
 private struct ParentAreaActionButtonStyle: ButtonStyle {
+    let look: MinikPretty.PillLook
+    @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    init(look: MinikPretty.PillLook = MinikPretty.PillLook.blue) {
+        self.look = look
+    }
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.headline.weight(.bold))
-            .foregroundStyle(.white)
+            .font(.custom("Fredoka-Bold", size: 17, relativeTo: .headline))
+            .foregroundStyle(look.ink)
+            .multilineTextAlignment(.center)
+            .shadow(color: look.inkShadow, radius: 1.5, x: 0, y: 1)
             .padding(.horizontal, 16)
-            .padding(.vertical, 14)
+            // The face sits 3 points above the pill's lip.
+            .padding(.top, 9)
+            .padding(.bottom, 12)
             .frame(minHeight: 52)
-            .background(
-                Capsule(style: .continuous)
-                    .fill(Color(red: 0.17, green: 0.42, blue: 0.96))
-            )
+            .background {
+                MinikPretty.PillBackground(look: look, pressed: configuration.isPressed)
+            }
+            .contentShape(Capsule(style: .continuous))
+            .opacity(isEnabled ? 1 : 0.5)
             .scaleEffect(configuration.isPressed && !reduceMotion ? 0.98 : 1)
             .animation(reduceMotion ? nil : .easeOut(duration: 0.14), value: configuration.isPressed)
     }
 }
 
-/// Android's levelsButton / statisticsButton: a #2F6BFF pill with bold white
-/// text centred in it.
+/// Android's levelsButton / statisticsButton in the rainbow-sky design
+/// (bg_pretty_button_purple and _blue): a glossy pill with white Fredoka text
+/// centred in it.
 private struct LanguageParentActionButtonStyle: ButtonStyle {
     let fontSize: CGFloat
     let minHeight: CGFloat
+    let look: MinikPretty.PillLook
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    init(fontSize: CGFloat, minHeight: CGFloat) {
+    init(fontSize: CGFloat, minHeight: CGFloat, look: MinikPretty.PillLook) {
         self.fontSize = fontSize
         self.minHeight = minHeight
+        self.look = look
     }
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(size: fontSize, weight: .bold))
-            .foregroundStyle(Color.white)
+            .font(MinikPretty.titleFont(fontSize))
+            .foregroundStyle(look.ink)
             .multilineTextAlignment(.center)
+            .shadow(color: look.inkShadow, radius: 1.5, x: 0, y: 1)
             .padding(.horizontal, 10)
-            .padding(.vertical, 6)
+            // The face sits 3 points above the pill's lip.
+            .padding(.top, 6)
+            .padding(.bottom, 9)
             .frame(maxWidth: .infinity, minHeight: minHeight)
-            .background(LanguageParentPalette.action, in: Capsule())
-            .contentShape(Capsule())
-            .opacity(configuration.isPressed ? 0.86 : 1)
+            .background {
+                MinikPretty.PillBackground(look: look, pressed: configuration.isPressed)
+            }
+            .contentShape(Capsule(style: .continuous))
             .scaleEffect(configuration.isPressed && !reduceMotion ? 0.98 : 1)
             .animation(reduceMotion ? nil : .easeOut(duration: 0.14), value: configuration.isPressed)
+    }
+}
+
+/// Android's pretty footer pills (bg_bottom_pill_lavender and _sky) with their
+/// pretty_purple_text and pretty_blue_text.
+private enum LanguageParentFooterPill {
+    case lavender
+    case sky
+
+    /// The soft drop under both pills (#26205A3C).
+    static let drop = MinikPretty.color(0x205A3C, opacity: 0.15)
+
+    var fill: Color {
+        switch self {
+        case .lavender: return MinikPretty.color(0xF1EEFF)
+        case .sky: return MinikPretty.color(0xECF7FF)
+        }
+    }
+
+    var ink: Color {
+        switch self {
+        case .lavender: return MinikPretty.color(0x6A55D6)
+        case .sky: return MinikPretty.color(0x2B8FD6)
+        }
     }
 }
 
 // MARK: - Android dialog look shared by the Language Parent Area and its Levels dialog
 
 /// Colours from dialog_languages_and_levels.xml, dialog_levels_difficulty.xml,
-/// bg_dialog_rounded, bg_spinner_arrow, bg_level_progress and the switch tints.
+/// bg_pretty_dialog, bg_spinner_arrow, bg_level_progress and the switch tints.
 enum LanguageParentPalette {
     static let title = Color(red: 63 / 255, green: 79 / 255, blue: 173 / 255)
     static let action = Color(red: 47 / 255, green: 107 / 255, blue: 255 / 255)
     static let onSurface = Color(red: 29 / 255, green: 27 / 255, blue: 32 / 255)
-    static let dialogFill = Color(red: 248 / 255, green: 250 / 255, blue: 252 / 255)
-    static let dialogStroke = Color(red: 226 / 255, green: 232 / 255, blue: 240 / 255)
+    /// bg_pretty_dialog: white with a 2 dp #E6DEFF rim.
+    static let dialogFill = Color.white
+    static let dialogStroke = Color(red: 230 / 255, green: 222 / 255, blue: 255 / 255)
     static let spinnerStroke = Color(red: 204 / 255, green: 204 / 255, blue: 204 / 255)
     static let outline = Color(red: 121 / 255, green: 116 / 255, blue: 126 / 255)
     static let switchThumb = Color(red: 24 / 255, green: 183 / 255, blue: 176 / 255)
@@ -1357,6 +1447,7 @@ struct LanguageParentDialogMetrics {
     let footerSideMargin: CGFloat
     let footerHeight: CGFloat
     let footerMaxWidth: CGFloat
+    let footerPillGap: CGFloat
 
     init(
         containerSize: CGSize,
@@ -1440,38 +1531,28 @@ struct LanguageParentDialogMetrics {
         // The pills' 12 dp bottom margin and the dialog's 16 dp padding.
         bottomPadding = 28
 
-        // Android's Intro footer links: bold 14 sp on phones, 28/40 dp from the
-        // sides, at most 900 dp wide. Tablets use 20 rather than Android's 28 sp,
-        // so the links stay in the 36 pt strip under the Intro's buttons.
-        let footerLink: CGFloat = tablet ? 20 : 14
+        // Android's pretty Intro footer pills (dimens_pretty.xml): bold Fredoka
+        // 16 sp in 46 dp pills 20 dp apart on phones, 21 sp in 58 dp pills 32 dp
+        // apart on tablets; 28/40 dp from the sides, at most 900 dp wide.
+        let footerLink: CGFloat = tablet ? 21 : 16
         footerLinkSize = footerLink * textScale
         footerLinkPadding = tablet ? 12 : 0
         footerSideMargin = tablet ? 40 : 28
-        footerHeight = 36
+        footerHeight = tablet ? 58 : 46
         footerMaxWidth = 900
+        footerPillGap = tablet ? 32 : 20
     }
 }
 
-/// bg_dialog_rounded: #F8FAFC with a 1 dp #E2E8F0 edge and a soft top highlight.
+/// bg_pretty_dialog: white with 28 dp corners on a soft shadow. The dialog draws
+/// the 2 dp #E6DEFF rim over its content.
 struct LanguageParentDialogBackground: View {
+    static let cornerRadius: CGFloat = 28
+
     var body: some View {
-        RoundedRectangle(cornerRadius: 22)
+        RoundedRectangle(cornerRadius: Self.cornerRadius, style: .continuous)
             .fill(LanguageParentPalette.dialogFill)
-            .overlay {
-                RoundedRectangle(cornerRadius: 21)
-                    .fill(
-                        LinearGradient(
-                            colors: [Color.white.opacity(0.4), Color.white.opacity(0)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .padding(1)
-            }
-            .overlay {
-                RoundedRectangle(cornerRadius: 22)
-                    .strokeBorder(LanguageParentPalette.dialogStroke, lineWidth: 1)
-            }
+            .shadow(color: MinikPretty.navy.opacity(0.2), radius: 12, x: 0, y: 6)
     }
 }
 

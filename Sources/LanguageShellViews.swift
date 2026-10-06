@@ -1,14 +1,17 @@
 import SwiftUI
 import UIKit
 
-/// Android IntroScreen / fragment_intro_plus and the fixed-header activity menu.
-/// These are Language routes; Math keeps its existing hub.
+/// Android IntroScreen / fragment_intro_plus.xml in the rainbow-sky design: the sky,
+/// the MINIK+plus logo with the score tiles beside it, and a glass panel with the
+/// welcome, Parent Area and Practice. These are Language routes; Math has its own hub.
 struct LanguageIntroView: View {
     let rewards: RewardState
     let variant: ProductVariant
     let onPractice: () -> Void
     let onParentArea: () -> Void
-    @Environment(\.layoutDirection) private var layoutDirection
+    @Environment(\.interfaceLocaleID) private var interfaceLocaleID
+    // Android's sp text follows the font-size setting; this follows Dynamic Type.
+    @ScaledMetric(relativeTo: .title2) private var textPercent: CGFloat = 100
 
     init(
         rewards: RewardState,
@@ -24,80 +27,172 @@ struct LanguageIntroView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let height = max(560, geometry.size.height - 32)
-            let wide = geometry.size.width >= 700
-            let width = max(1, min(760, geometry.size.width - (wide ? 104 : 48)))
-            ScrollView {
-                VStack(spacing: 12) {
-                    HStack(alignment: .top, spacing: 12) {
-                        logo(wide: wide, screenHeight: geometry.size.height)
-                        Spacer(minLength: 0)
-                        HStack(spacing: 8) {
-                            LanguageStatistic(title: "Points", value: rewards.points)
-                            LanguageStatistic(title: "Best streak", value: Int64(rewards.bestStreak))
+            let metrics = LanguagePrettyMetrics(size: geometry.size)
+            let panelWidth = max(1, min(metrics.panelMaxWidth, geometry.size.width - 2 * metrics.panelMargin))
+            let artWidth = max(1, min(metrics.welcomeMaxWidth, panelWidth - 2 * metrics.welcomeMargin))
+            VStack(spacing: 0) {
+                header(metrics)
+                MinikGlassPanel(padding: 0, cornerRadius: metrics.panelRadius) {
+                    // The panel fits the screen at ordinary sizes, its buttons at the
+                    // bottom; when larger text makes it taller, it scrolls instead.
+                    ViewThatFits(in: .vertical) {
+                        panelContent(metrics, artWidth: artWidth, fillsHeight: true)
+                        ScrollView {
+                            panelContent(metrics, artWidth: artWidth, fillsHeight: false)
                         }
-                        .frame(maxWidth: 280)
+                        .scrollBounceBehavior(.basedOnSize)
+                        .scrollIndicators(.hidden)
                     }
-                    Text("Welcome to Minik!")
-                        .font(.title2.bold())
-                        .foregroundStyle(LanguagePalette.title)
-                        .multilineTextAlignment(.center)
-                    MinikArtworkImage(name: MinikVisualAsset.welcome)
-                        .scaleEffect(x: layoutDirection == .rightToLeft ? 1 : -1, y: 1)
-                        .frame(height: min(wide ? 250 : 180, max(90, height - 430)))
-                        .padding(.horizontal, -20)
-                    Spacer(minLength: 8)
-                    Button(action: onParentArea) {
-                        Text("Parent Area").frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(LanguageOutlineActionStyle())
-                    Button(action: onPractice) {
-                        Text("Practice").frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(LanguageOutlineActionStyle())
+                    .clipShape(RoundedRectangle(cornerRadius: metrics.panelRadius, style: .continuous))
                 }
-                .padding(20)
-                .frame(width: width)
-                .frame(minHeight: height)
-                .background(.white, in: RoundedRectangle(cornerRadius: wide ? 24 : 16))
-                .padding(.vertical, 16)
-                .frame(maxWidth: .infinity)
+                .frame(width: panelWidth)
+                .frame(maxHeight: .infinity)
+                .padding(.top, metrics.panelTopMargin)
+                .padding(.bottom, metrics.panelBottomMargin)
             }
-            // The panel fits the screen at ordinary sizes; when larger text or a
-            // short screen makes it taller, it scrolls instead of cutting off.
-            .scrollBounceBehavior(.basedOnSize)
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
         }
         // A background never sizes the layout (see LanguageActivityScreen).
         .background {
-            MinikArtworkBackground()
-                .ignoresSafeArea()
+            MinikSkyBackground()
         }
     }
 
-    /// IntroScreen: English Only shows minik_plus_english_only in Android's
-    /// English box with a -8 dp start margin in place of the Plus logo's 13 dp
-    /// (26 dp on tablets), so its "MINIK" starts about where "MINIKplus" does.
-    @ViewBuilder
-    private func logo(wide: Bool, screenHeight: CGFloat) -> some View {
-        if LanguageEnglishOnlyLogoAsset.isShown(for: variant) {
-            let box = LanguageEnglishOnlyLogoAsset.box(screenHeight: screenHeight, tablet: wide)
-            let plusStart: CGFloat = wide ? 26 : 13
-            LanguageEnglishOnlyLogo()
-                .frame(width: box.width, height: box.height)
-                .padding(.leading, LanguageEnglishOnlyLogoAsset.startMargin - plusStart)
-        } else {
+    /// The logo at the start and the Points and Best Streak tiles at the end, on the sky.
+    private func header(_ metrics: LanguagePrettyMetrics) -> some View {
+        HStack(alignment: .center, spacing: metrics.statGap) {
             MinikLanguageLogo()
-                .frame(width: wide ? 88 : 70, height: wide ? 95 : 76)
+                .frame(width: metrics.logoWidth, height: metrics.logoHeight)
+            Spacer(minLength: 0)
+            LanguagePrettyStatTile(
+                kind: .points,
+                title: interfaceLocaleID.text("Points"),
+                value: rewards.points,
+                metrics: metrics
+            )
+            LanguagePrettyStatTile(
+                kind: .streak,
+                title: interfaceLocaleID.text("Best streak"),
+                value: Int64(rewards.bestStreak),
+                metrics: metrics
+            )
         }
+        .padding(.horizontal, metrics.screenMargin)
+        .padding(.top, metrics.topMargin)
+    }
+
+    /// The navy welcome title, Minik on the rainbow, and the two big pill buttons:
+    /// Parent Area (purple) and Practice (warm), as on Android; centred in the panel
+    /// when it has room to spare (tall phones, iPad).
+    private func panelContent(_ metrics: LanguagePrettyMetrics, artWidth: CGFloat, fillsHeight: Bool) -> some View {
+        VStack(spacing: 0) {
+            if fillsHeight {
+                Spacer(minLength: 0)
+            }
+            Text(interfaceLocaleID.text("Welcome"))
+                .font(MinikPretty.titleFont(metrics.introTitleSize * textScale))
+                .foregroundStyle(MinikPretty.navy)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.7)
+                .padding(.horizontal, metrics.introContentMargin)
+                .accessibilityAddTraits(.isHeader)
+            MinikArtworkImage(name: MinikPretty.Art.welcome)
+                .frame(width: artWidth, height: artWidth / MinikPretty.Art.welcomeAspect)
+                .padding(.top, 2)
+                .padding(.bottom, metrics.introSectionGap)
+            VStack(spacing: metrics.buttonGap) {
+                Button(action: onParentArea) {
+                    Text(interfaceLocaleID.text("Parent Area"))
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(MinikPretty.HeroButtonStyle(
+                    look: MinikPretty.PillLook.purple,
+                    fontSize: metrics.buttonTextSize * textScale,
+                    minHeight: metrics.buttonHeight
+                ))
+                Button(action: onPractice) {
+                    Text(interfaceLocaleID.text("Practice"))
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(MinikPretty.HeroButtonStyle(
+                    look: MinikPretty.PillLook.warm,
+                    fontSize: metrics.buttonTextSize * textScale,
+                    minHeight: metrics.buttonHeight
+                ))
+            }
+            .frame(maxWidth: metrics.introColumnMaxWidth)
+            .padding(.horizontal, metrics.introContentMargin)
+            if fillsHeight {
+                Spacer(minLength: 0)
+            }
+        }
+        .padding(.top, metrics.introTitleTop)
+        .padding(.bottom, metrics.introContentBottom)
+        .frame(maxWidth: .infinity)
+    }
+
+    /// Dynamic Type for the intro's text, within what its fixed layout holds.
+    private var textScale: CGFloat {
+        min(1.3, max(0.9, textPercent / 100))
+    }
+}
+
+/// IntroScreen's score tiles on the sky: Points on lavender, Best Streak on soft
+/// yellow with the trophy, both with a white rim.
+private struct LanguagePrettyStatTile: View {
+    enum Kind {
+        case points
+        case streak
+    }
+
+    let kind: Kind
+    let title: String
+    let value: Int64
+    let metrics: LanguagePrettyMetrics
+
+    var body: some View {
+        VStack(spacing: 2) {
+            HStack(spacing: 3) {
+                if kind == .streak {
+                    MinikArtworkImage(name: MinikVisualAsset.trophy)
+                        .frame(width: metrics.statTrophy, height: metrics.statTrophy)
+                }
+                Text(title)
+                    .font(MinikPretty.titleFont(metrics.statTitleSize))
+                    .foregroundStyle(kind == .points ? MinikPretty.color(0x6A55D6) : MinikPretty.color(0x8A6418))
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.6)
+            }
+            Text(value, format: .number)
+                .font(MinikPretty.titleFont(metrics.statValueSize))
+                .foregroundStyle(kind == .points ? MinikPretty.color(0x4A36C8) : MinikPretty.color(0xA86400))
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        }
+        .padding(.horizontal, 6)
+        .padding(.vertical, 2)
+        .frame(width: kind == .points ? metrics.statWidth : metrics.statStreakWidth, height: metrics.statHeight)
+        .background(
+            kind == .points ? MinikPretty.lavender : MinikPretty.color(0xFFF4CF),
+            in: RoundedRectangle(cornerRadius: metrics.statRadius, style: .continuous)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: metrics.statRadius, style: .continuous)
+                .strokeBorder(Color.white, lineWidth: 2)
+        }
+        .accessibilityElement(children: .combine)
     }
 }
 
 /// Android's Plus activity menu (fragment_select_screen_plus.xml and
-/// ButtonsMenuFragment): a white card inset on the Minik background, the logo
-/// at its start with Home and Trophy centred beside it, and below them a
-/// scrolling board of Letters, Words and Games: pairs of shallow framed artwork
-/// tiles with two-line captions, Flash Cards alone and centred under the Words.
-/// The Trophy opens the Top 20 as a dialog over the menu, as Android does.
+/// ButtonsMenuFragment) in the rainbow-sky design: the logo with the round Home and
+/// Trophy buttons on the sky, and below them a glass panel whose board scrolls
+/// through Letters, Words and Games: a colored section pill each, then pastel cards
+/// in pairs, each with a Minik cat and a white name strip, Flash Cards alone and
+/// centred under the Words. The Trophy opens the Top 20 as a dialog over the menu,
+/// as Android does.
 struct LanguageMenuView: View {
     let configuration: ProductConfiguration
     let learnedLanguage: LanguageIdentifier
@@ -107,12 +202,8 @@ struct LanguageMenuView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     // Android's sp text follows the font-size setting; these follow Dynamic Type.
-    @ScaledMetric(relativeTo: .headline) private var sectionTitlePercent: CGFloat = 100
-    @ScaledMetric(relativeTo: .title2) private var wideSectionTitlePercent: CGFloat = 100
-    @ScaledMetric(relativeTo: .footnote) private var captionPercent: CGFloat = 100
-    @ScaledMetric(relativeTo: .title3) private var wideCaptionPercent: CGFloat = 100
+    @ScaledMetric(relativeTo: .headline) private var captionPercent: CGFloat = 100
     @ScaledMetric(relativeTo: .callout) private var hintPercent: CGFloat = 100
-    @ScaledMetric(relativeTo: .title2) private var wideHintPercent: CGFloat = 100
     @StateObject private var speechPlayer = InterfaceSpeechPlayer()
     @State private var scrollTracker = LanguageMenuScrollTracker()
     @State private var didRegisterPresentation = false
@@ -136,36 +227,36 @@ struct LanguageMenuView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let metrics = LanguageMenuMetrics(
-                size: geometry.size,
-                englishOnlyLogo: LanguageEnglishOnlyLogoAsset.isShown(for: configuration.variant)
-            )
-            let cardWidth = max(1, min(metrics.cardMaxWidth, geometry.size.width - 2 * metrics.cardSideMargin))
-            let contentWidth = max(1, cardWidth - 2 * metrics.contentSidePadding)
+            let metrics = LanguagePrettyMetrics(size: geometry.size)
+            let panelWidth = max(1, min(metrics.panelMaxWidth, geometry.size.width - 2 * metrics.panelMargin))
+            let contentWidth = max(1, panelWidth - 2 * metrics.panelPadding)
             // Accessibility text on a phone gets one column, so captions wrap
             // between words rather than letter by letter.
             let sections = menuSections(singleColumn: dynamicTypeSize.isAccessibilitySize && !metrics.tablet)
             ScrollViewReader { proxy in
-                card(metrics: metrics, contentWidth: contentWidth, sections: sections, proxy: proxy)
-                    .frame(width: cardWidth)
+                VStack(spacing: 0) {
+                    header(metrics)
+                    MinikGlassPanel(padding: 0, cornerRadius: metrics.panelRadius) {
+                        board(metrics: metrics, contentWidth: contentWidth, sections: sections, proxy: proxy)
+                            .clipShape(RoundedRectangle(cornerRadius: metrics.panelRadius, style: .continuous))
+                    }
+                    .frame(width: panelWidth)
                     .frame(maxHeight: .infinity)
-                    .background(.white, in: RoundedRectangle(cornerRadius: metrics.cardCornerRadius))
-                    .clipShape(RoundedRectangle(cornerRadius: metrics.cardCornerRadius))
-                    .padding(.top, metrics.cardTopMargin)
-                    .padding(.bottom, metrics.cardBottomMargin)
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .onAppear {
-                        registerPresentation(using: proxy)
-                    }
-                    .onChange(of: contentContinuesBelow) { _, continues in
-                        applyStoreScreenshotScroll(continues: continues, using: proxy)
-                    }
+                    .padding(.top, metrics.panelTopMargin)
+                    .padding(.bottom, metrics.panelBottomMargin)
+                }
+                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
+                .onAppear {
+                    registerPresentation(using: proxy)
+                }
+                .onChange(of: contentContinuesBelow) { _, continues in
+                    applyStoreScreenshotScroll(continues: continues, using: proxy)
+                }
             }
         }
         // A background never sizes the layout (see LanguageActivityScreen).
         .background {
-            MinikArtworkBackground()
-                .ignoresSafeArea()
+            MinikSkyBackground()
         }
         .overlay {
             if recordsArePresented {
@@ -208,14 +299,69 @@ struct LanguageMenuView: View {
         scrollHintEligible && contentContinuesBelow
     }
 
-    private func card(
-        metrics: LanguageMenuMetrics,
+    /// The logo at the start; Home and Trophy as white round buttons centred in the
+    /// space beside it (plusMenuTopButtons).
+    private func header(_ metrics: LanguagePrettyMetrics) -> some View {
+        HStack(alignment: .center, spacing: 0) {
+            MinikLanguageLogo()
+                .frame(width: metrics.logoWidth, height: metrics.logoHeight)
+            Spacer(minLength: metrics.roundButtonGap)
+            HStack(spacing: metrics.roundButtonGap) {
+                roundButton(
+                    imageName: MinikVisualAsset.home,
+                    padding: metrics.homePadding,
+                    label: interfaceLocaleID.text("Home"),
+                    metrics: metrics
+                ) {
+                    // Home goes to the Intro, whose Practice opens a new menu.
+                    scrollTracker.leavesForNewMenu = true
+                    onHome()
+                }
+                roundButton(
+                    imageName: MinikVisualAsset.trophy,
+                    padding: metrics.trophyPadding,
+                    label: interfaceLocaleID.text("Top 20 records"),
+                    metrics: metrics
+                ) {
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        recordsArePresented = true
+                    }
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, metrics.screenMargin)
+        .padding(.top, metrics.topMargin)
+    }
+
+    /// bg_round_button_white with the art inside it.
+    private func roundButton(
+        imageName: String,
+        padding: CGFloat,
+        label: String,
+        metrics: LanguagePrettyMetrics,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            MinikArtworkImage(name: imageName)
+                .padding(padding)
+                .frame(width: metrics.roundButton, height: metrics.roundButton)
+                .background {
+                    MinikPretty.RoundButtonBackground()
+                }
+                .contentShape(Circle())
+        }
+        .buttonStyle(MinikPretty.PressScaleStyle())
+        .accessibilityLabel(Text(label))
+    }
+
+    private func board(
+        metrics: LanguagePrettyMetrics,
         contentWidth: CGFloat,
         sections: [LanguageMenuSection],
         proxy: ScrollViewProxy
     ) -> some View {
         VStack(spacing: 0) {
-            header(metrics)
             // The board scrolls below the logo row, which stays in place.
             ScrollView {
                 menuContent(metrics: metrics, contentWidth: contentWidth, sections: sections)
@@ -230,74 +376,20 @@ struct LanguageMenuView: View {
                 }
             }
             // Like Android's scrollDownHint, the hint takes its own space at the
-            // bottom of the card rather than covering the board.
+            // bottom of the panel rather than covering the board.
             if showsScrollHint {
                 scrollHint(metrics) {
                     scrollFurther(sections: sections, using: proxy)
                 }
                 .padding(.horizontal, metrics.hintSideMargin)
+                .padding(.top, 6)
                 .padding(.bottom, metrics.hintBottomMargin)
             }
         }
     }
 
-    /// The logo 12 dp from the top at the start; Home and Trophy centred across
-    /// the card and centred on the logo's lower part (their 20 dp top margin), so
-    /// they reach a little below it, where the board passes over them.
-    private func header(_ metrics: LanguageMenuMetrics) -> some View {
-        ZStack(alignment: .top) {
-            headerLogo(metrics)
-                .frame(width: metrics.logoWidth, height: metrics.logoHeight)
-                .padding(.leading, metrics.logoStart)
-                .padding(.top, metrics.logoTop)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            HStack(alignment: .top, spacing: 0) {
-                Button {
-                    // Home goes to the Intro, whose Practice opens a new menu.
-                    scrollTracker.leavesForNewMenu = true
-                    onHome()
-                } label: {
-                    MinikArtworkImage(name: MinikVisualAsset.home)
-                        .padding(metrics.iconPadding)
-                        .frame(width: metrics.homeSize, height: metrics.homeSize)
-                        .contentShape(Rectangle())
-                }
-                .accessibilityLabel(Text(interfaceLocaleID.text("Home")))
-                .padding(.top, metrics.homeTop)
-                Button {
-                    withAnimation(.easeOut(duration: 0.2)) {
-                        recordsArePresented = true
-                    }
-                } label: {
-                    MinikArtworkImage(name: MinikVisualAsset.trophy)
-                        .padding(metrics.iconPadding)
-                        .frame(width: metrics.trophyWidth, height: metrics.trophyHeight)
-                        .contentShape(Rectangle())
-                }
-                .accessibilityLabel(Text(interfaceLocaleID.text("Top 20 records")))
-                .padding(.leading, metrics.homeEnd)
-                .padding(.top, metrics.trophyTop)
-            }
-            .buttonStyle(.plain)
-            .padding(.top, metrics.headerGroupTop)
-            .frame(maxWidth: .infinity)
-        }
-        .frame(height: metrics.headerHeight, alignment: .top)
-    }
-
-    /// ButtonsMenuFragment: English Only swaps minik_plus_logo for
-    /// minik_plus_english_only, fitted in its own box (see LanguageMenuMetrics).
-    @ViewBuilder
-    private func headerLogo(_ metrics: LanguageMenuMetrics) -> some View {
-        if metrics.showsEnglishOnlyLogo {
-            LanguageEnglishOnlyLogo()
-        } else {
-            MinikLanguageLogo()
-        }
-    }
-
     private func menuContent(
-        metrics: LanguageMenuMetrics,
+        metrics: LanguagePrettyMetrics,
         contentWidth: CGFloat,
         sections: [LanguageMenuSection]
     ) -> some View {
@@ -305,12 +397,12 @@ struct LanguageMenuView: View {
             VStack(spacing: 0) {
                 ForEach(sections) { section in
                     sectionView(section, metrics: metrics, contentWidth: contentWidth)
-                        .padding(.top, section.isFirst ? 0 : metrics.sectionGap)
+                        .padding(.top, section.isFirst ? 0 : metrics.sectionTopGap)
                 }
             }
-            .padding(.horizontal, metrics.contentSidePadding)
-            .padding(.top, metrics.contentTopPadding)
-            .padding(.bottom, metrics.contentBottomPadding)
+            .padding(.horizontal, metrics.panelPadding)
+            .padding(.top, metrics.panelPaddingTop)
+            .padding(.bottom, metrics.panelPaddingBottom)
             // The end of the board: once it is in view, Android's
             // canScrollVertically(1) is false and the hint goes away.
             Color.clear
@@ -327,22 +419,23 @@ struct LanguageMenuView: View {
 
     private func sectionView(
         _ section: LanguageMenuSection,
-        metrics: LanguageMenuMetrics,
+        metrics: LanguagePrettyMetrics,
         contentWidth: CGFloat
     ) -> some View {
         VStack(spacing: 0) {
-            Text(section.title)
-                .font(.system(size: sectionTitleFontSize(metrics), weight: .bold))
-                .foregroundStyle(LanguagePalette.menuText)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.trailing, 4)
-                .padding(.bottom, metrics.sectionTitleBottom)
-                .accessibilityAddTraits(.isHeader)
-                .id(section.titleScrollID)
-                .background { scrollTargetProbe(section.titleScrollID) }
+            MinikPretty.SectionBanner(
+                title: section.title,
+                look: sectionLook(section.id),
+                icon: MinikPretty.SectionBanner.Icon.art(sectionIconName(section.id)),
+                tablet: metrics.tablet,
+                scale: metrics.scale
+            )
+            .padding(.bottom, metrics.sectionGap)
+            .id(section.titleScrollID)
+            .background { scrollTargetProbe(section.titleScrollID) }
             ForEach(section.rows) { row in
                 rowView(row, metrics: metrics, contentWidth: contentWidth)
-                    .padding(.top, row.isFirst ? 0 : metrics.rowGap)
+                    .padding(.top, row.isFirst ? 0 : metrics.cardRowGap)
                     .id(row.id)
                     .background { scrollTargetProbe(row.id) }
             }
@@ -359,129 +452,151 @@ struct LanguageMenuView: View {
     @ViewBuilder
     private func rowView(
         _ row: LanguageMenuRow,
-        metrics: LanguageMenuMetrics,
+        metrics: LanguagePrettyMetrics,
         contentWidth: CGFloat
     ) -> some View {
         if row.activities.count > 1 {
-            // Two weighted cells 20 dp apart; the row's gravity centres a shorter
-            // cell vertically.
-            HStack(alignment: .center, spacing: metrics.columnGap) {
+            // Two weighted cards 12 dp (18 dp) apart, as tall as the taller of them.
+            HStack(alignment: .top, spacing: metrics.cardGap) {
                 ForEach(row.activities) { activity in
-                    tile(activity, metrics: metrics, frameWidth: nil)
-                        .frame(maxWidth: .infinity)
+                    tile(activity, metrics: metrics)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
+            .fixedSize(horizontal: false, vertical: true)
         } else if let activity = row.activities.first {
-            if row.fullWidth {
-                tile(activity, metrics: metrics, frameWidth: columnWidth(metrics, contentWidth: contentWidth))
-            } else {
-                tile(activity, metrics: metrics, frameWidth: nil)
-                    .frame(width: singleTileWidth(activity, metrics: metrics, contentWidth: contentWidth))
-                    .frame(maxWidth: .infinity)
-            }
+            // Flash Cards alone, a column wide and centred; accessibility text on a
+            // phone gives every card the whole width.
+            tile(activity, metrics: metrics)
+                .frame(width: row.fullWidth ? contentWidth : columnWidth(metrics, contentWidth: contentWidth))
+                .frame(maxWidth: .infinity)
         }
     }
 
-    /// One menu button: the framed artwork and its caption below, the whole cell
-    /// tappable as Android's transparent MaterialButton covering both.
-    private func tile(_ activity: LanguageActivityKind, metrics: LanguageMenuMetrics, frameWidth: CGFloat?) -> some View {
+    /// One menu card: the pastel card with the cat art and the white name strip,
+    /// the whole card tappable as Android's transparent MaterialButton over it.
+    private func tile(_ activity: LanguageActivityKind, metrics: LanguagePrettyMetrics) -> some View {
         let title = menuCaption(for: activity)
         return Button {
             scrollTracker.leavesForNewMenu = !Self.opensOverMenu(activity)
             onSelect(activity)
         } label: {
-            VStack(spacing: 0) {
-                tileFrame(activity, metrics: metrics)
-                    .frame(width: frameWidth)
+            VStack(spacing: metrics.cardLabelGap) {
+                tileArtwork(activity, metrics: metrics)
                 Text(title)
-                    .font(.system(size: captionFontSize(metrics), weight: .bold))
-                    .lineSpacing(1)
+                    .font(MinikPretty.titleFont(captionFontSize(metrics)))
+                    .foregroundStyle(MinikPretty.navy)
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(LanguagePalette.menuText)
+                    .lineSpacing(1)
+                    .minimumScaleFactor(0.75)
                     .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, metrics.captionTop)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 4)
+                    .frame(maxWidth: .infinity, minHeight: metrics.cardLabelMinHeight, maxHeight: .infinity)
+                    .background {
+                        RoundedRectangle(cornerRadius: metrics.cardLabelRadius, style: .continuous)
+                            .fill(Color.white.opacity(0.94))
+                    }
             }
-            .contentShape(Rectangle())
+            .padding(.horizontal, metrics.cardPadding)
+            .padding(.top, metrics.cardPadding)
+            .padding(.bottom, metrics.cardPaddingBottom)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background {
+                MinikPretty.CardBackground(tint: cardTint(for: activity), cornerRadius: metrics.cardRadius)
+            }
+            .contentShape(RoundedRectangle(cornerRadius: metrics.cardRadius, style: .continuous))
         }
-        .buttonStyle(.plain)
+        .buttonStyle(MinikPretty.PressScaleStyle())
         .accessibilityLabel(Text(title.replacingOccurrences(of: "\n", with: " ")))
     }
 
-    /// bg_minik_gradient_rounded (12 dp corners) behind a white card with 10 dp
-    /// corners: the frame shows 5 dp at the start and bottom and 2 dp at the top
-    /// and end (7 and 3 dp on tablets). The gradient is not mirrored: purple on the
-    /// physical left, teal on the right, in Hebrew as well.
-    private func tileFrame(_ activity: LanguageActivityKind, metrics: LanguageMenuMetrics) -> some View {
-        let innerShape = RoundedRectangle(cornerRadius: metrics.innerCornerRadius)
-        return innerShape
-            .fill(.white)
-            .overlay { tileArtwork(activity, metrics: metrics) }
-            .clipShape(innerShape)
-            .padding(metrics.frameInsets)
-            .frame(height: metrics.tileHeight)
-            .background {
-                RoundedRectangle(cornerRadius: metrics.outerCornerRadius)
-                    .fill(LanguagePalette.border)
-                    .environment(\.layoutDirection, .leftToRight)
-            }
-    }
-
     @ViewBuilder
-    private func tileArtwork(_ activity: LanguageActivityKind, metrics: LanguageMenuMetrics) -> some View {
+    private func tileArtwork(_ activity: LanguageActivityKind, metrics: LanguagePrettyMetrics) -> some View {
         if let name = menuArtworkName(for: activity) {
-            artworkImage(name, box: artworkBox(for: activity, metrics: metrics))
+            MinikArtworkImage(name: name)
+                .frame(maxWidth: .infinity)
+                .frame(height: metrics.cardArtHeight)
+        } else {
+            Color.clear
+                .frame(height: metrics.cardArtHeight)
         }
     }
 
-    private func artworkImage(_ name: String, box: LanguageMenuArtworkBox) -> some View {
-        MinikArtworkImage(name: name)
-            .frame(width: box.width, height: box.height)
-    }
-
-    /// ButtonsMenuFragment shows minik_plus_letters_drag_logo_heb on Answers with
-    /// Words whichever language is learned.
+    /// ButtonsMenuFragment (pretty design): the pastel Minik cats; the Letters art
+    /// follows the learned language.
     private func menuArtworkName(for activity: LanguageActivityKind) -> String? {
-        if activity == .imageToWord {
-            return MinikVisualAsset.activityArtwork(for: .wordBuild, language: .hebrew)
+        let english = learnedLanguage == .english
+        switch activity {
+        case .learn:
+            return english ? MinikPretty.Art.catAbcBook : MinikPretty.Art.catHebrewBook
+        case .letterPairs:
+            return MinikPretty.Art.pairs
+        case .firstLetterChoices:
+            return english ? MinikPretty.Art.firstLetterChoicesEnglish : MinikPretty.Art.firstLetterChoicesHebrew
+        case .firstLetterPictures:
+            return english ? MinikPretty.Art.firstLetterPicturesEnglish : MinikPretty.Art.firstLetterPicturesHebrew
+        case .imageToWord:
+            return MinikPretty.Art.catPencil
+        case .wordToImage:
+            return MinikPretty.Art.pictureAnswers
+        case .wordBuild:
+            return MinikPretty.Art.catBlocks
+        case .mixed:
+            return MinikPretty.Art.catStarPaper
+        case .wordCards:
+            return MinikPretty.Art.flashCards
+        case .soccer:
+            return MinikPretty.Art.soccer
+        case .tower:
+            return MinikPretty.Art.tower
+        case .wordMemory:
+            return MinikPretty.Art.memory
+        case .ticTacToe:
+            return MinikPretty.Art.ticTacToe
+        case .multipleChoice, .build, .pairs, .memory:
+            return MinikVisualAsset.activityArtwork(for: activity, language: learnedLanguage)
         }
-        return MinikVisualAsset.activityArtwork(for: activity, language: learnedLanguage)
     }
 
-    /// The artwork's view in the layouts: most are sized by height alone (the width
-    /// follows the image), the rest fit a square; images taller than the card are
-    /// cropped by it, as on Android. The First Letter and Flash Cards sizes are set
-    /// by ButtonsMenuFragment for the learned language on phones and tablets alike.
-    private func artworkBox(for activity: LanguageActivityKind, metrics: LanguageMenuMetrics) -> LanguageMenuArtworkBox {
-        let hebrew = learnedLanguage == .hebrew
-        let scale = metrics.tablet ? metrics.scale : 1
+    /// fragment_select_screen_plus.xml's card colors (bg_menu_card_*).
+    private func cardTint(for activity: LanguageActivityKind) -> MinikPretty.CardTint {
         switch activity {
-        case .firstLetterChoices, .firstLetterPictures:
-            let side: CGFloat = (hebrew ? 110 : 80) * scale
-            return LanguageMenuArtworkBox(width: side, height: side)
-        case .wordCards:
-            let side: CGFloat = (hebrew ? 125 : 75) * scale
-            return LanguageMenuArtworkBox(width: side, height: side)
-        default:
-            break
+        case .learn, .wordToImage:
+            return .pink
+        case .letterPairs, .wordBuild, .tower:
+            return .mint
+        case .firstLetterChoices, .mixed:
+            return .yellow
+        case .firstLetterPictures, .wordCards, .ticTacToe:
+            return .blue
+        case .imageToWord, .wordMemory:
+            return .lavender
+        case .soccer:
+            return .peach
+        case .multipleChoice, .build, .pairs, .memory:
+            return .lavender
         }
-        if metrics.tablet {
-            let side: CGFloat = (activity == .learn ? 112 : 84) * scale
-            return LanguageMenuArtworkBox(width: side, height: side)
+    }
+
+    /// bg_section_pill_letters, _words and _games.
+    private func sectionLook(_ id: String) -> MinikPretty.PillLook {
+        switch id {
+        case "letters": return MinikPretty.PillLook.bannerPurple
+        case "words": return MinikPretty.PillLook.bannerBlue
+        default: return MinikPretty.PillLook.bannerWarm
         }
-        switch activity {
-        case .letterPairs:
-            return LanguageMenuArtworkBox(width: nil, height: 72)
-        case .tower:
-            return LanguageMenuArtworkBox(width: 80, height: 80)
-        case .wordMemory:
-            return LanguageMenuArtworkBox(width: 74, height: 74)
-        case .ticTacToe:
-            return LanguageMenuArtworkBox(width: 54, height: 54)
+    }
+
+    /// lettersSectionIcon follows the learned language (ABC or alef-bet).
+    private func sectionIconName(_ id: String) -> String {
+        switch id {
+        case "letters":
+            return learnedLanguage == .english ? MinikPretty.Art.iconAbc : MinikPretty.Art.iconAlefBet
+        case "words":
+            return MinikPretty.Art.iconBook
         default:
-            return LanguageMenuArtworkBox(width: nil, height: 74)
+            return MinikPretty.Art.iconGames
         }
     }
 
@@ -490,54 +605,41 @@ struct LanguageMenuView: View {
             ?? interfaceLocaleID.text(activity.titleKey)
     }
 
-    private func columnWidth(_ metrics: LanguageMenuMetrics, contentWidth: CGFloat) -> CGFloat {
-        max(1, (contentWidth - metrics.columnGap) / 2)
+    private func columnWidth(_ metrics: LanguagePrettyMetrics, contentWidth: CGFloat) -> CGFloat {
+        max(1, (contentWidth - metrics.cardGap) / 2)
     }
 
-    /// Flash Cards spans 46% of the board (48% on tablets); any other lone tile
-    /// keeps a column's width.
-    private func singleTileWidth(
-        _ activity: LanguageActivityKind,
-        metrics: LanguageMenuMetrics,
-        contentWidth: CGFloat
-    ) -> CGFloat {
-        if activity == .wordCards {
-            return max(1, contentWidth * metrics.singleTileFraction)
-        }
-        return columnWidth(metrics, contentWidth: contentWidth)
+    private func captionFontSize(_ metrics: LanguagePrettyMetrics) -> CGFloat {
+        metrics.cardLabelTextSize * captionPercent / 100
     }
 
-    private func sectionTitleFontSize(_ metrics: LanguageMenuMetrics) -> CGFloat {
-        metrics.sectionTitlePoints * (metrics.tablet ? wideSectionTitlePercent : sectionTitlePercent) / 100
+    private func hintFontSize(_ metrics: LanguagePrettyMetrics) -> CGFloat {
+        metrics.hintTextSize * hintPercent / 100
     }
 
-    private func captionFontSize(_ metrics: LanguageMenuMetrics) -> CGFloat {
-        metrics.captionPoints * (metrics.tablet ? wideCaptionPercent : captionPercent) / 100
-    }
-
-    private func hintFontSize(_ metrics: LanguageMenuMetrics) -> CGFloat {
-        metrics.hintTextPoints * (metrics.tablet ? wideHintPercent : hintPercent) / 100
-    }
-
-    /// Android's scrollDownHint: a pale yellow pill with bold text and a down
-    /// chevron after it, shown the first three times the menu opens while more of
-    /// the board lies below.
-    private func scrollHint(_ metrics: LanguageMenuMetrics, action: @escaping () -> Void) -> some View {
+    /// Android's scrollDownHint in the pretty design: a purple pill with a white rim,
+    /// white Fredoka text and a down chevron after it, shown the first three times
+    /// the menu opens while more of the board lies below.
+    private func scrollHint(_ metrics: LanguagePrettyMetrics, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: metrics.hintIconGap) {
                 Text(LanguageMenuAndroidText.scrollHint(interfaceLocaleID))
-                    .font(.system(size: hintFontSize(metrics), weight: .bold))
+                    .font(MinikPretty.titleFont(hintFontSize(metrics)))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                 LanguageMenuChevron()
-                    .fill(LanguagePalette.menuText)
+                    .fill(Color.white)
                     .frame(width: metrics.hintIconSize, height: metrics.hintIconSize)
             }
-            .foregroundStyle(LanguagePalette.menuText)
+            .foregroundStyle(Color.white)
             .padding(.horizontal, metrics.hintHorizontalPadding)
             .frame(minHeight: metrics.hintHeight)
-            .background(LanguagePalette.scrollHintFill, in: Capsule())
-            .shadow(color: .black.opacity(0.2), radius: 2, y: 1)
+            .background(MinikPretty.purple, in: Capsule(style: .continuous))
+            .overlay {
+                Capsule(style: .continuous)
+                    .strokeBorder(Color.white, lineWidth: 2)
+            }
+            .shadow(color: MinikPretty.shadowInk.opacity(0.25), radius: 3, x: 0, y: 2)
         }
         .buttonStyle(.plain)
         .offset(y: scrollHintOffset)
@@ -759,106 +861,89 @@ struct LanguageMenuView: View {
     }
 }
 
-/// fragment_select_screen_plus.xml in points: the phone layout, and the
-/// layout-sw600dp values on iPad. The iPad mini (744 points wide) uses the
-/// tablet values as they are; larger iPads scale them up so the board keeps
-/// its proportions instead of stretching.
-private struct LanguageMenuMetrics {
+/// dimens_pretty.xml in points: the phone values, and the values-sw600dp ones on
+/// iPad (both sides at least 600 points). The iPad mini (744 points wide) uses the
+/// tablet values as they are; larger iPads scale them up a little so the screens
+/// keep their proportions instead of stretching.
+private struct LanguagePrettyMetrics {
     let tablet: Bool
     let scale: CGFloat
-    /// English Only's logo box (see LanguageEnglishOnlyLogoAsset), or nil for
-    /// the Plus wordmark.
-    private let englishOnlyLogoBox: CGSize?
 
-    /// `size` is the safe area: Android picks the English Only logo box by the
-    /// screen height left between the system bars.
-    init(size: CGSize, englishOnlyLogo: Bool) {
-        let isTablet = size.width >= 700
-        let tabletScale: CGFloat = isTablet ? min(1.4, max(1, size.width / 744)) : 1
+    init(size: CGSize) {
+        let isTablet = min(size.width, size.height) >= 600
         tablet = isTablet
-        scale = tabletScale
-        if englishOnlyLogo {
-            let box = LanguageEnglishOnlyLogoAsset.box(screenHeight: size.height, tablet: isTablet)
-            englishOnlyLogoBox = CGSize(width: box.width * tabletScale, height: box.height * tabletScale)
-        } else {
-            englishOnlyLogoBox = nil
-        }
+        scale = isTablet ? min(1.3, max(1, size.width / 744)) : 1
     }
 
     private func value(_ phone: CGFloat, _ tabletValue: CGFloat) -> CGFloat {
         tablet ? tabletValue * scale : phone
     }
 
-    // The white card. Android's links row (the games website and Rate us)
-    // below the card awaits the owner's decision for iOS; until then the
-    // card's bottom margin matches the top one.
-    var cardSideMargin: CGFloat { value(28, 40) }
-    var cardTopMargin: CGFloat { value(18, 38) }
-    var cardBottomMargin: CGFloat { value(18, 38) }
-    var cardMaxWidth: CGFloat { value(1000, 1000) }
-    var cardCornerRadius: CGFloat { value(16, 24) }
+    // The logo row on the sky.
+    var logoHeight: CGFloat { value(82, 120) }
+    var logoWidth: CGFloat { logoHeight * MinikPretty.Art.plusLogoAspect }
+    var screenMargin: CGFloat { value(14, 32) }
+    var topMargin: CGFloat { value(6, 16) }
+    var roundButton: CGFloat { value(58, 84) }
+    var roundButtonGap: CGFloat { value(14, 22) }
+    var homePadding: CGFloat { value(3, 4) }
+    var trophyPadding: CGFloat { value(12, 17) }
 
-    // The logo row.
-    var showsEnglishOnlyLogo: Bool { englishOnlyLogoBox != nil }
-    var logoTop: CGFloat { 12 * (tablet ? scale : 1) }
-    /// English Only's box starts at -8 dp (its image is centred in the box,
-    /// whose transparent start the card clips).
-    var logoStart: CGFloat {
-        if englishOnlyLogoBox != nil {
-            return LanguageEnglishOnlyLogoAsset.startMargin * (tablet ? scale : 1)
-        }
-        return value(11, 12)
-    }
-    var logoHeight: CGFloat { englishOnlyLogoBox?.height ?? value(70, 95) }
-    /// minik_plus_logo is 121 x 131 pixels and sized by its height.
-    var logoWidth: CGFloat { englishOnlyLogoBox?.width ?? logoHeight * 121 / 131 }
-    /// Home and Trophy are constrained to the logo's top and bottom and the
-    /// board starts at its bottom, so both follow the logo's box.
-    var headerHeight: CGFloat { logoTop + logoHeight }
-    var homeSize: CGFloat { value(64, 86) }
-    var homeTop: CGFloat { value(0, 10) }
-    var homeEnd: CGFloat { value(10, 25) }
-    var trophyWidth: CGFloat { value(58, 86) }
-    var trophyHeight: CGFloat { value(54, 76) }
-    var trophyTop: CGFloat { value(5, 11) }
-    var iconPadding: CGFloat { 2 * (tablet ? scale : 1) }
-    /// Home and Trophy are constrained to the logo's top and bottom with a top
-    /// margin (20 dp, 15 dp on tablets), so they centre on the space below it.
-    var headerGroupTop: CGFloat {
-        let groupMargin = value(20, 15)
-        let groupHeight = max(homeTop + homeSize, trophyTop + trophyHeight)
-        return logoTop + groupMargin + (logoHeight - groupMargin - groupHeight) / 2
-    }
+    // The glass panel.
+    var panelMargin: CGFloat { value(12, 32) }
+    var panelTopMargin: CGFloat { value(6, 12) }
+    var panelBottomMargin: CGFloat { value(10, 16) }
+    var panelRadius: CGFloat { value(28, 36) }
+    var panelMaxWidth: CGFloat { value(640, 820) }
+    var panelPadding: CGFloat { value(12, 22) }
+    var panelPaddingTop: CGFloat { value(14, 22) }
+    var panelPaddingBottom: CGFloat { value(26, 34) }
 
-    // The scrolling board.
-    var contentSidePadding: CGFloat { value(20, 40) }
-    var contentTopPadding: CGFloat { value(20, 30) }
-    var contentBottomPadding: CGFloat { value(28, 40) }
-    var sectionTitlePoints: CGFloat { value(17, 24) }
-    var sectionTitleBottom: CGFloat { value(6, 12) }
-    var sectionGap: CGFloat { value(24, 38) }
-    var rowGap: CGFloat { value(16, 28) }
-    var columnGap: CGFloat { value(20, 36) }
-    var singleTileFraction: CGFloat { tablet ? 0.48 : 0.46 }
+    // The menu's sections and cards.
+    var sectionGap: CGFloat { value(10, 14) }
+    var sectionTopGap: CGFloat { value(20, 28) }
+    var cardPadding: CGFloat { value(6, 10) }
+    var cardPaddingBottom: CGFloat { value(9, 13) }
+    var cardArtHeight: CGFloat { value(98, 160) }
+    var cardLabelGap: CGFloat { value(4, 6) }
+    var cardLabelMinHeight: CGFloat { value(44, 58) }
+    var cardLabelTextSize: CGFloat { value(15, 20) }
+    var cardLabelRadius: CGFloat { value(16, 18) }
+    var cardRowGap: CGFloat { value(12, 18) }
+    var cardGap: CGFloat { value(12, 18) }
+    var cardRadius: CGFloat { value(22, 26) }
 
-    // A tile.
-    var tileHeight: CGFloat { value(78, 116) }
-    var frameInsets: EdgeInsets {
-        EdgeInsets(top: value(2, 3), leading: value(5, 7), bottom: value(5, 7), trailing: value(2, 3))
-    }
-    var outerCornerRadius: CGFloat { 12 * (tablet ? scale : 1) }
-    var innerCornerRadius: CGFloat { value(10, 16) }
-    var captionTop: CGFloat { value(5, 8) }
-    var captionPoints: CGFloat { value(13, 20) }
-
-    // The "more below" hint.
-    var hintHeight: CGFloat { value(52, 64) }
+    // The "more below" hint (scrollDownHint).
+    var hintHeight: CGFloat { value(50, 60) }
     var hintSideMargin: CGFloat { value(16, 24) }
-    var hintBottomMargin: CGFloat { value(10, 16) }
-    var hintHorizontalPadding: CGFloat { value(18, 24) }
-    var hintTextPoints: CGFloat { value(16, 22) }
-    var hintIconSize: CGFloat { value(28, 34) }
+    var hintBottomMargin: CGFloat { value(12, 16) }
+    var hintHorizontalPadding: CGFloat { value(20, 24) }
+    var hintTextSize: CGFloat { value(16, 20) }
+    var hintIconSize: CGFloat { value(26, 30) }
     var hintIconGap: CGFloat { value(8, 10) }
+
+    // The intro's score tiles.
+    var statWidth: CGFloat { value(88, 128) }
+    var statStreakWidth: CGFloat { value(100, 140) }
+    var statHeight: CGFloat { value(62, 86) }
+    var statGap: CGFloat { value(10, 20) }
+    var statRadius: CGFloat { value(20, 22) }
+    var statTitleSize: CGFloat { value(12, 18) }
+    var statValueSize: CGFloat { value(18, 26) }
+    var statTrophy: CGFloat { value(15, 24) }
+
+    // The intro's panel.
+    var introTitleTop: CGFloat { value(16, 30) }
+    var introTitleSize: CGFloat { value(25, 36) }
+    var welcomeMargin: CGFloat { value(12, 30) }
+    var welcomeMaxWidth: CGFloat { value(460, 600) }
+    var introContentMargin: CGFloat { value(22, 40) }
+    var introColumnMaxWidth: CGFloat { value(520, 600) }
+    var introSectionGap: CGFloat { value(12, 20) }
+    var introContentBottom: CGFloat { value(22, 30) }
+    var buttonHeight: CGFloat { value(68, 84) }
+    var buttonGap: CGFloat { value(12, 20) }
+    var buttonTextSize: CGFloat { value(28, 36) }
 }
 
 private struct LanguageMenuRow: Identifiable {
@@ -877,12 +962,6 @@ private struct LanguageMenuSection: Identifiable {
 
     var titleScrollID: String { "title-" + id }
     var scrollTargetIDs: [String] { [titleScrollID] + rows.map(\.id) }
-}
-
-private struct LanguageMenuArtworkBox {
-    /// Nil when Android sizes the image by its height alone.
-    let width: CGFloat?
-    let height: CGFloat
 }
 
 private enum LanguageMenuScrollID {
@@ -1246,11 +1325,13 @@ enum LanguagePalette {
     )
 }
 
-/// The full Android minik_plus_logo artwork used by Intro and menu.
-/// The former small pencil mascot is a different Android drawable.
+/// The new MINIK+plus logo (Android minik_logo_pretty_plus, a white sticker outline
+/// around it) used by the Intro, the menu and the activity screens. Android English
+/// Only shows the same logo in the pretty design. It is wider than the former
+/// minik_plus_logo and fits whatever box it is given.
 struct MinikLanguageLogo: View {
     var body: some View {
-        MinikArtworkImage(name: "minik_language_logo")
+        MinikArtworkImage(name: MinikPretty.Art.plusLogo)
             .accessibilityHidden(true)
     }
 }
@@ -1299,30 +1380,42 @@ struct LanguageEnglishOnlyLogo: View {
 /// RecordsLeaderboardDialogFragment over the menu, which stays where it was
 /// behind a 58% dim: 94% x 90% of the screen on phones (at most 560 x 760 dp)
 /// and 92% x 88% on tablets (at most 1120 x 860 dp), the card 6 dp inside that
-/// (10 dp on tablets) with 24 dp (30 dp) corners and a 1 dp #E8E5F1 stroke.
-/// A tap outside closes it.
-private struct LanguageRecordsDialog: View {
+/// (10 dp on tablets) in the rainbow-sky design's bg_pretty_dialog: 28 dp continuous
+/// corners and a 2 dp #E6DEFF rim, as the Levels and Parent dialogs.
+/// A tap outside closes it. When the Top 20 opened by itself (RecordsAutoShowPolicy)
+/// it offers "Don't show automatically", as Android's dialog does.
+struct LanguageRecordsDialog: View {
     let product: ProductVariant
+    let offersAutomaticOptOut: Bool
     let onClose: () -> Void
 
-    private static let stroke = Color(red: 232 / 255, green: 229 / 255, blue: 241 / 255)
+    init(product: ProductVariant, offersAutomaticOptOut: Bool = false, onClose: @escaping () -> Void) {
+        self.product = product
+        self.offersAutomaticOptOut = offersAutomaticOptOut
+        self.onClose = onClose
+    }
+
+    private static let rim = Color(red: 230 / 255, green: 222 / 255, blue: 255 / 255)
 
     var body: some View {
         GeometryReader { geometry in
             let tablet = geometry.size.width >= 600
             let width = min(geometry.size.width * (tablet ? 0.92 : 0.94), tablet ? 1120 : 560)
             let height = min(geometry.size.height * (tablet ? 0.88 : 0.90), tablet ? 860 : 760)
-            let corner: CGFloat = tablet ? 30 : 24
+            let card = RoundedRectangle(cornerRadius: 28, style: .continuous)
             ZStack {
                 Color.black.opacity(0.58)
                     .ignoresSafeArea()
                     .onTapGesture(perform: onClose)
                     .accessibilityHidden(true)
-                RecordsLeaderboardView(product: product, onClose: onClose)
-                    .clipShape(RoundedRectangle(cornerRadius: corner))
+                RecordsLeaderboardView(
+                    product: product,
+                    offersAutomaticOptOut: offersAutomaticOptOut,
+                    onClose: onClose
+                )
+                    .clipShape(card)
                     .overlay {
-                        RoundedRectangle(cornerRadius: corner)
-                            .strokeBorder(Self.stroke, lineWidth: 1)
+                        card.strokeBorder(Self.rim, lineWidth: 2)
                     }
                     .padding(tablet ? 10 : 6)
                     .frame(width: width, height: height)

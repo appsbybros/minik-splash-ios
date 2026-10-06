@@ -103,10 +103,13 @@ targets:
         buildPhase: resources
       - path: Resources/Privacy/Language/PrivacyInfo.xcprivacy
         buildPhase: resources
+      # Fredoka Bold for the rainbow-sky design (MinikPrettyDesign.swift).
+      - path: Resources/Fonts
+        buildPhase: resources
     info:
       properties:
         CFBundleDisplayName: Minik
-        UIAppFonts: [fredoka_medium.ttf]
+        UIAppFonts: [fredoka_medium.ttf, fredoka_bold.ttf]
         CFBundleLocalizations: [en, am, ar, de, es, fr, he, nl, pt-BR, pt-PT, ru]
         # Portrait only, as on Android (sensorPortrait); iPad allows that only as a
         # full-screen app. :REPLACE stops XcodeGen appending the template's landscape
@@ -198,10 +201,13 @@ targets:
         buildPhase: resources
       - path: Resources/Privacy/Language/PrivacyInfo.xcprivacy
         buildPhase: resources
+      # Fredoka Bold for the rainbow-sky design (MinikPrettyDesign.swift).
+      - path: Resources/Fonts
+        buildPhase: resources
     info:
       properties:
         CFBundleDisplayName: Minik
-        UIAppFonts: [fredoka_medium.ttf]
+        UIAppFonts: [fredoka_medium.ttf, fredoka_bold.ttf]
         CFBundleLocalizations: [en, am, ar, de, es, fr, nl, pt-BR, pt-PT, ru]
         # Portrait only, as on Android (sensorPortrait); iPad allows that only as a
         # full-screen app. :REPLACE stops XcodeGen appending the template's landscape
@@ -292,9 +298,16 @@ targets:
         buildPhase: resources
       - path: Resources/Privacy/LocalOnly/PrivacyInfo.xcprivacy
         buildPhase: resources
+      # Fredoka Bold and Medium for the rainbow-sky design (MinikPrettyDesign.swift).
+      # Math does not bundle LanguageMedia, so it has its own copy of the Medium face.
+      - path: Resources/Fonts
+        buildPhase: resources
+      - path: Resources/MathFonts
+        buildPhase: resources
     info:
       properties:
         CFBundleDisplayName: Minik Math
+        UIAppFonts: [fredoka_bold.ttf, fredoka_medium.ttf]
         CFBundleLocalizations: [en, am, ar, de, es, fr, he, nl, pt-BR, pt-PT, ru]
     settings:
       base:

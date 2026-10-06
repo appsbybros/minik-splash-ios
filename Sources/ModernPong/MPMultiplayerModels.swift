@@ -5,6 +5,8 @@ enum ModernPongExperience: String, Codable {
     var online: Bool { self == .full }
     var tournaments: Bool { self == .full }
     var profiles: Bool { self == .full }
+    /// Simple hosts hear about every completed match (onClose(result)) and close on Back (onClose(nil)).
+    /// Since the 2026-10 owner report a finished match first shows its result instead of closing at once.
     var closesAfterMatch: Bool { self == .simple }
 }
 struct MPBot: Codable, Equatable {

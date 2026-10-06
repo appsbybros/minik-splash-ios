@@ -44,7 +44,12 @@ struct MinikPracticeScreen<Content: View>: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let metrics = MinikPracticeLayoutMetrics(containerWidth: geometry.size.width)
+            let tablet = MinikPracticeLayoutMetrics.usesTabletLayout(for: geometry.size)
+            let metrics = MinikPracticeLayoutMetrics(
+                containerWidth: geometry.size.width,
+                isTablet: tablet,
+                containerHeight: geometry.size.height
+            )
 
             ScrollView {
                 VStack(spacing: metrics.stackSpacing) {
@@ -54,14 +59,21 @@ struct MinikPracticeScreen<Content: View>: View {
                     )
 
                     content(metrics)
+                        // iPad: the exercise sits in the middle of the screen instead
+                        // of hugging the top above an empty half screen.
+                        .frame(maxHeight: tablet ? CGFloat.infinity : nil)
                 }
                 .frame(maxWidth: metrics.contentMaxWidth)
                 .padding(.horizontal, metrics.horizontalPadding)
                 .padding(.vertical, metrics.verticalPadding)
                 .frame(maxWidth: .infinity)
+                .frame(minHeight: tablet ? geometry.size.height : nil)
             }
             .scrollBounceBehavior(.basedOnSize)
             .scrollIndicators(.hidden)
+            // The practice chrome below (surface, header, buttons and tiles) uses
+            // larger sizes on iPad.
+            .environment(\.minikPracticeTablet, tablet)
         }
         // The portrait fill artwork stays a background so it never sizes the layout. As a ZStack
         // sibling it made the stack taller than the screen and pushed the panel down (off-screen
@@ -76,6 +88,7 @@ struct MinikPracticeScreen<Content: View>: View {
 struct MinikPracticeSurface<Content: View>: View {
     let compact: Bool
     let content: () -> Content
+    @Environment(\.minikPracticeTablet) private var tablet
 
     init(
         compact: Bool,
@@ -86,17 +99,17 @@ struct MinikPracticeSurface<Content: View>: View {
     }
 
     var body: some View {
-        VStack(spacing: compact ? 18 : 24) {
+        VStack(spacing: tablet ? 30 : (compact ? 18 : 24)) {
             content()
         }
         .frame(maxWidth: .infinity)
-        .padding(compact ? 18 : 28)
+        .padding(tablet ? 36 : (compact ? 18 : 28))
         .background(
-            RoundedRectangle(cornerRadius: compact ? 28 : 36, style: .continuous)
+            RoundedRectangle(cornerRadius: tablet ? 40 : (compact ? 28 : 36), style: .continuous)
                 .fill(.white.opacity(0.94))
         )
         .overlay {
-            RoundedRectangle(cornerRadius: compact ? 28 : 36, style: .continuous)
+            RoundedRectangle(cornerRadius: tablet ? 40 : (compact ? 28 : 36), style: .continuous)
                 .strokeBorder(.white.opacity(0.7), lineWidth: 1.2)
         }
         .shadow(color: Color(red: 0.08, green: 0.35, blue: 0.53).opacity(0.12), radius: 26, y: 14)
@@ -107,6 +120,7 @@ struct MinikPracticeSurface<Content: View>: View {
 struct MinikFeedbackBadge: View {
     let isCorrect: Bool
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.minikPracticeTablet) private var tablet
     @State private var hasAppeared = false
 
     var body: some View {
@@ -114,13 +128,13 @@ struct MinikFeedbackBadge: View {
             MinikArtworkImage(
                 name: isCorrect ? MinikVisualAsset.success : MinikVisualAsset.tryAgain
             )
-            .frame(width: 72, height: 82)
+            .frame(width: tablet ? 90 : 72, height: tablet ? 102 : 82)
             .scaleEffect(reduceMotion || hasAppeared ? 1 : 0.72)
 
             Text(isCorrect
                 ? String(localized: "Great job!")
                 : String(localized: "Try again"))
-                .font(.headline.weight(.semibold))
+                .font(tablet ? Font.title3.weight(.semibold) : Font.headline.weight(.semibold))
         }
         .foregroundStyle(isCorrect ? Color(red: 0.1, green: 0.52, blue: 0.28) : Color(red: 0.73, green: 0.34, blue: 0.22))
         .padding(.horizontal, 18)
@@ -149,14 +163,15 @@ struct MinikFeedbackBadge: View {
 struct MinikPrimaryActionStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.minikPracticeTablet) private var tablet
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.headline.weight(.semibold))
+            .font(tablet ? Font.title3.weight(.semibold) : Font.headline.weight(.semibold))
             .foregroundStyle(Color(red: 0.16, green: 0.29, blue: 0.34))
             .padding(.horizontal, 24)
-            .padding(.vertical, 16)
-            .frame(maxWidth: .infinity, minHeight: 56)
+            .padding(.vertical, tablet ? 20 : 16)
+            .frame(maxWidth: .infinity, minHeight: tablet ? 68 : 56)
             .background(
                 Capsule(style: .continuous)
                     .fill(
@@ -181,14 +196,15 @@ struct MinikPrimaryActionStyle: ButtonStyle {
 
 struct MinikYellowActionStyle: ButtonStyle {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.minikPracticeTablet) private var tablet
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.headline.weight(.bold))
+            .font(tablet ? Font.title3.weight(.bold) : Font.headline.weight(.bold))
             .foregroundStyle(Color(red: 0.18, green: 0.30, blue: 0.34))
-            .padding(.horizontal, 24)
-            .padding(.vertical, 13)
-            .frame(minHeight: 50)
+            .padding(.horizontal, tablet ? 28 : 24)
+            .padding(.vertical, tablet ? 16 : 13)
+            .frame(minHeight: tablet ? 60 : 50)
             .background(
                 Capsule(style: .continuous)
                     .fill(Color(red: 1.0, green: 0.82, blue: 0.02))
@@ -202,14 +218,15 @@ struct MinikYellowActionStyle: ButtonStyle {
 struct MinikUtilityButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.minikPracticeTablet) private var tablet
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.headline.weight(.semibold))
+            .font(tablet ? Font.title3.weight(.semibold) : Font.headline.weight(.semibold))
             .foregroundStyle(isEnabled ? Color(red: 0.16, green: 0.47, blue: 0.59) : .secondary)
-            .frame(minWidth: 44, minHeight: 44)
-            .padding(.horizontal, 14)
-            .padding(.vertical, 10)
+            .frame(minWidth: 44, minHeight: tablet ? 52 : 44)
+            .padding(.horizontal, tablet ? 18 : 14)
+            .padding(.vertical, tablet ? 12 : 10)
             .background(
                 Capsule(style: .continuous)
                     .fill(.white.opacity(isEnabled ? 0.9 : 0.65))
@@ -237,19 +254,20 @@ struct MinikChoiceButtonStyle: ButtonStyle {
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.minikPracticeTablet) private var tablet
 
     func makeBody(configuration: Configuration) -> some View {
         let palette = palette(for: feedbackState)
 
         configuration.label
-            .padding(compact ? 16 : 20)
-            .frame(maxWidth: .infinity, minHeight: compact ? 108 : 124)
+            .padding(tablet ? 24 : (compact ? 16 : 20))
+            .frame(maxWidth: .infinity, minHeight: tablet ? 148 : (compact ? 108 : 124))
             .background(
-                RoundedRectangle(cornerRadius: compact ? 24 : 28, style: .continuous)
+                RoundedRectangle(cornerRadius: tablet ? 30 : (compact ? 24 : 28), style: .continuous)
                     .fill(palette.fill)
             )
             .overlay {
-                RoundedRectangle(cornerRadius: compact ? 24 : 28, style: .continuous)
+                RoundedRectangle(cornerRadius: tablet ? 30 : (compact ? 24 : 28), style: .continuous)
                     .strokeBorder(
                         LinearGradient(
                             colors: feedbackState == .idle
@@ -330,12 +348,13 @@ struct MinikTokenButtonStyle: ButtonStyle {
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.minikPracticeTablet) private var tablet
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .padding(.horizontal, compact ? 12 : 16)
-            .padding(.vertical, compact ? 12 : 16)
-            .frame(maxWidth: .infinity, minHeight: compact ? 64 : 76)
+            .padding(.horizontal, tablet ? 18 : (compact ? 12 : 16))
+            .padding(.vertical, tablet ? 18 : (compact ? 12 : 16))
+            .frame(maxWidth: .infinity, minHeight: tablet ? 90 : (compact ? 64 : 76))
             .background(
                 RoundedRectangle(cornerRadius: compact ? 22 : 26, style: .continuous)
                     .fill(
@@ -380,13 +399,14 @@ struct MinikMatchTileStyle: ButtonStyle {
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.minikPracticeTablet) private var tablet
 
     func makeBody(configuration: Configuration) -> some View {
         let palette = palette(for: state)
 
         configuration.label
-            .padding(compact ? 16 : 20)
-            .frame(maxWidth: .infinity, minHeight: compact ? 116 : 132)
+            .padding(tablet ? 24 : (compact ? 16 : 20))
+            .frame(maxWidth: .infinity, minHeight: tablet ? 156 : (compact ? 116 : 132))
             .background(
                 RoundedRectangle(cornerRadius: compact ? 24 : 28, style: .continuous)
                     .fill(palette.fill)
@@ -458,13 +478,14 @@ struct MinikMemoryCardStyle: ButtonStyle {
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.minikPracticeTablet) private var tablet
 
     func makeBody(configuration: Configuration) -> some View {
         let palette = palette(for: state)
 
         configuration.label
-            .padding(compact ? 14 : 18)
-            .frame(maxWidth: .infinity, minHeight: compact ? 126 : 144)
+            .padding(tablet ? 20 : (compact ? 14 : 18))
+            .frame(maxWidth: .infinity, minHeight: tablet ? 168 : (compact ? 126 : 144))
             .background(
                 RoundedRectangle(cornerRadius: compact ? 26 : 30, style: .continuous)
                     .fill(palette.fill)
@@ -548,9 +569,9 @@ struct MinikSoccerBallStyle: ButtonStyle {
             : Color(red: 0.08, green: 0.45, blue: 0.2).opacity(0.18)
 
         configuration.label
-            .padding(compact ? 14 : 16)
-            .frame(maxWidth: .infinity, minHeight: compact ? 138 : 154)
-            .aspectRatio(1, contentMode: .fit)
+            // SoccerView gives each ball its size for the screen (the label's frame is
+            // the plate). A fixed 138-154 point plate pushed the second row of balls
+            // and the Kick button below an iPad's screen (report 1 #4).
             .background(
                 ZStack {
                     Circle()
@@ -583,12 +604,13 @@ struct MinikTowerBlockStyle: ButtonStyle {
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.minikPracticeTablet) private var tablet
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .padding(.horizontal, compact ? 12 : 16)
-            .padding(.vertical, compact ? 12 : 14)
-            .frame(maxWidth: .infinity, minHeight: compact ? 68 : 80)
+            .padding(.horizontal, tablet ? 18 : (compact ? 12 : 16))
+            .padding(.vertical, tablet ? 16 : (compact ? 12 : 14))
+            .frame(maxWidth: .infinity, minHeight: tablet ? 94 : (compact ? 68 : 80))
             .background(
                 RoundedRectangle(cornerRadius: compact ? 22 : 26, style: .continuous)
                     .fill(
@@ -623,12 +645,18 @@ struct MinikTowerBlockStyle: ButtonStyle {
 private struct MinikPracticeHeader: View {
     let progressLabel: String
     let onExit: () -> Void
+    @Environment(\.minikPracticeTablet) private var tablet
+
+    init(progressLabel: String, onExit: @escaping () -> Void) {
+        self.progressLabel = progressLabel
+        self.onExit = onExit
+    }
 
     var body: some View {
         HStack(spacing: 16) {
             Button(action: onExit) {
                 MinikArtworkImage(name: MinikVisualAsset.close)
-                    .frame(width: 44, height: 44)
+                    .frame(width: tablet ? 60 : 44, height: tablet ? 60 : 44)
                     .background(.white.opacity(0.9), in: Circle())
             }
             .accessibilityLabel("Close exercise")
@@ -636,10 +664,10 @@ private struct MinikPracticeHeader: View {
             Spacer(minLength: 12)
 
             Text(progressLabel)
-                .font(.headline.weight(.semibold))
+                .font(tablet ? Font.title2.weight(.semibold) : Font.headline.weight(.semibold))
                 .foregroundStyle(Color(red: 0.14, green: 0.38, blue: 0.48))
-                .padding(.horizontal, 18)
-                .padding(.vertical, 11)
+                .padding(.horizontal, tablet ? 24 : 18)
+                .padding(.vertical, tablet ? 14 : 11)
                 .background(.white.opacity(0.9), in: Capsule(style: .continuous))
                 .overlay {
                     Capsule(style: .continuous)
@@ -659,11 +687,11 @@ struct MinikPracticeBackground: View {
     @ViewBuilder
     var body: some View {
         if visualIdentity == .math {
-            Image("math_frame_background")
-                .resizable()
-                .scaledToFill()
-                .overlay(Color.white.opacity(0.04))
-                .clipped()
+            // Minik Math's activities sit on the rainbow sky of the new Minik Plus
+            // design, like the Math hub (report 1 #10); the white practice surface
+            // keeps the content readable on it. The sky fills whatever size it is
+            // given and never sizes the layout.
+            MinikSkyBackground()
         } else {
             MinikArtworkBackground()
         }
@@ -672,8 +700,25 @@ struct MinikPracticeBackground: View {
 
 struct MinikPracticeLayoutMetrics {
     let containerWidth: CGFloat
+    /// An iPad-sized screen (usesTabletLayout(for:)): a tablet layout
+    /// with larger sizes and spacing rather than an enlarged phone one.
+    var isTablet: Bool = false
+    /// The screen's height inside the safe areas (0 when unknown), for a board that
+    /// sizes itself to fit the screen without scrolling (Soccer).
+    var containerHeight: CGFloat = 0
+
+    /// Both sides at least 600 points: every iPad in portrait and landscape, not an
+    /// iPhone in landscape or an iPad app in a narrow Split View.
+    static func usesTabletLayout(for size: CGSize) -> Bool {
+        min(size.width, size.height) >= 600
+    }
 
     var contentMaxWidth: CGFloat {
+        if isTablet {
+            if containerWidth >= 1100 { return 960 }
+            if containerWidth >= 900 { return 860 }
+            return 760
+        }
         if containerWidth >= 1100 { return 840 }
         if containerWidth >= 800 { return 760 }
         return 680
@@ -684,15 +729,28 @@ struct MinikPracticeLayoutMetrics {
     }
 
     var horizontalPadding: CGFloat {
-        compact ? 16 : 24
+        isTablet ? 32 : (compact ? 16 : 24)
     }
 
     var verticalPadding: CGFloat {
-        compact ? 18 : 28
+        isTablet ? 32 : (compact ? 18 : 28)
     }
 
     var stackSpacing: CGFloat {
-        compact ? 18 : 24
+        isTablet ? 32 : (compact ? 18 : 24)
+    }
+}
+
+private struct MinikPracticeTabletKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
+extension EnvironmentValues {
+    /// True inside MinikPracticeScreen on an iPad-sized screen: the practice chrome
+    /// (surface, header, buttons, tiles) uses its larger iPad sizes.
+    var minikPracticeTablet: Bool {
+        get { self[MinikPracticeTabletKey.self] }
+        set { self[MinikPracticeTabletKey.self] = newValue }
     }
 }
 

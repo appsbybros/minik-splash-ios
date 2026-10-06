@@ -2,8 +2,8 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $checks = @(
-    @{ File = 'Sources/TowerView.swift'; Pattern = 'private var languageTowerBody:[\s\S]*LanguageTowerPanel\(\s*sceneAsset: MinikVisualAsset\.towerScene'; Label = 'Language Tower owns the Android pastel scene instead of the generic practice shell' },
-    @{ File = 'Sources/TowerView.swift'; Pattern = 'languageTowerNavigation\([\s\S]*Image\(systemName: "speaker\.wave\.1\.fill"\)[\s\S]*MinikVisualAsset\.close'; Label = 'Android-equivalent speaker replay and exact close stay inside the Language panel' },
+    @{ File = 'Sources/TowerView.swift'; Pattern = 'private var languageTowerBody:[\s\S]*LanguageTowerPanel\([\s\S]*LanguageSkyPanel\([\s\S]*washed: true'; Label = 'Language Tower owns the glass panel with the light wash instead of the generic practice shell' },
+    @{ File = 'Sources/TowerView.swift'; Pattern = 'languageTowerNavigation\([\s\S]*LanguageSkySpeakerFace\([\s\S]*MinikVisualAsset\.close'; Label = 'Android-equivalent speaker replay and exact close stay inside the Language panel' },
     @{ File = 'Sources/TowerView.swift'; Pattern = 'interfaceLocaleID\.text\("Letter Tower"\)'; Label = 'The Android Letter Tower title uses the selected interface locale' },
     @{ File = 'Sources/TowerView.swift'; Pattern = 'Text\("Drag the letters in the correct order"\)'; Label = 'The exact Android instruction remains visible' },
     @{ File = 'Sources/TowerView.swift'; Pattern = 'representation: \.learningText\(content\.targetText\)'; Label = 'Target word remains visible' },

@@ -20,6 +20,9 @@ struct MinikActivityHubView: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.interfaceLocaleID) private var interfaceLocaleID
+    /// The Math hub's card and level text follow Dynamic Type, within what the cards hold.
+    @ScaledMetric(relativeTo: .body) private var hubTextPercent: CGFloat = 100
     @State private var selectedLanguage: LanguageIdentifier
     @State private var mathLevelController: MathLevelController
     @State private var languageActivitySessionID = ActivitySessionID()
@@ -27,6 +30,8 @@ struct MinikActivityHubView: View {
     @State private var route: Route?
     @State private var languageMenuIsPresented = false
     @State private var hasShownLanguageOpening = false
+    /// The Top 20 opened by itself over the intro (RecordsAutoShowPolicy).
+    @State private var recordsAutoPresented = false
     @State private var languageRewards = RewardState()
     @State private var languageWordBonusRun = 0
     @State private var pingPongCompletedMatchCount = 0
@@ -55,6 +60,9 @@ struct MinikActivityHubView: View {
     private let rewardRepository: LocalRewardRepository
     private let rewardService: LocalRewardService
     private let rewardRecordSubmissionService: RewardRecordSubmissionService
+    /// The online Top 20 is set up in this build (Android's fireBaseInitiated), so
+    /// it may open by itself.
+    private let publicRecordsConfigured: Bool
     @State private var outcomeDispatcher: ActivityOutcomeDispatcher
 
     private let learnedLanguageRepository: LearnedLanguageRepository
@@ -105,6 +113,7 @@ struct MinikActivityHubView: View {
             localStateStore: publicLeaderboardStore
         )
         self.rewardRecordSubmissionService = rewardRecordSubmissionService
+        self.publicRecordsConfigured = resolvedRecordsRepository != nil
         _publicLeaderboardController = StateObject(wrappedValue: PublicLeaderboardController(
             service: rewardRecordSubmissionService
         ))
@@ -212,6 +221,16 @@ struct MinikActivityHubView: View {
             }
         }
         .overlay {
+            if recordsAutoPresented {
+                LanguageRecordsDialog(product: configuration.variant, offersAutomaticOptOut: true) {
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        recordsAutoPresented = false
+                    }
+                }
+                .transition(.opacity)
+            }
+        }
+        .overlay {
             if configuration.contentDomain == .language && !hasShownLanguageOpening {
                 LanguageOpeningView(onFinish: { hasShownLanguageOpening = true })
             }
@@ -229,6 +248,8 @@ struct MinikActivityHubView: View {
                 .presentationDragIndicator(.visible)
                 .presentationBackground(.clear)
                 .presentationCornerRadius(34)
+                // The hub's light rainbow-sky design: the sheet stays light as well.
+                .preferredColorScheme(.light)
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             guard configuration.contentDomain == .language,
@@ -237,7 +258,28 @@ struct MinikActivityHubView: View {
             languageAutoState.applicationDidStop()
             languageAutoRepository.save(languageAutoState)
         }
+        .onChange(of: hasShownLanguageOpening) { _, hasShown in
+            if hasShown {
+                presentRecordsAutomaticallyIfAllowed()
+            }
+        }
         .onAppear(perform: applyStoreScreenshotScene)
+    }
+
+    /// Android IntroFragment opens the Top 20 by itself once the opening is over.
+    /// It now does so only as RecordsAutoShowPolicy allows: once per launch, with
+    /// "show automatically" on and at least 100 points; never over another screen
+    /// or in the App Store screenshot scenes.
+    private func presentRecordsAutomaticallyIfAllowed() {
+        guard configuration.contentDomain == .language,
+              StoreScreenshotScene.name == nil,
+              route == nil,
+              !languageMenuIsPresented,
+              publicRecordsConfigured,
+              RecordsAutoShowPolicy.claimAutomaticShowing(points: languageRewards.points) else { return }
+        withAnimation(.easeOut(duration: 0.2)) {
+            recordsAutoPresented = true
+        }
     }
 
     /// App Store screenshot captures open one screen at launch; see StoreScreenshotScene.
@@ -376,115 +418,143 @@ struct MinikActivityHubView: View {
         }
     }
 
+    /// The Math hub in the rainbow-sky design (Android Minik Math Plus, Rainbow Sky):
+    /// the Minik Math logo and Parent Area on the sky, and a glass panel with the
+    /// current level and the activity sections as pastel cards under colored section
+    /// pills. The cards sit in plain rows rather than a lazy grid, so the board
+    /// scrolls without jumps. On iPad the sizes and spacing grow and the cards take
+    /// three or four columns, a tablet layout rather than an enlarged phone one.
     private var hubBody: some View {
-        MinikHomeScreen { metrics in
-            VStack(alignment: .leading, spacing: metrics.compact ? 20 : 26) {
-                headerSection(compact: metrics.compact)
-
-                if configuration.contentDomain == .math {
-                    mathLevelStatusSection(compact: metrics.compact)
-                }
-
-                if configuration.contentDomain == .language {
-                    MinikHomeSectionCard(compact: metrics.compact) {
-                        VStack(alignment: .leading, spacing: metrics.compact ? 24 : 30) {
-                            ForEach(ActivityCatalog.languageSections(for: configuration)) { section in
-                                languageSection(
-                                    section,
-                                    compact: metrics.compact,
-                                    availableWidth: metrics.contentMaxWidth
-                                )
-                            }
-                        }
+        GeometryReader { geometry in
+            let metrics = MinikHubMetrics(size: geometry.size)
+            let panelWidth = max(1, min(metrics.panelMaxWidth, geometry.size.width - 2 * metrics.panelMargin))
+            let contentWidth = max(1, panelWidth - 2 * metrics.panelPadding)
+            VStack(spacing: 0) {
+                hubHeader(metrics)
+                MinikGlassPanel(padding: 0, cornerRadius: metrics.panelRadius) {
+                    ScrollView {
+                        hubBoard(metrics: metrics, contentWidth: contentWidth)
                     }
+                    .scrollBounceBehavior(.basedOnSize)
+                    .scrollIndicators(.hidden)
+                    .clipShape(RoundedRectangle(cornerRadius: metrics.panelRadius, style: .continuous))
                 }
-
-                ForEach(ActivityCatalog.mathSections(
-                    for: configuration,
-                    levelID: selectedMathLevelID
-                )) { section in
-                    mathSection(
-                        section,
-                        compact: metrics.compact,
-                        availableWidth: metrics.contentMaxWidth
-                    )
-                }
-
-                ForEach(ActivityCatalog.productGameSections(for: configuration)) { section in
-                    productGameSection(
-                        section,
-                        compact: metrics.compact,
-                        availableWidth: metrics.contentMaxWidth
-                    )
-                }
+                .frame(width: panelWidth)
+                .frame(maxHeight: .infinity)
+                .padding(.top, metrics.panelTopMargin)
+                .padding(.bottom, metrics.panelBottomMargin)
             }
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
+        }
+        // A background never sizes the layout (see MinikHomeScreen).
+        .background {
+            MinikSkyBackground()
         }
     }
 
-    private func headerSection(compact: Bool) -> some View {
-        VStack(spacing: compact ? 10 : 14) {
-            HStack(alignment: .center, spacing: compact ? 14 : 20) {
-                MinikArtworkImage(name: MinikVisualAsset.logo)
-                    .frame(width: compact ? 58 : 72, height: compact ? 58 : 72)
+    /// The logo at the start; the Top 20 (only products with a public leaderboard;
+    /// like Android Math, iOS Math has none) and Parent Area at the end.
+    private func hubHeader(_ metrics: MinikHubMetrics) -> some View {
+        HStack(alignment: .center, spacing: metrics.headerGap) {
+            MinikArtworkImage(
+                name: configuration.contentDomain == .math ? MinikPretty.Art.mathLogo : MinikVisualAsset.logo
+            )
+            .frame(width: metrics.logoSize, height: metrics.logoSize)
+            .shadow(color: MinikPretty.shadowInk.opacity(0.18), radius: 4, x: 0, y: 2)
 
-                Spacer(minLength: 8)
+            Spacer(minLength: 0)
 
+            if RemoteRecordsConfiguration.androidCompatible(for: configuration.variant) != nil {
                 Button {
-                    route = nil
+                    route = .recordsLeaderboard([])
                 } label: {
-                    MinikArtworkImage(name: MinikVisualAsset.home)
-                        .frame(width: compact ? 52 : 62, height: compact ? 52 : 62)
+                    MinikArtworkImage(name: MinikVisualAsset.trophy)
+                        .padding(metrics.trophyPadding)
+                        .frame(width: metrics.roundButton, height: metrics.roundButton)
+                        .background {
+                            MinikPretty.RoundButtonBackground()
+                        }
+                        .contentShape(Circle())
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel(String(localized: "Home"))
-                .accessibilityHint(String(localized: "Returns to the activity menu"))
-                .accessibilityAddTraits(.isSelected)
-
-                // Only products with a public leaderboard show the trophy;
-                // like Android Math, iOS Math has none.
-                if RemoteRecordsConfiguration.androidCompatible(for: configuration.variant) != nil {
-                    Button {
-                        route = .recordsLeaderboard([])
-                    } label: {
-                        MinikArtworkImage(name: MinikVisualAsset.trophy)
-                            .frame(width: compact ? 42 : 50, height: compact ? 52 : 62)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(String(localized: "Top 20 records"))
-                }
+                .buttonStyle(MinikPretty.PressScaleStyle())
+                .accessibilityLabel(String(localized: "Top 20 records"))
             }
-            .frame(maxWidth: .infinity)
 
             Button {
                 route = .parentArea
             } label: {
-                Text("Parent Area")
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(Color(red: 0.10, green: 0.25, blue: 0.67))
-                    .padding(.horizontal, 18)
-                    .padding(.vertical, 10)
-                    .background(.white.opacity(0.9), in: Capsule(style: .continuous))
+                Text(interfaceLocaleID.text("Parent Area"))
+                    .padding(.horizontal, 4)
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel(String(localized: "Parent Area"))
+            .buttonStyle(MinikPretty.HeroButtonStyle(
+                look: MinikPretty.PillLook.purple,
+                fontSize: metrics.parentButtonTextSize,
+                minHeight: metrics.parentButtonHeight
+            ))
             .accessibilityHint(String(localized: "Opens learning settings and progress"))
         }
-        .frame(maxWidth: .infinity)
-        .accessibilityElement(children: .contain)
+        .padding(.horizontal, metrics.screenMargin)
+        .padding(.top, metrics.topMargin)
     }
 
-    private func mathLevelStatusSection(compact: Bool) -> some View {
-        MinikHomeSectionCard(compact: compact) {
-            VStack(alignment: .leading, spacing: compact ? 14 : 16) {
-                Label(selectedMathLevel.title, systemImage: "wand.and.stars")
-                    .font(.headline.weight(.bold))
-                    .foregroundStyle(Color(red: 0.14, green: 0.39, blue: 0.49))
+    private func hubBoard(metrics: MinikHubMetrics, contentWidth: CGFloat) -> some View {
+        let columns = hubColumnCount(metrics, contentWidth: contentWidth)
+        let cardWidth = max(1, (contentWidth - metrics.cardGap * CGFloat(columns - 1)) / CGFloat(columns))
+        return VStack(spacing: 0) {
+            if configuration.contentDomain == .math {
+                mathLevelCard(metrics)
+                    .padding(.bottom, metrics.sectionTopGap)
+            }
 
-                Text(selectedMathLevel.subtitle)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(Color(red: 0.31, green: 0.49, blue: 0.57))
+            ForEach(ActivityCatalog.mathSections(
+                for: configuration,
+                levelID: selectedMathLevelID
+            )) { section in
+                VStack(spacing: 0) {
+                    hubSectionBanner(id: section.id, title: section.title, metrics: metrics)
+                        .padding(.bottom, metrics.sectionGap)
+                    mathCardRows(section.activities, columns: columns, cardWidth: cardWidth, metrics: metrics)
+                }
+                .padding(.bottom, metrics.sectionTopGap)
+            }
+
+            ForEach(ActivityCatalog.productGameSections(for: configuration)) { section in
+                VStack(spacing: 0) {
+                    hubSectionBanner(id: section.id, title: section.title, metrics: metrics)
+                        .padding(.bottom, metrics.sectionGap)
+                    gameCardRows(section.activities, columns: columns, cardWidth: cardWidth, metrics: metrics)
+                }
+                .padding(.bottom, metrics.sectionTopGap)
             }
         }
+        .padding(.horizontal, metrics.panelPadding)
+        .padding(.top, metrics.panelPaddingTop)
+        .padding(.bottom, max(0, metrics.panelPaddingBottom - metrics.sectionTopGap))
+    }
+
+    /// The current level, as Android Math Plus's level card: Minik on the rainbow,
+    /// the level and what it practises, on a white tile.
+    private func mathLevelCard(_ metrics: MinikHubMetrics) -> some View {
+        HStack(spacing: metrics.tablet ? 18 : 12) {
+            MinikArtworkImage(name: MinikPretty.Art.welcome)
+                .frame(
+                    width: metrics.levelArtHeight * MinikPretty.Art.welcomeAspect,
+                    height: metrics.levelArtHeight
+                )
+            VStack(alignment: .leading, spacing: 4) {
+                Text(selectedMathLevel.title)
+                    .font(MinikPretty.titleFont(metrics.levelTitleSize * hubTextScale))
+                    .foregroundStyle(MinikPretty.navy)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(selectedMathLevel.subtitle)
+                    .font(MinikPretty.bodyFont(metrics.levelSubtitleSize * hubTextScale))
+                    .foregroundStyle(MinikPretty.softInk)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(metrics.tablet ? 8 : 2)
+        .minikChoiceTile(selected: false)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(String(
             format: mathLevelController.state.mode == .automatic
@@ -494,200 +564,272 @@ struct MinikActivityHubView: View {
         ))
     }
 
-    private func languageSection(
-        _ section: ActivitySection<LanguageActivityKind>,
-        compact: Bool,
-        availableWidth: CGFloat
-    ) -> some View {
-        VStack(alignment: .leading, spacing: compact ? 12 : 16) {
-            Text(section.title)
-                .font(.title3.weight(.bold))
-                .foregroundStyle(Color(red: 0.14, green: 0.39, blue: 0.49))
+    /// The sections' colored pills, as in the language menu.
+    private func hubSectionBanner(id: String, title: String, metrics: MinikHubMetrics) -> some View {
+        let look: MinikPretty.PillLook
+        let icon: MinikPretty.SectionBanner.Icon
+        switch id {
+        case "math-learn":
+            look = MinikPretty.PillLook.bannerPurple
+            icon = MinikPretty.SectionBanner.Icon.art(MinikPretty.Art.iconBook)
+        case "math-practice":
+            look = MinikPretty.PillLook.bannerBlue
+            icon = MinikPretty.SectionBanner.Icon.symbol("plus.forwardslash.minus")
+        case "math-games":
+            look = MinikPretty.PillLook.bannerWarm
+            icon = MinikPretty.SectionBanner.Icon.art(MinikPretty.Art.iconGames)
+        default:
+            look = MinikPretty.PillLook.bannerPurple
+            icon = MinikPretty.SectionBanner.Icon.symbol("sparkles")
+        }
+        return MinikPretty.SectionBanner(
+            title: title,
+            look: look,
+            icon: icon,
+            tablet: metrics.tablet,
+            scale: metrics.scale
+        )
+    }
 
-            LazyVGrid(
-                columns: cardColumns(for: availableWidth, compact: compact),
-                spacing: compact ? 14 : 18
-            ) {
-                ForEach(section.activities) { activity in
-                    activityCard(
-                        title: activity.title,
-                        subtitle: activity.subtitle,
-                        symbolName: activity.symbolName,
-                        theme: activity.theme,
-                        artworkName: MinikVisualAsset.activityArtwork(
-                            for: activity,
-                            language: selectedLanguage
-                        )
-                    ) {
-                        if activity == .ticTacToe {
-                            route = .ticTacToe(UUID())
-                        } else {
-                            languageActivitySessionID = ActivitySessionID()
-                            route = .language(activity, selectedLanguage, UUID())
+    private func mathCardRows(
+        _ activities: [MathProductionActivityID],
+        columns: Int,
+        cardWidth: CGFloat,
+        metrics: MinikHubMetrics
+    ) -> some View {
+        let rows = Self.rowsOf(activities, columns: columns)
+        return VStack(spacing: metrics.cardGap) {
+            ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+                HStack(alignment: .top, spacing: metrics.cardGap) {
+                    ForEach(row) { activity in
+                        hubCard(
+                            title: activity.title,
+                            subtitle: activity.subtitle,
+                            tint: Self.cardTint(for: activity),
+                            visual: Self.cardVisual(for: activity),
+                            width: cardWidth,
+                            metrics: metrics
+                        ) {
+                            if activity.launchRoute(for: selectedMathLevelID) == .pingPong {
+                                pingPongCompletedMatchCount = 0
+                            }
+                            route = .math(activity, selectedMathLevelID, UUID())
+                            mathActivitySessionID = ActivitySessionID()
                         }
                     }
                 }
+                // The cards of a row are as tall as the tallest; a short last row is centred.
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity)
             }
         }
     }
 
-    private func mathSection(
-        _ section: ActivitySection<MathProductionActivityID>,
-        compact: Bool,
-        availableWidth: CGFloat
+    private func gameCardRows(
+        _ games: [ProductGameKind],
+        columns: Int,
+        cardWidth: CGFloat,
+        metrics: MinikHubMetrics
     ) -> some View {
-        sectionBody(title: section.title, subtitle: section.subtitle, compact: compact) {
-            LazyVGrid(
-                columns: cardColumns(for: availableWidth, compact: compact),
-                spacing: compact ? 14 : 18
-            ) {
-                ForEach(section.activities) { activity in
-                    activityCard(
-                        title: activity.title,
-                        subtitle: activity.subtitle,
-                        symbolName: activity.symbolName,
-                        theme: activity.theme,
-                        iconArtworkName: activity == .pingPong ? PingPongAssetNames.minikPong : nil
-                    ) {
-                        if activity.launchRoute(for: selectedMathLevelID) == .pingPong {
-                            pingPongCompletedMatchCount = 0
+        let rows = Self.rowsOf(games, columns: columns)
+        return VStack(spacing: metrics.cardGap) {
+            ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+                HStack(alignment: .top, spacing: metrics.cardGap) {
+                    ForEach(row) { game in
+                        hubCard(
+                            title: game.title,
+                            subtitle: game.subtitle,
+                            tint: MinikPretty.CardTint.blue,
+                            visual: MinikHubCardVisual(art: PingPongAssetNames.minikPong),
+                            width: cardWidth,
+                            metrics: metrics
+                        ) {
+                            switch game {
+                            case .pingPong:
+                                pingPongCompletedMatchCount = 0
+                                route = .pingPong(UUID())
+                            }
                         }
-                        route = .math(activity, selectedMathLevelID, UUID())
-                        mathActivitySessionID = ActivitySessionID()
                     }
                 }
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity)
             }
         }
     }
 
-    private func productGameSection(
-        _ section: ActivitySection<ProductGameKind>,
-        compact: Bool,
-        availableWidth: CGFloat
-    ) -> some View {
-        sectionBody(title: section.title, subtitle: section.subtitle, compact: compact) {
-            LazyVGrid(
-                columns: cardColumns(for: availableWidth, compact: compact),
-                spacing: compact ? 14 : 18
-            ) {
-                ForEach(section.activities) { game in
-                    activityCard(
-                        title: game.title,
-                        subtitle: game.subtitle,
-                        symbolName: game.symbolName,
-                        theme: game.theme,
-                        iconArtworkName: game == .pingPong ? PingPongAssetNames.minikPong : nil
-                    ) {
-                        switch game {
-                        case .pingPong:
-                            pingPongCompletedMatchCount = 0
-                            route = .pingPong(UUID())
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private func sectionBody<Content: View>(
+    /// A pastel card (bg_menu_card_*): its picture on top and a white strip with the
+    /// navy name and the soft-ink description under it.
+    private func hubCard(
         title: String,
         subtitle: String,
-        compact: Bool,
-        @ViewBuilder content: @escaping () -> Content
-    ) -> some View {
-        MinikHomeSectionCard(compact: compact) {
-            VStack(alignment: .leading, spacing: compact ? 14 : 18) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(title)
-                        .font(.title3.weight(.bold))
-                        .foregroundStyle(Color(red: 0.14, green: 0.39, blue: 0.49))
-
-                    Text(subtitle)
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(Color(red: 0.31, green: 0.49, blue: 0.57))
-                }
-
-                content()
-            }
-        }
-    }
-
-    private func activityCard(
-        title: String,
-        subtitle: String,
-        symbolName: String,
-        theme: ActivityTheme,
-        artworkName: String? = nil,
-        iconArtworkName: String? = nil,
+        tint: MinikPretty.CardTint,
+        visual: MinikHubCardVisual,
+        width: CGFloat,
+        metrics: MinikHubMetrics,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
-            Group {
-                if let artworkName {
-                    VStack(spacing: 8) {
-                        MinikArtworkImage(name: artworkName)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 92)
-
+            VStack(spacing: metrics.cardLabelGap) {
+                hubCardVisual(visual, metrics: metrics)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: metrics.cardArtHeight)
+                VStack(spacing: 2) {
                     Text(title)
-                        .font(.headline.weight(.bold))
-                            .foregroundStyle(Color(red: 0.13, green: 0.39, blue: 0.49))
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity)
-                    }
-                } else {
-                    VStack(alignment: .leading, spacing: 14) {
-                        ZStack {
-                            Circle()
-                                .fill(.white.opacity(0.24))
-                                .frame(width: 54, height: 54)
-
-                            if let iconArtworkName {
-                                MinikArtworkImage(name: iconArtworkName)
-                                    .frame(width: 46, height: 46)
-                            } else {
-                                Image(systemName: symbolName)
-                                    .font(.system(size: 24, weight: .bold))
-                                    .foregroundStyle(.white)
-                            }
-                        }
-
-                        Text(title)
-                            .font(.headline.weight(.bold))
-                            .foregroundStyle(.white)
-                            .multilineTextAlignment(.leading)
-
-                        Text(subtitle)
-                            .font(.subheadline.weight(.medium))
-                            .foregroundStyle(.white.opacity(0.9))
-                            .multilineTextAlignment(.leading)
-
-                        Spacer(minLength: 0)
-                    }
+                        .font(MinikPretty.titleFont(metrics.cardTitleSize * hubTextScale))
+                        .foregroundStyle(MinikPretty.navy)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(3)
+                        .minimumScaleFactor(0.75)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text(subtitle)
+                        .font(MinikPretty.bodyFont(metrics.cardSubtitleSize * hubTextScale))
+                        .foregroundStyle(MinikPretty.softInk)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.horizontal, 6)
+                .padding(.vertical, 6)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .background {
+                    RoundedRectangle(cornerRadius: metrics.cardLabelRadius, style: .continuous)
+                        .fill(Color.white.opacity(0.94))
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .padding(.horizontal, metrics.cardPadding)
+            .padding(.top, metrics.cardPadding)
+            .padding(.bottom, metrics.cardPaddingBottom)
+            .frame(width: width)
+            .frame(maxHeight: .infinity)
+            .background {
+                MinikPretty.CardBackground(tint: tint, cornerRadius: metrics.cardRadius)
+            }
+            .contentShape(RoundedRectangle(cornerRadius: metrics.cardRadius, style: .continuous))
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Text(title) + Text(verbatim: ". ") + Text(subtitle))
         }
-        .buttonStyle(MinikHomeActivityCardStyle(theme: theme, usesArtwork: artworkName != nil))
+        .buttonStyle(MinikPretty.PressScaleStyle())
     }
 
-    private func cardColumns(for availableWidth: CGFloat, compact: Bool) -> [GridItem] {
-        if dynamicTypeSize >= .accessibility1 {
-            return [GridItem(.flexible(minimum: 0, maximum: 340), spacing: compact ? 14 : 18)]
-        }
-
-        let minimumWidth: CGFloat
-        if availableWidth < 420 {
-            minimumWidth = 150
-        } else if availableWidth < 700 {
-            minimumWidth = 170
+    @ViewBuilder
+    private func hubCardVisual(_ visual: MinikHubCardVisual, metrics: MinikHubMetrics) -> some View {
+        if let art = visual.art {
+            MinikArtworkImage(name: art)
         } else {
-            minimumWidth = 210
+            HStack(spacing: 4) {
+                if let glyph = visual.leadingGlyph {
+                    hubGlyph(glyph, metrics: metrics)
+                }
+                if let objectName = visual.objectName, visual.objectCount > 0 {
+                    HStack(spacing: 2) {
+                        ForEach(0..<visual.objectCount, id: \.self) { _ in
+                            Image(objectName)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: metrics.objectSize, height: metrics.objectSize)
+                        }
+                    }
+                }
+                if let glyph = visual.trailingGlyph {
+                    hubGlyph(glyph, metrics: metrics)
+                }
+            }
+            .padding(.horizontal, 6)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background {
+                RoundedRectangle(cornerRadius: metrics.cardLabelRadius, style: .continuous)
+                    .fill(Color.white.opacity(0.55))
+            }
+            // Sums read left to right in every language.
+            .environment(\.layoutDirection, .leftToRight)
+            .accessibilityHidden(true)
         }
+    }
 
-        return [GridItem(.adaptive(minimum: minimumWidth, maximum: 280), spacing: compact ? 14 : 18)]
+    private func hubGlyph(_ text: String, metrics: MinikHubMetrics) -> some View {
+        Text(verbatim: text)
+            .font(MinikPretty.titleFont(metrics.glyphSize))
+            .foregroundStyle(MinikPretty.navy)
+            .lineLimit(1)
+            .minimumScaleFactor(0.5)
+    }
+
+    private var hubTextScale: CGFloat {
+        min(1.6, max(0.9, hubTextPercent / 100))
+    }
+
+    /// Two columns on phones, three or four as the width allows (iPad, landscape);
+    /// accessibility text sizes get one column on phones and two on iPad.
+    private func hubColumnCount(_ metrics: MinikHubMetrics, contentWidth: CGFloat) -> Int {
+        if dynamicTypeSize.isAccessibilitySize {
+            return metrics.tablet ? 2 : 1
+        }
+        let fitting = Int((contentWidth + metrics.cardGap) / (metrics.cardMinWidth + metrics.cardGap))
+        return min(4, max(2, fitting))
+    }
+
+    private static func rowsOf<Item>(_ items: [Item], columns: Int) -> [[Item]] {
+        let size = max(1, columns)
+        var rows: [[Item]] = []
+        var start = 0
+        while start < items.count {
+            let end = min(start + size, items.count)
+            rows.append(Array(items[start..<end]))
+            start = end
+        }
+        return rows
+    }
+
+    private static func cardTint(for activity: MathProductionActivityID) -> MinikPretty.CardTint {
+        switch activity {
+        case .learnMath, .buildMath:
+            return .pink
+        case .mathCards, .visualToAnswer, .pingPong:
+            return .blue
+        case .mathPairs, .mathTower:
+            return .mint
+        case .buildNumber, .mathMixed:
+            return .yellow
+        case .buildQuantity, .mathSoccer:
+            return .peach
+        case .answerToRepresentation, .mathMemory:
+            return .lavender
+        }
+    }
+
+    /// The Minik cats where an activity has one (Android Plus menu art), otherwise a
+    /// little sum with counting objects, as Android Math Plus's hub cards.
+    private static func cardVisual(for activity: MathProductionActivityID) -> MinikHubCardVisual {
+        switch activity {
+        case .learnMath:
+            return MinikHubCardVisual(art: MinikPretty.Art.catStarPaper)
+        case .mathCards:
+            // The facts table.
+            return MinikHubCardVisual(leadingGlyph: "3 × 4 = 12")
+        case .mathPairs:
+            return MinikHubCardVisual(art: MinikPretty.Art.pairs)
+        case .buildNumber:
+            return MinikHubCardVisual(leadingGlyph: "10 + 7")
+        case .buildQuantity:
+            return MinikHubCardVisual(objectName: "math_object_apple", objectCount: 5)
+        case .visualToAnswer:
+            return MinikHubCardVisual(objectName: "math_object_balloon", objectCount: 3, trailingGlyph: "= ?")
+        case .answerToRepresentation:
+            return MinikHubCardVisual(leadingGlyph: "4 =", objectName: "math_object_bee", objectCount: 4)
+        case .buildMath:
+            return MinikHubCardVisual(leadingGlyph: "□ + □")
+        case .mathMixed:
+            return MinikHubCardVisual(leadingGlyph: "+ − × ÷")
+        case .mathSoccer:
+            return MinikHubCardVisual(art: MinikPretty.Art.soccer)
+        case .mathTower:
+            return MinikHubCardVisual(art: MinikPretty.Art.tower)
+        case .mathMemory:
+            return MinikHubCardVisual(art: MinikPretty.Art.memory)
+        case .pingPong:
+            return MinikHubCardVisual(art: PingPongAssetNames.minikPong)
+        }
     }
 
     @ViewBuilder
@@ -1531,4 +1673,74 @@ struct MinikActivityHubView: View {
             configuration.allowedLearnedLanguages.sorted { $0.rawValue < $1.rawValue }.first ??
             .english
     }
+}
+
+/// The hub's sizes: the phone values, and on iPad (both sides at least 600 points)
+/// larger ones, a little larger still on the bigger iPads, as Android's sw600dp
+/// dimensions are.
+private struct MinikHubMetrics {
+    let tablet: Bool
+    let scale: CGFloat
+
+    init(size: CGSize) {
+        let shortSide = min(size.width, size.height)
+        let isTablet = shortSide >= 600
+        tablet = isTablet
+        scale = isTablet ? min(1.3, max(1, shortSide / 744)) : 1
+    }
+
+    private func value(_ phone: CGFloat, _ tabletValue: CGFloat) -> CGFloat {
+        tablet ? tabletValue * scale : phone
+    }
+
+    // The logo row on the sky.
+    var logoSize: CGFloat { value(64, 104) }
+    var headerGap: CGFloat { value(10, 18) }
+    var roundButton: CGFloat { value(52, 76) }
+    var trophyPadding: CGFloat { value(11, 15) }
+    var parentButtonTextSize: CGFloat { value(17, 23) }
+    var parentButtonHeight: CGFloat { value(48, 60) }
+    var screenMargin: CGFloat { value(14, 32) }
+    var topMargin: CGFloat { value(6, 16) }
+
+    // The glass panel.
+    var panelMargin: CGFloat { value(12, 32) }
+    var panelTopMargin: CGFloat { value(8, 14) }
+    var panelBottomMargin: CGFloat { value(10, 18) }
+    var panelRadius: CGFloat { value(28, 36) }
+    var panelMaxWidth: CGFloat { value(720, 900) }
+    var panelPadding: CGFloat { value(12, 22) }
+    var panelPaddingTop: CGFloat { value(14, 22) }
+    var panelPaddingBottom: CGFloat { value(24, 34) }
+
+    // Sections and cards.
+    var sectionTopGap: CGFloat { value(20, 28) }
+    var sectionGap: CGFloat { value(10, 14) }
+    var cardGap: CGFloat { value(12, 18) }
+    var cardMinWidth: CGFloat { value(140, 200) }
+    var cardPadding: CGFloat { value(6, 10) }
+    var cardPaddingBottom: CGFloat { value(9, 13) }
+    var cardRadius: CGFloat { value(22, 26) }
+    var cardArtHeight: CGFloat { value(84, 128) }
+    var cardLabelGap: CGFloat { value(4, 6) }
+    var cardLabelRadius: CGFloat { value(16, 18) }
+    var cardTitleSize: CGFloat { value(15, 20) }
+    var cardSubtitleSize: CGFloat { value(12, 15) }
+    var glyphSize: CGFloat { value(26, 36) }
+    var objectSize: CGFloat { value(20, 28) }
+
+    // The level card.
+    var levelArtHeight: CGFloat { value(58, 92) }
+    var levelTitleSize: CGFloat { value(19, 26) }
+    var levelSubtitleSize: CGFloat { value(14, 18) }
+}
+
+/// What a hub card shows above its name: a Minik picture, or a little sum with
+/// counting objects.
+private struct MinikHubCardVisual {
+    var art: String? = nil
+    var leadingGlyph: String? = nil
+    var objectName: String? = nil
+    var objectCount: Int = 0
+    var trailingGlyph: String? = nil
 }
