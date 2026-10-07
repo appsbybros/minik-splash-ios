@@ -1,10 +1,12 @@
 import XCTest
 @testable import MinikMultiPingPong
 
-// Android app/src/test/.../localization/LanguageTest.kt (MinikCrossPong working tree on 828c6fc, 2026-10-04): the device-language
-// catalog (`AppText` -> `MPText`, `AppText.configure` -> `MPText.configure`, `AppText.keys()` -> `MPText.keys`).
-// The instrumentation test app/src/androidTest/.../LanguageDeviceTest.kt is ported in part: its language and direction checks
-// run here; launching activities and taking screenshots has no unit-test counterpart on iOS.
+// Android app/src/test/.../localization/LanguageTest.kt (MinikCrossPong 1908719; first ported from the working tree on 828c6fc,
+// 2026-10-04): the device-language catalog (`AppText` -> `MPText`, `AppText.configure` -> `MPText.configure`,
+// `AppText.keys()` -> `MPText.keys`).
+// The instrumentation test app/src/androidTest/.../LanguageDeviceTest.kt (1908719) is ported in part: its language, direction
+// and settings-action checks run here; launching activities, taking screenshots and measuring the dialog's buttons have no
+// unit-test counterpart on iOS.
 final class LanguageTests: XCTestCase {
     // Kotlin: @After reset
     override func tearDown() {
@@ -56,6 +58,30 @@ final class LanguageTests: XCTestCase {
             if lang == "he" { XCTAssertEqual("הגדרות", settings) }
             if lang == "en" { XCTAssertEqual("Settings", settings) }
         }
+    }
+
+    // Kotlin (androidTest): LanguageDeviceTest.sixDeviceLanguagesResolveResourcesAndRenderCrossCourt (1908719) — the cross
+    // settings dialog in each device language. Android asserts that both actions are fully visible, after shortening the Dutch
+    // R.string.new_match. The iOS settings sheet stacks its actions at full width, so here the two action texts are checked:
+    // they are Android's resource texts (values-*/strings.xml new_match and cancel).
+    func testSixLanguagesSettingsActionsUseAndroidResources() {
+        let apply = ["en": "Apply & start new match", "he": "החלת ההגדרות ומשחק חדש", "es": "Aplicar e iniciar partida",
+                     "ar": "تطبيق وبدء مباراة جديدة", "hi": "लागू करके नया मैच शुरू करें", "nl": "Nieuw spel starten"]
+        let cancel = ["en": "Cancel", "he": "ביטול", "es": "Cancelar", "ar": "إلغاء", "hi": "रद्द करें", "nl": "Annuleren"]
+        for lang in ["en", "he", "es", "ar", "hi", "nl"] {
+            MPText.configure(lang)
+            let hebrew = MPText.language == "he"
+            XCTAssertEqual(apply[lang], MPText.resource("Apply & start new match", "החלת ההגדרות ומשחק חדש", hebrew), lang)
+            XCTAssertEqual(cancel[lang], MPText.t("Cancel", "ביטול", hebrew), lang)
+        }
+        // Only the Dutch resource string was shortened: AppText keeps its longer catalog text, and no other language or
+        // text differs from its catalog row.
+        MPText.configure("nl")
+        XCTAssertEqual("Toepassen en nieuw spel starten", MPText.t("Apply & start new match", "החלת ההגדרות ומשחק חדש", false))
+        XCTAssertEqual(["Apply & start new match"], Array(MPText.resourceTexts.keys))
+        XCTAssertEqual(["nl": "Nieuw spel starten"], MPText.resourceTexts["Apply & start new match"])
+        XCTAssertEqual("Instellingen", MPText.resource("Settings", "הגדרות", false))
+        XCTAssertEqual("הגדרות", MPText.resource("Settings", "הגדרות", true))
     }
 
     // iOS: the language list, the catalog and the lookups keep Android's rules (Android LocalizedActivity / AppText).

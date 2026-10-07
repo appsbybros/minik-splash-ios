@@ -10,12 +10,16 @@ Checks, without building or touching the network:
   * braces, brackets and parentheses balance in every Swift file of MultiPong/ and Tests/MultiPongTests/;
   * the text catalog (MultiPong/MPTextCatalog.swift, Android AppText) is complete: four non-blank columns per row, no
     duplicate keys, and every {n} of a translation exists in its English key;
+  * MPText.resourceTexts (Android strings.xml texts that differ from the catalog row of their English text) names catalog
+    keys and catalog languages, really differs from the catalog, and its texts are shown through MPText.resource, never t();
   * the six app languages agree in MPText.swift and in the CFBundleLocalizations of the MinikMultiPingPong target.
 
 With --android <path to the MinikCrossPong checkout>, it also
-  * re-hashes every Android file listed in the handoff document: the committed blobs of the commit it names, and the
+  * re-hashes every Android file listed in the handoff document: the committed blobs of ANDROID_COMMIT, and the
     working-tree files listed in its "working-tree files" section;
-  * compares MultiPong/MPTextCatalog.swift row by row with the Android AppText.kt of that working tree.
+  * compares MultiPong/MPTextCatalog.swift row by row with the Android AppText.kt of that working tree;
+  * compares every string of the working tree's values-es, -ar, -hi and -nl strings.xml (Android getString) with the text
+    MPText shows for its English text: the catalog row, or MPText.resourceTexts where Android's resource text differs.
 
 With --android and --write-catalog it regenerates MultiPong/MPTextCatalog.swift from the Android AppText.kt instead of
 comparing (then run the audit again).
@@ -24,6 +28,7 @@ Usage: python3 Scripts/audit-multi-pong.py [--android C:/Projects/MinikCrossPong
 """
 import argparse
 import hashlib
+import html
 import json
 import pathlib
 import re
@@ -34,8 +39,11 @@ import unicodedata
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DOC = ROOT / 'docs' / 'multi-pong-ios-handoff.md'
 CATALOG = ROOT / 'MultiPong' / 'MPTextCatalog.swift'
-ANDROID_COMMIT = '828c6fc094f3afb05d86fea0616704a17976dfaf'
+ANDROID_COMMIT = '190871983cb5b72715604d1e48b6dd6bb6c8a22f'
 APP_TEXT = 'app/src/main/java/com/appsbybros/minik/localization/AppText.kt'
+STRINGS = 'app/src/main/res/values{}/strings.xml'
+# Android strings that are not catalog rows: the app name, "Minik" and two format-only strings, the same in every language.
+STRINGS_WITHOUT_ROW = {'app_name', 'minik', 'guide_progress', 'guide_live'}
 LANGUAGES = ['en', 'he', 'ar', 'es', 'hi', 'nl']
 COLUMNS = ['es', 'ar', 'hi', 'nl']
 BACKSLASH = chr(92)
@@ -301,6 +309,106 @@ def check_catalog(rows):
             check(placeholders(value) <= placeholders(key), f'{column} text uses a placeholder its key lacks: {key[:60]!r}')
 
 
+# ---- Android strings.xml (getString) <-> MPText.resourceTexts ---------------------------------------------------------
+
+def literal_at(row, i):
+    """The Swift string literal that must start at row[i] and the index after it."""
+    if not row.startswith('"', i):
+        raise ValueError('a string literal was expected: ' + row[:80])
+    return parse_swift_string(row, i)
+
+
+def resource_overrides(text):
+    """MPText.resourceTexts of MPText.swift: {(English text, language): Android resource text}."""
+    if re.search(r'static let resourceTexts: \[String: \[String: String\]\] = \[:\]', text):
+        return {}
+    block = re.search(r'static let resourceTexts: \[String: \[String: String\]\] = \[\n(.*?)\n    \]\n', text, re.S)
+    if not block:
+        raise ValueError('MPText.resourceTexts is missing')
+    overrides = {}
+    for line in block.group(1).splitlines():
+        row = line.strip()
+        if not row or row.startswith('//'):
+            continue
+        key, i = literal_at(row, 0)
+        if not row.startswith(': [', i):
+            raise ValueError('unexpected MPText.resourceTexts row: ' + row[:80])
+        i += 3
+        while True:
+            lang, i = literal_at(row, i)
+            if not row.startswith(': ', i):
+                raise ValueError('unexpected MPText.resourceTexts row: ' + row[:80])
+            value, i = literal_at(row, i + 2)
+            overrides[(key, lang)] = value
+            if not row.startswith(', ', i):
+                break
+            i += 2
+        if row[i:] not in (']', '],'):
+            raise ValueError('unexpected MPText.resourceTexts row end: ' + row[-40:])
+    return overrides
+
+
+def check_overrides(overrides, table, sources):
+    """Every MPText.resourceTexts entry is a real difference of a catalog row, shown through MPText.resource only."""
+    for (key, lang), value in sorted(overrides.items()):
+        check(key in table, f'MPText.resourceTexts: {key[:60]!r} is not a catalog key')
+        check(lang in COLUMNS, f'MPText.resourceTexts: {lang!r} is not a catalog language')
+        check(value.strip() != '', f'MPText.resourceTexts: blank {lang} text for {key[:60]!r}')
+        if key in table and lang in COLUMNS:
+            check(value != table[key][COLUMNS.index(lang)], f'MPText.resourceTexts repeats the catalog {lang} text of {key[:60]!r}')
+    for key in sorted({key for key, _ in overrides}):
+        literal = swift_literal(key)
+        check(f'MPText.resource({literal},' in sources, f'{key[:60]!r} is not shown through MPText.resource')
+        check(f't({literal},' not in sources, f'{key[:60]!r} is also shown through t(), without its resource text')
+
+
+def android_strings(text):
+    """{name: text} of an Android strings.xml: XML entities and backslash escapes decoded, unescaped double quotes dropped."""
+    found = {}
+    for m in re.finditer(r'<string name="([^"]+)"[^>]*>(.*?)</string>', text, re.S):
+        raw = html.unescape(m.group(2))
+        out, i = [], 0
+        while i < len(raw):
+            c = raw[i]
+            if c == BACKSLASH and i + 1 < len(raw):
+                e = raw[i + 1]
+                if e == 'u':
+                    out.append(chr(int(raw[i + 2:i + 6], 16)))
+                    i += 6
+                    continue
+                out.append({'n': '\n', 't': '\t'}.get(e, e))
+                i += 2
+                continue
+            if c != '"':
+                out.append(c)
+            i += 1
+        found[m.group(1)] = ''.join(out)
+    return found
+
+
+def check_resources(android, table, overrides):
+    """Android's translated strings.xml (shown with getString) against what MPText shows for the same English text: the
+    catalog row, or MPText.resourceTexts where the two differ. Returns the number of strings compared."""
+    english = android_strings((android / STRINGS.format('')).read_text(encoding='utf-8'))
+    used, compared = set(), 0
+    for column, lang in enumerate(COLUMNS):
+        local = android_strings((android / STRINGS.format('-' + lang)).read_text(encoding='utf-8'))
+        check(sorted(local) == sorted(english), f'values-{lang}/strings.xml and values/strings.xml name different strings')
+        for name, value in sorted(local.items()):
+            key = english.get(name)
+            if key not in table:
+                check(name in STRINGS_WITHOUT_ROW and value == key, f'values-{lang} string {name} is not a catalog row')
+                continue
+            expected = table[key][column]
+            if (key, lang) in overrides:
+                used.add((key, lang))
+                expected = overrides[(key, lang)]
+            check(value == expected, f'values-{lang} {name}: Android shows {value!r}, MPText {expected!r}')
+            compared += 1
+    check(used == set(overrides), 'MPText.resourceTexts has a text that no Android strings.xml has')
+    return compared
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--android', help='path to the MinikCrossPong checkout (read-only)')
@@ -371,6 +479,14 @@ def main():
     except (OSError, ValueError, IndexError) as error:
         catalog = []
         failures.append(f'MPTextCatalog.swift could not be read: {error}')
+    table = {key: values for _, key, values in catalog}
+    sources = ''.join(path.read_text(encoding='utf-8') for path in sorted((ROOT / 'MultiPong').glob('*.swift')) if path != CATALOG)
+    try:
+        overrides = resource_overrides(text_source)
+        check_overrides(overrides, table, sources)
+    except (ValueError, IndexError) as error:
+        overrides = {}
+        failures.append(f'MPText.resourceTexts could not be read: {error}')
 
     if args.android:
         android = pathlib.Path(args.android)
@@ -396,6 +512,13 @@ def main():
             print(f'Catalog rows compared with Android: {len(expected_rows)}')
         except (OSError, ValueError, IndexError) as error:
             failures.append(f'Android AppText.kt could not be read: {error}')
+        for suffix in [''] + ['-' + lang for lang in COLUMNS]:
+            check(STRINGS.format(suffix) in worktree, f'{STRINGS.format(suffix)} is not listed in the working-tree hashes')
+        try:
+            compared = check_resources(android, table, overrides)
+            print(f'Android strings.xml texts compared with MPText: {compared}')
+        except (OSError, ValueError, IndexError) as error:
+            failures.append(f'Android strings.xml could not be compared: {error}')
         print(f'Android hashes checked: {len(committed)} at {ANDROID_COMMIT[:7]}, {len(worktree)} in the working tree')
 
     if failures:

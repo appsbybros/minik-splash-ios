@@ -519,9 +519,9 @@
   },
   {
     "source": "C:\\Projects\\MinikPaddleAndLearn\\app\\src\\main\\assets\\www\\pong-layout.css",
-    "sourceSHA256": "bbeb4bdd1ee75aac5fe39c6bbbcbd128e04ca73e5d698924a6ec363cea79f372",
+    "sourceSHA256": "e5ff7ee61acf698b3d23b146d1414e499716bc368d6d7c15f7e1625ed1435e9b",
     "output": "Resources/RetroPong/pong-layout.css",
-    "outputSHA256": "bbeb4bdd1ee75aac5fe39c6bbbcbd128e04ca73e5d698924a6ec363cea79f372",
+    "outputSHA256": "65fd8e43f50dcc7bd9ff9d8e0ec7dcf9d062c6a0c3f338f1e709f258bff1d8ee",
     "outputHashMode": "lf-text"
   },
   {

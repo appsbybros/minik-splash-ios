@@ -1,7 +1,7 @@
 import SpriteKit
 import UIKit
 
-/// One rendered world for every seat (Android cross/CrossCourt.kt, MinikCrossPong 828c6fc): the shared table rotated so the viewer's
+/// One rendered world for every seat (Android cross/CrossCourt.kt, MinikCrossPong 1908719): the shared table rotated so the viewer's
 /// seat is at the bottom, a mild fixed perspective, and in full screen a camera that pans sideways with the ball (never a zoom
 /// change). Drawing, input and collision all use CrossGeometry; the court never invents table areas or nets. Android draws in
 /// view coordinates (y down); here "canvas" points are those coordinates and `sk` turns them into SpriteKit's (y up).
@@ -527,7 +527,8 @@ final class CrossScene: SKScene {
         let c = CrossScene.seatColors[seat % CrossScene.seatColors.count]
         return UIColor(red: CGFloat((c.0 / 2 + shift) / 255), green: CGFloat((c.1 / 2 + shift) / 255), blue: CGFloat((c.2 / 2 + shift + 10) / 255), alpha: CGFloat(alpha / 255))
     }
-    /// Name and score next to every player, with a server marker and floating +1/−1 notes.
+    /// Name and score next to every player, with a server marker and floating +1/−1 notes. The other players' badges sit
+    /// above their heads (Android CrossCourt.drawTags, 1908719).
     private func renderTags() {
         let now = CACurrentMediaTime()
         let ref = engine.referee
@@ -538,7 +539,13 @@ final class CrossScene: SKScene {
             if s == viewSeat {
                 at = screen(g.fromLocal(s, 0, CrossGeometry.reach + 0.30))
                 at.y = min(at.y, CGFloat(height - 16))
-            } else { at = screen(g.fromLocal(s, 0, CrossGeometry.reach + 0.22), CrossScene.character * 0.95) }
+            } else {
+                // Use the sprite's actual stand-line projection: a separate world-height
+                // projection can put the badge over the opponent's face on tall screens.
+                let lateral = g.toLocal(s, engine.racket(s)).u.mpClamp(-0.75, 0.75)
+                let anchor = screen(g.fromLocal(s, lateral, CrossGeometry.reach + CrossScene.stand))
+                at = CGPoint(x: anchor.x, y: anchor.y - CGFloat(CrossScene.character * sizeAt(g.home(s)) * 0.84) - 8)
+            }
             let serving = ref.server == s && ref.phase == .awaitingServe
             let label = (serving ? "🏓 " : "") + (s < names.count ? names[s] : "") + "  " + String(ref.score(s))
             tag.label.text = label

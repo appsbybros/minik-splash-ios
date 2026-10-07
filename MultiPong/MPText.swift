@@ -1,6 +1,7 @@
 import Foundation
 
-/// Android `localization/AppText.kt` (MinikCrossPong working tree on 828c6fc, 2026-10-04): the device-language catalog.
+/// Android `localization/AppText.kt` (MinikCrossPong 1908719; first ported from the working tree on 828c6fc, 2026-10-04): the
+/// device-language catalog.
 ///
 /// English and Hebrew stay at their call sites (`t(english, hebrew)`). Spanish, Arabic, Hindi and Dutch come from
 /// `MPTextCatalog`, keyed by the exact English text; a key with `{0}`, `{1}`… matches a text that carries names or numbers and
@@ -54,6 +55,19 @@ enum MPText {
         let dot = " · "
         if en.hasPrefix(dot) { return dot + t(String(en.dropFirst(dot.count)), he, false) }
         return en
+    }
+    /// Android `res/values-<lang>/strings.xml` texts that differ from the catalog row of their English text, keyed by the English
+    /// text and then by language. Android shows a resource string through `getString`, not `AppText`. Every other resource
+    /// string has the same text as its catalog row, so `t` shows it (Scripts/audit-multi-pong.py checks this string by string).
+    static let resourceTexts: [String: [String: String]] = [
+        // R.string.new_match, the cross settings action (1908719 shortened the Dutch text so that Cancel stays visible).
+        "Apply & start new match": ["nl": "Nieuw spel starten"],
+    ]
+    /// Android `getString(R.string.…)` for a resource string whose English text is a catalog key: the resource text of the app
+    /// language when it differs from the catalog row (`resourceTexts`), otherwise `t(en, he, hebrew)`.
+    static func resource(_ en: String, _ he: String, _ hebrew: Bool) -> String {
+        if !hebrew, let text = resourceTexts[en]?[current] { return text }
+        return t(en, he, hebrew)
     }
     /// Android `AppText.translated`: the catalog text of `key` in `lang` (nil for English, Hebrew or an unknown key).
     static func translated(_ key: String, _ lang: String) -> String? {

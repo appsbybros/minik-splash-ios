@@ -523,7 +523,8 @@ extension ModernPongView {
                     Text(t("Beginner: keep your paddle in the ball's path for an automatic hit; swipe a little left or right before the ball arrives to choose who gets it (the 🎯 shows who). Standard: tap as the ball arrives, drag sideways to aim, a faster drag hits harder. Pro: swipe through the ball toward a player.",
                            "מתחילים: השאירו את המחבט במסלול הכדור לחבטה אוטומטית; החליקו מעט שמאלה או ימינה לפני שהכדור מגיע כדי לבחור למי (ה־🎯 מראה למי). רגילה: הקישו כשהכדור מגיע, גררו הצידה לכיוון, גרירה מהירה חזקה יותר. מקצועני: החליקו דרך הכדור לעבר שחקן."))
                         .font(.footnote).multilineTextAlignment(.center)
-                    action(t("Apply & start new match", "החלת ההגדרות ומשחק חדש"), color: MPStyle.mint) {
+                    // Android setPositiveButton(R.string.new_match): a resource string, shorter in Dutch than its catalog row.
+                    action(MPText.resource("Apply & start new match", "החלת ההגדרות ומשחק חדש", he), color: MPStyle.mint) {
                         crossSettingsWasPaused = true
                         model.applyCrossSettings(players: settingsPlayers, control: settingsControl, target: settingsTarget, opponents: settingsOpponents)
                         showCrossSettings = false

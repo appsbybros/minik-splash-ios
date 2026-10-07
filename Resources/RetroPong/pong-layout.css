@@ -812,3 +812,16 @@ html.minik-android-inset-host[dir] body[data-view="pong"] .back-btn img,
 html.minik-android-inset-host[dir] body[data-view="pong"] .pong-guide-close img{
   width:34px !important;height:34px !important;max-width:34px;object-fit:contain;margin:0;
 }
+
+/* Large Android windows with a mouse/trackpad use the desktop court layout.
+   Keep its cumulative score as readable and correctly ordered as the touch HUD. */
+html.minik-android-inset-host[dir] body.pong-desktop-active[data-view="pong"] .pong-total{
+  display:flex;flex-direction:row;direction:ltr;align-items:center;justify-content:center;
+  min-width:104px;gap:6px;padding:8px 12px;
+}
+html.minik-android-inset-host[dir="rtl"] body.pong-desktop-active[data-view="pong"] .pong-total{flex-direction:row-reverse;}
+html.minik-android-inset-host[dir] body.pong-desktop-active[data-view="pong"] .pong-total small,
+html.minik-android-inset-host[dir] body.pong-desktop-active[data-view="pong"] .pong-total-number b{
+  display:block;font-size:17px;line-height:1.15;font-weight:800;margin:0;
+}
+html.minik-android-inset-host .site-footer{display:none;}

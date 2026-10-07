@@ -2,7 +2,8 @@
 
 This document covers the iOS app target `MinikMultiPingPong` (bundle `com.appsbybros.minik.crosspong`, display name
 "Multi Ping Pong"). It is a port of the Android app **Multi Ping Pong** (`C:\Projects\MinikCrossPong`, commit
-`828c6fc094f3afb05d86fea0616704a17976dfaf`): table tennis for 3 or 4 players on a cross-shaped table. Android forked that app
+`828c6fc094f3afb05d86fea0616704a17976dfaf`, brought up to commit `190871983cb5b72715604d1e48b6dd6bb6c8a22f` by the updates at
+the end of this document): table tennis for 3 or 4 players on a cross-shaped table. Android forked that app
 from **Modern Ping Pong** (`C:\Projects\MinikPingPong`, commit `7f5dd0a844ef8986eacd662f4afbbc34c7e92f56`). The iOS starting
 point was `MultiPong/`, a copy of `Sources/ModernPong` that is compiled only into this target. The port keeps the Modern Ping
 Pong type names (`MPController`, `MPEngine`, `ModernPongView` and so on), so the shared `Sources/**` code still compiles
@@ -314,7 +315,11 @@ npm run test:emulator
 
 ## SHA-256 of the Android files used
 
-Hashes are of the committed blobs at `828c6fc` (`git show HEAD:<path> | sha256sum`). Some working-tree copies on the
+Hashes are of the committed blobs at `1908719` (`git show 1908719:<path> | sha256sum`), the Android commit this port matches
+since the 2026-10-07 update; `python3 Scripts/audit-multi-pong.py --android <MinikCrossPong>` re-hashes them at its
+`ANDROID_COMMIT`. The original port read these files at `828c6fc`. 18 of the Kotlin sources below changed between the two
+commits, and all of those changes are ported: the six languages in the 2026-10-04 update, and the name badges of
+`CrossCourt.kt` in the 2026-10-07 update. The files added since `828c6fc` are listed at the end. The working copies on the
 Android machine have CRLF line endings, so their working-file hashes differ. `MinikPingPong@7f5dd0a` was used only as the diff
 base, to find what the fork changed, and is not listed.
 
@@ -323,13 +328,13 @@ Kotlin sources (all of app/src/main/java/com/appsbybros/minik/pingpong) (57 file
 ```text
 97e6c175c9bcfde4eb07e42150a9b5306e889cca8ed46df5c74446a49947a197  app/src/main/java/com/appsbybros/minik/pingpong/ActorPresentation.kt
 53411f3236c67bf7edfa5ff798e653332114c480b33d2dd4598cbbe14dfa3ca4  app/src/main/java/com/appsbybros/minik/pingpong/BotArt.kt
-d608d34e48c417833e0097c5d8b41f87bebf3721c5176b528acd3e7085134cfd  app/src/main/java/com/appsbybros/minik/pingpong/BotPicker.kt
-304c724bfca95022b9ea6ff5e939bd6043371535963783ca8450d1117122c9d9  app/src/main/java/com/appsbybros/minik/pingpong/GuideDialog.kt
-e6d7507d355864d9d66eeab6afaf408329fde450a61ba49500ea4a226969f473  app/src/main/java/com/appsbybros/minik/pingpong/HousePlayerPicker.kt
+f272fd9552687f324e69e45ca3dd15155b6e16181bab0a306ced482e9292ca29  app/src/main/java/com/appsbybros/minik/pingpong/BotPicker.kt
+fdfebcabec8852c833c5532d0d0aab05b6603f42ddd20eca724d8482ce036238  app/src/main/java/com/appsbybros/minik/pingpong/GuideDialog.kt
+a237466a01c684e2af095fbba55c7e29d950eed58640485f6f56236e26de586a  app/src/main/java/com/appsbybros/minik/pingpong/HousePlayerPicker.kt
 b490e3c79d8b28314c6f1c966ea350a744e9bbcfdc92f3d5bae242bac9766989  app/src/main/java/com/appsbybros/minik/pingpong/HouseStrategy.kt
-5ce242740ee0d17e5127b8fd6a90bc12d583c9cc923d52f86111f2dfdb8ebfd8  app/src/main/java/com/appsbybros/minik/pingpong/LocalizedActivity.kt
+11d393f2441b68fd6fcc28800dcb17dcf6d7c885ef2bf85a016f536fd4a436dc  app/src/main/java/com/appsbybros/minik/pingpong/LocalizedActivity.kt
 f152395827b3e876c91159278332b85023acb71a3a6633cfd2f183af1ee02bec  app/src/main/java/com/appsbybros/minik/pingpong/MinikMotion.kt
-ceb76971f7db7ab0b653ff950daf20f1273362352f1b6fc00ab1535b9b0d02fe  app/src/main/java/com/appsbybros/minik/pingpong/ModernActivity.kt
+c0e2b0ec7d697a18590bf9eb6bd939967d7931b3ac54393a7fbb421bfdc5bfa1  app/src/main/java/com/appsbybros/minik/pingpong/ModernActivity.kt
 8c3d6bc0c7891ab7143223269b28057106d142cf7c26ceea7bfe4e4d5086ca25  app/src/main/java/com/appsbybros/minik/pingpong/ModernAudio.kt
 d670bf97dff1c82dff8574073e354024315eb40796ae9d363167103790b8654d  app/src/main/java/com/appsbybros/minik/pingpong/ModernCourt.kt
 1dbfeb8393f3eaebc673d566819a1446742302633e85c387491b892a13460e48  app/src/main/java/com/appsbybros/minik/pingpong/ModernEngine.kt
@@ -342,9 +347,9 @@ ba6b2b6fe56196466c7dcaa7d173e46e05f804d625b452cac83dc5f3f5227757  app/src/main/j
 d657d63391fbd3002c38933b847fabb89a1bf0291c3a439a7a7402806782e5ed  app/src/main/java/com/appsbybros/minik/pingpong/SpriteSampling.kt
 d8791489501a20a8f3694bdd901c36b49915e6ac5e233cd767f088d15acb16cb  app/src/main/java/com/appsbybros/minik/pingpong/Tuning.kt
 37be9d496034a3b9aaaac518077d62146996270c88a50fc828d9972547a55d4a  app/src/main/java/com/appsbybros/minik/pingpong/VictoryConfetti.kt
-04b812d709ed7744c4c697cc86ea3798608ff44dd6564a75c829a4a180d06314  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossActivity.kt
+aab3d5bb11db884ef17c4f89a55cc419ebd1b9a57e40be7ec1c406541872a34a  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossActivity.kt
 ba5bfe0e3638e7b18e753139197b573ed3f495ffa21c2c83bceff0df01acb0b5  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossBall.kt
-da5aee266ab9ffd04b09e4a67c3214cc15141462e52927699a27e1384d61cc7c  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossCourt.kt
+c576b74e0c527bf5f8ffa4ba8cbe7161f3be25c887caf2eccb4b4286f8d547e8  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossCourt.kt
 ed7ad7b40b8d38cb34e0ec1d276e8f69d912aaa07da89dfa9d018cffd9a66880  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossEngine.kt
 ecd8868d326a0d57dc672db01b04d5dc54ec86c62c6e8035a658d09ae8f03dcc  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossEvents.kt
 191f173cbbcb4c5ccb668dfec2dd9e47dd6ee073c233911496fc8ff584d77fa8  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossGeometry.kt
@@ -354,29 +359,29 @@ a12f2a0ace4d02acc6fe8d12e8a3f73e7d9e9236db36f00070c66c274347cafd  app/src/main/j
 6d6032dce2482e7b3f34c84826ba28bd5f8d9fd1b693de3822283be572e37017  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossReferee.kt
 b108a98176700ff7a3849fbfa4a394b7d6474094bd3f9a503f2c369673348f98  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossShots.kt
 b64dbe9ad8ec6f79107a8a7be40a4091bcdd262860ad50d5d97988b37b4686c0  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossState.kt
-7b76a63d4b0fe97f80f0bc73021fddaa3f3b5fa7b83003fb8773fa0af9abd011  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossText.kt
-c61071e1be2f1fd9684f2006819ba8050d46263a64cdc90ff133690bd9113313  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossTutorial.kt
+880167f955a7cd77efc3e0ad879ea1a927522ea00f164817c71ac2245cb3b38c  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossText.kt
+096d63093ac587c68cbfd29dba68597a7d4ff4981d29a9a04d6eb4e55c70deda  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossTutorial.kt
 8e1908d4c70eef01554e4f791a682e5a348a3995a4585abbbb89af3fbd51a6cf  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/BotRoster.kt
-a3617644fc37ef82321cc572bb56b7ee20697a7944b6c42a0ea6a6fedde257e2  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/CompletionText.kt
-38e45acb652bb02bd3971c0105b1222597e1e99910dede2c5c0b0a695b744ee5  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/ControlChoice.kt
+d1dee0c8e77dec54ba07f6974fc273b91a68b5e8e5ad3aeef7105614c908030d  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/CompletionText.kt
+4bb38dab3c7ec0ec8c6925a4fbaca0058d75d70cda96af09c707c878a433ae19  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/ControlChoice.kt
 02675891e0d31c9999770178c72b6d41a5271672c11737e73b3d91448ab3289a  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/CrossFixture.kt
 24f8cab6dd3db9d999b810ca7a9cb3537ca794dd164f940eee14e034583facc5  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/ExpandButton.kt
 d7051174bceb3c709b0613b4dec7c90c787a31df4872fcfcc50b6502af411329  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/FirebasePongRepository.kt
-b98b694830f12fcc8f8f0429e4bd5fc864056ecc0b311f2ddb4ec0ff6f784f3f  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/GroupMatch.kt
-899d32e0792f2fa99eb4eae2a4819d323732d493d24b7ec399dd9dc3618e36af  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/Knockout.kt
-830e7ec204c7bfa49974dda54612e24534b8c5f8622c793808f2e510edb8bbf0  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/KnockoutBracketView.kt
+7cf29d21153a42435b17a5009a1f9c1823be812639d0fe1999e5970f89a631c9  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/GroupMatch.kt
+5d413f5e06594dccdf35f52c2e7e8a1ef0025adc0fb1dd9f2b37aa7e23b57215  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/Knockout.kt
+e2f415768510976623400d941dde279c0752475aeab4781aceb4ab055354c56a  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/KnockoutBracketView.kt
 a06c683dc320e2dc049ffef10cb2c0fcf5b48d1277d8e97c950183958aa4afd2  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/LobbyAudio.kt
 9305c1faca41d216793755116ecd230971e23cf4caa5bc6fe478488120ac60e3  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/LobbyEvents.kt
 338a9ae241843c6d87110ff58d262ae8c5d2f999e6cec7633ce5390488dce874  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/MatchLink.kt
-97bc53ff08c82928ad0f13f7f2de87763fc1d7707c634e9b4cc8d6c052663e35  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/MatchText.kt
+0bc051ebbbde053c2420ad3170ff5a5faddc4f1ed3e60486c3c5cd60b02a5f6a  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/MatchText.kt
 1558269ac8f2769cbc6cc9710912362a5395b87d39bd20218385700f50e258b3  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/MenuExpansion.kt
 5ba15a361ad0228240d11ccb6a8455ea11c0b18e9a61714b48aa513aa5451320  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/MenuScrollView.kt
 fb11e7c8107f69796da0c88582ff5c33156577596dc5bb3476f11a9cc45c823f  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/Nicknames.kt
-58ffec013e635a031c09386211991597fb4c1753696b362fda7c301c81c01a41  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/PlayActivity.kt
+a7bc826e961bd7c84b3041861261daec89c211f8c0ce199bc864f0ba55d5be52  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/PlayActivity.kt
 9729c963acd3e00b624e340d25904eac4a34c4f5ef9bc79f54661a92241e4ed8  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/PongCodec.kt
-04f18d46abdd90a2d854ef98bbc0d7eda617fd5cd8b57840f795df318c85f42f  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/PongModels.kt
+2035b4a3793920d8e6ee09b3e98cca3eb22367cf236ec4f780c79564d69dd416  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/PongModels.kt
 38fd94419a96512c56a01209ec2c2f2dcee6308a21019df11ac72357fbc57a92  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/PongRepository.kt
-319b74c97a900086763fe6c1f2813ab4bc7451c664f163defb35339385542119  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/PrivateMatchActivity.kt
+d624c5cd5a2f098741d35ed6b7204764866c528c41bce94dab91e116f25017c0  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/PrivateMatchActivity.kt
 254ad8380f31fb7f494c5d3c24f089199714afd8cb0e02341dbe6b0dec4e2c34  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/RoomBook.kt
 ```
 
@@ -481,6 +486,26 @@ Design reference (1 files):
 89d04d8c3d903b37a964bd00ef26a515c9250b8695053006f6762ea09a2f9c7c  docs/CROSS_DESIGN.md
 ```
 
+Added since `828c6fc`: the six languages and their tests (used by the 2026-10-04 and 2026-10-07 updates) (7 files):
+
+```text
+014d028f43646b74540446db9e362b86838bafb5f20cee7b271d737bbf99b9b9  app/src/main/java/com/appsbybros/minik/localization/AppText.kt
+3821a4b7a57dbec13f8aa1c52f8731a8ea80719e1a9358828d3be1e65877859e  app/src/main/res/values-ar/strings.xml
+b600929ea747efc1efc498c0a8a349a4490f71a80cac5e3d5fc1c48c95a79688  app/src/main/res/values-es/strings.xml
+7ac059ece62f176afb92e6987b6c5270c72aebc7d3a032146ca6166aa5a11a5b  app/src/main/res/values-hi/strings.xml
+c022eb62e3ecba2171b7b9577393fe1a630082114613a777cc2e14b41f7e563e  app/src/main/res/values-nl/strings.xml
+c0ecbdbe6f8fe561f99475d8e1b5f704cbfeaa0aaa9abac562a5e41afb07e816  app/src/test/java/com/appsbybros/minik/localization/LanguageTest.kt
+1eb8a56ec0b81aebe996dc239fb4ea20f1a74c0fa71bc78ebc33e13556ab3f30  app/src/androidTest/java/com/appsbybros/minik/pingpong/LanguageDeviceTest.kt
+```
+
+Reviewed and not ported (Android purchases and build, and the QA notes that describe the 2026-10-06 changes) (3 files):
+
+```text
+e1afbf0d5a71a7c320a5f414c96c218919c9c971e3c6957261fe5a62ca29dcd9  app/src/main/java/com/appsbybros/minik/monetization/MonetizationActivity.java
+d909ad7fd7f08f5d5de6c230efccd09400613c761afd1e205d0998a7a0b76cad  app/build.gradle.kts
+9c48a800a781bb966749a054481e6560552d20294d41f0f94f345d273f16df97  docs/qa-2026-10-06.md
+```
+
 ## Update 2026-10-04: six languages (Android working tree on 828c6fc)
 
 Source: the uncommitted working tree of `C:\Projects\MinikCrossPong` on top of `828c6fc` (the delivered revision in its
@@ -537,7 +562,7 @@ control line in `CrossTutorial.card` (its control name is translated before the 
 | Android (working tree on 828c6fc) | iOS |
 | --- | --- |
 | `localization/AppText.kt` | `MPText.swift` (`normalize`, `configure`, `configureFromDevice`, `language`, `rtl`, `t`, `translated`, `keys`; `MPTextTemplate` for the `{n}` keys) and `MPTextCatalog.swift` (the rows in Android order; regenerate with `python3 Scripts/audit-multi-pong.py --android <MinikCrossPong> --write-catalog`) |
-| `res/values-ar`, `values-es`, `values-hi`, `values-nl` `strings.xml` | Not copied. Each of their 103 strings except four (the app name "Multi Ping Pong", "Minik" and two format-only strings, identical in every language) is a catalog row with the same translation in all four languages, so iOS shows them through `MPText`. This was checked string by string. |
+| `res/values-ar`, `values-es`, `values-hi`, `values-nl` `strings.xml` | Not copied. Each of their 103 strings except four (the app name "Multi Ping Pong", "Minik" and two format-only strings, identical in every language) is a catalog row with the same translation in all four languages, so iOS shows them through `MPText`. This was checked string by string. Since `1908719` one Dutch string differs from its catalog row; the 2026-10-07 update ports it and makes this check part of the audit. |
 | `LocalizedActivity.kt` (language, RTL, Back) | `ModernPongView.init` (`MPText.configureFromDevice()`), `he`, `t`, `backButton` and the layout direction; `MPController.hebrew` and `MPController.text` |
 | `GuideDialog.kt` (RTL) | The guide card and the sheets read in the screen's direction |
 | `BotPicker.kt`, `HousePlayerPicker.kt` | `ModernPongView.housePicker`, `carousel` and `statsLine` |
@@ -593,7 +618,8 @@ Swift sources. Nothing has been compiled or run: this Windows machine has no Swi
 ### Checks run
 
 - `python3 Scripts/audit-multi-pong.py --android C:/Projects/MinikCrossPong`: OK. Besides the earlier checks it now
-  - re-hashes the working-tree files listed below (the 138 committed blobs at `828c6fc` still match);
+  - re-hashes the working-tree files of this update (the 138 committed blobs at `828c6fc` still matched; since the 2026-10-07
+    update the audit checks these files as committed blobs of `1908719`);
   - compares `MPTextCatalog.swift` with Android's `AppText.kt` row by row (820 rows) and checks the hash it names;
   - checks every catalog row (four non-blank columns, no duplicate key, no placeholder missing from its key);
   - checks that `MPText.languages`, `MPText.columns` and the target's `CFBundleLocalizations` agree.
@@ -602,43 +628,93 @@ Swift sources. Nothing has been compiled or run: this Windows machine has no Swi
   above; all the other ported texts have a row.
 - Line-by-line compile review of every changed Swift file against the declarations it uses.
 
-### SHA-256 of the Android working-tree files used (2026-10-04)
+### Android files used (2026-10-04)
 
-Hashes of the files as they are on disk in the Android working tree (CRLF line endings), `sha256sum <path>`.
+This update read 26 files of the Android working tree on `828c6fc`. It ported or used 24 of them, and reviewed
+`MonetizationActivity.java` and `app/build.gradle.kts` without porting them (Android-only). Android committed all 26 in
+`1908719`. 24 of them are byte for byte the files ported here: this was checked against the on-disk hashes that this section
+listed, and against the copies that Android's QA pass of 2026-10-06 kept of its files before its changes. The other two,
+`LanguageDeviceTest.kt` and `values-nl/strings.xml`, changed after this update; the 2026-10-07 update below ports them. The
+blob hashes of all 26 at `1908719` are in "SHA-256 of the Android files used" above. The on-disk hashes of the files that the
+audit reads from the working tree are at the end of the 2026-10-07 update.
 
-Ported or used for the port (24 files):
+## Update 2026-10-07: Android 1908719
+
+Source: `C:\Projects\MinikCrossPong` at commit `190871983cb5b72715604d1e48b6dd6bb6c8a22f` ("Polish multilingual dialogs and
+player tags; refresh store assets", 2026-10-06). Its working tree is clean apart from untracked delivery and store folders.
+
+`git diff 828c6fc..1908719` touches 138 files:
+
+- the six languages of the 2026-10-04 update, now committed;
+- the device, language and large-window QA pass of 2026-10-06 (`docs/qa-2026-10-06.md`);
+- store assets, privacy pages, QA evidence and build files.
+
+Compared with the working tree that the 2026-10-04 update ported, only three app files differ: `cross/CrossCourt.kt`,
+`res/values-nl/strings.xml` and the instrumentation test `LanguageDeviceTest.kt`. Two sources confirm this: the hashes
+recorded on 2026-10-04, and the QA pass's backup of its files before its changes
+(`C:\Projects\MinikProWorkspace\store-work\expanded-qa\before-changes\MinikCrossPong`). `AppText.kt` and Android's
+`firebase/` did not change, so the catalog rows and `Tests/MultiPongFirebase/` did not change either. The Android repositories
+were only read.
+
+### Android → iOS mapping (1908719)
+
+| Android | iOS |
+| --- | --- |
+| `cross/CrossCourt.kt` `drawTags` (player tags): the badge of every other player is anchored on that player's sprite: its stand line beyond the arm end, at the racket's sideways position, raised by 0.84 of the character's height plus 8 dp. It now sits above the head. Before, a separate world-height projection could put it over the face on tall screens. | `CrossScene.renderTags`, statement by statement (Android dp are iOS points). The viewer's own badge is unchanged. |
+| `res/values-nl/strings.xml` `new_match` (dialogs): "Toepassen en nieuw spel starten" was shortened to "Nieuw spel starten", so that Cancel stays visible in the cross settings dialog. `AppText.kt` keeps the longer text, but Android shows this button through `getString(R.string.new_match)`. | `MPText.resourceTexts` lists the Android `strings.xml` texts that differ from the catalog row of their English text; this is the only one. `MPText.resource` (Android `getString`) shows it, in the apply action of the settings sheet (`ModernPongRooms.crossSettings`). `MPText.t` keeps the catalog text, as `AppText.t` does. |
+| `androidTest/.../LanguageDeviceTest.kt`: in each of the six languages, both actions of the cross settings dialog must be fully visible | `LanguageTests.testSixLanguagesSettingsActionsUseAndroidResources`: in all six languages, the two action texts are Android's resource texts. The iOS sheet stacks its actions at full width, so there is no layout assertion to port. |
+| `localization/AppText.kt` (unchanged) | `MPTextCatalog.swift`, regenerated with `--write-catalog`: the same 820 rows. Only its header changed; it now names `1908719`. |
+| The other 23 files of the 2026-10-04 update (unchanged since then) | No change; `MonetizationActivity.java` and `app/build.gradle.kts` stay unported |
+| `.gitignore`, `play-store/**`, `website/**`, `docs/qa-2026-10-06-results.json` | Not ported: repository settings, store assets, privacy pages and QA evidence |
+
+### What changed in this repository (uncommitted)
+
+| Area | Files |
+| --- | --- |
+| Court | `MultiPong/CrossScene.swift` (`renderTags`; the header comment now names `1908719`) |
+| Texts | `MultiPong/MPText.swift` (`resourceTexts`, `resource`; header comment), `MultiPong/ModernPongRooms.swift` (the apply action of the settings sheet), `MultiPong/MPTextCatalog.swift` (regenerated, header only) |
+| Tests | `Tests/MultiPongTests/LanguageTests.swift`: one new method (10 methods now) and the header comment |
+| Audit | `Scripts/audit-multi-pong.py` (see below) |
+| This document | this section, the hash lists of "SHA-256 of the Android files used", the 2026-10-04 file list and the pointers above |
+
+`Sources/**`, other targets, `project.yml` and the Firebase mirror were not touched. Every edited file keeps its line endings.
+
+### Audit
+
+- `ANDROID_COMMIT` is now `190871983cb5b72715604d1e48b6dd6bb6c8a22f`, so `--android` checks the committed hashes above at
+  `1908719`.
+- New: `MPText.resourceTexts` must name catalog keys and catalog languages, and must really differ from the catalog. Its texts
+  must be shown through `MPText.resource`, never through `t()`.
+- New, with `--android`: every string of the working tree's `values-es`, `-ar`, `-hi` and `-nl` `strings.xml` is compared with
+  the text that `MPText` shows for its English text in that language: the catalog row, or `MPText.resourceTexts`. That is 396
+  strings. The four strings that are not catalog rows (`app_name`, `minik`, `guide_progress`, `guide_live`) must equal their
+  English text. This automates the 2026-10-04 "string by string" check, and it is how the Dutch change was found.
+
+### Checks run
+
+- `python Scripts/audit-multi-pong.py`: OK.
+- `python Scripts/audit-multi-pong.py --android C:/Projects/MinikCrossPong`: OK. All 148 committed hashes at `1908719` and
+  the 6 working-tree hashes match. The 820 catalog rows and the 396 `strings.xml` texts agree.
+- Every `MultiPong/*.swift` and `Tests/MultiPongTests/*.swift` file (68) parses without errors with tree-sitter-swift 0.7.3.
+  The audit's bracket balance check passes for all of them.
+- Line-by-line compile review of the changed Swift against the declarations it uses (`CrossGeometry.toLocal`, `fromLocal`,
+  `home`, `CrossEngine.racket`, `CrossScene.screen`, `sizeAt`, `stand`, `character`, `Double.mpClamp`, `ModernPongView.he`,
+  `action(_:color:_:)`).
+- The new test's expected texts were taken from Android's `strings.xml` files, and the `MPText` lookup was replayed in Python
+  over the catalog.
+
+Nothing has been compiled or run: this Windows machine has no Swift toolchain.
+
+### SHA-256 of the Android working-tree files used (2026-10-07)
+
+The files that the audit reads from the Android working tree (the catalog source and the `strings.xml` files it compares), as
+they are on disk, `sha256sum <path>`. All but `values/strings.xml` have CRLF line endings.
 
 ```text
 7bba0d0c8ee52aaa13f08d8c8a8281381224d7c0a0985c05d6cb5dd89e7b5f94  app/src/main/java/com/appsbybros/minik/localization/AppText.kt
+2e5554dcc9f38d99310dbec5d544a1365266e56b09df3a0108613ce99182f8e9  app/src/main/res/values/strings.xml
 5542d7312af8247dc1bd1cbed881d278b182be69f8c9ac8c31af8b90877937ac  app/src/main/res/values-ar/strings.xml
 64a2f5c5dba04cb74cab39a828bde4923f83f9f7c771abeeb246d707aca89fbc  app/src/main/res/values-es/strings.xml
 485efd28216ebd0699b0b31549f95c11ebff5b7deb6e6864d97eb0216bc4e864  app/src/main/res/values-hi/strings.xml
-e857189ce1a9353a4e8be1852324644aad3b3fe609b5a2f0f6d82ff6e362a575  app/src/main/res/values-nl/strings.xml
-fae78f0c5cfd25c4447c59f13907b5a48dc3fb7a29639431282d206174423969  app/src/main/java/com/appsbybros/minik/pingpong/LocalizedActivity.kt
-2f785d6441cd85d31062c426ea3ba9b8fe6709ffc05fbbffb137d7d11360ca75  app/src/main/java/com/appsbybros/minik/pingpong/BotPicker.kt
-b540453d6425836a562af0ce5830c249c3f75ed7ea9dbef6734a98f947a33ddd  app/src/main/java/com/appsbybros/minik/pingpong/GuideDialog.kt
-b5ad992e3c7b8335749c7dad25d6ef54767b5309492841bd5c7012d047ccd132  app/src/main/java/com/appsbybros/minik/pingpong/HousePlayerPicker.kt
-d8dd558aafadab50c7b307e18ade3d3dcac780e97f3d6188635175d83e972f93  app/src/main/java/com/appsbybros/minik/pingpong/ModernActivity.kt
-662532070826f740d8735a7d7e469beee4c69e5fb425ac39d6f6cc5a248ad2e4  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossActivity.kt
-dc24925fadde508528f248dfa40d012f4faffdc311a7c0b8a98dac3567e32f1f  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossText.kt
-1aef643ed335a401e7374e45a4f860fe1734fb95c7860e03c2bf2fb0a846f002  app/src/main/java/com/appsbybros/minik/pingpong/cross/CrossTutorial.kt
-c67e98bc5ee8540af68ee6281db6af41d3a9698e884d83114d3c780b89a8da72  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/CompletionText.kt
-bc865a4618e048bee01ba8a0eb81d7911b1b5d7cbe161baf4b24e546b53fbf19  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/ControlChoice.kt
-c14c2802a8897287d1267e14b46559ffb9f68589fb79fb64bee30aad33d8f106  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/GroupMatch.kt
-86d49f84cd724104bea8085d0242e1743747f710cc42052115d5e4643c9d5d87  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/Knockout.kt
-44558073ed1cdeaed3e00b0759a75e5ecc9c061a186e9c9a64e5f5f7a60ea7f2  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/KnockoutBracketView.kt
-4ac1b5225e5c054904e73f11d3cf03e201441229ec8cb9a375506025820a8da6  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/MatchText.kt
-069ba849fa4dba8ef420b5b87924a3cb0980e2f4bbbf04ff88e7b68e49410ab5  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/PlayActivity.kt
-18e58ce32730e5096fee748d2e9837cf8e7136746a01ae1e22ffb4fc112a6a36  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/PongModels.kt
-da967922f28d3fd07cb620427b81a756f03e9c48a2e7648a0d3d0564c9aab28f  app/src/main/java/com/appsbybros/minik/pingpong/multiplayer/PrivateMatchActivity.kt
-5117994247324664c1255499754de48c2b5c9fe40e2505c62f3656c0d53c8cb0  app/src/test/java/com/appsbybros/minik/localization/LanguageTest.kt
-c7b9ac59de7a17bf2f93a9656f552b9bb04998b88db94cddc6c371157c364236  app/src/androidTest/java/com/appsbybros/minik/pingpong/LanguageDeviceTest.kt
+9e251cb43c18f3004829b1176332245ba23a3e0c1c9f94550b627ddb13da0da1  app/src/main/res/values-nl/strings.xml
 ```
-
-Reviewed and not ported (Android-only, 2 files):
-
-```text
-ebcd1efbc2806bd362ee86edae472877bc15c553f1abcf645681e4c253493948  app/src/main/java/com/appsbybros/minik/monetization/MonetizationActivity.java
-a11491a87c1cba784c601ca2ed62b0e933142464a54e8f03bd238ce1c84691a5  app/build.gradle.kts
-```
-
